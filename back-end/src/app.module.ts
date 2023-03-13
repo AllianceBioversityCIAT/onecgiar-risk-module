@@ -10,8 +10,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { InitiativeModule } from './initiative/initiative.module';
 import { RiskModule } from './risk/risk.module';
-import { SharedModule } from './shared/shared.module';
 import { RiskCategoriesModule } from './risk-categories/risk-categories.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -32,6 +33,8 @@ import { RiskCategoriesModule } from './risk-categories/risk-categories.module';
     InitiativeModule,
     ScheduleModule.forRoot(),
     RiskCategoriesModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
