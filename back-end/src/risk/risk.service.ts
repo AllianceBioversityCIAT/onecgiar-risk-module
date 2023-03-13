@@ -5,10 +5,8 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class RiskService {
-
-    constructor( @InjectRepository(Risk)
-    public riskRepository: Repository<Risk>){
-
-        
-    }
+  constructor(
+    @InjectRepository(Risk)
+    public riskRepository: Repository<Risk>,
+  ) {}
 }

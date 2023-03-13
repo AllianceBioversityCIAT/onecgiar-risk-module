@@ -1,22 +1,34 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { Initiative } from 'entities/initiative.entity';
 import { FindManyOptions } from 'typeorm';
 import { InitiativeService } from './initiative.service';
 
+@ApiTags('Initiative')
 @Controller('initiative')
 export class InitiativeController {
   constructor(private iniService: InitiativeService) {}
-  @Get(['', ':id'])
-  getInitiatives(@Param('id') id: number) {
-    const options: FindManyOptions = {
-      where: {},
+
+  @Get()
+  @ApiCreatedResponse({
+    description: '',
+    type: [Initiative],
+  })
+  getInitiative() {
+    return this.iniService.iniRepository.findOne({
       relations: ['risks', 'risks.categories', 'roles', 'roles.user'],
-    };
-    if (id) options.where = { id };
-    return this.iniService.iniRepository.find(options);
+    });
   }
 
-  @Get('test/test')
-  test() {
-    return this.iniService.syncFromClarisa();
+  @Get(':id')
+  @ApiCreatedResponse({
+    description: '',
+    type: () => Initiative,
+  })
+  getInitiatives(@Param('id') id: number): Promise<Initiative> {
+    return this.iniService.iniRepository.findOne({
+      where: { id },
+      relations: ['risks', 'risks.categories', 'roles', 'roles.user'],
+    });
   }
 }

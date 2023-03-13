@@ -44,8 +44,6 @@ export class InitiativeService {
         initiative.official_code = clarisa_initiative.official_code;
 
         await this.iniRepository.save(initiative);
-
-       
       }
       this.logger.log('Sync CLARISA initiative Data ');
     } catch (e) {

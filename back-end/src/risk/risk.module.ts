@@ -7,7 +7,7 @@ import { RiskService } from './risk.service';
 
 @Module({
   controllers: [RiskController],
-  imports: [TypeOrmModule.forFeature([Risk]),SharedModule],
-  providers: [RiskService]
+  imports: [TypeOrmModule.forFeature([Risk]), SharedModule],
+  providers: [RiskService],
 })
 export class RiskModule {}

@@ -1,19 +1,31 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { FindManyOptions } from 'typeorm';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { Risk } from 'entities/risk.entity';
 import { RiskService } from './risk.service';
-
+@ApiTags('Risk')
 @Controller('risk')
 export class RiskController {
   constructor(private riskService: RiskService) {}
 
-  @Get(['', ':id'])
-  getRisks(@Param('id') id: number) {
-    const options: FindManyOptions = {
-      where: {},
+  @Get('')
+  @ApiCreatedResponse({
+    description: '',
+    type: [Risk],
+  })
+  getRisk() {
+    return this.riskService.riskRepository.find({
       relations: ['categories', 'initiative', 'mitigations'],
-    };
-    if (id) options.where = { id };
-
-    return this.riskService.riskRepository.find(options);
+    });
+  }
+  @ApiCreatedResponse({
+    description: '',
+    type: Risk,
+  })
+  @Get(':id')
+  getRisks(@Param('id') id: number) {
+    return this.riskService.riskRepository.find({
+      where: { id },
+      relations: ['categories', 'initiative', 'mitigations'],
+    });
   }
 }

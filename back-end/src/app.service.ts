@@ -5,6 +5,4 @@ import { Risk } from 'entities/risk.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class AppService {
-
-}
+export class AppService {}

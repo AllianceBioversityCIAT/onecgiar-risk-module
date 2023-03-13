@@ -5,8 +5,8 @@ import { User } from 'entities/user.entitiy';
 import { SharedService } from './shared.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]),HttpModule],
+  imports: [TypeOrmModule.forFeature([User]), HttpModule],
   providers: [SharedService],
-  exports: [ SharedService,HttpModule],
+  exports: [SharedService, HttpModule],
 })
 export class SharedModule {}

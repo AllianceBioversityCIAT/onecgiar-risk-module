@@ -1,26 +1,39 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinColumn, JoinTable, OneToMany } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  JoinTable,
+  OneToMany,
+} from 'typeorm';
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Risk } from './risk.entity';
 
 @Entity()
 export class Initiative {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({nullable:true,default:null})
+  @ApiProperty()
+  @Column({ nullable: true, default: null })
   official_code: string;
-
+  @ApiProperty()
   @Column()
   clarisa_id: string;
-
+  @ApiProperty()
   @Column()
   name: string;
 
-  @OneToMany(()=> Risk,(risk)=>risk.initiative)
+  @ApiProperty({ type: () => [Risk] })
+  @OneToMany(() => Risk, (risk) => risk.initiative)
   @JoinTable()
-  risks:Array<Risk>
+  risks: Array<Risk>;
 
-  @OneToMany(()=> InitiativeRoles,(initiative_roles)=>initiative_roles.initiative)
+  @ApiProperty({ type: () => [InitiativeRoles] })
+  @OneToMany(
+    () => InitiativeRoles,
+    (initiative_roles) => initiative_roles.initiative,
+  )
   @JoinTable()
-  roles:Array<InitiativeRoles>
+  roles: Array<InitiativeRoles>;
 }
