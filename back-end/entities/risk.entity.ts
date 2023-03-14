@@ -21,7 +21,7 @@ export class Risk {
   @ApiProperty()
   @Column()
   initiative_id: number;
-  @ApiProperty({ type: () => Initiative })
+
   @ManyToOne(() => Initiative, (initiative) => initiative.risks)
   @JoinColumn({ name: 'initiative_id' })
   initiative: Initiative;
@@ -47,7 +47,7 @@ export class Risk {
   @ManyToMany(() => RiskCategory, (riskcat) => riskcat)
   @JoinTable()
   categories: Array<RiskCategory>;
-  @ApiProperty({ type: () => [Mitigation] })
+  @ApiProperty({ type: () => [Mitigation], })
   @OneToMany(() => Mitigation, (mitigation) => mitigation.risk)
   @JoinTable()
   mitigations: Array<Mitigation>;

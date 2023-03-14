@@ -1,7 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { firstValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
@@ -11,6 +12,8 @@ export class InitiativeService {
   constructor(
     @InjectRepository(Initiative)
     public iniRepository: Repository<Initiative>,
+    @InjectRepository(InitiativeRoles)
+    public iniRolesRepository: Repository<InitiativeRoles>,
     private http: HttpService,
   ) {}
 
@@ -20,6 +23,30 @@ export class InitiativeService {
       username: process.env.CLARISA_USERNAME,
       password: process.env.CLARISA_PASSWORD,
     };
+  }
+  async deleteRole(initiative_id, id) {
+    const roles = await this.iniRolesRepository.findOne({
+      where: { initiative_id, id },
+    });
+    if (roles) return await this.iniRolesRepository.remove(roles);
+    else throw new NotFoundException();
+  }
+
+  async updateRoles(initiative_id, id, initiativeRoles: InitiativeRoles) {
+    const found_roles = await this.iniRolesRepository.findOne({
+      where: { initiative_id, id },
+    });
+    if (found_roles) return await this.iniRolesRepository.save(initiativeRoles);
+    else throw new NotFoundException();
+  }
+
+  async setRole(initiative_id, role: InitiativeRoles) {
+    let init = await this.iniRepository.findOne({
+      where: { id: initiative_id },
+      relations: ['roles'],
+    });
+    if (!init) throw new NotFoundException();
+    return await this.iniRolesRepository.save(role, { reload: true });
   }
   async syncFromClarisa() {
     try {

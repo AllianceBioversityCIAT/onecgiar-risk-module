@@ -21,17 +21,18 @@ export class InitiativeRoles {
   @ApiProperty()
   @Column({ nullable: true })
   user_id: number;
-  @ApiProperty()
+  
   @ManyToOne(() => User, (user) => user)
   @JoinColumn({ name: 'user_id' })
   user: User;
   @ApiProperty()
   @Column()
   initiative_id: number;
-  @ApiProperty({ type: () => Initiative })
+
   @ManyToOne(() => Initiative, (initiative) => initiative)
   @JoinColumn({ name: 'initiative_id' })
   initiative: Initiative;
+
   @ApiProperty()
   @Column()
   role: string;
