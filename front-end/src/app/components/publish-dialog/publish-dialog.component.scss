@@ -1,0 +1,28 @@
+.dialogHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    h1 {
+        margin-bottom: 0;
+    }
+    button {
+        all: unset;
+        cursor: pointer;
+        margin: 1em 1.5em;
+    }
+}
+.dialogBody {
+    min-width: 300px;
+    padding: 1.5em;
+    background-color: rgb(245, 243, 243);
+    .w-90 {
+        width: 100%;
+    }
+    .end {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+}

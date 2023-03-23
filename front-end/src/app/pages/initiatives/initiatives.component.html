@@ -1,0 +1,70 @@
+
+<ng-container *ngIf="router.isActive('risk-dashboard/initiatives', true)">
+    <div class="globalContainer">
+        <h1>Initiatives Dashboard</h1>
+        <div class="table">
+                <table mat-table [dataSource]="dataSource">
+                  <ng-container matColumnDef="INIT-ID">
+                    <th class="big bold spacing border-left-0 " mat-header-cell *matHeaderCellDef> INIT-ID </th>
+                    <td class="border-left-0 " mat-cell *matCellDef="let element"> {{element['INIT-ID']}} </td>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="Initiative Name">
+                    <th class="big bold  spacing" mat-header-cell *matHeaderCellDef> Initiative Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element['Initiative Name']}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Risk Category">
+                    <th class="big bold  spacing" mat-header-cell *matHeaderCellDef> Risk Category </th>
+                    <td mat-cell *matCellDef="let element"> {{element['Risk Category']}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Num of Risk">
+                    <th class="big bold spacing" mat-header-cell *matHeaderCellDef> Num of Risk </th>
+                    <td mat-cell *matCellDef="let element"> {{element['Num of Risk']}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="My Role">
+                    <th class="big bold center spacing" mat-header-cell *matHeaderCellDef> My Role </th>
+                    <td mat-cell *matCellDef="let element"> {{element['My Role']}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Actions">
+                    <th class="big bold center spacing" mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td style="min-width: 100px; max-width: 120px;" mat-cell *matCellDef="let element">
+                        <button routerLink="/risk-dashboard/initiatives/{{element['INIT-ID']}}/team-members" mat-button>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                              </svg>
+                        </button>
+                        <button routerLink="./INIT-1" mat-button>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                            </svg>
+                        </button>
+                        <button mat-button routerLink="/risk-dashboard/initiatives/{{element['INIT-ID']}}/versions">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-layers-fill" viewBox="0 0 16 16">
+                                <path d="M7.765 1.559a.5.5 0 0 1 .47 0l7.5 4a.5.5 0 0 1 0 .882l-7.5 4a.5.5 0 0 1-.47 0l-7.5-4a.5.5 0 0 1 0-.882l7.5-4z"/>
+                                <path d="m2.125 8.567-1.86.992a.5.5 0 0 0 0 .882l7.5 4a.5.5 0 0 0 .47 0l7.5-4a.5.5 0 0 0 0-.882l-1.86-.992-5.17 2.756a1.5 1.5 0 0 1-1.41 0l-5.17-2.756z"/>
+                              </svg>
+                        </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                               showFirstLastButtons
+                               aria-label="Select page of periodic elements">
+                </mat-paginator>
+        </div>
+        <div class="export">
+            <h2>Export all my risks to excel</h2>
+            <button mat-raised-button>Export</button>
+        </div>
+        
+    </div>
+</ng-container>
+<router-outlet></router-outlet>

@@ -1,0 +1,28 @@
+nav {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em 2em;
+    .logoAndBredcrumb {
+        display: flex;
+        align-items: center;
+    }
+    .logo {
+        width: 130px;
+        height: 52px;
+        background-color: rgb(214, 214, 213);
+    }
+    .bredcrumb {
+        margin-left: 40px;
+        text-transform: capitalize;
+        font-size: 1.1em;
+    }
+    .currentUser {
+        button {
+            background-color: unset;
+            border: none;
+            cursor: pointer;
+        }
+    }
+}

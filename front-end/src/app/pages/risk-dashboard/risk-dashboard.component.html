@@ -1,0 +1,12 @@
+
+<ng-container *ngIf="router.isActive('risk-dashboard', true)">
+    <div class="globalContainer">
+        <div class="head">
+            <h3>Risk Dashboard</h3>
+            <div class="buttons">
+                <button mat-raised-button routerLink="./initiatives">Go to Initiatives</button>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<router-outlet></router-outlet>

@@ -1,0 +1,139 @@
+<div class="dialogHeader">
+    <h1 mat-dialog-title>Add New Risk</h1>
+    <button mat-dialog-close>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+          </svg>
+    </button>
+</div>
+<mat-dialog-content class="dialogBody">
+    <div >
+        <form [formGroup]="newRiskForm">
+            <mat-form-field class="w-90" appearance="outline">
+                <input formControlName="riskOwner" matInput placeholder="Risk Owner">
+                <mat-error class="error" *ngIf="newRiskForm.controls['riskOwner'].errors?.['required']">Risk Owner is Required</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field class="w-90" appearance="outline">
+                <mat-select formControlName="riskCategories">
+                  <mat-option *ngFor="let riskCat of riskCategories" [value]="riskCat.value">
+                    {{riskCat.viewValue}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field class="w-90" appearance="outline">
+                <input formControlName="riskTitle" matInput placeholder="Risk Title ">
+                <mat-error class="error" *ngIf="newRiskForm.controls['riskTitle'].errors?.['required']">Risk Title is Required</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field class="w-90" appearance="outline">
+                <textarea formControlName="detailedDescription" rows="4" matInput placeholder="Detailed Description"></textarea>
+                <mat-error class="error" *ngIf="newRiskForm.controls['detailedDescription'].errors?.['required']">Detailed Description is Required</mat-error>
+            </mat-form-field>
+            <div class="radio">
+                <h3>Target Likelihood</h3>
+                <mat-radio-group formControlName="targetLikelihood" aria-label="Select an option">
+                    <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
+                </mat-radio-group>
+                <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['targetLikelihood'].errors?.['required']">Target Likelihood is Required</mat-error>
+            </div>
+            <div class="radio">
+                <h3>Target Impact &nbsp; &nbsp; &nbsp; </h3>
+                <mat-radio-group formControlName="targetImpact" aria-label="Select an option">
+                    <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
+                </mat-radio-group>
+                <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['targetImpact'].errors?.['required']">Target Impact is Required</mat-error>
+            </div>
+            <div class="radio">
+                <h2>Target Risk Level &nbsp; </h2>
+                <mat-form-field class="count" appearance="outline">
+                    <input min="0" type="number" formControlName="targetRiskLevel" matInput placeholder="00">
+                </mat-form-field>
+            </div>
+            
+            <div class="radio">
+                <h3>Current Likelihood</h3>
+                <mat-radio-group formControlName="currentLikelihood" aria-label="Select an option">
+                    <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
+                </mat-radio-group>
+                <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['currentLikelihood'].errors?.['required']">Current Likelihood is Required</mat-error>
+            </div>
+            <div class="radio">
+                <h3>Current Impact &nbsp; &nbsp; &nbsp; </h3>
+                <mat-radio-group formControlName="currentImpact" aria-label="Select an option">
+                    <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
+                    <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
+                </mat-radio-group>
+                <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['currentImpact'].errors?.['required']">Current Impact is Required</mat-error>
+            </div>
+            <div class="radio">
+                <h2>Current Risk Level &nbsp; </h2>
+                <mat-form-field class="count" appearance="outline">
+                    <input min="0" type="number" formControlName="currentRiskLevel" matInput placeholder="00">
+                </mat-form-field>
+            </div>
+            <hr>
+            <div class="head">
+                <h2>Proposed mitigation measurements</h2>
+                <button mat-raised-button (click)="openNewProposedDialog()">Add New</button>
+            </div>
+            <div class="table">
+                <table mat-table [dataSource]="proposed">
+                   
+                  <ng-container matColumnDef="Mitigation Description">
+                    <th class="big bold spacing border-left-0 " mat-header-cell *matHeaderCellDef> Mitigation Description </th>
+                    <td class="border-left-0 " mat-cell *matCellDef="let element"> {{element['Mitigation Description']}} </td>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="Status of Action">
+                    <th class="big bold  spacing" mat-header-cell *matHeaderCellDef> Status of Action </th>
+                    <td mat-cell *matCellDef="let element"> {{element['Status of Action']}} </td>
+                  </ng-container>
+
+                 
+
+                  <ng-container matColumnDef="Actions">
+                    <th class="big bold center spacing" mat-header-cell *matHeaderCellDef> Actions </th>
+                    <td style="min-width: 100px; max-width: 190px;" mat-cell *matCellDef="let element; let i = index">
+                        <button mat-button (click)="editProposed(i, element)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                              </svg>
+                        </button>
+                        <button mat-button (click)="removeProposed(i)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                              </svg>
+                        </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <p class="errorMessage">{{errorMessage}}</p>
+            </div>
+        </form>
+        <div class="end">
+            <button mat-raised-button class="submit" (click)="submit()">SAVE</button>
+        </div>
+       
+    </div>
+</mat-dialog-content>
