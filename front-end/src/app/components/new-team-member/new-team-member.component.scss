@@ -2,9 +2,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #fff;
+    background-color: rgb(183, 209, 252);
+    color: #fff;
     h1 {
-        margin-bottom: 0;
+        margin-bottom: 0px;
+        color: #fff;
     }
     button {
         all: unset;
@@ -15,7 +17,7 @@
 .dialogBody {
     min-width: 300px;
     padding: 1.5em;
-    background-color: rgb(245, 243, 243);
+    background-color: rgb(255, 255, 255);
     .w-90 {
         width: 100%;
     }

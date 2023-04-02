@@ -2,9 +2,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #fff;
+    background-color: rgb(183, 209, 252);
+    color: #fff;
     h1 {
         margin-bottom: 0;
+        color: #fff;
     }
     button {
         all: unset;
@@ -16,7 +18,7 @@
     color: #222;
     min-width: 300px;
     padding: 1.5em;
-    background-color: rgb(245, 243, 243);
+    background-color: rgb(255, 255, 255);
     .w-90 {
         width: 100%;
     }
@@ -77,4 +79,10 @@
         margin-top: 0.5em;
         color: rgb(233, 91, 91);
     }
+}
+.mt-2 {
+    margin-top: 2em;
+}
+.multi {
+    border: 1px solid rgb(135, 135, 251); padding: 7px 12px; border-radius: 50%; font-weight: bold; font-size: 1.3em; color: rgb(135, 135, 251);
 }

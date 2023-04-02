@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NewRiskComponent } from 'src/app/components/new-risk/new-risk.component';
 import { PublishDialogComponent } from 'src/app/components/publish-dialog/publish-dialog.component';
 
@@ -12,8 +12,10 @@ import { PublishDialogComponent } from 'src/app/components/publish-dialog/publis
   styleUrls: ['./initiative-details.component.scss']
 })
 export class InitiativeDetailsComponent {
-  constructor(public router: Router,
-    public dialog: MatDialog) {
+  constructor(
+    public router: Router,
+    public dialog: MatDialog,
+    public activatedRoute: ActivatedRoute) {
     
   }
  
@@ -115,4 +117,15 @@ export class InitiativeDetailsComponent {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  path: any = '';
+  id: any;
+  ngOnInit() {
+    this.path = window.location.pathname
+
+    this.activatedRoute.params.subscribe(params=>{
+      this.id = params['versionId'];
+    })
+  }
+
 }

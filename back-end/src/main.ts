@@ -4,7 +4,12 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors({
+    origin: '*',
+    methods: 'GET, PUT, POST, PATCH, DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true
+  });
   const config = new DocumentBuilder()
     .setTitle('Risk Module')
     .setVersion('1.0')

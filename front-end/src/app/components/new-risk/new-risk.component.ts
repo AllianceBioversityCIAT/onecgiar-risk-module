@@ -39,10 +39,8 @@ export class NewRiskComponent {
       detailedDescription: ['', Validators.required],
       targetLikelihood: ['', Validators.required],
       targetImpact: ['', Validators.required],
-      targetRiskLevel: ['', Validators.required],
       currentLikelihood: ['', Validators.required],
-      currentImpact: ['', Validators.required],
-      currentRiskLevel: ['', Validators.required]
+      currentImpact: ['', Validators.required]
     })
   }
 

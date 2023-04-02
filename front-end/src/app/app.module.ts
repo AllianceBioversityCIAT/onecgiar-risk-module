@@ -28,6 +28,12 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import { VersionDetailsComponent } from './pages/version-details/version-details.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { HttpClientModule } from '@angular/common/http';
+
+
+
+
 
 
 @NgModule({
@@ -61,7 +67,9 @@ import { VersionDetailsComponent } from './pages/version-details/version-details
     ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTooltipModule,
+    HttpClientModule
   ],
   providers: [
     BreadcrumbService

@@ -11,7 +11,14 @@ nav {
     .logo {
         width: 130px;
         height: 52px;
-        background-color: rgb(214, 214, 213);
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: rgb(107, 151, 237);
+        font-size: 1.7em;
     }
     .bredcrumb {
         margin-left: 40px;

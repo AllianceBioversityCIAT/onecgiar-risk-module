@@ -1,15 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
-html, body { height: 100%; background-color: rgb(238, 238, 238); }
+html, body { height: 100%; background-color: rgb(247, 247, 247); }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 .globalContainer {
     padding: 2em !important;
 }
+.primaryColor {
+    color: rgb(154, 187, 248) !important;
+}
+.primaryButton {
+    all: unset;
+    cursor: pointer;
+    background-color: rgb(182, 199, 246);
+    color: rgb(255, 255, 255) !important;
+    border: 1px solid rgb(182, 199, 246) !important;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 0.5em 1.5em;
+}
+.closeButton {
+    all: unset !important;
+    cursor: pointer !important;
+    padding: 15px !important;
+}
+.actionButton {
+    all: unset;
+    cursor: pointer;
+    background-color: none;
+    color: rgb(66, 66, 67) !important;
+    border: none !important;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 0.5em 1em;
+}
+.tableContainer {
+    width: 100% !important;
+    overflow: scroll;
+}
+.table {
+    width: 100% !important;
+    overflow: scroll;
+}
 table {
-    border: 1px solid #222222 !important;
+    width: 100% !important;
+    overflow: scroll;
+    border: 1px solid #bdbdbd !important;
     border-bottom: none !important;
     .center {
         text-align: center !important;
@@ -27,12 +65,33 @@ table {
     .border-left-0 {
         border-left: none !important;
     }
+    th {
+        color: rgb(154, 187, 248) !important;
+    }
     td, th {
-        border-left: 1px solid #222222 !important;
-        border-bottom: 1px solid #222222 !important;
+        border-left: 1px solid #bdbdbd !important;
+        border-bottom: 1px solid #bdbdbd !important;
+    }
+    .color-1 {
+        color: rgb(48, 48, 48) !important;
+    }
+    .color-2 {
+        color: rgb(48, 48, 48) !important;
+    }
+    .color-3 {
+        color: rgb(48, 48, 48) !important;
     }
 }
 mat-paginator {
-    border: 1px solid #222222;
+    border: 1px solid #bdbdbd;
     border-top: none !important;
+}
+.xng-breadcrumb-link {
+    color: rgba(154, 187, 248, 0.538) !important;
+}
+.xng-breadcrumb-separator {
+    color: rgba(154, 187, 248, 0.538) !important;
+}
+.xng-breadcrumb-trail {
+    color: rgb(124, 165, 243) !important;
 }
