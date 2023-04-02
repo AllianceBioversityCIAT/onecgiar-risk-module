@@ -8,9 +8,9 @@ import { VersionDetailsComponent } from './pages/version-details/version-details
 import { VersionsDashboardComponent } from './pages/versions-dashboard/versions-dashboard.component';
 
 const routes: Routes = [
-  
+  { path: '', redirectTo: '/risk-dashboard/initiatives', pathMatch: 'full' },
   {
-    path: 'risk-dashboard', 
+    path: 'risk-dashboard',
     component: RiskDashboardComponent,
     children: [
       { 
