@@ -52,7 +52,14 @@ export class RiskController {
     console.log(risk)
     return this.riskService.createRisk(risk);
   }
-
+  @ApiCreatedResponse({
+    description: '',
+    type: Risk,
+  })
+  @Put(':id')
+  setRisk(@Body() risk: Risk,@Param('id') id:number) {
+    return this.riskService.updateRisk(id,risk);
+  }
   @Delete(':risk_id')
   @ApiCreatedResponse({
     description: '',
