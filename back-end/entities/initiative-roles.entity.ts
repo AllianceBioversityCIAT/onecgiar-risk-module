@@ -6,6 +6,8 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Initiative } from './initiative.entity';
 import { User } from './user.entitiy';
@@ -36,4 +38,13 @@ export class InitiativeRoles {
   @ApiProperty()
   @Column()
   role: string;
+
+
+  @ApiProperty()
+    @CreateDateColumn({ type: "timestamp" })
+    createdAt: Date;
+
+    @ApiProperty()
+    @UpdateDateColumn({ type: "timestamp" })
+    updatedAt: Date; 
 }

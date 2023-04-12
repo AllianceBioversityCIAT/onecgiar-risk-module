@@ -25,52 +25,10 @@ export class VersionsDashboardComponent {
   dataSource = new MatTableDataSource<any>([
     { 
       "Version": "1", 
-      "Version Title": "My first version", 
-      "Publish Reason": "No specific reason", 
-      "Creation Date": "5 Nov. 2022",
-      "Creation By": "Monther (Co-leader)"
-    },
-    { 
-      "Version": "2", 
-      "Version Title": "My first version", 
-      "Publish Reason": "No specific reason", 
-      "Creation Date": "5 Nov. 2022",
-      "Creation By": "Monther (Co-leader)"
-    },
-    { 
-      "Version": "3", 
-      "Version Title": "My first version", 
-      "Publish Reason": "No specific reason", 
-      "Creation Date": "5 Nov. 2022",
-      "Creation By": "Monther (Co-leader)"
-    },
-    { 
-      "Version": "4", 
-      "Version Title": "My first version", 
-      "Publish Reason": "No specific reason", 
-      "Creation Date": "5 Nov. 2022",
-      "Creation By": "Monther (Co-leader)"
-    },
-    { 
-      "Version": "5", 
-      "Version Title": "My first version", 
-      "Publish Reason": "No specific reason", 
-      "Creation Date": "5 Nov. 2022",
-      "Creation By": "Monther (Co-leader)"
-    },
-    { 
-      "Version": "6", 
-      "Version Title": "My first version", 
-      "Publish Reason": "No specific reason", 
-      "Creation Date": "5 Nov. 2022",
-      "Creation By": "Monther (Co-leader)"
-    },
-    { 
-      "Version": "7", 
-      "Version Title": "My first version", 
-      "Publish Reason": "No specific reason", 
-      "Creation Date": "5 Nov. 2022",
-      "Creation By": "Monther (Co-leader)"
+      "Version Title": "Test", 
+      "Publish Reason": "Test", 
+      "Creation Date": "Test",
+      "Creation By": "Test"
     }
   ]);
 
@@ -80,8 +38,12 @@ export class VersionsDashboardComponent {
   @ViewChild(MatPaginator) paginator: any;
 
   path: any = '';
+  initiativeId: any;
   ngOnInit() {
     this.path = window.location.pathname
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.initiativeId = Number(params['initiativeId']);
+    });
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

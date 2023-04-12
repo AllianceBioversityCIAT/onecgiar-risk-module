@@ -37,7 +37,7 @@ export class RiskService {
     }
     return created_risk;
   }
-  async updateMitigation(risk_id, id , mitigation:Mitigation) {
+  async updateMitigation(risk_id, id , mitigation: Mitigation) {
     const found_mitigation = await this.mitigationRepository.findOne({
       where: { risk_id, id },
     });

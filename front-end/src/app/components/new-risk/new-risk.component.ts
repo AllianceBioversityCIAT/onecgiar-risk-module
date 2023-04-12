@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { RiskService } from 'src/app/services/risk.service';
 import { NewProposedComponent } from '../new-proposed/new-proposed.component';
 
 @Component({
@@ -14,26 +15,21 @@ export class NewRiskComponent {
     public fb: FormBuilder,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<NewRiskComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any = {}
+    @Inject(MAT_DIALOG_DATA) public data: any = {},
+    private riskService: RiskService
   ) {}
 
-  errorMessage: any = ''
-  riskCategories: any[] = [
-    {value: '', viewValue: 'Choice Category'},
-    {value: 'Cohesion', viewValue: 'Cohesion'},
-    {value: 'Funding', viewValue: 'Funding'},
-    {value: 'Operations', viewValue: 'Operations'},
-    {value: 'Partners and Partnerships ', viewValue: 'Partners and Partnerships '},
-    {value: 'Scaling and Impact', viewValue: 'Scaling and Impact'},
-    {value: 'Science Research & Innovation', viewValue: 'Science Research & Innovation'},
-    {value: 'Talent', viewValue: 'Talent'}
-  ];
+  
+  riskApi: any = null;
 
+  errorMessage: any = ''
+  riskCategories: any;
   newRiskForm: any;
+
   populateNewRiskForm() {
     
     this.newRiskForm = this.fb.group({
-      riskOwner: ['' , Validators.required],
+      riskOwner: [''],
       riskCategories: ['', Validators.required],
       riskTitle: ['', Validators.required],
       detailedDescription: ['', Validators.required],
@@ -44,6 +40,22 @@ export class NewRiskComponent {
     })
   }
 
+  async submitPartOfRiskForm() {
+    this.newRiskForm.markAllAsTouched();
+    this.newRiskForm.updateValueAndValidity();
+    if(this.newRiskForm.valid) {
+      this.riskApi = await this.riskService.createNewRisk({
+        initiative_id: Number(this.data.initiative_id), 
+        title: this.newRiskForm.value.riskTitle,
+        description: this.newRiskForm.value.detailedDescription,
+        target_likelihood: Number(this.newRiskForm.value.targetLikelihood),
+        target_impact: Number(this.newRiskForm.value.targetImpact),
+        likelihood: Number(this.newRiskForm.value.currentLikelihood),
+        impact: Number(this.newRiskForm.value.currentImpact),
+        categories: [{id: this.newRiskForm.value.riskCategories}],
+      })
+    } 
+  }
 
   submit() {
     this.newRiskForm.markAllAsTouched();
@@ -52,52 +64,57 @@ export class NewRiskComponent {
       this.errorMessage = "Proposed is Required"
     } else if(this.newRiskForm.valid) {
       this.errorMessage = '';
-
+      this.dialog.closeAll();
     } 
   }
 
   arr: any[] = [];
-  openNewProposedDialog() {
+  async openNewProposedDialog() {
+    if(this.riskApi == null) {
+       await this.submitPartOfRiskForm()
+    }
+   
     const dialogRef = this.dialog.open(NewProposedComponent, {
       width: '600px',
       data: {role: 'add', proposed: null}
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async (result) => {
       if(result.role == 'add') {
         this.errorMessage = '';
-        this.arr.push({"Mitigation Description": result.formValue.mitigationDescription, "Status of Action": result.formValue.statusOfAction})
-        this.proposed = new MatTableDataSource<any>(this.arr);
-      } else {
-        console.log(result.index)
-        this.arr.splice(result.index, 1)
-        this.errorMessage = '';
-        this.arr.push({"Mitigation Description": result.formValue.mitigationDescription, "Status of Action": result.formValue.statusOfAction})
-        this.proposed = new MatTableDataSource<any>(this.arr);
-      }
+        await this.riskService.createNewMitigation(this.riskApi.id, {
+          risk_id: this.riskApi.id,
+          description: result.formValue.description,
+          status: result.formValue.status
+        })
+        var risk: any = await this.riskService.getRisk(this.riskApi.id)
+        this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
+        console.log(this.proposed)
+      } 
     });
   }
 
-  removeProposed(index: any) {
-    this.arr.splice(index, 1)
-    this.proposed = new MatTableDataSource<any>(this.arr);
+  async removeProposed(mitigationId: any) {
+    await this.riskService.deleteMitigation(this.riskApi.id, mitigationId)
+    var risk: any = await this.riskService.getRisk(this.riskApi.id)
+    this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
   }
 
-  editProposed(index: any, proposed: any) {
+  editProposed(mitigationId: number, mitigation: any) {
     const dialogRef = this.dialog.open(NewProposedComponent, {
       width: '600px',
-      data: {role: 'edit', proposed: proposed, index: index}
+      data: {role: 'edit', proposed: mitigation, mitigationId: mitigationId}
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if(result.role == 'add') {
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if(result.role == 'edit') {
         this.errorMessage = '';
-        this.arr.push({"Mitigation Description": result.formValue.mitigationDescription, "Status of Action": result.formValue.statusOfAction})
-        this.proposed = new MatTableDataSource<any>(this.arr);
-      } else {
-        console.log(result.index)
-        this.arr.splice(result.index, 1)
-        this.errorMessage = '';
-        this.arr.push({"Mitigation Description": result.formValue.mitigationDescription, "Status of Action": result.formValue.statusOfAction})
-        this.proposed = new MatTableDataSource<any>(this.arr);
+        await this.riskService.editMitigation(this.riskApi.id, mitigationId,  {
+          risk_id: this.riskApi.id,
+          description: result.formValue.description,
+          status: result.formValue.status
+        })
+        var risk: any = await this.riskService.getRisk(this.riskApi.id)
+        this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
+       
       }
     });
   }
@@ -108,7 +125,9 @@ export class NewRiskComponent {
 
 
 
-  ngOnInit() {
+  async ngOnInit() {
     this.populateNewRiskForm()
+    this.riskCategories = await this.riskService.getRiskCategories();
+    
   }
 }

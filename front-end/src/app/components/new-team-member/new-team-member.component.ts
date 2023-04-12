@@ -26,8 +26,8 @@ export class NewTeamMemberComponent {
   memberForm: any;
   populateMemberForm() {
     this.memberForm = this.fb.group({
-      email: [(this.data.role == 'add')? '' : this.data.member['Email'] , [Validators.required, Validators.email]],
-      userRole : [(this.data.role == 'add')? '' : this.data.member['My Role'], Validators.required]
+      email: [(this.data.role == 'add')? '' : this.data.member.email , [Validators.required, Validators.email]],
+      userRole : [(this.data.role == 'add')? '' : this.data.member.role, Validators.required]
     })
   }
 

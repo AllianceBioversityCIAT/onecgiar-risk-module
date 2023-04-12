@@ -9,16 +9,16 @@
 <div class="dialogBody">
     <form [formGroup]="proposedForm" (ngSubmit)="submit()">
         <mat-form-field class="w-90" appearance="outline">
-            <textarea formControlName="mitigationDescription" rows="4" matInput placeholder="Mitigation Description"></textarea>
-            <mat-error class="error" *ngIf="proposedForm.controls['mitigationDescription'].errors?.['required']">Mitigation Description is Required</mat-error>
+            <textarea formControlName="description" rows="4" matInput placeholder="Mitigation Description"></textarea>
+            <mat-error class="error" *ngIf="proposedForm.controls['description'].errors?.['required']">Mitigation Description is Required</mat-error>
         </mat-form-field>
         <mat-form-field class="w-90" appearance="outline">
-            <mat-select formControlName="statusOfAction">
+            <mat-select formControlName="status">
               <mat-option *ngFor="let action of Actions" [value]="action.value">
                 {{action.viewValue}}
               </mat-option>
             </mat-select>
-          <mat-error class="error" *ngIf="proposedForm.controls['statusOfAction'].errors?.['required']">Status of Action is Required</mat-error>
+          <mat-error class="error" *ngIf="proposedForm.controls['status'].errors?.['required']">Status of Action is Required</mat-error>
         </mat-form-field>
         
         <div class="end">

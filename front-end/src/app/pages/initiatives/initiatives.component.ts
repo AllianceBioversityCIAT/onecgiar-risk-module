@@ -41,6 +41,22 @@ export class InitiativesComponent {
     // this.totalItems =  this.dataSource.meta.totalItems;
   }
 
+
+  filterCategories(categories: any) {
+    var list = '';
+    categories.forEach((element: any) => {
+      list += element.categories[0].title + ", ";
+    });
+    return list;
+  }
+
+  filterRoles(roles: any) {
+    var list = '';
+    roles.forEach((element: any) => {
+      list += element.role + ", ";
+    });
+    return list;
+  }
   async ngOnInit() {
     this.getInitiatives();
   }

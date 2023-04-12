@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NewRiskComponent } from 'src/app/components/new-risk/new-risk.component';
 import { PublishDialogComponent } from 'src/app/components/publish-dialog/publish-dialog.component';
+import { InitiativesService } from 'src/app/services/initiatives.service';
+import { RiskService } from 'src/app/services/risk.service';
 
 @Component({
   selector: 'app-initiative-details',
@@ -15,7 +17,10 @@ export class InitiativeDetailsComponent {
   constructor(
     public router: Router,
     public dialog: MatDialog,
-    public activatedRoute: ActivatedRoute) {
+    public activatedRoute: ActivatedRoute,
+    private initiativeService: InitiativesService,
+    private riskService: RiskService
+    ) {
     
   }
  
@@ -29,10 +34,17 @@ export class InitiativeDetailsComponent {
       console.log(`Dialog result: ${result}`);
     });
   }
-  deleteInitiative(initiative: any) {
-    alert()
-    // handel delete initiative api service
+  async deleteRisk(risk: any) {
+    this.deleteMitigationRisk(risk);
+    await this.riskService.deleteRisk(risk.id);
+    this.loadInitiative();
   }
+  async deleteMitigationRisk(risk: any) {
+    risk.mitigations.forEach( async (mitigation: any) => {
+      await this.riskService.deleteMitigation(risk.id, mitigation.id);
+    })
+  }
+
 
   openPublishDialog() {
     this.dialog.open(PublishDialogComponent , {
@@ -43,74 +55,18 @@ export class InitiativeDetailsComponent {
   openNewRiskDialog() {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
-      data: {role: 'add'}
+      data: {role: 'add', initiative_id: Number(this.initiativeId.split('-')[1])}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      this.loadInitiative()
     });
   }
 
 
 
   displayedColumns: string[] = ['ID', 'Risk Achieving Impact', 'Risk Category', 'Risk Owner', 'Description Risk', 'Current Likelihood', 'Current Impact', 'Current Risk Level', 'Target Likelihood', 'Target Impact', 'Target Risk Level', 'Mitigation Action', 'Status of Actions', 'Flag to SDG', 'Redundant', 'Actions'];
-  dataSource = new MatTableDataSource<any>([
-    { 
-      "ID": "1.001", 
-      "Risk Achieving Impact": "Operational: Data Impedance (1)", 
-      "Risk Category": "Partners and partnerships", 
-      "Risk Owner": "Monther", 
-      "Description Risk": "Efforts and time taken to generate large amounts of market intelligence data paralyzes the product profile revision process; programs continue to pursue inadequately targeted priorities", 
-      "Current Likelihood": "2", 
-      "Current Impact": "5", 
-      "Current Risk Level": "10", 
-      "Target Likelihood": "4", 
-      "Target Impact": "3", 
-      "Target Risk Level": "12",
-      "Mitigation Action": "Active collaboration with Market Intelligence to work towards pragmatic approaches, including (i) ABI-supported collection of current status across breeding programs; (ii) agreement over main impact hypotheses; (iii) use of DAC indicators",
-      "Status of Actions": "Delayed",
-      "Flag to SDG": "",
-      "Redundant": "",
-      "Actions": ""
-    },
-    { 
-      "ID": "1.001", 
-      "Risk Achieving Impact": "Operational: Data Impedance (1)", 
-      "Risk Category": "Partners and partnerships", 
-      "Risk Owner": "Monther", 
-      "Description Risk": "Efforts and time taken to generate large amounts of market intelligence data paralyzes the product profile revision process; programs continue to pursue inadequately targeted priorities", 
-      "Current Likelihood": "2", 
-      "Current Impact": "5", 
-      "Current Risk Level": "10", 
-      "Target Likelihood": "4", 
-      "Target Impact": "3", 
-      "Target Risk Level": "12",
-      "Mitigation Action": "Active collaboration with Market Intelligence to work towards pragmatic approaches, including (i) ABI-supported collection of current status across breeding programs; (ii) agreement over main impact hypotheses; (iii) use of DAC indicators",
-      "Status of Actions": "Delayed",
-      "Flag to SDG": "",
-      "Redundant": "",
-      "Actions": ""
-    },
-    { 
-      "ID": "1.001", 
-      "Risk Achieving Impact": "Operational: Data Impedance (1)", 
-      "Risk Category": "Partners and partnerships", 
-      "Risk Owner": "Monther", 
-      "Description Risk": "Efforts and time taken to generate large amounts of market intelligence data paralyzes the product profile revision process; programs continue to pursue inadequately targeted priorities", 
-      "Current Likelihood": "2", 
-      "Current Impact": "5", 
-      "Current Risk Level": "10", 
-      "Target Likelihood": "4", 
-      "Target Impact": "3", 
-      "Target Risk Level": "12",
-      "Mitigation Action": "Active collaboration with Market Intelligence to work towards pragmatic approaches, including (i) ABI-supported collection of current status across breeding programs; (ii) agreement over main impact hypotheses; (iii) use of DAC indicators",
-      "Status of Actions": "Delayed",
-      "Flag to SDG": "",
-      "Redundant": "",
-      "Actions": ""
-    }
-    
-  ]);
+  dataSource: any = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator: any;
 
@@ -118,14 +74,50 @@ export class InitiativeDetailsComponent {
     this.dataSource.paginator = this.paginator;
   }
 
-  path: any = '';
-  id: any;
-  ngOnInit() {
-    this.path = window.location.pathname
-
-    this.activatedRoute.params.subscribe(params=>{
-      this.id = params['versionId'];
-    })
+  async loadInitiative() {
+    var initId = Number(this.initiativeId.split('-')[1])
+    var data:any = await this.initiativeService.getInitiative(initId);
+    console.log(data)
+    this.dataSource =  new MatTableDataSource<any>(data.risks);
   }
+  versionId: any;
+  initiativeId: any;
+  async ngOnInit() {
+   
+    this.activatedRoute.params.subscribe(params=>{
+      console.log(params)
+      this.versionId = params['versionId'];
+      this.initiativeId = params['initiativeId'];
+    })
+
+    
+    this.loadInitiative()
+   
+
+  }
+  filterCategory(element: any) {
+    var categories = '';
+    element.categories.forEach((cat: any) => {
+      categories += cat.title + " ";
+    });
+    return categories;
+  }
+  filterDescriptionMitigations(element: any) {
+    var mitigationsList = '';
+    element.mitigations.forEach((mitigation: any) => {
+      mitigationsList += mitigation.description + ",  ";
+    })
+    return mitigationsList
+  }
+  filterStatusMitigations(element: any) {
+    var mitigationsList = '';
+    element.mitigations.forEach((mitigation: any) => {
+      mitigationsList += mitigation.status + ",  ";
+    })
+    return mitigationsList
+  }
+  
+
+ 
 
 }

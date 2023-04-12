@@ -27,8 +27,8 @@ export class NewProposedComponent {
   populateProposedForm() {
 
     this.proposedForm = this.fb.group({
-      mitigationDescription: [this.data.role == 'add'? '' : this.data.proposed['Mitigation Description'] , Validators.required],
-      statusOfAction: [this.data.role == 'add'? '' : this.data.proposed['Status of Action'], Validators.required]
+      description: [this.data.role == 'add'? '' : this.data.proposed.description , Validators.required],
+      status: [this.data.role == 'add'? '' : this.data.proposed.status, Validators.required]
     })
   }
 

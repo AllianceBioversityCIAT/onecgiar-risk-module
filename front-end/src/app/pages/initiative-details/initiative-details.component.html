@@ -1,5 +1,5 @@
 
-<ng-container *ngIf="router.isActive(path, true)">
+<ng-container *ngIf="router.isActive('/risk-dashboard/initiatives/' + initiativeId, true)">
     <div class="globalContainer">
         <div class="head">
             <h3 class="primaryColor">Risk management for Accelerated Breeding: Meeting Farmers.</h3>
@@ -9,12 +9,14 @@
                 <button class="primaryButton mt-1"  (click)="openNewRiskDialog()">Create Risk</button>
             </div>
         </div>
+        
         <div class="tableContainer">
           <div class="table">
             <table mat-table [dataSource]="dataSource">
+            
               <ng-container matColumnDef="ID">
                 <th class="big bold center spacing border-left-0 " mat-header-cell *matHeaderCellDef> ID </th>
-                <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element['ID']}} </td>
+                <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element.id}} </td>
               </ng-container>
           
               <ng-container matColumnDef="Risk Achieving Impact">
@@ -24,7 +26,7 @@
 
               <ng-container matColumnDef="Risk Category">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Category </th>
-                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element['Risk Category']}} </td>
+                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{filterCategory(element)}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Risk Owner">
@@ -34,47 +36,47 @@
 
               <ng-container matColumnDef="Description Risk">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Description Risk </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element['Description Risk']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element.description}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Likelihood">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Likelihood </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element['Current Likelihood']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element.likelihood}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Impact">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Impact </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element['Current Impact']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element.impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Risk Level">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Risk Level </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element['Current Risk Level']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.likelihood * element.impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Target Likelihood">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Likelihood </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element['Target Likelihood']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.target_likelihood}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Target Impact">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Impact </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 130px;"> {{element['Target Impact']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 130px;"> {{element.target_impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Target Risk Level">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Risk Level </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element['Target Risk Level']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.target_likelihood * element.target_impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Mitigation Action">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Mitigation Action </th>
-                <td mat-cell *matCellDef="let element" style="min-width: 180px;"> {{element['Mitigation Action']}} </td>
+                <td mat-cell *matCellDef="let element" style="min-width: 180px;"> {{filterDescriptionMitigations(element)}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Status of Actions">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Status of Actions </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element['Status of Actions']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{filterStatusMitigations(element)}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Flag to SDG">
@@ -103,7 +105,7 @@
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                           </svg>
                     </button>
-                    <button matTooltip="Delete" class="actionButton" (click)="deleteInitiative(element)">
+                    <button matTooltip="Delete" class="actionButton" (click)="deleteRisk(element)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                           </svg>

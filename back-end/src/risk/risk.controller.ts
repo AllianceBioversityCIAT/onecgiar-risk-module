@@ -11,7 +11,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiParam,
-  ApiTags,
+  ApiTags,  
 } from '@nestjs/swagger';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
@@ -49,6 +49,7 @@ export class RiskController {
   })
   @Post()
   setRisks(@Body() risk: Risk) {
+    console.log(risk)
     return this.riskService.createRisk(risk);
   }
 

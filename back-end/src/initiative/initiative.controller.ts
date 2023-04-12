@@ -28,14 +28,14 @@ export class InitiativeController {
   getInitiatives(@Param('id') id: number): Promise<Initiative> {
     return this.iniService.iniRepository.findOne({
       where: { id },
-      relations: ['risks', 'risks.categories', 'roles', 'roles.user'],
+      relations: ['risks', 'risks.categories', 'risks.mitigations',  'roles', 'roles.user'],
     });
   }
 
   @Get(':id/roles')
   @ApiCreatedResponse({
     description: '',
-    type:[InitiativeRoles],
+    type:[InitiativeRoles], 
   })
   getRoles(@Param('id') id: number): Promise<InitiativeRoles[]> {
     return this.iniService.iniRolesRepository.find({
@@ -63,7 +63,7 @@ export class InitiativeController {
     return  this.iniService.setRole(initiative_id,initiativeRoles)
   }
 
-  @Put(':initiative_id/mitigation/:initiative_roles_id')
+  @Put(':initiative_id/roles/:initiative_roles_id')
   @ApiCreatedResponse({
     description: '',
     type:InitiativeRoles,
