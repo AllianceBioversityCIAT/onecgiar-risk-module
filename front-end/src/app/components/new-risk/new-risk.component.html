@@ -7,7 +7,7 @@
     </button>
 </div>
 <div class="dialogBody">
-    
+        {{data | json}}
         <form [formGroup]="newRiskForm">
             <mat-form-field class="w-90" appearance="outline">
                 <input formControlName="riskOwner" matInput placeholder="Risk Owner">

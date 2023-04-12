@@ -22,9 +22,24 @@ export class RiskService {
   getRisk(riskId: number) {
     return this.http.get(this.backend_url + '/risk/' + riskId, { headers: this.headers }).toPromise();
   }
-  deleteRisk(id: number) {
-    return this.http.delete(this.backend_url + '/risk/' + id, { headers: this.headers }).toPromise();
+  deleteRisk(riskId: number) {
+    return this.http.delete(this.backend_url + '/risk/' + riskId, { headers: this.headers }).toPromise();
   }
+  // ============================================================================= RISK  --  PUT API 
+  updateRisk(riskId: number, risk: any) {
+    return this.http.put(this.backend_url + '/risk/' + riskId, {
+      id: risk.id,
+      initiative_id: risk.initiative_id,
+      title: risk.title,
+      description: risk.description,
+      target_likelihood: risk.target_likelihood,
+      target_impact: risk.target_impact,
+      likelihood: risk.likelihood,
+      impact: risk.impact,
+      categories: risk.categories,
+    }, { headers: this.headers }).toPromise();
+  }
+  // ============================================================================= RISK  --  PUT API 
   getRiskMitigations(riskId: number) {
     return this.http.get(this.backend_url + '/risk/' + riskId + '/mitigation', { headers: this.headers }).toPromise();
   }

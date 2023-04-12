@@ -31,6 +31,7 @@ export class InitiativesComponent {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.getInitiatives();
   }
 
   async getInitiatives() {
@@ -57,6 +58,7 @@ export class InitiativesComponent {
     });
     return list;
   }
+  
   async ngOnInit() {
     this.getInitiatives();
   }

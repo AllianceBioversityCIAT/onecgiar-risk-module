@@ -24,14 +24,15 @@ export class InitiativeDetailsComponent {
     
   }
  
-  editInitiative(data: any) {
+  editRisk(data: any) {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
-      data: {role: 'edit' , risk: data}
+      data: {taskRole: 'edit' , risk: data}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      this.loadInitiative();
     });
   }
   async deleteRisk(risk: any) {
@@ -55,7 +56,7 @@ export class InitiativeDetailsComponent {
   openNewRiskDialog() {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
-      data: {role: 'add', initiative_id: Number(this.initiativeId.split('-')[1])}
+      data: {taskRole: 'add', initiative_id: Number(this.initiativeId.split('-')[1])}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -85,7 +86,6 @@ export class InitiativeDetailsComponent {
   async ngOnInit() {
    
     this.activatedRoute.params.subscribe(params=>{
-      console.log(params)
       this.versionId = params['versionId'];
       this.initiativeId = params['initiativeId'];
     })

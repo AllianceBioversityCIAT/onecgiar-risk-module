@@ -30,14 +30,19 @@ export class NewRiskComponent {
     
     this.newRiskForm = this.fb.group({
       riskOwner: [''],
-      riskCategories: ['', Validators.required],
-      riskTitle: ['', Validators.required],
-      detailedDescription: ['', Validators.required],
-      targetLikelihood: ['', Validators.required],
-      targetImpact: ['', Validators.required],
-      currentLikelihood: ['', Validators.required],
-      currentImpact: ['', Validators.required]
+      riskCategories: [(this.data.taskRole == 'add')? '' : this.data.risk.categories[0].id, Validators.required],
+      riskTitle: [(this.data.taskRole == 'add')? '' : this.data.risk.title, Validators.required],
+      detailedDescription: [(this.data.taskRole == 'add')? '' : this.data.risk.description, Validators.required],
+      targetLikelihood: [(this.data.taskRole == 'add')? '' :  String(this.data.risk.target_likelihood), Validators.required],
+      targetImpact: [(this.data.taskRole == 'add')? '' :  String(this.data.risk.target_impact), Validators.required],
+      currentLikelihood: [(this.data.taskRole == 'add')? '' :  String(this.data.risk.likelihood), Validators.required],
+      currentImpact: [(this.data.taskRole == 'add')? '' : String(this.data.risk.impact), Validators.required]
     })
+
+    if(this.data.taskRole == 'edit') {
+
+      this.proposed = new MatTableDataSource<any>(this.data.risk.mitigations);
+    }
   }
 
   async submitPartOfRiskForm() {
@@ -64,13 +69,29 @@ export class NewRiskComponent {
       this.errorMessage = "Proposed is Required"
     } else if(this.newRiskForm.valid) {
       this.errorMessage = '';
-      this.dialog.closeAll();
+      if(this.data.taskRole == 'add') {
+        this.dialog.closeAll();
+      } else if(this.data.taskRole == 'edit') {
+        // here we handle put api for risk
+        this.riskService.updateRisk(this.data.risk.id, {
+          initiative_id: Number(this.data.initiative_id), 
+          title: this.newRiskForm.value.riskTitle,
+          description: this.newRiskForm.value.detailedDescription,
+          target_likelihood: Number(this.newRiskForm.value.targetLikelihood),
+          target_impact: Number(this.newRiskForm.value.targetImpact),
+          likelihood: Number(this.newRiskForm.value.currentLikelihood),
+          impact: Number(this.newRiskForm.value.currentImpact),
+          categories: [{id: this.newRiskForm.value.riskCategories}],
+        })
+        this.dialog.closeAll();
+      }
+      
     } 
   }
 
   arr: any[] = [];
   async openNewProposedDialog() {
-    if(this.riskApi == null) {
+    if(this.riskApi == null && this.data.taskRole == 'add') {
        await this.submitPartOfRiskForm()
     }
    
@@ -79,24 +100,42 @@ export class NewRiskComponent {
       data: {role: 'add', proposed: null}
     });
     dialogRef.afterClosed().subscribe(async (result) => {
-      if(result.role == 'add') {
+      if(this.data.taskRole == 'add') {
+        if(result.role == 'add') {
+          this.errorMessage = '';
+          await this.riskService.createNewMitigation(this.riskApi.id, {
+            risk_id: this.riskApi.id,
+            description: result.formValue.description,
+            status: result.formValue.status
+          })
+          var risk: any = await this.riskService.getRisk(this.riskApi.id)
+          this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
+        }
+      } else if(this.data.taskRole == 'edit'){
         this.errorMessage = '';
-        await this.riskService.createNewMitigation(this.riskApi.id, {
-          risk_id: this.riskApi.id,
+        await this.riskService.createNewMitigation(this.data.risk.id, {
+          risk_id: this.data.risk.id,
           description: result.formValue.description,
           status: result.formValue.status
         })
-        var risk: any = await this.riskService.getRisk(this.riskApi.id)
+        var risk: any = await this.riskService.getRisk(this.data.risk.id)
         this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
-        console.log(this.proposed)
-      } 
+      }
+      
     });
   }
 
   async removeProposed(mitigationId: any) {
-    await this.riskService.deleteMitigation(this.riskApi.id, mitigationId)
-    var risk: any = await this.riskService.getRisk(this.riskApi.id)
-    this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
+    if(this.data.taskRole == 'add') {
+      await this.riskService.deleteMitigation(this.riskApi.id, mitigationId)
+      var risk: any = await this.riskService.getRisk(this.riskApi.id)
+      this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
+    } else if(this.data.taskRole == 'edit') {
+      await this.riskService.deleteMitigation(this.data.risk.id, mitigationId)
+      var risk: any = await this.riskService.getRisk(this.data.risk.id)
+      this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
+    }
+    
   }
 
   editProposed(mitigationId: number, mitigation: any) {
@@ -105,17 +144,29 @@ export class NewRiskComponent {
       data: {role: 'edit', proposed: mitigation, mitigationId: mitigationId}
     });
     dialogRef.afterClosed().subscribe(async (result) => {
-      if(result.role == 'edit') {
+      if(this.data.taskRole == 'add') {
+        if(result.role == 'edit') {
+          this.errorMessage = '';
+          await this.riskService.editMitigation(this.riskApi.id, mitigationId,  {
+            risk_id: this.riskApi.id,
+            description: result.formValue.description,
+            status: result.formValue.status
+          })
+          var risk: any = await this.riskService.getRisk(this.riskApi.id)
+          this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
+        }
+      } else if(this.data.taskRole == 'edit') {
         this.errorMessage = '';
-        await this.riskService.editMitigation(this.riskApi.id, mitigationId,  {
-          risk_id: this.riskApi.id,
+        await this.riskService.editMitigation(this.data.risk.id, mitigationId,  {
+          risk_id: this.data.risk.id,
           description: result.formValue.description,
           status: result.formValue.status
         })
-        var risk: any = await this.riskService.getRisk(this.riskApi.id)
+        var risk: any = await this.riskService.getRisk(this.data.risk.id)
         this.proposed = new MatTableDataSource<any>(risk[0].mitigations);
-       
+        
       }
+      
     });
   }
 
