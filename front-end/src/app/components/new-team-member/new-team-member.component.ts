@@ -16,7 +16,7 @@ export class NewTeamMemberComponent {
 
 
   Roles: any[] = [
-    {value: '', viewValue: 'Choice Role'},
+    {value: '', viewValue: 'Role selection'},
     {value: 'Member', viewValue: 'Member'},
     {value: 'Leader', viewValue: 'Leader'},
     {value: 'Co-leader', viewValue: 'Co-leader'}

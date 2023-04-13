@@ -17,7 +17,7 @@ export class NewProposedComponent {
 
 
   Actions: any[] = [
-    {value: '', viewValue: 'Choice Action'},
+    {value: '', viewValue: 'Action selection'},
     {value: 'Delayed', viewValue: 'Delayed'},
     {value: 'Completed', viewValue: 'Completed'}
   ];

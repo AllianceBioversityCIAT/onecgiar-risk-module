@@ -9,13 +9,13 @@
 <div class="dialogBody">
     <form [formGroup]="publishForm">
         <mat-form-field class="w-90" appearance="outline">
-            <input formControlName="versionTitle" matInput placeholder="Version Title">
-            <mat-error class="error" *ngIf="publishForm.controls['versionTitle'].errors?.['required']">Version Title is Required</mat-error>
+            <input formControlName="versionTitle" matInput placeholder="Version title">
+            <mat-error class="error" *ngIf="publishForm.controls['versionTitle'].errors?.['required']">Version title is required</mat-error>
         </mat-form-field>
         <br>
         <mat-form-field class="w-90" appearance="outline">
-          <input formControlName="publishReason" matInput placeholder="Publish Reason">
-          <mat-error class="error" *ngIf="publishForm.controls['publishReason'].errors?.['required']">Publish Reason is Required</mat-error>
+          <input formControlName="publishReason" matInput placeholder="Publication reason">
+          <mat-error class="error" *ngIf="publishForm.controls['publishReason'].errors?.['required']">Publication reason is required</mat-error>
         </mat-form-field>
         <br>
         <div class="end">

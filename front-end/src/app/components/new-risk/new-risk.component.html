@@ -17,7 +17,7 @@
             <mat-form-field class="w-90" appearance="outline">
                 <mat-select formControlName="riskCategories">
                     <mat-option [value]="''">
-                       Choice Category
+                       Category selection
                     </mat-option>
                     <mat-option *ngFor="let riskCat of riskCategories" [value]="riskCat.id">
                         {{riskCat.title}}
