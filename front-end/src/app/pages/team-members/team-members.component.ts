@@ -84,11 +84,14 @@ export class TeamMembersComponent {
     this.dataSource = new MatTableDataSource<any>(data);
   }
 
-  
+  id:number = 0;
   async ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.initiativeId = Number(params['initiativeId']);
     });
+    this.activatedRoute.params.subscribe(params=>{
+      this.id =  params['id'];
+    })
     this.loadInitiativeRoles()
   }
 }
