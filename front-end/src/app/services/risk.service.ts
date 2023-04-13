@@ -30,6 +30,7 @@ export class RiskService {
     return this.http.put(this.backend_url + '/risk/' + riskId, {
       id: risk.id,
       initiative_id: risk.initiative_id,
+      risk_owner: risk.risk_owner,
       title: risk.title,
       description: risk.description,
       target_likelihood: risk.target_likelihood,
@@ -47,6 +48,7 @@ export class RiskService {
     console.log(newRisk)
     return this.http.post(this.backend_url + '/risk', {
       initiative_id: newRisk.initiative_id,
+      risk_owner: newRisk.risk_owner,
       title: newRisk.title,
       description: newRisk.description,
       target_likelihood: newRisk.target_likelihood,

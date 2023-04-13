@@ -56,7 +56,7 @@ export class InitiativeDetailsComponent {
   openNewRiskDialog() {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
-      data: {taskRole: 'add', initiative_id: Number(this.initiativeId.split('-')[1])}
+      data: {taskRole: 'add', initiative_id: Number(this.id)}
     });
 
     dialogRef.afterClosed().subscribe(result => {

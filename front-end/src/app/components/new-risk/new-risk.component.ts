@@ -29,7 +29,7 @@ export class NewRiskComponent {
   populateNewRiskForm() {
     
     this.newRiskForm = this.fb.group({
-      riskOwner: [''],
+      riskOwner: [(this.data.taskRole == 'add')? '' : this.data.risk.risk_owner, Validators.required],
       riskCategories: [(this.data.taskRole == 'add')? '' : this.data.risk.categories[0].id, Validators.required],
       riskTitle: [(this.data.taskRole == 'add')? '' : this.data.risk.title, Validators.required],
       detailedDescription: [(this.data.taskRole == 'add')? '' : this.data.risk.description, Validators.required],
@@ -51,6 +51,7 @@ export class NewRiskComponent {
     if(this.newRiskForm.valid) {
       this.riskApi = await this.riskService.createNewRisk({
         initiative_id: Number(this.data.initiative_id), 
+        risk_owner: this.newRiskForm.value.riskOwner,
         title: this.newRiskForm.value.riskTitle,
         description: this.newRiskForm.value.detailedDescription,
         target_likelihood: Number(this.newRiskForm.value.targetLikelihood),
@@ -74,7 +75,9 @@ export class NewRiskComponent {
       } else if(this.data.taskRole == 'edit') {
         // here we handle put api for risk
         this.riskService.updateRisk(this.data.risk.id, {
-          initiative_id: Number(this.data.initiative_id), 
+          id:  Number(this.data.risk.id),
+          initiative_id: Number(this.data.risk.initiative_id),
+          risk_owner: this.newRiskForm.value.riskOwner,
           title: this.newRiskForm.value.riskTitle,
           description: this.newRiskForm.value.detailedDescription,
           target_likelihood: Number(this.newRiskForm.value.targetLikelihood),
