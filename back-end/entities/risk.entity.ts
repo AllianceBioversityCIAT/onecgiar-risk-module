@@ -30,6 +30,9 @@ export class Risk {
   title: string;
   @ApiProperty()
   @Column()
+  risk_owner: string;
+  @ApiProperty()
+  @Column()
   description: string;
   @ApiProperty()
   @Column()
