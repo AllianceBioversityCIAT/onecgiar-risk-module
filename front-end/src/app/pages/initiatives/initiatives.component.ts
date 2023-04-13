@@ -19,7 +19,7 @@ export class InitiativesComponent {
 
 
   length = 100;
-  pageSize = 10;
+  pageSize = 100;
   pageSizeOptions: number[] = [10, 15, 50, 100];
   totalItems = 0;
 
@@ -37,7 +37,7 @@ export class InitiativesComponent {
   async getInitiatives() {
     var Initiatives: any = await this.initiativeService.getInitiatives()
     this.dataSource = new MatTableDataSource<any>(Initiatives)
-    // this.length =  this.dataSource.meta.totalItems;
+   this.length =  Initiatives.length;
     // this.pageSize =  this.dataSource.meta.itemsPerPage; 
     // this.totalItems =  this.dataSource.meta.totalItems;
   }

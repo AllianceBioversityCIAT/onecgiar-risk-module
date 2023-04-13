@@ -18,7 +18,7 @@ const routes: Routes = [
         component: InitiativesComponent ,
         children: [
           {
-            path: ':initiativeId',
+            path: ':id/:initiativeId',
             component: InitiativeDetailsComponent,
             children: [
               {

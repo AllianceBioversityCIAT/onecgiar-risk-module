@@ -68,7 +68,7 @@ export class InitiativeDetailsComponent {
 
   displayedColumns: string[] = ['ID', 'Risk Achieving Impact', 'Risk Category', 'Risk Owner', 'Description Risk', 'Current Likelihood', 'Current Impact', 'Current Risk Level', 'Target Likelihood', 'Target Impact', 'Target Risk Level', 'Mitigation Action', 'Status of Actions', 'Flag to SDG', 'Redundant', 'Actions'];
   dataSource: any = new MatTableDataSource<any>([]);
-
+  initiative:any=null;
   @ViewChild(MatPaginator) paginator: any;
 
   ngAfterViewInit() {
@@ -76,18 +76,18 @@ export class InitiativeDetailsComponent {
   }
 
   async loadInitiative() {
-    var initId = Number(this.initiativeId.split('-')[1])
-    var data:any = await this.initiativeService.getInitiative(initId);
-    console.log(data)
-    this.dataSource =  new MatTableDataSource<any>(data.risks);
+    this.initiative = await this.initiativeService.getInitiative(this.id);
+    this.dataSource =  new MatTableDataSource<any>(this.initiative.risks);
   }
   versionId: any;
   initiativeId: any;
+  id:number = 0;
   async ngOnInit() {
    
     this.activatedRoute.params.subscribe(params=>{
       this.versionId = params['versionId'];
       this.initiativeId = params['initiativeId'];
+      this.id =  params['id'];
     })
 
     

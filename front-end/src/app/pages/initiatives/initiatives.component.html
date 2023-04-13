@@ -32,24 +32,24 @@
 
               <ng-container matColumnDef="Actions" style="margin-right: 3px;" stickyEnd>
                 <th class=" big bold center spacing" mat-header-cell *matHeaderCellDef> Actions </th>
-                <td class="center" style="min-width: 200px;" mat-cell *matCellDef="let element">
+                <td class="center" style="min-width: 150px;" mat-cell *matCellDef="let element">
                     <button matTooltip="Team Members" class="actionButton" routerLink="./{{element['official_code']}}/team-members"  [queryParams]="{initiativeId: element['id']}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                             <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
                           </svg>
                     </button>
-                    <button matTooltip="Initiative Details" class="actionButton" routerLink="./{{element['official_code']}}">
+                    <button matTooltip="Initiative Details" class="actionButton" routerLink="./{{element['id']}}/{{element['official_code']}}">
                         <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                             <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                             <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                         </svg>
                     </button>
-                    <button matTooltip="Initiative Versions" class="actionButton" routerLink="./{{element['official_code']}}/versions" [queryParams]="{initiativeId: element['id']}">
+                    <!-- <button matTooltip="Initiative Versions" class="actionButton" routerLink="./{{element['official_code']}}/versions" [queryParams]="{initiativeId: element['id']}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-layers-fill" viewBox="0 0 16 16">
                             <path d="M7.765 1.559a.5.5 0 0 1 .47 0l7.5 4a.5.5 0 0 1 0 .882l-7.5 4a.5.5 0 0 1-.47 0l-7.5-4a.5.5 0 0 1 0-.882l7.5-4z"/>
                             <path d="m2.125 8.567-1.86.992a.5.5 0 0 0 0 .882l7.5 4a.5.5 0 0 0 .47 0l7.5-4a.5.5 0 0 0 0-.882l-1.86-.992-5.17 2.756a1.5 1.5 0 0 1-1.41 0l-5.17-2.756z"/>
                           </svg>
-                    </button>
+                    </button> -->
                 </td>
               </ng-container>
 
