@@ -21,16 +21,10 @@ export class RiskService {
     if (!risk) throw new NotFoundException();
     return await this.mitigationRepository.save(mitigation, { reload: true });
   }
-  async updateRisk(id,risk: Risk) {
-    const created_risk = await this.riskRepository.findOne({where:{id}})
-    if (risk?.mitigations?.length) {
-      risk.mitigations.map((d) => (d.risk_id = created_risk.id));
-      created_risk.mitigations = await this.mitigationRepository.save(
-        this.mitigationRepository.create(risk.mitigations),
-        { reload: true },
-      );
-    }
-    return created_risk;
+
+  async updateRisk(id, risk: Risk) {
+    return await this.riskRepository.save(this.riskRepository.create(risk));
+
   }
   async createRisk(risk: Risk) {
     const created_risk = await this.riskRepository.save(
@@ -48,11 +42,12 @@ export class RiskService {
     }
     return created_risk;
   }
-  async updateMitigation(risk_id, id , mitigation: Mitigation) {
+  async updateMitigation(risk_id, id, mitigation: Mitigation) {
     const found_mitigation = await this.mitigationRepository.findOne({
       where: { risk_id, id },
     });
-    if (found_mitigation) return await this.mitigationRepository.save(mitigation);
+    if (found_mitigation)
+      return await this.mitigationRepository.save(mitigation);
     else throw new NotFoundException();
   }
 
