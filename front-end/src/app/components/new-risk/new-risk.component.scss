@@ -1,9 +1,31 @@
+.dialog {
+    position: relative;
+}
+.dialogFooter {
+    background-color: rgb(255, 255, 255);
+    position: sticky;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+
+} 
+.mt-0 {
+    margin-top: 0 !important;
+}
 .dialogHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: rgb(183, 209, 252);
     color: #fff;
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    
     h1 {
         margin-bottom: 0;
         color: #fff;
@@ -15,9 +37,11 @@
     }
 }
 .dialogBody {
+   
     color: #222;
     min-width: 300px;
     padding: 1.5em;
+    padding-top: 2.5em;
     background-color: rgb(255, 255, 255);
     .w-90 {
         width: 100%;
@@ -86,3 +110,4 @@
 .multi {
     border: 1px solid rgb(135, 135, 251); padding: 7px 12px; border-radius: 50%; font-weight: bold; font-size: 1.3em; color: rgb(135, 135, 251);
 }
+
