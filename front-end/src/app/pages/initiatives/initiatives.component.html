@@ -25,8 +25,8 @@
                 <td class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element['risks'].length}} </td>
               </ng-container>
 
-              <ng-container matColumnDef="User Role">
-                <th class="big bold center spacing" mat-header-cell *matHeaderCellDef> My Role </th>
+              <ng-container matColumnDef="My Role">
+                <th class="big bold center spacing" mat-header-cell *matHeaderCellDef> User Role </th>
                 <td mat-cell class="center" *matCellDef="let element" style="min-width: 150px;"> {{filterRoles(element['roles'])}} </td>
               </ng-container>
               <ng-container matColumnDef="Actions" style="margin-right: 3px;" stickyEnd>
