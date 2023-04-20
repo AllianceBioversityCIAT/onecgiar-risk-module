@@ -37,32 +37,7 @@
                     <textarea formControlName="detailedDescription" rows="4" matInput placeholder="Detailed Description"></textarea>
                     <mat-error class="error" *ngIf="newRiskForm.controls['detailedDescription'].errors?.['required']">Detailed Description is Required</mat-error>
                 </mat-form-field>
-                <div class="radio">
-                    <h3>Target Likelihood</h3>
-                    <mat-radio-group formControlName="targetLikelihood" aria-label="Select an option">
-                        <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
-                    </mat-radio-group>
-                    <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['targetLikelihood'].errors?.['required']">Target Likelihood is Required</mat-error>
-                </div>
-                <div class="radio">
-                    <h3>Target Impact &nbsp; &nbsp; &nbsp; </h3>
-                    <mat-radio-group formControlName="targetImpact" aria-label="Select an option">
-                        <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
-                        <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
-                    </mat-radio-group>
-                    <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['targetImpact'].errors?.['required']">Target Impact is Required</mat-error>
-                </div>
-                <div class="radio">
-                    <h2>Target Risk Level &nbsp; </h2>
-                    <p class="multi">{{newRiskForm.value.targetImpact * newRiskForm.value.targetLikelihood}}</p>
-                </div>
+                
                 
                 <div class="radio">
                     <h3>Current Likelihood</h3>
@@ -90,9 +65,36 @@
                     <h2>Current Risk Level &nbsp; </h2>
                     <p class="multi">{{newRiskForm.value.currentLikelihood * newRiskForm.value.currentImpact}}</p>
                 </div>
+
+                <div class="radio">
+                    <h3>Target Likelihood</h3>
+                    <mat-radio-group formControlName="targetLikelihood" aria-label="Select an option">
+                        <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['targetLikelihood'].errors?.['required']">Target Likelihood is Required</mat-error>
+                </div>
+                <div class="radio">
+                    <h3>Target Impact &nbsp; &nbsp; &nbsp; </h3>
+                    <mat-radio-group formControlName="targetImpact" aria-label="Select an option">
+                        <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
+                        <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['targetImpact'].errors?.['required']">Target Impact is Required</mat-error>
+                </div>
+                <div class="radio">
+                    <h2>Target Risk Level &nbsp; </h2>
+                    <p class="multi">{{newRiskForm.value.targetImpact * newRiskForm.value.targetLikelihood}}</p>
+                </div>
                 <hr>
                 <div class="head">
-                    <h2>Proposed mitigation measurements</h2>
+                    <h2>Actions to manage risk</h2>
                     <button class="primaryButton" (click)="openNewProposedDialog()">Add New</button>
                 </div>
                 <div class="table">
@@ -100,7 +102,7 @@
                     <table mat-table [dataSource]="proposed">
                        
                       <ng-container matColumnDef="Mitigation Description">
-                        <th class="big bold spacing border-left-0 " mat-header-cell *matHeaderCellDef> Mitigation Description </th>
+                        <th class="big bold spacing border-left-0 " mat-header-cell *matHeaderCellDef> Action to manage risk description </th>
                         <td class="border-left-0 " mat-cell *matCellDef="let element"> {{element.description}} </td>
                       </ng-container>
                   

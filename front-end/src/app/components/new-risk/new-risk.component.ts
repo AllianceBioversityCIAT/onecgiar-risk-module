@@ -67,7 +67,7 @@ export class NewRiskComponent {
     this.newRiskForm.markAllAsTouched();
     this.newRiskForm.updateValueAndValidity();
     if(this.proposed.data.length == 0) {
-      this.errorMessage = "Proposed mitigation measurements is required"
+      this.errorMessage = "Action to manage risk is required"
     } else if(this.newRiskForm.valid) {
       this.errorMessage = '';
       if(this.data.taskRole == 'add') {
