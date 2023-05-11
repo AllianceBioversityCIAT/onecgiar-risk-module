@@ -77,6 +77,7 @@ export class InitiativeDetailsComponent {
 
   async loadInitiative() {
     this.initiative = await this.initiativeService.getInitiative(this.id);
+    console.log(this.initiative)
     this.dataSource =  new MatTableDataSource<any>(this.initiative.risks);
   }
   versionId: any;
