@@ -10,5 +10,6 @@ import { RiskService } from './risk.service';
   controllers: [RiskController],
   imports: [TypeOrmModule.forFeature([Risk,Mitigation]), SharedModule],
   providers: [RiskService],
+  exports:[RiskService]
 })
 export class RiskModule {}

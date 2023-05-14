@@ -16,6 +16,7 @@ export class InitiativeController {
   })
   getInitiative() {
     return this.iniService.iniRepository.find({
+      where:{parent_id:null},
       relations: ['risks', 'risks.categories', 'roles', 'roles.user'],
     });
   }
@@ -29,6 +30,27 @@ export class InitiativeController {
     return this.iniService.iniRepository.findOne({
       where: { id },
       relations: ['risks', 'risks.categories', 'risks.mitigations',  'roles', 'roles.user'],
+    });
+  }
+
+  @Post(':id/create_version')
+  @ApiCreatedResponse({
+    description: '',
+    type:Initiative,
+  })
+  createVersion(@Param('id') id: number): Promise<Initiative> {
+    return this.iniService.createINIT(id);
+  }
+
+  @Get(':id/versions')
+  @ApiCreatedResponse({
+    description: '',
+    type:Initiative,
+  })
+  getVersons(@Param('id') id: number) {
+     return this.iniService.iniRepository.find({
+      where:{parent_id:id},
+      relations: ['risks', 'risks.categories', 'roles', 'roles.user'],
     });
   }
 

@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
@@ -5,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   JoinTable,
   OneToMany,
+  CreateDateColumn,
 } from 'typeorm';
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Risk } from './risk.entity';
@@ -36,4 +38,14 @@ export class Initiative {
   )
   @JoinTable()
   roles: Array<InitiativeRoles>;
+
+  @ApiProperty()
+  @Optional()
+  @Column({default:null})
+  parent_id: number;
+
+  @ApiProperty()
+  @CreateDateColumn()
+  submit_date: Date;
+
 }
