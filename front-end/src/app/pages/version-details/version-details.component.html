@@ -8,7 +8,7 @@
             <table mat-table [dataSource]="dataSource">
               <ng-container matColumnDef="ID">
                 <th class="big bold center spacing border-left-0 " mat-header-cell *matHeaderCellDef> ID </th>
-                <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element['ID']}} </td>
+                <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element.id}} </td>
               </ng-container>
           
               <ng-container matColumnDef="Risk Achieving Impact">
@@ -18,47 +18,47 @@
 
               <ng-container matColumnDef="Risk Category">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Category </th>
-                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element['Risk Category']}} </td>
+                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> </td>
               </ng-container>
 
               <ng-container matColumnDef="Risk Owner">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Owner </th>
-                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 120px;"> {{element['Risk Owner']}} </td>
+                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 120px;"> {{element.risk_owner}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Description Risk">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Description Risk </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element['Description Risk']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element.description}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Likelihood">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Likelihood </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element['Current Likelihood']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element.likelihood}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Impact">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Impact </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element['Current Impact']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element.impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Risk Level">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Risk Level </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element['Current Risk Level']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.likelihood * element.impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Target Likelihood">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Likelihood </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element['Target Likelihood']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.target_likelihood}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Target Impact">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Impact </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 130px;"> {{element['Target Impact']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 130px;"> {{element.target_impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Target Risk Level">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Risk Level </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element['Target Risk Level']}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.target_likelihood * element.target_impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Mitigation Action">

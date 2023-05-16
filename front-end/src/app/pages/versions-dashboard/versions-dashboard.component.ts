@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InitiativesService } from 'src/app/services/initiatives.service';
 
 @Component({
   selector: 'app-versions-dashboard',
@@ -11,7 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class VersionsDashboardComponent {
   constructor(
     public router: Router,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    private initiativeService : InitiativesService
     ) {
     
   }
@@ -20,16 +22,9 @@ export class VersionsDashboardComponent {
 
   
 
-
-  displayedColumns: string[] = ['Version', 'Version Title', 'Publish Reason', 'Creation Date', 'Creation By', 'Actions'];
+  initiative_name:string='';
+  displayedColumns: string[] = ['Version', 'Publish Reason', 'Creation Date', 'Creation By', 'Actions'];
   dataSource = new MatTableDataSource<any>([
-    { 
-      "Version": "1", 
-      "Version Title": "Test", 
-      "Publish Reason": "Test", 
-      "Creation Date": "Test",
-      "Creation By": "Test"
-    }
   ]);
 
   openNewMemberDialog() {
@@ -39,13 +34,17 @@ export class VersionsDashboardComponent {
 
   path: any = '';
   initiativeId: any;
-  ngOnInit() {
+ async ngOnInit() {
     this.path = window.location.pathname
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.initiativeId = Number(params['initiativeId']);
-    });
-  }
-  ngAfterViewInit() {
+    const params:any =  this.activatedRoute.parent?.snapshot.params
+  
+    const iniitaves = await this.initiativeService.getInitiatives(params.id)
+    console.log(iniitaves);
+    this.initiativeId = params.id;
     this.dataSource.paginator = this.paginator;
+   
+    this.initiative_name =  iniitaves[0].name;
+    this.dataSource.data = iniitaves;
+
   }
 }

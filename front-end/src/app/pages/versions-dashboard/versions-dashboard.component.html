@@ -1,8 +1,8 @@
 
-<ng-container *ngIf="router.isActive(path + '?initiativeId=' + initiativeId, true)">
+<ng-container *ngIf="router.isActive(path, true)">
     <div class="globalContainer">
         <div class="head">
-            <h2 class="primaryColor">Versions Dashboard</h2>
+            <h2 class="primaryColor">Versions Dashboard for {{initiative_name}}</h2>
             
         </div>
        <div class="tableContainer">
@@ -10,16 +10,9 @@
           <table mat-table [dataSource]="dataSource">
               
             <ng-container matColumnDef="Version">
-              <th class="big bold center spacing border-left-0 " mat-header-cell *matHeaderCellDef> Version </th>
-              <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element['Version']}} </td>
+              <th class="big bold center spacing border-left-0 " mat-header-cell *matHeaderCellDef> Version ID </th>
+              <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element.id}} </td>
             </ng-container>
-
-
-            <ng-container matColumnDef="Version Title">
-              <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Version Title </th>
-              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element['Version Title']}} </td>
-            </ng-container>
-
 
             <ng-container matColumnDef="Publish Reason">
               <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Publish Reason </th>
@@ -28,7 +21,7 @@
 
             <ng-container matColumnDef="Creation Date">
               <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Creation Date </th>
-              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element['Creation Date']}} </td>
+              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element.submit_date}} </td>
             </ng-container>
 
             <ng-container matColumnDef="Creation By">
@@ -40,7 +33,7 @@
               <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Actions </th>
               <td class="center" mat-cell *matCellDef="let element" style="min-width: 100px;">
                   
-                  <button matTooltip="Version Details" mat-button routerLink="{{path}}/{{element['Version']}}">
+                  <button matTooltip="Version Details" mat-button routerLink="{{path}}/{{element.id}}">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                           <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                           <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>

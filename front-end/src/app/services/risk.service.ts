@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { firstValueFrom, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -21,6 +22,9 @@ export class RiskService {
 
   getRisk(riskId: number) {
     return this.http.get(this.backend_url + '/risk/' + riskId, { headers: this.headers }).toPromise();
+  }
+  getRisks(iniitave_id: number) {
+    return  firstValueFrom(this.http.get(this.backend_url + '/risk/' + iniitave_id, { headers: this.headers }).pipe(map((d:any)=>d))) 
   }
   deleteRisk(riskId: number) {
     return this.http.delete(this.backend_url + '/risk/' + riskId, { headers: this.headers }).toPromise();

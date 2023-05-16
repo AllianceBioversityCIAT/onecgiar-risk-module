@@ -45,17 +45,13 @@ export class InitiativesComponent {
 
   filterCategories(categories: any) {
     var list = '';
-    categories.forEach((element: any) => {
-      list += element.categories[0].title + ", ";
-    });
+    list= categories.map((d:any)=>d.title).join(', ')
     return list;
   }
 
   filterRoles(roles: any) {
     var list = '';
-    roles.forEach((element: any) => {
-      list += element.role + ", ";
-    });
+    list=  roles.map((d:any)=>d.role).join(', ')
     return list;
   }
   

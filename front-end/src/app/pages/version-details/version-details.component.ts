@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InitiativesService } from 'src/app/services/initiatives.service';
+import { RiskService } from 'src/app/services/risk.service';
 
 @Component({
   selector: 'app-version-details',
@@ -10,16 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class VersionDetailsComponent {
   constructor(public router: Router,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    private initiativesService:InitiativesService,
     ) {
     
   }
  
-
- 
-
-
-
   displayedColumns: string[] = ['ID', 'Risk Achieving Impact', 'Risk Category', 'Risk Owner', 'Description Risk', 'Current Likelihood', 'Current Impact', 'Current Risk Level', 'Target Likelihood', 'Target Impact', 'Target Risk Level', 'Mitigation Action', 'Status of Actions', 'Flag to SDG', 'Redundant'];
   dataSource = new MatTableDataSource<any>([
     { 
@@ -38,7 +36,6 @@ export class VersionDetailsComponent {
       "Status of Actions": "Delayed",
       "Flag to SDG": "",
       "Redundant": "",
-      
     },
     { 
       "ID": "1.001", 
@@ -56,7 +53,6 @@ export class VersionDetailsComponent {
       "Status of Actions": "Delayed",
       "Flag to SDG": "",
       "Redundant": "",
-      
     },
     { 
       "ID": "1.001", 
@@ -74,7 +70,6 @@ export class VersionDetailsComponent {
       "Status of Actions": "Delayed",
       "Flag to SDG": "",
       "Redundant": "",
-      
     }
     
   ]);
@@ -88,11 +83,11 @@ export class VersionDetailsComponent {
 
   path: any = '';
   id: any;
-  ngOnInit() {
+ async ngOnInit() {
     this.path = window.location.pathname
-
-    this.activatedRoute.params.subscribe(params=>{
-      this.id = params['versionId'];
-    })
+    const params:any =  this.activatedRoute.snapshot.params
+    this.id = params.versionId
+  const  initiative  = await this.initiativesService.getInitiative(this.id)
+   this.dataSource.data  = initiative.risks; 
   }
 }
