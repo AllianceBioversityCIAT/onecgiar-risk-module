@@ -75,6 +75,10 @@ export class InitiativeDetailsComponent {
     this.dataSource.paginator = this.paginator;
   }
 
+ async export(id:number,official_code:string){
+    await this.initiativeService.getExportByinititave(id,official_code)
+  }
+
   async loadInitiative() {
     this.initiative = await this.initiativeService.getInitiative(this.id);
     this.dataSource =  new MatTableDataSource<any>(this.initiative.risks);

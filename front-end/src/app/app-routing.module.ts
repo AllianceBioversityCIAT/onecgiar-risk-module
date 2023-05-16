@@ -14,10 +14,12 @@ const routes: Routes = [
     component: RiskDashboardComponent,
     children: [
       { 
+        runGuardsAndResolvers: 'always',
         path: 'initiatives', 
         component: InitiativesComponent ,
         children: [
           {
+            runGuardsAndResolvers: 'always',
             path: ':id/:initiativeId',
             component: InitiativeDetailsComponent,
             children: [

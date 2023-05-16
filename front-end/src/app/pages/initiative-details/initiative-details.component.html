@@ -4,8 +4,8 @@
         <div class="head">
             <h3 class="primaryColor">Risk management for {{initiative.name}} ({{initiative.official_code}}) </h3>
             <div class="buttons">
-                <!-- <button class="primaryButton mt-1" >Export to excel</button>
-                <button class="primaryButton mt-1"  (click)="openPublishDialog()">Publish</button> -->
+                <button (click)="export(initiative.id,initiative.official_code)" class="primaryButton mt-1" >Export to excel</button>
+                <!-- <button class="primaryButton mt-1"  (click)="openPublishDialog()">Publish</button> -->
                 <button class="primaryButton mt-1"  (click)="openNewRiskDialog()">Create Risk</button>
             </div>
         </div>

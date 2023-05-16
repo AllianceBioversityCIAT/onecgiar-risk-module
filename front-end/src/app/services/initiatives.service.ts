@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
-
+import { saveAs } from 'file-saver';
 @Injectable({
   providedIn: 'root',
 })
@@ -16,7 +16,26 @@ export class InitiativesService {
       authorization: 'Bearer ' + localStorage.getItem('token'),
     };
   }
-
+  async getExport() {
+    const data = await firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/all/excel', {
+          responseType: 'blob',
+        })
+        .pipe(map((d: Blob) => d))
+    );
+    saveAs(data,'All-Risks.xlsx');
+  }
+async getExportByinititave(id:number,official_code='') {
+    const data = await firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/'+id+'/excel', {
+          responseType: 'blob',
+        })
+        .pipe(map((d: Blob) => d))
+    );
+    saveAs(data,'Risks-'+official_code+'-'+id+'.xlsx');
+  }
   async getInitiatives(id = null): Promise<Array<any>> {
     if (id)
       return await firstValueFrom(
@@ -36,13 +55,13 @@ export class InitiativesService {
       );
   }
 
-  getInitiative(initiativeId: number):Promise<any> {
+  getInitiative(initiativeId: number): Promise<any> {
     return firstValueFrom(
       this.http
         .get(this.backend_url + '/initiative/' + initiativeId, {
           headers: this.headers,
         })
-        .pipe(map((d:any)=>d))
+        .pipe(map((d: any) => d))
     );
   }
 

@@ -1,22 +1,27 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 
 @Component({
   selector: 'app-initiatives',
   templateUrl: './initiatives.component.html',
-  styleUrls: ['./initiatives.component.scss']
+  styleUrls: ['./initiatives.component.scss'],
 })
 export class InitiativesComponent {
+  navigationSubscription;
   constructor(
     public router: Router,
     public initiativeService: InitiativesService
-    ) {
-    
+  ) {
+    this.navigationSubscription = this.router.events.subscribe((e: any) => {
+      // If it is a NavigationEnd event re-initalise the component
+      if (e instanceof NavigationEnd) {
+        this.getInitiatives();
+      }
+    });
   }
-
 
   length = 100;
   pageSize = 100;
@@ -24,7 +29,14 @@ export class InitiativesComponent {
   totalItems = 0;
 
   pageChanged(event: any) {}
-  displayedColumns: string[] = ['INIT-ID', 'Initiative Name', 'Risk Category', 'Num of Risk', 'My Role', 'Actions'];
+  displayedColumns: string[] = [
+    'INIT-ID',
+    'Initiative Name',
+    'Risk Category',
+    'Num of Risk',
+    'My Role',
+    'Actions',
+  ];
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator: any;
@@ -35,26 +47,32 @@ export class InitiativesComponent {
   }
 
   async getInitiatives() {
-    var Initiatives: any = await this.initiativeService.getInitiatives()
-    this.dataSource = new MatTableDataSource<any>(Initiatives)
-   this.length =  Initiatives.length;
-    // this.pageSize =  this.dataSource.meta.itemsPerPage; 
+    var Initiatives: any = await this.initiativeService.getInitiatives();
+    this.dataSource = new MatTableDataSource<any>(Initiatives);
+    this.length = Initiatives.length;
+    // this.pageSize =  this.dataSource.meta.itemsPerPage;
     // this.totalItems =  this.dataSource.meta.totalItems;
   }
-
-
+  ngOnDestroy() {
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+  }
+ async export() {
+    await this.initiativeService.getExport(); 
+  }
   filterCategories(categories: any) {
     var list = '';
-    list= categories.map((d:any)=>d.title).join(', ')
+    list = categories.map((d: any) => d.title).join(', ');
     return list;
   }
 
   filterRoles(roles: any) {
     var list = '';
-    list=  roles.map((d:any)=>d.role).join(', ')
+    list = roles.map((d: any) => d.role).join(', ');
     return list;
   }
-  
+
   async ngOnInit() {
     this.getInitiatives();
   }

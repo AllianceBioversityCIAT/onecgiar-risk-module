@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'entities/user.entitiy';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      id: 1,
-      email: 'admin@codeobia.com',
-      password: 'admin',
-    },
-  ];
-  async findFakeOne(username: string): Promise<any | undefined> {
+  constructor(
+    @InjectRepository(User)
+    public UserRepository: Repository<User>,
+  ) {}
+  async find(username: string): Promise<any | undefined> {
     return this.users[0];
   }
 }
