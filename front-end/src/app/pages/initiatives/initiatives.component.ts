@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NavigationEnd, Router } from '@angular/router';
 import { InitiativesService } from 'src/app/services/initiatives.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-initiatives',
@@ -13,7 +14,8 @@ export class InitiativesComponent {
   navigationSubscription;
   constructor(
     public router: Router,
-    public initiativeService: InitiativesService
+    public initiativeService: InitiativesService,
+    private userService:UserService
   ) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
@@ -68,8 +70,10 @@ export class InitiativesComponent {
   }
 
   filterRoles(roles: any) {
+   const user_info = this.userService.getLogedInUser();
     var list = '';
-    list = roles.map((d: any) => d.role).join(', ');
+
+    list = roles.filter((d:any)=>d.user_id == user_info.id).map((d: any) => d.role).join(', ');
     return list;
   }
 

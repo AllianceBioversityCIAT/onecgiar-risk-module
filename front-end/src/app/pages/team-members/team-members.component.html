@@ -23,10 +23,15 @@
             <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element.createdAt | date:'MMMM d, y'}} </td>
           </ng-container>
 
-          <ng-container matColumnDef="My Role">
-            <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> User Role </th>
+          <ng-container matColumnDef="Role">
+            <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Role </th>
             <td  class="center" mat-cell *matCellDef="let element" style="min-width: 110px;"> {{element.role}} </td>
           </ng-container>
+          <ng-container matColumnDef="Status">
+            <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Status </th>
+            <td  class="center" mat-cell *matCellDef="let element" style="min-width: 110px;"> {{ element.user_id ? 'Active' :'Invited'   }} </td>
+          </ng-container>
+
 
           <ng-container matColumnDef="Actions" stickyEnd>
             <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Actions </th>

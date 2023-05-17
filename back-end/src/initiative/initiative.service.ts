@@ -6,7 +6,8 @@ import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { firstValueFrom, map } from 'rxjs';
 import { RiskService } from 'src/risk/risk.service';
-import { Repository } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
+import { IsNull, Repository } from 'typeorm';
 
 @Injectable()
 export class InitiativeService {
@@ -17,6 +18,7 @@ export class InitiativeService {
     public iniRolesRepository: Repository<InitiativeRoles>,
     private http: HttpService,
     private riskService: RiskService,
+    private userService: UsersService,
   ) {}
 
   private readonly logger = new Logger(InitiativeService.name);
@@ -57,7 +59,8 @@ export class InitiativeService {
     });
 
     const old_Risks = await this.riskService.riskRepository.find({
-      where: { initiative_id: old_init_id },relations:['mitigations']
+      where: { initiative_id: old_init_id },
+      relations: ['mitigations'],
     });
     if (old_Risks.length)
       for (let risk of old_Risks) {
@@ -115,7 +118,30 @@ export class InitiativeService {
     }
   }
   @Cron(CronExpression.EVERY_HOUR)
-  handleCron() {
+  syncClarisa() {
     this.syncFromClarisa();
+  }
+
+  @Cron(CronExpression.EVERY_30_SECONDS)
+  syncUserRolesTask() {
+    this.syncUserRoles();
+  }
+
+  async syncUserRoles() {
+    try {
+      const user_roles = await this.iniRolesRepository.find({
+        where: { user_id: IsNull() },
+      });
+      const users = await this.userService.userRepository.find();
+      for (let user_role of user_roles) {
+        let found_users = users.filter((u) => u.email == user_role.email);
+        if (found_users.length) {
+          user_role.user_id = found_users[0].id;
+          await this.iniRolesRepository.save(user_role);
+        }
+      }
+    } catch (e) {
+      this.logger.error('Error in Sync CLARISA initiative Data ', e);
+    }
   }
 }

@@ -69,7 +69,7 @@ export class TeamMembersComponent {
   }
 
 
-  displayedColumns: string[] = [ /*'User Name',*/ 'Email',  'My Role', 'Creation Date', 'Actions'];
+  displayedColumns: string[] = [ /*'User Name',*/ 'Email',  'Role', 'Creation Date','Status', 'Actions'];
   dataSource = new MatTableDataSource<any>([]);
 
   
