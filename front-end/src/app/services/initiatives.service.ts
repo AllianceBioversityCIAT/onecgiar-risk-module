@@ -3,38 +3,38 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
+import { MainService } from './main.service';
 @Injectable({
   providedIn: 'root',
 })
-export class InitiativesService {
-  backend_url = environment.backend_url;
-  constructor(private http: HttpClient) {}
-
-  get headers() {
-    return {
-      'content-type': 'application/json',
-      authorization: 'Bearer ' + localStorage.getItem('token'),
-    };
+export class InitiativesService extends MainService {
+ 
+  constructor(private http: HttpClient) {
+    super();
   }
+
+
   async getExport() {
     const data = await firstValueFrom(
       this.http
         .get(this.backend_url + '/initiative/all/excel', {
+          headers: this.headers,
           responseType: 'blob',
         })
         .pipe(map((d: Blob) => d))
     );
-    saveAs(data,'All-Risks.xlsx');
+    saveAs(data, 'All-Risks.xlsx');
   }
-async getExportByinititave(id:number,official_code='') {
+  async getExportByinititave(id: number, official_code = '') {
     const data = await firstValueFrom(
       this.http
-        .get(this.backend_url + '/initiative/'+id+'/excel', {
+        .get(this.backend_url + '/initiative/' + id + '/excel', {
+          headers: this.headers,
           responseType: 'blob',
         })
         .pipe(map((d: Blob) => d))
     );
-    saveAs(data,'Risks-'+official_code+'-'+id+'.xlsx');
+    saveAs(data, 'Risks-' + official_code + '-' + id + '.xlsx');
   }
   async getInitiatives(id = null): Promise<Array<any>> {
     if (id)
