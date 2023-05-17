@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TeamMembersComponent } from './pages/team-members/team-members.component';
 import { VersionsDashboardComponent } from './pages/versions-dashboard/versions-dashboard.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { LoginDialog, NavbarComponent } from './components/navbar/navbar.component';
 import { BreadcrumbModule, BreadcrumbService } from 'xng-breadcrumb';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,13 +23,14 @@ import { NewTeamMemberComponent } from './components/new-team-member/new-team-me
 import { NewProposedComponent } from './components/new-proposed/new-proposed.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import { VersionDetailsComponent } from './pages/version-details/version-details.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { HttpClientModule } from '@angular/common/http';
+import { ConfirmComponent } from './components/confirm/confirm.component';
 
 
 
@@ -49,7 +50,7 @@ import { HttpClientModule } from '@angular/common/http';
     NewRiskComponent,
     NewTeamMemberComponent,
     NewProposedComponent,
-    VersionDetailsComponent
+    VersionDetailsComponent,LoginDialog, ConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +70,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatSelectModule,
     MatRadioModule,
     MatTooltipModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     BreadcrumbService

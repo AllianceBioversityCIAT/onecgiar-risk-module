@@ -7,9 +7,9 @@ import { Repository } from 'typeorm';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    public UserRepository: Repository<User>,
+    public userRepository: Repository<User>,
   ) {}
-  async find(username: string): Promise<any | undefined> {
-    return this.users[0];
+  async findByEmail(email: string): Promise<any | undefined> {
+    return this.userRepository.findOne({where:{email}})
   }
 }

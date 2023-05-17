@@ -22,11 +22,12 @@ import { UsersModule } from './users/users.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'welcom@123',  // 'root',
+      password: 'root',  // 'root',
       database: 'risk',
       synchronize: true,
       entities: [`dist/**/*.entity{.ts,.js}`],
       autoLoadEntities: true,
+      
       namingStrategy: new SnakeNamingStrategy(),
     }),
     RiskModule,
