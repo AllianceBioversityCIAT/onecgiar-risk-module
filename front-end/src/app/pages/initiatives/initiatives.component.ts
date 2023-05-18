@@ -15,7 +15,7 @@ export class InitiativesComponent {
   constructor(
     public router: Router,
     public initiativeService: InitiativesService,
-    private userService:UserService
+    private userService: UserService
   ) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
@@ -60,8 +60,8 @@ export class InitiativesComponent {
       this.navigationSubscription.unsubscribe();
     }
   }
- async export() {
-    await this.initiativeService.getExport(); 
+  async export() {
+    await this.initiativeService.getExport();
   }
   filterCategories(categories: any) {
     var list = '';
@@ -70,10 +70,14 @@ export class InitiativesComponent {
   }
 
   filterRoles(roles: any) {
-   const user_info = this.userService.getLogedInUser();
+    const user_info = this.userService.getLogedInUser();
     var list = '';
 
-    list = roles.filter((d:any)=>d.user_id == user_info.id).map((d: any) => d.role).join(', ');
+    list = roles
+      .filter((d: any) => d.user_id == user_info.id)
+      .map((d: any) => d.role)
+      .join(', ');
+    if (list == '') list = 'Guest';
     return list;
   }
 

@@ -9,6 +9,7 @@ import {
   Put,
   Res,
   StreamableFile,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -26,6 +27,7 @@ import { createReadStream } from 'fs';
 import { RiskService } from 'src/risk/risk.service';
 import { In, IsNull } from 'typeorm';
 import { unlink } from 'fs/promises';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @ApiTags('Initiative')
 @Controller('initiative')
 export class InitiativeController {
@@ -33,7 +35,7 @@ export class InitiativeController {
     private iniService: InitiativeService,
     private riskService: RiskService,
   ) {}
-
+  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiCreatedResponse({
     description: '',

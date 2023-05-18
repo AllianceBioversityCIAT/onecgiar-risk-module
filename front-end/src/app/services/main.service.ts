@@ -12,7 +12,7 @@ export class MainService {
     let headers: any = {
       'content-type': 'application/json',
     };
-    if (access_token) headers['authorization'] = 'Bearer ' + access_token;
+    if (access_token) headers['Authorization'] = 'Bearer ' + access_token;
 
     return headers;
   }

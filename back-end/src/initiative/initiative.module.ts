@@ -4,6 +4,7 @@ import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
+import { AuthModule } from 'src/auth/auth.module';
 import { RiskModule } from 'src/risk/risk.module';
 import { RiskService } from 'src/risk/risk.service';
 import { SharedModule } from 'src/shared/shared.module';
@@ -13,7 +14,7 @@ import { InitiativeService } from './initiative.service';
 
 @Module({
   controllers: [InitiativeController],
-  imports: [TypeOrmModule.forFeature([Initiative,InitiativeRoles,Risk,Mitigation]), SharedModule,RiskModule,UsersModule],
+  imports: [TypeOrmModule.forFeature([Initiative,InitiativeRoles,Risk,Mitigation]), SharedModule,RiskModule,UsersModule,AuthModule],
   providers: [InitiativeService,RiskService],
 })
 export class InitiativeModule {}
