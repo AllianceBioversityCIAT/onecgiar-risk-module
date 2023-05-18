@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,9 +9,27 @@ import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 
 @Component({
+  selector: 'publish-dialog',
+  templateUrl: 'publish-dialog.html',
+})
+export class PublishDialog {
+  constructor(
+    public dialogRef: MatDialogRef<PublishDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close(false);
+  }
+  async publish() {
+    this.dialogRef.close(this.data);
+  }
+}
+
+@Component({
   selector: 'app-initiative-details',
   templateUrl: './initiative-details.component.html',
-  styleUrls: ['./initiative-details.component.scss']
+  styleUrls: ['./initiative-details.component.scss'],
 })
 export class InitiativeDetailsComponent {
   constructor(
@@ -20,17 +38,15 @@ export class InitiativeDetailsComponent {
     public activatedRoute: ActivatedRoute,
     private initiativeService: InitiativesService,
     private riskService: RiskService
-    ) {
-    
-  }
- 
+  ) {}
+
   editRisk(data: any) {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
-      data: {taskRole: 'edit' , risk: data}
+      data: { taskRole: 'edit', risk: data },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
       this.loadInitiative();
     });
@@ -41,14 +57,13 @@ export class InitiativeDetailsComponent {
     this.loadInitiative();
   }
   async deleteMitigationRisk(risk: any) {
-    risk.mitigations.forEach( async (mitigation: any) => {
+    risk.mitigations.forEach(async (mitigation: any) => {
       await this.riskService.deleteMitigation(risk.id, mitigation.id);
-    })
+    });
   }
 
-
   openPublishDialog() {
-    this.dialog.open(PublishDialogComponent , {
+    this.dialog.open(PublishDialogComponent, {
       width: '600px',
     });
   }
@@ -56,72 +71,93 @@ export class InitiativeDetailsComponent {
   openNewRiskDialog() {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
-      data: {taskRole: 'add', initiative_id: Number(this.id)}
+      data: { taskRole: 'add', initiative_id: Number(this.id) },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.loadInitiative()
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadInitiative();
     });
   }
 
-
-
-  displayedColumns: string[] = ['ID', 'Risk Achieving Impact', 'Risk Category', 'Risk Owner', 'Description Risk', 'Current Likelihood', 'Current Impact', 'Current Risk Level', 'Target Likelihood', 'Target Impact', 'Target Risk Level', 'Mitigation Action', 'Status of Actions', 'Flag to SDG', 'Redundant', 'Actions'];
+  displayedColumns: string[] = [
+    'ID',
+    'Risk Achieving Impact',
+    'Risk Category',
+    'Risk Owner',
+    'Description Risk',
+    'Current Likelihood',
+    'Current Impact',
+    'Current Risk Level',
+    'Target Likelihood',
+    'Target Impact',
+    'Target Risk Level',
+    'Mitigation Action',
+    'Status of Actions',
+    'Flag to SDG',
+    'Redundant',
+    'Actions',
+  ];
   dataSource: any = new MatTableDataSource<any>([]);
-  initiative:any=null;
+  initiative: any = null;
   @ViewChild(MatPaginator) paginator: any;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
- async export(id:number,official_code:string){
-    await this.initiativeService.getExportByinititave(id,official_code)
+  async export(id: number, official_code: string) {
+    await this.initiativeService.getExportByinititave(id, official_code);
+  }
+
+  async publish(id: number) {
+    this.dialog
+    .open(PublishDialog, {
+      maxWidth: '400px',
+      data: {reason:''},
+    })
+    .afterClosed()
+    .subscribe( async (dialogResult) => {
+      if (dialogResult) {
+        await this.initiativeService.Publish(id,dialogResult);
+      }
+    });
   }
 
   async loadInitiative() {
     this.initiative = await this.initiativeService.getInitiative(this.id);
-    this.dataSource =  new MatTableDataSource<any>(this.initiative.risks);
+    this.dataSource = new MatTableDataSource<any>(this.initiative.risks);
   }
   versionId: any;
   initiativeId: any;
-  id:number = 0;
+  id: number = 0;
   async ngOnInit() {
-   
-    this.activatedRoute.params.subscribe(params=>{
+    this.activatedRoute.params.subscribe((params) => {
       this.versionId = params['versionId'];
       this.initiativeId = params['initiativeId'];
-      this.id =  params['id'];
-    })
+      this.id = params['id'];
+    });
 
-    
-    this.loadInitiative()
-   
-
+    this.loadInitiative();
   }
   filterCategory(element: any) {
     var categories = '';
     element.categories.forEach((cat: any) => {
-      categories += cat.title + " ";
+      categories += cat.title + ' ';
     });
     return categories;
   }
   filterDescriptionMitigations(element: any) {
     var mitigationsList = '';
     element.mitigations.forEach((mitigation: any) => {
-      mitigationsList += mitigation.description + ",  ";
-    })
-    return mitigationsList
+      mitigationsList += mitigation.description + ',  ';
+    });
+    return mitigationsList;
   }
   filterStatusMitigations(element: any) {
     var mitigationsList = '';
     element.mitigations.forEach((mitigation: any) => {
-      mitigationsList += mitigation.status + ",  ";
-    })
-    return mitigationsList
+      mitigationsList += mitigation.status + ',  ';
+    });
+    return mitigationsList;
   }
-  
-
- 
-
 }

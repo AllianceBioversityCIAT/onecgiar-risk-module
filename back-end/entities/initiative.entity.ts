@@ -7,10 +7,12 @@ import {
   JoinTable,
   OneToMany,
   CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Risk } from './risk.entity';
-
+import { User } from './user.entitiy';
 @Entity()
 export class Initiative {
   @ApiProperty()
@@ -48,4 +50,15 @@ export class Initiative {
   @CreateDateColumn()
   submit_date: Date;
 
+  @ManyToOne(() => User, (user) => user.initiatives)
+  @JoinColumn({ name: 'created_by_user_id' })
+  created_by: User;
+  @Optional()
+  @Column({default:null})
+  created_by_user_id:number
+
+
+  @Optional()
+  @Column({default:null})
+  publish_reason:string
 }

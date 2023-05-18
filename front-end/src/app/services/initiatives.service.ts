@@ -8,11 +8,9 @@ import { MainService } from './main.service';
   providedIn: 'root',
 })
 export class InitiativesService extends MainService {
- 
   constructor(private http: HttpClient) {
     super();
   }
-
 
   async getExport() {
     const data = await firstValueFrom(
@@ -24,6 +22,16 @@ export class InitiativesService extends MainService {
         .pipe(map((d: Blob) => d))
     );
     saveAs(data, 'All-Risks.xlsx');
+  }
+
+  async Publish(id: number, reason: any) {
+    return await firstValueFrom(
+      this.http
+        .post(this.backend_url + '/initiative/' + id + '/create_version', reason, {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
   }
   async getExportByinititave(id: number, official_code = '') {
     const data = await firstValueFrom(

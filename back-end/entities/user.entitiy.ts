@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinTable } from 'typeorm';
+import { Initiative } from './initiative.entity';
 @Entity()
 export class User {
   @ApiProperty()
@@ -18,4 +19,10 @@ export class User {
   @ApiProperty()
   @Column()
   role: 'user' | 'admin';
+
+
+  @ApiProperty({ type: () => [Initiative] })
+  @OneToMany(() => Initiative, (initiative) => initiative.created_by)
+  @JoinTable()
+  initiatives: Array<Initiative>;
 }

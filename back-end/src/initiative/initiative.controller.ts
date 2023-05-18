@@ -7,11 +7,13 @@ import {
   Param,
   Post,
   Put,
+  Request,
   Res,
   StreamableFile,
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiParam,
@@ -136,14 +138,15 @@ export class InitiativeController {
       disposition: `attachment; filename="${file_name}"`,
     });
   }
-
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Post(':id/create_version')
   @ApiCreatedResponse({
     description: '',
     type: Initiative,
   })
-  createVersion(@Param('id') id: number): Promise<Initiative> {
-    return this.iniService.createINIT(id);
+  createVersion(@Param('id') id: number,@Body('reason') reason: string,@Request() req): Promise<Initiative> {
+    return this.iniService.createINIT(id,reason,req.user);
   }
 
   @Get(':id/versions')
@@ -154,7 +157,7 @@ export class InitiativeController {
   getVersons(@Param('id') id: number) {
     return this.iniService.iniRepository.find({
       where: { parent_id: id },
-      relations: ['risks', 'risks.categories', 'roles', 'roles.user'],
+      relations: ['risks', 'risks.categories', 'roles', 'roles.user','created_by'],
     });
   }
 

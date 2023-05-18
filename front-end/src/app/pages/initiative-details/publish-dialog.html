@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Publish Risks</h1>
+
+<div mat-dialog-content>
+  <mat-form-field>
+    <textarea
+      [(ngModel)]="data.reason"
+      rows="4"
+      cols="4"
+      placeholder="Publish Reason"
+      matInput
+    ></textarea>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="publish()">Publish</button>
+</div>

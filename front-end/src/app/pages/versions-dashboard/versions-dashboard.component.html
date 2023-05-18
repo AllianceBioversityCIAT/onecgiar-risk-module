@@ -14,9 +14,9 @@
               <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element.id}} </td>
             </ng-container>
 
-            <ng-container matColumnDef="Publish Reason">
+            <ng-container matColumnDef="publish_reason">
               <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Publish Reason </th>
-              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element['Publish Reason']}} </td>
+              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element.publish_reason}} </td>
             </ng-container>
 
             <ng-container matColumnDef="Creation Date">
@@ -26,7 +26,7 @@
 
             <ng-container matColumnDef="Creation By">
               <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Creation By </th>
-              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 180px;"> {{element['Creation By']}} </td>
+              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 180px;"> {{element?.created_by?.firstName + ' ' + element?.created_by?.lastName}} </td>
             </ng-container>
 
             <ng-container matColumnDef="Actions" stickyEnd>

@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { InitiativesComponent } from './pages/initiatives/initiatives.component';
-import { InitiativeDetailsComponent } from './pages/initiative-details/initiative-details.component';
+import { InitiativeDetailsComponent, PublishDialog } from './pages/initiative-details/initiative-details.component';
 import { RiskDashboardComponent } from './pages/risk-dashboard/risk-dashboard.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -50,7 +50,7 @@ import { ConfirmComponent } from './components/confirm/confirm.component';
     NewRiskComponent,
     NewTeamMemberComponent,
     NewProposedComponent,
-    VersionDetailsComponent,LoginDialog, ConfirmComponent
+    VersionDetailsComponent,LoginDialog, ConfirmComponent,PublishDialog
   ],
   imports: [
     BrowserModule,
