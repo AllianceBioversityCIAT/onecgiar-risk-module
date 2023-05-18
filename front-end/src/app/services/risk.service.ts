@@ -8,16 +8,19 @@ import { MainService } from './main.service';
   providedIn: 'root',
 })
 export class RiskService extends MainService {
-
   constructor(private http: HttpClient) {
     super();
   }
-  updateRedundant(iniitave_id:number,redundant:number){
+  updateRedundant(iniitave_id: number, redundant: number) {
     return firstValueFrom(
       this.http
-        .patch(this.backend_url + '/risk/' + iniitave_id+'/redundant',{redundant}, {
-          headers: this.headers,
-        })
+        .patch(
+          this.backend_url + '/risk/' + iniitave_id + '/redundant',
+          { redundant },
+          {
+            headers: this.headers,
+          }
+        )
         .pipe(map((d: any) => d))
     );
   }
@@ -42,24 +45,11 @@ export class RiskService extends MainService {
       .toPromise();
   }
   // ============================================================================= RISK  --  PUT API
-  updateRisk(riskId: number, risk: any) {
+  async updateRisk(riskId: number, risk: any) {
     return this.http
-      .put(
-        this.backend_url + '/risk/' + riskId,
-        {
-          id: risk.id,
-          initiative_id: risk.initiative_id,
-          risk_owner: risk.risk_owner,
-          title: risk.title,
-          description: risk.description,
-          target_likelihood: risk.target_likelihood,
-          target_impact: risk.target_impact,
-          likelihood: risk.likelihood,
-          impact: risk.impact,
-          categories: risk.categories,
-        },
-        { headers: this.headers }
-      )
+      .put(this.backend_url + '/risk/' + riskId, risk, {
+        headers: this.headers,
+      })
       .toPromise();
   }
   // ============================================================================= RISK  --  PUT API
@@ -73,21 +63,7 @@ export class RiskService extends MainService {
   createNewRisk(newRisk: any) {
     console.log(newRisk);
     return this.http
-      .post(
-        this.backend_url + '/risk',
-        {
-          initiative_id: newRisk.initiative_id,
-          risk_owner: newRisk.risk_owner,
-          title: newRisk.title,
-          description: newRisk.description,
-          target_likelihood: newRisk.target_likelihood,
-          target_impact: newRisk.target_impact,
-          likelihood: newRisk.likelihood,
-          impact: newRisk.impact,
-          categories: newRisk.categories,
-        },
-        { headers: this.headers }
-      )
+      .post(this.backend_url + '/risk', newRisk, { headers: this.headers })
       .toPromise();
   }
 

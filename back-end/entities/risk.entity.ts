@@ -44,16 +44,23 @@ export class Risk {
   target_impact: number;
   @ApiProperty()
   @Column()
-  likelihood: number;
+  current_likelihood: number;
+
   @ApiProperty()
   @Column()
-  impact: number;
-  @ApiProperty({ type: () => [RiskCategory] })
-  @ManyToMany(() => RiskCategory, (riskcat) => riskcat)
-  @JoinTable()
-  categories: Array<RiskCategory>;
+  current_impact: number;
+
+  @ManyToOne(() => RiskCategory, (category) => category.risks)
+  @JoinColumn({ name: 'category_id' })
+  category: RiskCategory;
+
+
+  @ApiProperty()
+  @Column()
+  category_id: number;
+  
   @ApiProperty({ type: () => [Mitigation], })
-  @OneToMany(() => Mitigation, (mitigation) => mitigation.risk)
+  @OneToMany(() => Mitigation, (mitigation) => mitigation.risk,{onUpdate:'CASCADE',onDelete:'CASCADE'})
   @JoinTable()
   mitigations: Array<Mitigation>;
 

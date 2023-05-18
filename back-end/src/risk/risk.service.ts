@@ -24,12 +24,25 @@ export class RiskService {
   }
 
   async updateRisk(id, risk: Risk) {
-    return await this.riskRepository.save(this.riskRepository.create(risk));
+    let tobeadded = { ...risk };
+    if (tobeadded.mitigations) delete tobeadded.mitigations;
+    const created_risk = await this.riskRepository.save(
+      this.riskRepository.create(tobeadded),
+      { reload: true },
+    );
+    if (risk?.mitigations?.length) {
+      await this.mitigationRepository.delete({ risk_id:created_risk.id });
+      risk.mitigations.map((d) => (d.risk_id = created_risk.id));
+      created_risk.mitigations = await this.mitigationRepository.save(
+        this.mitigationRepository.create(risk.mitigations),
+        { reload: true },
+      );
+    }
 
+    return;
   }
-  async createRisk(risk: Risk,user:User = null) {
-    if(user)
-    risk.created_by_user_id=user.id
+  async createRisk(risk: Risk, user: User = null) {
+    if (user) risk.created_by_user_id = user.id;
     const created_risk = await this.riskRepository.save(
       this.riskRepository.create(risk),
       {

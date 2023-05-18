@@ -27,7 +27,7 @@
 
               <ng-container matColumnDef="Risk Category">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Category </th>
-                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{filterCategory(element)}} </td>
+                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element?.category?.title}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Risk Owner">
@@ -42,17 +42,17 @@
 
               <ng-container matColumnDef="Current Likelihood">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Likelihood </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element.likelihood}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element.current_likelihood}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Impact">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Impact </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element.impact}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element.current_impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Current Risk Level">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Risk Level </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.likelihood * element.impact}} </td>
+                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element.current_likelihood * element.current_impact}} </td>
               </ng-container>
 
               <ng-container matColumnDef="Target Likelihood">
@@ -87,7 +87,7 @@
               <ng-container matColumnDef="Flag to SDG">
                 <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Flag to SGD </th>
                 <td class="center" mat-cell *matCellDef="let element" style="min-width: 120px;"> 
-                    <svg *ngIf="(element.likelihood * element.impact) > 5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
+                    <svg *ngIf="(element.current_likelihood * element.current_impact) > 5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
                         <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
                     </svg>
                 </td>

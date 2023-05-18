@@ -7,6 +7,11 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import {
+  ConfirmComponent,
+  ConfirmDialogModel,
+} from 'src/app/components/confirm/confirm.component';
 import { NewRiskComponent } from 'src/app/components/new-risk/new-risk.component';
 import { PublishDialogComponent } from 'src/app/components/publish-dialog/publish-dialog.component';
 import { InitiativesService } from 'src/app/services/initiatives.service';
@@ -41,7 +46,8 @@ export class InitiativeDetailsComponent {
     public dialog: MatDialog,
     public activatedRoute: ActivatedRoute,
     private initiativeService: InitiativesService,
-    private riskService: RiskService
+    private riskService: RiskService,
+    private toastr: ToastrService
   ) {}
 
   editRisk(data: any) {
@@ -51,14 +57,26 @@ export class InitiativeDetailsComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
       this.loadInitiative();
     });
   }
   async deleteRisk(risk: any) {
-    this.deleteMitigationRisk(risk);
-    await this.riskService.deleteRisk(risk.id);
-    this.loadInitiative();
+    this.dialog
+      .open(ConfirmComponent, {
+        maxWidth: '400px',
+        data: new ConfirmDialogModel(
+          'Delete',
+          `Are you sure you want to delete risk ${risk.title} ?`
+        ),
+      })
+      .afterClosed()
+      .subscribe(async (dialogResult) => {
+        if (dialogResult) {
+          await this.riskService.deleteRisk(risk.id);
+          this.loadInitiative();
+          this.toastr.success('Success', `${risk.title} has been deleted`);
+        }
+      });
   }
   async deleteMitigationRisk(risk: any) {
     risk.mitigations.forEach(async (mitigation: any) => {
@@ -75,9 +93,8 @@ export class InitiativeDetailsComponent {
   openNewRiskDialog() {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
-      data: { taskRole: 'add', initiative_id: Number(this.id) },
+      data: { initiative_id: this.id },
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       this.loadInitiative();
     });
@@ -128,9 +145,8 @@ export class InitiativeDetailsComponent {
         }
       });
   }
-  async checkValue(id:number,value:any) {
-    await this.riskService.updateRedundant(id,value);
-
+  async checkValue(id: number, value: any) {
+    await this.riskService.updateRedundant(id, value);
   }
 
   async loadInitiative() {
@@ -141,21 +157,13 @@ export class InitiativeDetailsComponent {
   initiativeId: any;
   id: number = 0;
   async ngOnInit() {
-    this.activatedRoute.params.subscribe((params) => {
-      this.versionId = params['versionId'];
-      this.initiativeId = params['initiativeId'];
-      this.id = params['id'];
-    });
+    const params: any = this.activatedRoute?.snapshot.params;
 
+    this.id = +params.id;
+    this.initiativeId = params.initiativeId
     this.loadInitiative();
   }
-  filterCategory(element: any) {
-    var categories = '';
-    element.categories.forEach((cat: any) => {
-      categories += cat.title + ' ';
-    });
-    return categories;
-  }
+
   filterDescriptionMitigations(element: any) {
     var mitigationsList = '';
     element.mitigations.forEach((mitigation: any) => {

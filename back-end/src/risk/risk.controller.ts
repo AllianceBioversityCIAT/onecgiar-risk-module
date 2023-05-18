@@ -33,7 +33,8 @@ export class RiskController {
   })
   getRisk() {
     return this.riskService.riskRepository.find({
-      relations: ['categories', 'initiative', 'mitigations', 'created_by'],
+      relations: ['category', 'initiative', 'mitigations', 'created_by'],
+      order:{id:'ASC'}
     });
   }
   @ApiCreatedResponse({
@@ -44,7 +45,8 @@ export class RiskController {
   getRisks(@Param('id') id: number) {
     return this.riskService.riskRepository.find({
       where: { id },
-      relations: ['categories', 'initiative', 'mitigations', 'created_by'],
+      relations: ['category', 'initiative', 'mitigations', 'created_by'],
+      order:{id:'ASC'}
     });
   }
 

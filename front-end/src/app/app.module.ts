@@ -31,6 +31,7 @@ import { VersionDetailsComponent } from './pages/version-details/version-details
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmComponent } from './components/confirm/confirm.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -71,7 +72,8 @@ import { ConfirmComponent } from './components/confirm/confirm.component';
     MatRadioModule,
     MatTooltipModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     BreadcrumbService

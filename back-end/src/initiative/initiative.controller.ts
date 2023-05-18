@@ -46,7 +46,8 @@ export class InitiativeController {
   getInitiative() {
     return this.iniService.iniRepository.find({
       where: { parent_id: null },
-      relations: ['risks', 'risks.categories', 'roles', 'roles.user'],
+      relations: ['risks', 'risks.category', 'roles', 'roles.user'],
+      order:{id:'DESC',risks:{id:'DESC'}}
     });
   }
 
@@ -61,13 +62,14 @@ export class InitiativeController {
         where: { id },
         relations: [
           'risks',
-          'risks.categories',
+          'risks.category',
           'risks.mitigations',
           'risks.created_by',
           'created_by',
           'roles',
           'roles.user',
         ],
+        order:{id:'DESC',risks:{id:'DESC'}}
       })
       .catch((d) => {
         throw new NotFoundException();
@@ -87,7 +89,7 @@ export class InitiativeController {
     });
     const risks = await this.riskService.riskRepository.find({
       where: { initiative_id: In(ininit.map((d) => d.id)) },
-      relations: ['initiative', 'categories', 'mitigations'],
+      relations: ['initiative', 'category', 'mitigations'],
     });
 
     const file_name = 'All-Risks-.xlsx';
@@ -116,7 +118,7 @@ export class InitiativeController {
       where: { id },
       relations: [
         'risks',
-        'risks.categories',
+        'risks.category',
         'risks.mitigations',
         'roles',
         'roles.user',
@@ -159,7 +161,7 @@ export class InitiativeController {
   getVersons(@Param('id') id: number) {
     return this.iniService.iniRepository.find({
       where: { parent_id: id },
-      relations: ['risks', 'risks.categories', 'roles', 'roles.user','created_by'],
+      relations: ['risks', 'risks.category', 'roles', 'roles.user','created_by'],
     });
   }
 

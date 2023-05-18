@@ -16,7 +16,7 @@ export class Mitigation {
   @ApiProperty()
   @Column()
   risk_id: number;
-  @ManyToOne(() => Risk, (risk) => risk.mitigations)
+  @ManyToOne(() => Risk, (risk) => risk.mitigations,{onUpdate:'CASCADE',onDelete:'CASCADE'})
   @JoinColumn({ name: 'risk_id' })
   risk: Risk;
   @ApiProperty()
@@ -25,4 +25,5 @@ export class Mitigation {
   @ApiProperty()
   @Column()
   status: string;
+  
 }

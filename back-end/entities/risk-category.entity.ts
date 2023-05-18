@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinTable } from 'typeorm';
+import { Risk } from './risk.entity';
 
 @Entity()
 export class RiskCategory {
@@ -9,4 +10,10 @@ export class RiskCategory {
   @ApiProperty()
   @Column()
   title: string;
+
+  @ApiProperty({ type: () => [Risk] })
+  @OneToMany(() => Risk, (risk) => risk.initiative)
+  @JoinTable()
+  risks: Array<Risk>;
+
 }
