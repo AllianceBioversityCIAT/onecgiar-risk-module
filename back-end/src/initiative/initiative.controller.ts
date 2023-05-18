@@ -63,6 +63,8 @@ export class InitiativeController {
           'risks',
           'risks.categories',
           'risks.mitigations',
+          'risks.created_by',
+          'created_by',
           'roles',
           'roles.user',
         ],

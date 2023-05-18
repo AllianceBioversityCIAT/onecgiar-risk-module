@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
@@ -12,6 +13,7 @@ import {
 import { Initiative } from './initiative.entity';
 import { Mitigation } from './mitigation.entity';
 import { RiskCategory } from './risk-category.entity';
+import { User } from './user.entitiy';
 
 @Entity()
 export class Risk {
@@ -54,4 +56,17 @@ export class Risk {
   @OneToMany(() => Mitigation, (mitigation) => mitigation.risk)
   @JoinTable()
   mitigations: Array<Mitigation>;
+
+  @ManyToOne(() => User, (user) => user.risks)
+  @JoinColumn({ name: 'created_by_user_id' })
+  created_by: User;
+  @Optional()
+  @Column({default:null})
+  created_by_user_id:number
+
+  @Optional()
+  @Column({default:false})
+  redundant:boolean
+  
+  
 }

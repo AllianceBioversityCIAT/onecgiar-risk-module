@@ -12,7 +12,15 @@ export class RiskService extends MainService {
   constructor(private http: HttpClient) {
     super();
   }
-
+  updateRedundant(iniitave_id:number,redundant:number){
+    return firstValueFrom(
+      this.http
+        .patch(this.backend_url + '/risk/' + iniitave_id+'/redundant',{redundant}, {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
+  }
 
   getRisk(riskId: number) {
     return this.http

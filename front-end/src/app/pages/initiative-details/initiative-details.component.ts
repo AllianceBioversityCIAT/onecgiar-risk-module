@@ -1,5 +1,9 @@
 import { Component, Inject, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -91,8 +95,10 @@ export class InitiativeDetailsComponent {
     'Target Likelihood',
     'Target Impact',
     'Target Risk Level',
+
     'Mitigation Action',
     'Status of Actions',
+    'created_by',
     'Flag to SDG',
     'Redundant',
     'Actions',
@@ -111,16 +117,20 @@ export class InitiativeDetailsComponent {
 
   async publish(id: number) {
     this.dialog
-    .open(PublishDialog, {
-      maxWidth: '400px',
-      data: {reason:''},
-    })
-    .afterClosed()
-    .subscribe( async (dialogResult) => {
-      if (dialogResult) {
-        await this.initiativeService.Publish(id,dialogResult);
-      }
-    });
+      .open(PublishDialog, {
+        maxWidth: '400px',
+        data: { reason: '' },
+      })
+      .afterClosed()
+      .subscribe(async (dialogResult) => {
+        if (dialogResult) {
+          await this.initiativeService.Publish(id, dialogResult);
+        }
+      });
+  }
+  async checkValue(id:number,value:any) {
+    await this.riskService.updateRedundant(id,value);
+
   }
 
   async loadInitiative() {

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
+import { User } from 'entities/user.entitiy';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -26,7 +27,9 @@ export class RiskService {
     return await this.riskRepository.save(this.riskRepository.create(risk));
 
   }
-  async createRisk(risk: Risk) {
+  async createRisk(risk: Risk,user:User = null) {
+    if(user)
+    risk.created_by_user_id=user.id
     const created_risk = await this.riskRepository.save(
       this.riskRepository.create(risk),
       {
