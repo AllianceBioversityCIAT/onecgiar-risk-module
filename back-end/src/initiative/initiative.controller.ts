@@ -23,7 +23,6 @@ import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { InitiativeService } from './initiative.service';
 import * as XLSX from 'xlsx';
-import { Workbook } from 'excel4node';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { RiskService } from 'src/risk/risk.service';
@@ -93,7 +92,7 @@ export class InitiativeController {
     });
 
     const file_name = 'All-Risks-.xlsx';
-    var wb: Workbook = XLSX.utils.book_new();
+    var wb  = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(risks);
     XLSX.utils.book_append_sheet(wb, ws, 'Risks');
     await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
@@ -125,7 +124,7 @@ export class InitiativeController {
       ],
     });
     const file_name = init.official_code + '-Risks-' + init.id + '.xlsx';
-    var wb: Workbook = XLSX.utils.book_new();
+    var wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(init.risks);
     XLSX.utils.book_append_sheet(wb, ws, 'Risks');
     await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
