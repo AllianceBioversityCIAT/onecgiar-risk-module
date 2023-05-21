@@ -18,16 +18,15 @@ import { UsersModule } from './users/users.module';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',  // 'root',
-      database: 'risk',
       synchronize: true,
       entities: [`dist/**/*.entity{.ts,.js}`],
       autoLoadEntities: true,
-      
       namingStrategy: new SnakeNamingStrategy(),
     }),
     RiskModule,
