@@ -1,104 +1,301 @@
 <ng-container *ngIf="router.isActive(path, true)">
-    <div class="globalContainer">
-        <div class="head">
-            <h3 class="primaryColor">Risk management for Accelerated Breeding: Meeting Farmers - Version - {{id}}.</h3>
-        </div>
-        <div class="tableContainer">
-          <div class="table">
-            <table mat-table [dataSource]="dataSource">
-              <ng-container matColumnDef="ID">
-                <th class="big bold center spacing border-left-0 " mat-header-cell *matHeaderCellDef> ID </th>
-                <td class="border-left-0 center " mat-cell *matCellDef="let element"> {{element.id}} </td>
-              </ng-container>
-          
-              <ng-container matColumnDef="Risk Achieving Impact">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Achieving Impact </th>
-                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 200px;"> {{element.title}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Risk Category">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Category </th>
-                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 140px;">{{element.category?.title}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Risk Owner">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Owner </th>
-                <td  class="center" mat-cell *matCellDef="let element" style="min-width: 120px;"> {{element?.risk_owner}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Description Risk">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Description Risk </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element?.description}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Current Likelihood">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Likelihood </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{element?.current_likelihood}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Current Impact">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Impact </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 140px;"> {{element?.current_impact}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Current Risk Level">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Current Risk Level </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element?.current_likelihood * element?.current_impact}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Target Likelihood">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Likelihood </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element?.target_likelihood}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Target Impact">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Impact </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 130px;"> {{element?.target_impact}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Target Risk Level">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Target Risk Level </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 160px;"> {{element?.target_likelihood * element?.target_impact}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Mitigation Action">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Mitigation Action </th>
-                <td mat-cell *matCellDef="let element" style="min-width: 180px;"> {{filterDescriptionMitigations(element)}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Status of Actions">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Status of Actions </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 170px;"> {{filterStatusMitigations(element)}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Flag to SDG">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Flag to SDG </th>
-                <td class="center" mat-cell *matCellDef="let element" style="min-width: 120px;"> 
-                    <svg *ngIf="(element.current_likelihood * element.current_impact) > 5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
-                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
-                    </svg>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="Redundant">
-                <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Redundant </th>
-                <td  class="center" mat-cell *matCellDef="let element"  style="min-width: 120px;">
-                  <mat-checkbox  [(ngModel)]="element.redundant" [checked]="element.redundant"  class="example-margin"></mat-checkbox>
-                </td>
-              </ng-container>
-
-
-             
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-          </div>
-        </div>
-        
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                               showFirstLastButtons
-                               aria-label="Select page of periodic elements">
-                </mat-paginator>
+  <div class="globalContainer">
+    <div class="head">
+      <h3 class="primaryColor">
+        Risk management for Accelerated Breeding: Meeting Farmers - Version -
+        {{ id }}.
+      </h3>
     </div>
+    <div class="tableContainer">
+      <div class="table">
+        <table mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="ID">
+            <th
+              class="big bold center spacing border-left-0"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              ID
+            </th>
+            <td class="border-left-0 center" mat-cell *matCellDef="let element">
+              {{ element.id }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Risk Achieving Impact">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Risk Achieving Impact
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 200px"
+            >
+              {{ element.title }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Risk Category">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Risk Category
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 140px"
+            >
+              {{ element.category?.title }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Risk Owner">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Risk Owner
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 120px"
+            >
+              {{ element?.risk_owner }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Description Risk">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Description Risk
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 190px"
+            >
+              {{ element?.description }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Current Likelihood">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Current Likelihood
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 170px"
+            >
+              {{ element?.current_likelihood }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Current Impact">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Current Impact
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 140px"
+            >
+              {{ element?.current_impact }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Current Risk Level">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Current Risk Level
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 160px"
+            >
+              {{ element?.current_likelihood * element?.current_impact }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Target Likelihood">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Target Likelihood
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 160px"
+            >
+              {{ element?.target_likelihood }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Target Impact">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Target Impact
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 130px"
+            >
+              {{ element?.target_impact }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Target Risk Level">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Target Risk Level
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 160px"
+            >
+              {{ element?.target_likelihood * element?.target_impact }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Mitigation Action">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Mitigation Action
+            </th>
+            <td mat-cell *matCellDef="let element" style="min-width: 180px">
+              {{ filterDescriptionMitigations(element) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Status of Actions">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Status of Actions
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 170px"
+            >
+              {{ filterStatusMitigations(element) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Flag to SDG">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Flag to SDG
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 120px"
+            >
+              <svg
+                *ngIf="element.current_likelihood * element.current_impact > 5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                class="bi bi-info-square-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                />
+              </svg>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Redundant">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              Redundant
+            </th>
+            <td
+              class="center"
+              mat-cell
+              *matCellDef="let element"
+              style="min-width: 120px"
+            >
+              <mat-checkbox
+                [(ngModel)]="element.redundant"
+                [checked]="element.redundant"
+                class="example-margin"
+              ></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Select page of periodic elements"
+    >
+    </mat-paginator>
+  </div>
 </ng-container>
