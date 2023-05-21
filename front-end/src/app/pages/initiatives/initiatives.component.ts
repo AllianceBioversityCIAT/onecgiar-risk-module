@@ -65,7 +65,7 @@ export class InitiativesComponent {
   }
   filterCategories(categories: any) {
     var list = '';
-    list = categories.map((d: any) => d.title).join(', ');
+    list = categories.map((d: any) => d?.category?.title).join(', ');
     return list;
   }
 
