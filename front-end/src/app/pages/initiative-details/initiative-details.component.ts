@@ -165,16 +165,16 @@ export class InitiativeDetailsComponent {
   }
 
   filterDescriptionMitigations(element: any) {
-    var mitigationsList = '';
+    const mitigationsList:any[] = [];
     element.mitigations.forEach((mitigation: any) => {
-      mitigationsList += mitigation.description + ',  ';
+      mitigationsList.push(mitigation.description );
     });
-    return mitigationsList;
+    return mitigationsList.join(', ');
   }
   filterStatusMitigations(element: any) {
-    var mitigationsList = '';
+    const mitigationsList:any[] = [];
     element.mitigations.forEach((mitigation: any) => {
-      mitigationsList += mitigation.status + ',  ';
+      mitigationsList.push(mitigation.status);
     });
     return mitigationsList;
   }

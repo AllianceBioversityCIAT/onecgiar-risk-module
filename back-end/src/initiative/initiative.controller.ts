@@ -45,9 +45,9 @@ export class InitiativeController {
   })
   getInitiative() {
     return this.iniService.iniRepository.find({
-      where: { parent_id: null },
+      where: { parent_id: IsNull() },
       relations: ['risks', 'risks.category', 'roles', 'roles.user'],
-      order:{id:'DESC',risks:{id:'DESC'}}
+      order:{id:'ASC',risks:{id:'DESC'}}
     });
   }
 
@@ -162,6 +162,7 @@ export class InitiativeController {
     return this.iniService.iniRepository.find({
       where: { parent_id: id },
       relations: ['risks', 'risks.category', 'roles', 'roles.user','created_by'],
+      order:{id:'DESC',risks:{id:'DESC'}}
     });
   }
 
