@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ConfirmComponent, ConfirmDialogModel } from 'src/app/components/confirm/confirm.component';
 import { NewTeamMemberComponent } from 'src/app/components/new-team-member/new-team-member.component';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 
@@ -16,15 +18,32 @@ export class TeamMembersComponent {
   constructor(public router: Router,
     public dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
-    private initiativeService: InitiativesService
+    private initiativeService: InitiativesService,
+    private toastr: ToastrService
     ) {
     
   }
 
   async deleteMember(roleId: number) {
-    await this.initiativeService.deleteInitiativeRole(this.initiativeId, roleId);
-    this.loadInitiativeRoles();
+    this.dialog
+    .open(ConfirmComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel(
+        'Delete',
+        `Are you sure you want to delete user role ?`
+      ),
+    })
+    .afterClosed()
+    .subscribe(async (dialogResult) => {
+      if (dialogResult) {
+        await this.initiativeService.deleteInitiativeRole(this.initiativeId, roleId);
+        this.loadInitiativeRoles();
+        this.toastr.success('Success', `User role has been deleted`);
+      }
+    });
+   
   }
+  
 
   openNewTeamMemberDialog() {
     const dialogRef = this.dialog.open(NewTeamMemberComponent , {
@@ -43,6 +62,7 @@ export class TeamMembersComponent {
           email: result.formValue.email,
           role: result.formValue.userRole,
         })
+        this.toastr.success('Success', `User role has been added`);
         this.loadInitiativeRoles()
       }
     });
@@ -63,6 +83,7 @@ export class TeamMembersComponent {
           email: result.formValue.email,
           role: result.formValue.userRole,
         })
+        this.toastr.success('Success', `User role has been updated`);
         this.loadInitiativeRoles()
       }
     });

@@ -72,7 +72,7 @@ export class NewRiskComponent {
     let result = null;
     if (this.newRiskForm.valid) {
       this.errorMessage = '';
-      if (this?.data?.risk?.id)
+      if (this?.data?.risk?.id){
         result = await this.riskService.updateRisk(this?.data?.risk?.id, {
           id: Number(this?.data?.risk?.id),
           initiative_id:
@@ -80,17 +80,26 @@ export class NewRiskComponent {
           mitigations: this.proposed.data,
           ...this.newRiskForm.value,
         });
-      else
+        console.log(result);
+        if (result)
+        this.toastr.success(
+          'Success',
+          `${this.newRiskForm.value.title} has been updated`
+        );
+      }
+      else{
         result = await this.riskService.createNewRisk({
           initiative_id: this?.data?.initiative_id,
           mitigations: this.proposed.data,
           ...this.newRiskForm.value,
         });
-      if (result)
+        if (result)
         this.toastr.success(
           'Success',
-          `${this.newRiskForm.value.riskTitle} has been updated`
+          `${this.newRiskForm.value.title} has been created`
         );
+      }
+
       this.dialog.closeAll();
     }
   }

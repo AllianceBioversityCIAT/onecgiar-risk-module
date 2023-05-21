@@ -39,7 +39,7 @@ export class RiskService {
       );
     }
 
-    return;
+    return created_risk;
   }
   async createRisk(risk: Risk, user: User = null) {
     if (user) risk.created_by_user_id = user.id;

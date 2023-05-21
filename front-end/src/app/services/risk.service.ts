@@ -40,31 +40,38 @@ export class RiskService extends MainService {
     );
   }
   deleteRisk(riskId: number) {
-    return this.http
-      .delete(this.backend_url + '/risk/' + riskId, { headers: this.headers })
-      .toPromise();
+    return firstValueFrom(
+      this.http.delete(this.backend_url + '/risk/' + riskId, {
+        headers: this.headers,
+      })
+    );
   }
   // ============================================================================= RISK  --  PUT API
   async updateRisk(riskId: number, risk: any) {
-    return this.http
-      .put(this.backend_url + '/risk/' + riskId, risk, {
-        headers: this.headers,
-      })
-      .toPromise();
+    return firstValueFrom(
+      this.http
+        .put(this.backend_url + '/risk/' + riskId, risk, {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
   }
   // ============================================================================= RISK  --  PUT API
   getRiskMitigations(riskId: number) {
-    return this.http
-      .get(this.backend_url + '/risk/' + riskId + '/mitigation', {
-        headers: this.headers,
-      })
-      .toPromise();
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/risk/' + riskId + '/mitigation', {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
   }
   createNewRisk(newRisk: any) {
-    console.log(newRisk);
-    return this.http
-      .post(this.backend_url + '/risk', newRisk, { headers: this.headers })
-      .toPromise();
+    return firstValueFrom(
+      this.http
+        .post(this.backend_url + '/risk', newRisk, { headers: this.headers })
+        .pipe(map((d: any) => d))
+    );
   }
 
   createNewMitigation(riskId: number, newMitigation: any) {
