@@ -14,41 +14,48 @@
             <form [formGroup]="newRiskForm">
                 <mat-form-field class="w-90" appearance="outline">
                     <input formControlName="risk_owner" matInput placeholder="Risk Owner">
+                    <mat-icon  matTooltip="Info about the action" matSuffix>help_outline</mat-icon>
                     <mat-error class="error" *ngIf="newRiskForm.controls['risk_owner'].errors?.['required']">Risk Owner is Required</mat-error>
                 </mat-form-field>
                 
                 <mat-form-field class="w-90" appearance="outline">
-                    <mat-select formControlName="category_id">
+                    <mat-select placeholder="Risk Category" formControlName="category_id">
                         <mat-option *ngFor="let riskCat of riskCategories" [value]="riskCat.id">
                             {{riskCat.title}}
+                            <mat-icon  matTooltip="Info about the action" matSuffix>help_outline</mat-icon>
                         </mat-option>
+                     
                     </mat-select>
+                    <mat-icon  matTooltip="Info about the action" matSuffix>help_outline</mat-icon>
                 </mat-form-field>
                 
                 <mat-form-field class="w-90" appearance="outline">
                     <input formControlName="title" matInput placeholder="Risk Title ">
+                    <mat-icon  matTooltip="Info about the action" matSuffix>help_outline</mat-icon>
                     <mat-error class="error" *ngIf="newRiskForm.controls['title'].errors?.['required']">Risk Title is Required</mat-error>
                 </mat-form-field>
                 
                 <mat-form-field class="w-90" appearance="outline">
                     <textarea formControlName="description" rows="4" matInput placeholder="Detailed Description"></textarea>
+                    <mat-icon  matTooltip="Info about the action" matSuffix>help_outline</mat-icon>
                     <mat-error class="error" *ngIf="newRiskForm.controls['description'].errors?.['required']">Detailed Description is Required</mat-error>
                 </mat-form-field>
                 
                 
                 <div class="radio">
-                    <h3>Current Likelihood</h3>
+                    <h3><mat-icon  matTooltip="Info about the action">help_outline</mat-icon>Current Likelihood </h3>
                     <mat-radio-group formControlName="current_likelihood" aria-label="Select an option">
                         <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
                         <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
                         <mat-radio-button class="radioValue" value="3"><span>3</span></mat-radio-button>
                         <mat-radio-button class="radioValue" value="4"><span>4</span></mat-radio-button>
                         <mat-radio-button class="radioValue" value="5"><span>5</span></mat-radio-button>
+                        
                     </mat-radio-group>
                     <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['current_likelihood'].errors?.['required']">Current Likelihood is Required</mat-error>
                 </div>
                 <div class="radio">
-                    <h3>Current Impact &nbsp; &nbsp; &nbsp; </h3>
+                    <h3><mat-icon  matTooltip="Info about the action">help_outline</mat-icon>Current Impact &nbsp; &nbsp; &nbsp; </h3>
                     <mat-radio-group formControlName="current_impact" aria-label="Select an option">
                         <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
                         <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
@@ -59,12 +66,12 @@
                     <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['current_impact'].errors?.['required']">Current Impact is Required</mat-error>
                 </div>
                 <div class="radio">
-                    <h2>Current Risk Level &nbsp; </h2>
+                    <h2><mat-icon  matTooltip="Info about the action">help_outline</mat-icon>Current Risk Level &nbsp; </h2>
                     <p class="multi">{{newRiskForm.value.current_likelihood * newRiskForm.value.current_impact}}</p>
                 </div>
 
                 <div class="radio">
-                    <h3>Target Likelihood</h3>
+                    <h3><mat-icon  matTooltip="Info about the action">help_outline</mat-icon>Target Likelihood  &nbsp;</h3>
                     <mat-radio-group formControlName="target_likelihood" aria-label="Select an option">
                         <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
                         <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
@@ -75,7 +82,7 @@
                     <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['target_likelihood'].errors?.['required']">Target Likelihood is Required</mat-error>
                 </div>
                 <div class="radio">
-                    <h3>Target Impact &nbsp; &nbsp; &nbsp; </h3>
+                    <h3><mat-icon  matTooltip="Info about the action">help_outline</mat-icon>Target Impact &nbsp; &nbsp; &nbsp;  &nbsp; </h3>
                     <mat-radio-group formControlName="target_impact" aria-label="Select an option">
                         <mat-radio-button class="radioValue" value="1"><span>1</span></mat-radio-button>
                         <mat-radio-button class="radioValue" value="2"><span>2</span></mat-radio-button>
@@ -86,12 +93,12 @@
                     <mat-error class="error errorMessage" *ngIf="newRiskForm.controls['target_impact'].errors?.['required']">Target Impact is Required</mat-error>
                 </div>
                 <div class="radio">
-                    <h2>Target Risk Level &nbsp; </h2>
+                    <h2><mat-icon  matTooltip="Info about the action">help_outline</mat-icon>Target Risk Level &nbsp;  &nbsp; </h2>
                     <p class="multi">{{newRiskForm.value.target_impact * newRiskForm.value.target_likelihood}}</p>
                 </div>
                 <hr>
                 <div class="head">
-                    <h2>Actions to manage risk</h2>
+                    <h2>Actions to manage risk <mat-icon  matTooltip="Info about the action">help_outline</mat-icon></h2>
                     <button class="primaryButton" (click)="openNewProposedDialog()">Add New</button>
                 </div>
                 <div class="table">
