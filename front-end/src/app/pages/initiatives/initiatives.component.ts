@@ -35,7 +35,7 @@ export class InitiativesComponent {
     'INIT-ID',
     'Initiative Name',
     'Risk Category',
-    'Num of Risk',
+    'Number of risks',
     'My Role',
     'Actions',
   ];
