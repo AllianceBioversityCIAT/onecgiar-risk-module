@@ -102,10 +102,10 @@ export class InitiativeDetailsComponent {
 
   displayedColumns: string[] = [
     'ID',
-    'Risk Achieving Impact',
+    'Risk Title',
+    'Risk Description',
     'Risk Category',
     'Risk Owner',
-    'Description Risk',
     'Current Likelihood',
     'Current Impact',
     'Current Risk Level',

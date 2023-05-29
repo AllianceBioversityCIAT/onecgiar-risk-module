@@ -1,7 +1,7 @@
 <div class="dialog">
   <div class="dialogHeader">
-    <h1 mat-dialog-title *ngIf="this.data.taskRole == 'add'">Add New Risk</h1>
-    <h1 mat-dialog-title *ngIf="this.data.taskRole == 'edit'">Edit Risk</h1>
+    <h1 mat-dialog-title *ngIf="!data?.risk?.id">Create New Risk</h1>
+    <h1 mat-dialog-title *ngIf="data?.risk?.id">Update Risk ({{data?.risk?.title}})</h1>
     <button mat-dialog-close>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +58,11 @@
           *ngIf="newRiskForm.controls['title'].errors?.['required']"
           >Risk Title is Required</mat-error
         >
+        <mat-error
+        class="error"
+        *ngIf="newRiskForm.controls?.title?.errors?.maxword"
+        >Max words you can use is {{newRiskForm.controls?.title?.errors?.maxword?.max}} you used {{newRiskForm.controls?.title?.errors?.maxword.actual}}</mat-error
+      >
       </mat-form-field>
 
       <mat-form-field class="w-90" appearance="outline">
@@ -75,6 +80,11 @@
           *ngIf="newRiskForm.controls['description'].errors?.['required']"
           >Detailed Description is Required</mat-error
         >
+        <mat-error
+        class="error"
+        *ngIf="newRiskForm.controls?.description?.errors?.maxword"
+        >Max words you can use is {{newRiskForm.controls?.description?.errors?.maxword?.max}} you used {{newRiskForm.controls?.description?.errors?.maxword.actual}}</mat-error
+      >
       </mat-form-field>
 
       <div class="radio">

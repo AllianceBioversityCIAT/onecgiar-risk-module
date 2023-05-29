@@ -8,6 +8,7 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { RiskService } from 'src/app/services/risk.service';
+import { WordCountValidators } from 'src/app/validators/word-count.validator';
 import {
   ConfirmComponent,
   ConfirmDialogModel,
@@ -39,8 +40,8 @@ export class NewRiskComponent {
     this.newRiskForm = this.fb.group({
       risk_owner: [this?.data?.risk?.risk_owner, Validators.required],
       category_id: [this?.data?.risk?.category.id, Validators.required],
-      title: [this?.data?.risk?.title, Validators.required],
-      description: [this?.data?.risk?.description, Validators.required],
+      title: [this?.data?.risk?.title,[ Validators.required, WordCountValidators.max(50)]],
+      description: [this?.data?.risk?.description, [Validators.required, WordCountValidators.max(150)]],
       target_likelihood: [
         String(this?.data?.risk?.target_likelihood | 0),
         Validators.required,

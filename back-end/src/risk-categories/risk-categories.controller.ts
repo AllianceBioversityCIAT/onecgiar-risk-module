@@ -16,6 +16,6 @@ export class RiskCategoriesController {
   })
   @Get()
   get() {
-    return this.riskcatRepository.find();
+    return this.riskcatRepository.find({order:{title:'ASC'}});
   }
 }

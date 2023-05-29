@@ -46,13 +46,13 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="Risk Achieving Impact">
+          <ng-container matColumnDef="Risk Title">
             <th
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
             >
-              Risk Achieving Impact
+              Title
             </th>
             <td
               class="center"
@@ -70,7 +70,7 @@
               mat-header-cell
               *matHeaderCellDef
             >
-              Risk Category
+             Category
             </th>
             <td
               class="center"
@@ -82,26 +82,13 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="Risk Owner">
+          <ng-container matColumnDef="Risk Description">
             <th
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
             >
-              Risk Owner
-            </th>
-            <td class="center" mat-cell *matCellDef="let element">
-              {{ element.risk_owner }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="Description Risk">
-            <th
-              class="big bold center spacing"
-              mat-header-cell
-              *matHeaderCellDef
-            >
-              Risk Description
+             Description
             </th>
             <td
               class="center"
@@ -113,11 +100,25 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="Risk Owner">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+              style="min-width: 100px"
+            >
+              Risk Owner
+            </th>
+            <td class="center" mat-cell *matCellDef="let element">
+              {{ element.risk_owner }}
+            </td>
+          </ng-container>
           <ng-container matColumnDef="Current Likelihood">
             <th
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 100px"
             >
               Current Likelihood
             </th>
@@ -131,6 +132,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 100px"
             >
               Current Impact
             </th>
@@ -144,6 +146,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 100px"
             >
               Current Risk Level
             </th>
@@ -157,6 +160,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 100px"
             >
               Target Likelihood
             </th>
@@ -170,6 +174,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 100px"
             >
               Target Impact
             </th>
@@ -183,6 +188,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 100px"
             >
               Target Risk Level
             </th>

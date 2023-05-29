@@ -5,6 +5,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import { WordCountValidators } from 'src/app/validators/word-count.validator';
 
 @Component({
   selector: 'app-new-proposed',
@@ -20,7 +21,6 @@ export class NewProposedComponent {
   ) {}
 
   Actions: any[] = [
-    { value: '', viewValue: 'Action selection' },
     { value: 'Delayed', viewValue: 'Delayed' },
     { value: 'Completed', viewValue: 'Completed' },
     { value: 'Ongoing and on track', viewValue: 'Ongoing and On Track' },
@@ -30,7 +30,7 @@ export class NewProposedComponent {
   proposedForm: any;
   populateProposedForm() {
     this.proposedForm = this.fb.group({
-      description: [this.data?.proposed?.description, Validators.required],
+      description: [this.data?.proposed?.description, [Validators.required, WordCountValidators.max(150)]],
       status: [this.data?.proposed?.status, Validators.required],
     });
   }
