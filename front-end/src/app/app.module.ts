@@ -32,6 +32,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { ToastrModule } from 'ngx-toastr';
+import { Safe } from './pipes/safe';
 
 
 
@@ -51,7 +52,7 @@ import { ToastrModule } from 'ngx-toastr';
     NewRiskComponent,
     NewTeamMemberComponent,
     NewProposedComponent,
-    VersionDetailsComponent,LoginDialog, ConfirmComponent,PublishDialog
+    VersionDetailsComponent,LoginDialog, ConfirmComponent,PublishDialog,Safe
   ],
   imports: [
     BrowserModule,

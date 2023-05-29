@@ -112,9 +112,7 @@ export class InitiativeDetailsComponent {
     'Target Likelihood',
     'Target Impact',
     'Target Risk Level',
-
     'Mitigation Action',
-    'Status of Actions',
     'created_by',
     'Flag to SDG',
     'Redundant',
@@ -160,19 +158,30 @@ export class InitiativeDetailsComponent {
     const params: any = this.activatedRoute?.snapshot.params;
 
     this.id = +params.id;
-    this.initiativeId = params.initiativeId
+    this.initiativeId = params.initiativeId;
     this.loadInitiative();
   }
 
   filterDescriptionMitigations(element: any) {
-    const mitigationsList:any[] = [];
+    const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {
-      mitigationsList.push(mitigation.description );
+      mitigationsList.push(
+        `<tr><td style="border:none !important;">${mitigation.description}</td><td style="border:none !important;">${mitigation.status}</td></tr>`
+      );
     });
-    return mitigationsList.join(', ');
+    let html = `
+    <table style="border:none !important;">
+    <tr>
+    <th style="border:none !important; text-align:left;">Description</th>
+    <th style="border:none !important; text-align:center;">Status</th>
+  </tr>
+  ${mitigationsList.join('')}
+</table>`;
+    if (mitigationsList.length) return html; // ;
+    else return '';
   }
   filterStatusMitigations(element: any) {
-    const mitigationsList:any[] = [];
+    const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(mitigation.status);
     });
