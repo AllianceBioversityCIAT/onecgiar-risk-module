@@ -110,4 +110,8 @@
 .multi {
     border: 1px solid rgb(135, 135, 251); padding: 7px 12px; border-radius: 50%; font-weight: bold; font-size: 1.3em; color: rgb(135, 135, 251);
 }
+.mdc-card__actions{
+    flex-direction: row-reverse;
+}
+
 

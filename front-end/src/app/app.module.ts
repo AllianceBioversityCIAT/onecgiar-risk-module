@@ -33,7 +33,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { ToastrModule } from 'ngx-toastr';
 import { Safe } from './pipes/safe';
+import {MatCardModule} from '@angular/material/card';
 
+import {MatDividerModule} from '@angular/material/divider';
 
 
 
@@ -74,6 +76,8 @@ import { Safe } from './pipes/safe';
     MatTooltipModule,
     HttpClientModule,
     FormsModule,
+    MatCardModule,
+    MatDividerModule,
     ToastrModule.forRoot(),
   ],
   providers: [
