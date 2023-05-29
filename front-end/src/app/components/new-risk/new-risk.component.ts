@@ -72,7 +72,7 @@ export class NewRiskComponent {
     let result = null;
     if (this.newRiskForm.valid) {
       this.errorMessage = '';
-      if (this?.data?.risk?.id){
+      if (this?.data?.risk?.id) {
         result = await this.riskService.updateRisk(this?.data?.risk?.id, {
           id: Number(this?.data?.risk?.id),
           initiative_id:
@@ -82,22 +82,21 @@ export class NewRiskComponent {
         });
         console.log(result);
         if (result)
-        this.toastr.success(
-          'Success',
-          `${this.newRiskForm.value.title} has been updated`
-        );
-      }
-      else{
+          this.toastr.success(
+            'Success',
+            `${this.newRiskForm.value.title} has been updated`
+          );
+      } else {
         result = await this.riskService.createNewRisk({
           initiative_id: this?.data?.initiative_id,
           mitigations: this.proposed.data,
           ...this.newRiskForm.value,
         });
         if (result)
-        this.toastr.success(
-          'Success',
-          `${this.newRiskForm.value.title} has been created`
-        );
+          this.toastr.success(
+            'Success',
+            `${this.newRiskForm.value.title} has been created`
+          );
       }
 
       this.dialog.closeAll();
@@ -111,9 +110,11 @@ export class NewRiskComponent {
       data: { role: 'add', proposed: null },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
-      const data = this.proposed.data;
-      data.push(result.formValue);
-      this.proposed = new MatTableDataSource<any>(data);
+      if (result) {
+        const data = this.proposed.data;
+        data.push(result.formValue);
+        this.proposed = new MatTableDataSource<any>(data);
+      }
     });
   }
 
@@ -142,6 +143,7 @@ export class NewRiskComponent {
       data: { role: 'edit', proposed: mitigation },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
+      console.log(result);
       if (result) {
         let data = this.proposed.data;
         data[data.indexOf(mitigation)] = result.formValue;
