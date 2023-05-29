@@ -1,11 +1,14 @@
 <h1 mat-dialog-title>Publish Risks</h1>
 
 <div mat-dialog-content>
-  <mat-form-field>
+  <p>
+    if you publish you can't update any risk please be sure all data is accurate before you publish 
+  </p>
+  <mat-form-field  style="width:100%">
     <textarea
+  
       [(ngModel)]="data.reason"
       rows="4"
-      cols="4"
       placeholder="Publish Reason"
       matInput
     ></textarea>
