@@ -14,7 +14,7 @@
             <mat-error class="error" *ngIf="memberForm.controls['email'].errors?.['email']">Wrong Email</mat-error>
         </mat-form-field>
         <mat-form-field class="w-90" appearance="outline">
-            <mat-select formControlName="userRole">
+            <mat-select placeholder="Role" formControlName="userRole">
               <mat-option *ngFor="let role of Roles" [value]="role.value">
                 {{role.viewValue}}
               </mat-option>

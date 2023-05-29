@@ -9,10 +9,10 @@ export class User {
   id: number;
   @ApiProperty()
   @Column()
-  firstName: string;
+  first_name: string;
   @ApiProperty()
   @Column()
-  lastName: string;
+  last_name: string;
   @ApiProperty()
   @Column()
   email: string;
@@ -31,5 +31,13 @@ export class User {
   @OneToMany(() => Risk, (risk) => risk.initiative)
   @JoinTable()
   risks: Array<Risk>;
+
+  @ApiProperty()
+  @Column({
+      type: "varchar",
+      generatedType: 'STORED',
+      asExpression: `Concat(first_name,' ' ,last_name)`
+    })
+    full_name: string;
   
 }

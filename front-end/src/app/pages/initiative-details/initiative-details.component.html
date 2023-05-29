@@ -110,7 +110,7 @@
               Risk Owner
             </th>
             <td class="center" mat-cell *matCellDef="let element">
-              {{ element.risk_owner }}
+              {{ element.risk_owner?.user?.full_name || element.risk_owner?.email }}
             </td>
           </ng-container>
           <ng-container matColumnDef="Current Likelihood">
@@ -219,13 +219,11 @@
               mat-header-cell
               *matHeaderCellDef
             >
-              Created By
+            Risk Raiser
             </th>
             <td mat-cell *matCellDef="let element" style="min-width: 180px">
               {{
-                element?.created_by?.firstName +
-                  " " +
-                  element?.created_by?.lastName
+                element?.created_by?.full_name
               }}
             </td>
           </ng-container>

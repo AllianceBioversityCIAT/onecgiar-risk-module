@@ -1,7 +1,9 @@
 <div class="dialog">
   <div class="dialogHeader">
     <h1 mat-dialog-title *ngIf="!data?.risk?.id">Create New Risk</h1>
-    <h1 mat-dialog-title *ngIf="data?.risk?.id">Update Risk ({{data?.risk?.title}})</h1>
+    <h1 mat-dialog-title *ngIf="data?.risk?.id">
+      Update Risk ({{ data?.risk?.title }})
+    </h1>
     <button mat-dialog-close>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -20,13 +22,30 @@
   <div class="dialogBody">
     <form [formGroup]="newRiskForm">
       <mat-form-field class="w-90" appearance="outline">
-        <input formControlName="risk_owner" matInput placeholder="Risk Owner" />
-        <mat-icon matTooltip="Info about the action" matSuffix
+        <input [disabled]="true" [value]="data?.risk?.created_by?.full_name || user_info.full_name" matInput placeholder="Risk Raiser" />
+        <mat-icon
+          matTooltip="The user raising a new risk for discussion with the team. This person will be detected by the system automatically"
+          matSuffix
+          >help_outline</mat-icon
+        >
+      </mat-form-field>
+      <mat-form-field class="w-90" appearance="outline">
+        <mat-select placeholder="Risk Owner" formControlName="risk_owner_id">
+            <mat-option
+              *ngFor="let riskrole of riskUsers"
+              [value]="riskrole.id"
+            >
+              {{ riskrole?.user?.full_name ||  riskrole.email }}
+            </mat-option>
+          </mat-select>
+        <mat-icon
+          matTooltip="The person proposed by the risk raiser and to be confirmed by the Initiative Lead/Co-lead"
+          matSuffix
           >help_outline</mat-icon
         >
         <mat-error
           class="error"
-          *ngIf="newRiskForm.controls['risk_owner'].errors?.['required']"
+          *ngIf="newRiskForm.controls?.risk_owner_id.errors?.['required']"
           >Risk Owner is Required</mat-error
         >
       </mat-form-field>
@@ -59,10 +78,12 @@
           >Risk Title is Required</mat-error
         >
         <mat-error
-        class="error"
-        *ngIf="newRiskForm.controls?.title?.errors?.maxword"
-        >Max words you can use is {{newRiskForm.controls?.title?.errors?.maxword?.max}} you used {{newRiskForm.controls?.title?.errors?.maxword.actual}}</mat-error
-      >
+          class="error"
+          *ngIf="newRiskForm.controls?.title?.errors?.maxword"
+          >Max words you can use is
+          {{ newRiskForm.controls?.title?.errors?.maxword?.max }} you used
+          {{ newRiskForm.controls?.title?.errors?.maxword.actual }}</mat-error
+        >
       </mat-form-field>
 
       <mat-form-field class="w-90" appearance="outline">
@@ -81,10 +102,14 @@
           >Detailed Description is Required</mat-error
         >
         <mat-error
-        class="error"
-        *ngIf="newRiskForm.controls?.description?.errors?.maxword"
-        >Max words you can use is {{newRiskForm.controls?.description?.errors?.maxword?.max}} you used {{newRiskForm.controls?.description?.errors?.maxword.actual}}</mat-error
-      >
+          class="error"
+          *ngIf="newRiskForm.controls?.description?.errors?.maxword"
+          >Max words you can use is
+          {{ newRiskForm.controls?.description?.errors?.maxword?.max }} you used
+          {{
+            newRiskForm.controls?.description?.errors?.maxword.actual
+          }}</mat-error
+        >
       </mat-form-field>
 
       <div class="radio">
@@ -342,20 +367,14 @@
           <li>
             Review Risk Theme/Category and change if not correct (optional)
           </li>
-          <li>
-            Review Risk Owner and change if not correct (optional)
-          </li>
-          <li>
-            Update Risk Description (optional)
-          </li>
+          <li>Review Risk Owner and change if not correct (optional)</li>
+          <li>Update Risk Description (optional)</li>
           <li>
             Update Risk Targets (default will be same as risk level; and
             adjustments to be made to target level – mandatory; no action =
             targets same as risk level)
           </li>
-          <li>
-            Add additional Actions to Manage Risk (optional)
-          </li>
+          <li>Add additional Actions to Manage Risk (optional)</li>
           <li>
             Review Status of Actions for each risk; default is “Ongoing and
             ontrack” (optional)

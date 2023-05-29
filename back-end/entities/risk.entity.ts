@@ -10,6 +10,7 @@ import {
   JoinTable,
   ManyToMany,
 } from 'typeorm';
+import { InitiativeRoles } from './initiative-roles.entity';
 import { Initiative } from './initiative.entity';
 import { Mitigation } from './mitigation.entity';
 import { RiskCategory } from './risk-category.entity';
@@ -30,9 +31,13 @@ export class Risk {
   @ApiProperty()
   @Column()
   title: string;
+
   @ApiProperty()
   @Column()
-  risk_owner: string;
+  risk_owner_id: number;
+  @ManyToOne(() => InitiativeRoles, (initiativeRoles) => initiativeRoles.risks)
+  @JoinColumn({ name: 'risk_owner_id' })
+  risk_owner: number;
   @ApiProperty()
   @Column()
   description: string;

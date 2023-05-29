@@ -111,8 +111,11 @@ export class RiskService extends MainService {
   }
 
   getRiskCategories() {
-    return this.http
-      .get(this.backend_url + '/risk-categories', { headers: this.headers })
-      .toPromise();
+    return firstValueFrom(this.http
+      .get(this.backend_url + '/risk-categories', { headers: this.headers }).pipe(map(d=>d))) 
+  }
+  getRiskUsers(id:number){
+    return firstValueFrom(this.http
+      .get(this.backend_url + `/initiative/${id}/roles`, { headers: this.headers }).pipe(map(d=>d))) 
   }
 }

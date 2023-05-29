@@ -8,8 +8,11 @@ import {
   OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  JoinTable,
 } from 'typeorm';
 import { Initiative } from './initiative.entity';
+import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 
 @Entity()
@@ -23,7 +26,7 @@ export class InitiativeRoles {
   @ApiProperty()
   @Column({ nullable: true })
   user_id: number;
-  
+
   @ManyToOne(() => User, (user) => user)
   @JoinColumn({ name: 'user_id' })
   user: User;
@@ -39,12 +42,16 @@ export class InitiativeRoles {
   @Column()
   role: string;
 
+  @ApiProperty()
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
   @ApiProperty()
-    @CreateDateColumn({ type: "timestamp" })
-    createdAt: Date;
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
-    @ApiProperty()
-    @UpdateDateColumn({ type: "timestamp" })
-    updatedAt: Date; 
+  @ApiProperty({ type: () => [Risk] })
+  @OneToMany(() => Risk, (risk) => risk.risk_owner)
+  @JoinTable()
+  risks: Array<Risk>;
 }

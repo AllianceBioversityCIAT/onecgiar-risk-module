@@ -45,8 +45,14 @@ export class InitiativeController {
   getInitiative() {
     return this.iniService.iniRepository.find({
       where: { parent_id: IsNull() },
-      relations: ['risks', 'risks.category', 'roles', 'roles.user'],
-      order:{id:'ASC',risks:{id:'DESC'}}
+      relations: [
+        'risks',
+        'risks.category',
+        'risks.risk_owner',
+        'roles',
+        'roles.user',
+      ],
+      order: { id: 'ASC', risks: { id: 'DESC' } },
     });
   }
 
@@ -64,11 +70,13 @@ export class InitiativeController {
           'risks.category',
           'risks.mitigations',
           'risks.created_by',
+          'risks.risk_owner',
+          'risks.risk_owner.user',
           'created_by',
           'roles',
           'roles.user',
         ],
-        order:{id:'DESC',risks:{id:'DESC'}}
+        order: { id: 'DESC', risks: { id: 'DESC' } },
       })
       .catch((d) => {
         throw new NotFoundException();
@@ -88,11 +96,11 @@ export class InitiativeController {
     });
     const risks = await this.riskService.riskRepository.find({
       where: { initiative_id: In(ininit.map((d) => d.id)) },
-      relations: ['initiative', 'category', 'mitigations'],
+      relations: ['initiative', 'category', 'mitigations', 'risk_owner'],
     });
 
     const file_name = 'All-Risks-.xlsx';
-    var wb  = XLSX.utils.book_new();
+    var wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(risks);
     XLSX.utils.book_append_sheet(wb, ws, 'Risks');
     await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
@@ -119,6 +127,8 @@ export class InitiativeController {
         'risks',
         'risks.category',
         'risks.mitigations',
+        'risks.risk_owner',
+        'risks.risk_owner.user',
         'roles',
         'roles.user',
       ],
@@ -148,8 +158,12 @@ export class InitiativeController {
     description: '',
     type: Initiative,
   })
-  createVersion(@Param('id') id: number,@Body('reason') reason: string,@Request() req): Promise<Initiative> {
-    return this.iniService.createINIT(id,reason,req.user);
+  createVersion(
+    @Param('id') id: number,
+    @Body('reason') reason: string,
+    @Request() req,
+  ): Promise<Initiative> {
+    return this.iniService.createINIT(id, reason, req.user);
   }
 
   @Get(':id/versions')
@@ -160,8 +174,15 @@ export class InitiativeController {
   getVersons(@Param('id') id: number) {
     return this.iniService.iniRepository.find({
       where: { parent_id: id },
-      relations: ['risks', 'risks.category', 'roles', 'roles.user','created_by'],
-      order:{id:'DESC',risks:{id:'DESC'}}
+      relations: [
+        'risks',
+        'risks.category',
+        'risks.risk_owner',
+        'roles',
+        'roles.user',
+        'created_by',
+      ],
+      order: { id: 'DESC', risks: { id: 'DESC' } },
     });
   }
 
@@ -173,7 +194,7 @@ export class InitiativeController {
   getRoles(@Param('id') id: number): Promise<InitiativeRoles[]> {
     return this.iniService.iniRolesRepository.find({
       where: { initiative_id: id },
-      relations: [],
+      relations: ['user'],
     });
   }
 

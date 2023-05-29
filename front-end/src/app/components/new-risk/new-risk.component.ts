@@ -14,7 +14,7 @@ import {
   ConfirmDialogModel,
 } from '../confirm/confirm.component';
 import { NewProposedComponent } from '../new-proposed/new-proposed.component';
-
+import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-new-risk',
   templateUrl: './new-risk.component.html',
@@ -34,11 +34,18 @@ export class NewRiskComponent {
 
   errorMessage: any = '';
   riskCategories: any;
+  riskUsers:any;
   newRiskForm: any;
+  user_info:any;
 
   populateNewRiskForm() {
+    const access_token = localStorage.getItem('access_token');
+    if (access_token) {
+      this.user_info = jwt_decode(access_token);
+    }
     this.newRiskForm = this.fb.group({
-      risk_owner: [this?.data?.risk?.risk_owner, Validators.required],
+      risk_raiser: [this.user_info.email],
+      risk_owner_id: [this?.data?.risk?.risk_owner?.id, Validators.required],
       category_id: [this?.data?.risk?.category.id, Validators.required],
       title: [this?.data?.risk?.title,[ Validators.required, WordCountValidators.max(50)]],
       description: [this?.data?.risk?.description, [Validators.required, WordCountValidators.max(150)]],
@@ -163,5 +170,8 @@ export class NewRiskComponent {
   async ngOnInit() {
     this.populateNewRiskForm();
     this.riskCategories = await this.riskService.getRiskCategories();
+    console.log(this.data)
+    if(this?.data?.initiative_id || this?.data?.risk?.initiative_id)
+    this.riskUsers = await this.riskService.getRiskUsers(this?.data?.initiative_id | this?.data?.risk?.initiative_id);
   }
 }

@@ -17,7 +17,7 @@ export class RiskService {
   async setMitigation(risk_id, mitigation: Mitigation) {
     let risk = await this.riskRepository.findOne({
       where: { id: risk_id },
-      relations: ['mitigations'],
+      relations: ['mitigations', 'risk_owner'],
     });
     if (!risk) throw new NotFoundException();
     return await this.mitigationRepository.save(mitigation, { reload: true });
@@ -31,7 +31,7 @@ export class RiskService {
       { reload: true },
     );
     if (risk?.mitigations?.length) {
-      await this.mitigationRepository.delete({ risk_id:created_risk.id });
+      await this.mitigationRepository.delete({ risk_id: created_risk.id });
       risk.mitigations.map((d) => (d.risk_id = created_risk.id));
       created_risk.mitigations = await this.mitigationRepository.save(
         this.mitigationRepository.create(risk.mitigations),

@@ -51,6 +51,7 @@ export class NavbarComponent {
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       this.user_info = jwt_decode(access_token);
+      console.log('user_info', this.user_info);
     }
   }
   logout() {
