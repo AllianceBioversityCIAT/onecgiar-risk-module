@@ -100,19 +100,7 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="Risk Owner">
-            <th
-              class="big bold center spacing"
-              mat-header-cell
-              *matHeaderCellDef
-              style="min-width: 100px"
-            >
-              Risk Owner
-            </th>
-            <td class="center" mat-cell *matCellDef="let element">
-              {{ element.risk_owner?.user?.full_name || element.risk_owner?.email }}
-            </td>
-          </ng-container>
+       
           <ng-container matColumnDef="Current Likelihood">
             <th
               class="big bold center spacing"
@@ -208,11 +196,23 @@
             <td
               mat-cell
               *matCellDef="let element"
-              style="min-width: 280px"
+              style="min-width: 350px"
               [innerHTML]="filterDescriptionMitigations(element) | safeHtml"
             ></td>
           </ng-container>
-
+          <ng-container matColumnDef="Risk Owner">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+              style="min-width: 160px"
+            >
+              Risk Owner
+            </th>
+            <td class="center" mat-cell *matCellDef="let element">
+              {{ element.risk_owner?.user?.full_name || element.risk_owner?.email }}
+            </td>
+          </ng-container>
           <ng-container matColumnDef="created_by">
             <th
               class="big bold center spacing"
@@ -221,7 +221,7 @@
             >
             Risk Raiser
             </th>
-            <td mat-cell *matCellDef="let element" style="min-width: 180px">
+            <td mat-cell *matCellDef="let element" style="min-width: 160px">
               {{
                 element?.created_by?.full_name
               }}

@@ -24,14 +24,18 @@ import { RiskService } from 'src/app/services/risk.service';
 export class PublishDialog {
   constructor(
     public dialogRef: MatDialogRef<PublishDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private toastr: ToastrService
+    
   ) {}
 
   onNoClick(): void {
     this.dialogRef.close(false);
   }
   async publish() {
+    
     this.dialogRef.close(this.data);
+  
   }
 }
 
@@ -105,7 +109,6 @@ export class InitiativeDetailsComponent {
     'Risk Title',
     'Risk Description',
     'Risk Category',
-    'Risk Owner',
     'Current Likelihood',
     'Current Impact',
     'Current Risk Level',
@@ -113,6 +116,7 @@ export class InitiativeDetailsComponent {
     'Target Impact',
     'Target Risk Level',
     'Mitigation Action',
+    'Risk Owner',
     'created_by',
     'Flag to SDG',
     'Redundant',
@@ -140,6 +144,8 @@ export class InitiativeDetailsComponent {
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.initiativeService.Publish(id, dialogResult);
+          console.log(this.initiative)
+          this.toastr.success('Success', `Risks for ${this.initiative.name} has been published successfully`);
         }
       });
   }
@@ -166,14 +172,15 @@ export class InitiativeDetailsComponent {
     const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(
-        `<tr><td style="border:none !important;">${mitigation.description}</td><td style="border:none !important;">${mitigation.status}</td></tr>`
+        `<tr style="border: 1px black solid !important;"><td style="border:none !important;width:70%;border-top: 1px solid #e0e0e0 !important;text-align: justify;">${mitigation.description}</td><td style="border:none !important;;width:30%;border-top: 1px solid #e0e0e0 !important;">${mitigation.status}</td></tr>`
       );
     });
     let html = `
     <table style="border:none !important;">
     <tr>
-    <th style="border:none !important; text-align:left;">Description</th>
-    <th style="border:none !important; text-align:center;">Status</th>
+    <th style="border:none !important; text-align:left;width:70%;">Description</th>
+    <th style="border:none !important; text-align:center;width:30%;">Status</th>
+   
   </tr>
   ${mitigationsList.join('')}
 </table>`;
