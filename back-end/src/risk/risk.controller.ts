@@ -87,7 +87,7 @@ export class RiskController {
     type: Risk,
   })
   deleteRisk(@Param('risk_id') risk_id: number) {
-    return this.riskService.riskRepository.delete(risk_id);
+    return this.riskService.deleteRisk(risk_id);
   }
 
   @Get(':id/mitigation')
@@ -108,51 +108,8 @@ export class RiskController {
   })
   async patchRedandant(@Param('id') id: number, @Body('redundant') redundant) {
     await this.riskService.riskRepository.update({ id }, { redundant });
-
+    await this.riskService.updateInitiativeUpdateDateToNowByRiskID(id);
     return this.riskService.riskRepository.findOne({ where: { id } });
   }
-
-  @Post(':risk_id/mitigation')
-  @ApiCreatedResponse({
-    description: '',
-    type: Mitigation,
-  })
-  @ApiBody({
-    type: Mitigation,
-  })
-  @ApiParam({
-    name: 'risk_id',
-    type: 'string',
-  })
-  setRoles(@Param('risk_id') risk_id: number, @Body() mitigation: Mitigation) {
-    return this.riskService.setMitigation(risk_id, mitigation);
-  }
-
-  @Put(':risk_id/mitigation/:mitigation_id')
-  @ApiCreatedResponse({
-    description: '',
-    type: Mitigation,
-  })
-  updateMitigation(
-    @Body() mitigation: Mitigation,
-    @Param('risk_id') risk_id: number,
-    @Param('mitigation_id') mitigation_id: number,
-  ) {
-    return this.riskService.updateMitigation(
-      risk_id,
-      mitigation_id,
-      mitigation,
-    );
-  }
-  @Delete(':risk_id/mitigation/:mitigation_id')
-  @ApiCreatedResponse({
-    description: '',
-    type: Mitigation,
-  })
-  deleteMitigation(
-    @Param('risk_id') risk_id: number,
-    @Param('mitigation_id') mitigation_id: number,
-  ) {
-    return this.riskService.deleteMitigation(risk_id, mitigation_id);
-  }
+  
 }

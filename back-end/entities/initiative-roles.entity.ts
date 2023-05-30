@@ -34,7 +34,7 @@ export class InitiativeRoles {
   @Column()
   initiative_id: number;
 
-  @ManyToOne(() => Initiative, (initiative) => initiative)
+  @ManyToOne(() => Initiative, (initiative) => initiative,{onUpdate:'CASCADE',onDelete:'CASCADE'})
   @JoinColumn({ name: 'initiative_id' })
   initiative: Initiative;
 
@@ -51,7 +51,7 @@ export class InitiativeRoles {
   updatedAt: Date;
 
   @ApiProperty({ type: () => [Risk] })
-  @OneToMany(() => Risk, (risk) => risk.risk_owner)
+  @OneToMany(() => Risk, (risk) => risk.risk_owner,{onUpdate:'CASCADE',onDelete:'CASCADE'})
   @JoinTable()
   risks: Array<Risk>;
 }

@@ -14,22 +14,36 @@
         }})
       </h3>
       <div class="buttons">
-        <button (click)="publish(initiative.id)" class="primaryButton mt-1">
+        <button [disabled]="!canEdit()" [ngClass]="{disabled: !canEdit()}" class="primaryButton mt-1" routerLink="./team-members">
+          Team Members
+      </button>
+        <button
+          class="primaryButton mt-1"
+          matTooltip="Risks Versions"
+          routerLink="./versions"
+        >
+         Published Versions
+        </button>
+        <button  [disabled]="!canPublish()" (click)="publish(initiative.id)" [ngClass]="{disabled: !canPublish()}" class="primaryButton mt-1">
           Publish
         </button>
         <button
+       
           (click)="export(initiative.id, initiative.official_code)"
           class="primaryButton mt-1"
         >
           Export to excel
         </button>
         <!-- <button class="primaryButton mt-1"  (click)="openPublishDialog()">Publish</button> -->
-        <button class="primaryButton mt-1" (click)="openNewRiskDialog()">
+        <button [disabled]="!canEdit()" [ngClass]="{disabled: !canEdit()}" class="primaryButton mt-1" (click)="openNewRiskDialog()">
           Create Risk
         </button>
       </div>
+     
     </div>
-
+<div>
+  <p style="float:right;">This is a draft version until it get published.   last update at {{ initiative?.last_updated_date | date:'short'}} </p>
+</div>
     <div class="tableContainer">
       <div class="table">
         <table mat-table [dataSource]="dataSource">
@@ -70,7 +84,7 @@
               mat-header-cell
               *matHeaderCellDef
             >
-             Category
+              Category
             </th>
             <td
               class="center"
@@ -88,7 +102,7 @@
               mat-header-cell
               *matHeaderCellDef
             >
-             Description
+              Description
             </th>
             <td
               class="center"
@@ -100,7 +114,6 @@
             </td>
           </ng-container>
 
-       
           <ng-container matColumnDef="Current Likelihood">
             <th
               class="big bold center spacing"
@@ -210,7 +223,9 @@
               Risk Owner
             </th>
             <td class="center" mat-cell *matCellDef="let element">
-              {{ element.risk_owner?.user?.full_name || element.risk_owner?.email }}
+              {{
+                element.risk_owner?.user?.full_name || element.risk_owner?.email
+              }}
             </td>
           </ng-container>
           <ng-container matColumnDef="created_by">
@@ -219,12 +234,10 @@
               mat-header-cell
               *matHeaderCellDef
             >
-            Risk Raiser
+              Risk Raiser
             </th>
             <td mat-cell *matCellDef="let element" style="min-width: 160px">
-              {{
-                element?.created_by?.full_name
-              }}
+              {{ element?.created_by?.full_name }}
             </td>
           </ng-container>
 
@@ -264,6 +277,7 @@
             </th>
             <td class="center" mat-cell *matCellDef="let element">
               <mat-checkbox
+              [disabled]="!canEdit()"
                 matTooltip="You can check/uncheck this as redundant"
                 [(ngModel)]="element.redundant"
                 [checked]="element.redundant"
@@ -273,7 +287,7 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="Actions" stickyEnd>
+          <ng-container *ngIf="canEdit()" matColumnDef="Actions" stickyEnd>
             <th
               class="big bold center spacing"
               mat-header-cell

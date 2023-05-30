@@ -13,9 +13,11 @@ import {
   ConfirmDialogModel,
 } from 'src/app/components/confirm/confirm.component';
 import { NewRiskComponent } from 'src/app/components/new-risk/new-risk.component';
+import { ROLES } from 'src/app/components/new-team-member/new-team-member.component';
 import { PublishDialogComponent } from 'src/app/components/publish-dialog/publish-dialog.component';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'publish-dialog',
@@ -26,16 +28,13 @@ export class PublishDialog {
     public dialogRef: MatDialogRef<PublishDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private toastr: ToastrService
-    
   ) {}
 
   onNoClick(): void {
     this.dialogRef.close(false);
   }
   async publish() {
-    
     this.dialogRef.close(this.data);
-  
   }
 }
 
@@ -51,7 +50,8 @@ export class InitiativeDetailsComponent {
     public activatedRoute: ActivatedRoute,
     private initiativeService: InitiativesService,
     private riskService: RiskService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private userService: UserService
   ) {}
 
   editRisk(data: any) {
@@ -120,7 +120,6 @@ export class InitiativeDetailsComponent {
     'created_by',
     'Flag to SDG',
     'Redundant',
-    'Actions',
   ];
   dataSource: any = new MatTableDataSource<any>([]);
   initiative: any = null;
@@ -144,8 +143,11 @@ export class InitiativeDetailsComponent {
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.initiativeService.Publish(id, dialogResult);
-          console.log(this.initiative)
-          this.toastr.success('Success', `Risks for ${this.initiative.name} has been published successfully`);
+          console.log(this.initiative);
+          this.toastr.success(
+            'Success',
+            `Risks for ${this.initiative.name} has been published successfully`
+          );
         }
       });
   }
@@ -159,13 +161,40 @@ export class InitiativeDetailsComponent {
   }
   versionId: any;
   initiativeId: any;
+  user_info: any;
+  my_roles: string[] = [];
+  riskUsers: any;
   id: number = 0;
   async ngOnInit() {
+    this.user_info = this.userService.getLogedInUser();
+    // my_roles
+
     const params: any = this.activatedRoute?.snapshot.params;
 
     this.id = +params.id;
     this.initiativeId = params.initiativeId;
+    this.riskUsers = await this.riskService.getRiskUsers(this.id);
+    console.log(' riskUsers', this.riskUsers);
+    this.my_roles = this.riskUsers
+      .filter((d: any) => d?.user?.id == this?.user_info?.id)
+      .map((d: any) => d.role);
     this.loadInitiative();
+    if (this.canEdit()) this.displayedColumns.push('Actions');
+  }
+
+  canPublish() {
+    console.log(
+      this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD)
+    );
+    return this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD);
+  }
+
+  canEdit() {
+    return (
+      this.user_info.role == 'admin' ||
+      this.my_roles.includes(ROLES.LEAD) ||
+      this.my_roles.includes(ROLES.CO_LEADER)
+    );
   }
 
   filterDescriptionMitigations(element: any) {

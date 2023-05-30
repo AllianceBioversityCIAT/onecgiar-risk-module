@@ -9,6 +9,7 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Risk } from './risk.entity';
@@ -36,7 +37,7 @@ export class Initiative {
   @ApiProperty({ type: () => [InitiativeRoles] })
   @OneToMany(
     () => InitiativeRoles,
-    (initiative_roles) => initiative_roles.initiative,
+    (initiative_roles) => initiative_roles.initiative,{onUpdate:'CASCADE',onDelete:'CASCADE'}
   )
   @JoinTable()
   roles: Array<InitiativeRoles>;
@@ -49,6 +50,10 @@ export class Initiative {
   @ApiProperty()
   @CreateDateColumn()
   submit_date: Date;
+
+  @ApiProperty()
+  @UpdateDateColumn()
+  last_updated_date: Date;
 
   @ManyToOne(() => User, (user) => user.initiatives)
   @JoinColumn({ name: 'created_by_user_id' })

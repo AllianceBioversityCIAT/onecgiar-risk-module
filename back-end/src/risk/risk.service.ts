@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
@@ -12,8 +13,14 @@ export class RiskService {
     public riskRepository: Repository<Risk>,
     @InjectRepository(Mitigation)
     public mitigationRepository: Repository<Mitigation>,
+    @InjectRepository(Initiative)
+    public initativeRepository: Repository<Initiative>,
   ) {}
-
+  async updateInitiativeUpdateDateToNow(initiative_id) {
+    await this.initativeRepository.update(initiative_id, {
+      last_updated_date: new Date(),
+    });
+  }
   async setMitigation(risk_id, mitigation: Mitigation) {
     let risk = await this.riskRepository.findOne({
       where: { id: risk_id },
@@ -21,6 +28,20 @@ export class RiskService {
     });
     if (!risk) throw new NotFoundException();
     return await this.mitigationRepository.save(mitigation, { reload: true });
+  }
+  async deleteRisk(id) {
+    const risk = await this.riskRepository.findOne({
+      where: { id },
+    });
+    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
+    return this.riskRepository.delete(id);
+  }
+
+  async updateInitiativeUpdateDateToNowByRiskID(id) {
+    const risk = await this.riskRepository.findOne({
+      where: { id },
+    });
+    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
   }
 
   async updateRisk(id, risk: Risk) {
@@ -38,7 +59,7 @@ export class RiskService {
         { reload: true },
       );
     }
-
+    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
     return created_risk;
   }
   async createRisk(risk: Risk, user: User = null) {
@@ -56,6 +77,8 @@ export class RiskService {
         { reload: true },
       );
     }
+
+    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
     return created_risk;
   }
   async updateMitigation(risk_id, id, mitigation: Mitigation) {

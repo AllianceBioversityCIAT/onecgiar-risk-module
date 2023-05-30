@@ -36,6 +36,9 @@ export class InitiativeService {
     else throw new NotFoundException();
   }
 
+  async updateInitiativeUpdateDateToNow(initiative_id) {
+   await this.iniRepository.update(initiative_id,{last_updated_date:new Date()})
+  }
   async updateRoles(initiative_id, id, initiativeRoles: InitiativeRoles) {
     const found_roles = await this.iniRolesRepository.findOne({
       where: { initiative_id, id },

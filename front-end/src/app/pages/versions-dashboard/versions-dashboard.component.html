@@ -21,11 +21,11 @@
 
             <ng-container matColumnDef="Creation Date">
               <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Creation Date </th>
-              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element.submit_date}} </td>
+              <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element.submit_date | date:'short'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="Creation By">
-              <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Risk Raiser </th>
+              <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Created By </th>
               <td  class="center" mat-cell *matCellDef="let element" style="min-width: 180px;"> {{element?.created_by?.full_name}} </td>
             </ng-container>
 
