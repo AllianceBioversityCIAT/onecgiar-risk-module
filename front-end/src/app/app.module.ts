@@ -36,6 +36,7 @@ import { Safe } from './pipes/safe';
 import {MatCardModule} from '@angular/material/card';
 
 import {MatDividerModule} from '@angular/material/divider';
+import { RiskTableComponent } from './components/risk-table/risk-table.component';
 
 
 
@@ -54,7 +55,7 @@ import {MatDividerModule} from '@angular/material/divider';
     NewRiskComponent,
     NewTeamMemberComponent,
     NewProposedComponent,
-    VersionDetailsComponent,LoginDialog, ConfirmComponent,PublishDialog,Safe
+    VersionDetailsComponent,LoginDialog, ConfirmComponent,PublishDialog,Safe, RiskTableComponent
   ],
   imports: [
     BrowserModule,

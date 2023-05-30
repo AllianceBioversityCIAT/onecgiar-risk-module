@@ -8,17 +8,15 @@ import { RiskService } from 'src/app/services/risk.service';
 @Component({
   selector: 'app-version-details',
   templateUrl: './version-details.component.html',
-  styleUrls: ['./version-details.component.scss']
+  styleUrls: ['./version-details.component.scss'],
 })
 export class VersionDetailsComponent {
-  constructor(public router: Router,
+  constructor(
+    public router: Router,
     public activatedRoute: ActivatedRoute,
-    private initiativesService:InitiativesService,
-    ) {
-    
-  }
- 
-  displayedColumns: string[] = ['ID', 'Risk Achieving Impact', 'Risk Category', 'Risk Owner', 'Description Risk', 'Current Likelihood', 'Current Impact', 'Current Risk Level', 'Target Likelihood', 'Target Impact', 'Target Risk Level', 'Mitigation Action', 'Status of Actions', 'Flag to SDG', 'Redundant'];
+    private initiativesService: InitiativesService
+  ) {}
+
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator: any;
@@ -27,29 +25,18 @@ export class VersionDetailsComponent {
     this.dataSource.paginator = this.paginator;
   }
 
-
   path: any = '';
   id: any;
- async ngOnInit() {
-    this.path = window.location.pathname
-    const params:any =  this.activatedRoute.snapshot.params
-    this.id = params.versionId
-  const  initiative  = await this.initiativesService.getInitiative(this.id)
-   this.dataSource.data  = initiative.risks; 
+  initiative: any;
+  async ngOnInit() {
+    this.path = window.location.pathname;
+    const params: any = this.activatedRoute.snapshot.params;
+    this.id = params.versionId;
+    this.initiative = await this.initiativesService.getInitiative(this.id);
+    this.dataSource.data = this.initiative.risks;
   }
 
-  filterDescriptionMitigations(element: any) {
-    const mitigationsList:any[] = [];
-    element.mitigations.forEach((mitigation: any) => {
-      mitigationsList.push(mitigation.description );
-    });
-    return mitigationsList.join(', ');
-  }
-  filterStatusMitigations(element: any) {
-    const mitigationsList:any[] = [];
-    element.mitigations.forEach((mitigation: any) => {
-      mitigationsList.push(mitigation.status);
-    });
-    return mitigationsList;
+  async export() {
+    await this.initiativesService.getExportByinititave(this.id,  this.initiative.official_code);
   }
 }

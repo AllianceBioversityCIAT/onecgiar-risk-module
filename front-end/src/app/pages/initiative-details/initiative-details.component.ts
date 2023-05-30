@@ -104,23 +104,7 @@ export class InitiativeDetailsComponent {
     });
   }
 
-  displayedColumns: string[] = [
-    'ID',
-    'Risk Title',
-    'Risk Description',
-    'Risk Category',
-    'Current Likelihood',
-    'Current Impact',
-    'Current Risk Level',
-    'Target Likelihood',
-    'Target Impact',
-    'Target Risk Level',
-    'Mitigation Action',
-    'Risk Owner',
-    'created_by',
-    'Flag to SDG',
-    'Redundant',
-  ];
+
   dataSource: any = new MatTableDataSource<any>([]);
   initiative: any = null;
   @ViewChild(MatPaginator) paginator: any;
@@ -132,7 +116,9 @@ export class InitiativeDetailsComponent {
   async export(id: number, official_code: string) {
     await this.initiativeService.getExportByinititave(id, official_code);
   }
-
+  refresh(data:any=null){
+    this.loadInitiative()
+  }
   async publish(id: number) {
     this.dialog
       .open(PublishDialog, {
@@ -179,7 +165,7 @@ export class InitiativeDetailsComponent {
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
     this.loadInitiative();
-    if (this.canEdit()) this.displayedColumns.push('Actions');
+   
   }
 
   canPublish() {
@@ -216,11 +202,5 @@ export class InitiativeDetailsComponent {
     if (mitigationsList.length) return html; // ;
     else return '';
   }
-  filterStatusMitigations(element: any) {
-    const mitigationsList: any[] = [];
-    element.mitigations.forEach((mitigation: any) => {
-      mitigationsList.push(mitigation.status);
-    });
-    return mitigationsList;
-  }
+
 }
