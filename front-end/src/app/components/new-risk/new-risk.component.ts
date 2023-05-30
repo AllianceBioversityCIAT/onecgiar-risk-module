@@ -170,7 +170,6 @@ export class NewRiskComponent {
   async ngOnInit() {
     this.populateNewRiskForm();
     this.riskCategories = await this.riskService.getRiskCategories();
-    console.log(this.data)
     if(this?.data?.initiative_id || this?.data?.risk?.initiative_id)
     this.riskUsers = await this.riskService.getRiskUsers(this?.data?.initiative_id | this?.data?.risk?.initiative_id);
   }
