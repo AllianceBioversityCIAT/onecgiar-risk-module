@@ -115,6 +115,49 @@ export class InitiativeController {
       disposition: `attachment; filename="${file_name}"`,
     });
   }
+
+  @Get(':id/test_excel')
+  @ApiCreatedResponse({
+    description: '',
+    type: Initiative,
+  })
+  async testexil(@Param('id') id: number) {
+    const workbook = await XLSX.readFile(
+      join(process.cwd(), 'generated_files', 'risk.xlsx'),
+      { cellStyles: true },
+    );
+
+    return workbook;
+    // let init = await this.iniService.iniRepository.findOne({
+    //   where: { id },
+    //   relations: [
+    //     'risks',
+    //     'risks.category',
+    //     'risks.mitigations',
+    //     'risks.risk_owner',
+    //     'risks.risk_owner.user',
+    //     'roles',
+    //     'roles.user',
+    //   ],
+    // });
+    // const file_name = init.official_code + '-Risks-' + init.id + '.xlsx';
+    // var wb = XLSX.utils.book_new();
+    // const ws = XLSX.utils.json_to_sheet(init.risks);
+    // XLSX.utils.book_append_sheet(wb, ws, 'Risks');
+    // await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+    // const file = createReadStream(
+    //   join(process.cwd(), 'generated_files', file_name),
+    // );
+
+    // setTimeout(async () => {
+    //   await unlink(join(process.cwd(), 'generated_files', file_name));
+    // }, 9000);
+
+    // return new StreamableFile(file, {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //   disposition: `attachment; filename="${file_name}"`,
+    // });
+  }
   @Get(':id/excel')
   @ApiCreatedResponse({
     description: '',
@@ -126,6 +169,7 @@ export class InitiativeController {
       relations: [
         'risks',
         'risks.category',
+        'risks.created_by',
         'risks.mitigations',
         'risks.risk_owner',
         'risks.risk_owner.user',
@@ -133,11 +177,118 @@ export class InitiativeController {
         'roles.user',
       ],
     });
+    /// merges  Here s = start, r = row, c=col, e= end
+
     const file_name = init.official_code + '-Risks-' + init.id + '.xlsx';
     var wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(init.risks);
-    XLSX.utils.book_append_sheet(wb, ws, 'Risks');
-    await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+
+    const risks = init.risks;
+
+    let finaldata = [
+      {
+        id: null,
+        title: null,
+        description: null,
+        risk_owner: null,
+        target_likelihood: null,
+        target_impact: null,
+        current_likelihood: null,
+        current_impact: null,
+        category: null,
+        created_by: null,
+        redundant: false,
+        mitigations: 'Description',
+        mitigations_status: 'Status',
+      },
+    ];
+    let merges = [
+      {
+        s: { c: 11, r: 0 },
+        e: { c: 12, r: 0 },
+      },
+    ];
+    for (let index = 0; index < 11; index++) {
+      merges.push({
+        s: { c: index, r: 0 },
+        e: { c: index, r: 1 },
+      });
+    }
+    let base = 2;
+    risks.forEach((element, indexbase) => {
+      const template = {
+        id: null,
+        title: null,
+        description: null,
+        risk_owner: null,
+        target_likelihood: null,
+        target_impact: null,
+        current_likelihood: null,
+        current_impact: null,
+        category: null,
+        created_by: null,
+        redundant: false,
+        mitigations: null,
+        mitigations_status: null,
+      };
+      template.id = element.id;
+      template.title = element.title;
+      template.description = element.description;
+      template.risk_owner = element.risk_owner?.user?.full_name;
+      template.target_likelihood = element.target_likelihood;
+      template.target_impact = element.target_impact;
+      template.current_likelihood = element.current_likelihood;
+      template.current_impact = element.current_impact;
+      template.category = element.category.title;
+      template.created_by = element.created_by?.full_name;
+      template.redundant = element.redundant;
+      if (element.mitigations.length) {
+        for (let index = 0; index < 11; index++) {
+          merges.push({
+            s: { c: index, r: base },
+            e: { c: index, r: base + element.mitigations.length -1 },
+          });
+        }
+        base += element.mitigations.length;
+      }else{
+        finaldata.push(template);
+        base += 1;
+      }
+      element.mitigations.forEach((d, index) => {
+        if (index == 0) {
+          template.mitigations = d.description;
+          template.mitigations_status = d.status;
+          finaldata.push(template);
+        }else{
+          const template2 = {
+            id: null,
+            title: null,
+            description: null,
+            risk_owner: null,
+            target_likelihood: null,
+            target_impact: null,
+            current_likelihood: null,
+            current_impact: null,
+            category: null,
+            created_by: null,
+            redundant: false,
+            mitigations: null,
+            mitigations_status: null,
+          };
+          template2.mitigations = d.description;
+          template2.mitigations_status = d.status;
+          finaldata.push(template2);
+        }
+      });
+    });
+    const ws = XLSX.utils.json_to_sheet(finaldata);
+    ws['!merges'] = merges;
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+    await XLSX.writeFile(
+      wb,
+      join(process.cwd(), 'generated_files', file_name),
+      { cellStyles: true },
+    );
     const file = createReadStream(
       join(process.cwd(), 'generated_files', file_name),
     );
