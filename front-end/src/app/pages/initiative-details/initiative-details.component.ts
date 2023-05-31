@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, ViewChild } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -115,7 +115,12 @@ export class InitiativeDetailsComponent {
   async export(id: number, official_code: string) {
     await this.initiativeService.getExportByinititave(id, official_code);
   }
+  savePdf: EventEmitter<any> = new EventEmitter<any>();
+  exportPdf(){
+    this.savePdf.emit();
+  }
   refresh(data:any=null){
+
     this.loadInitiative()
   }
   async publish(id: number) {

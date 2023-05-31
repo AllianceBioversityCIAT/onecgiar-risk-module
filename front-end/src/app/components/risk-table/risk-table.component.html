@@ -1,7 +1,5 @@
 
     <div class="tableContainer">
-        <button (click)="SavePDF()">SavePDF</button>
-    
       <div #pdfcontent id="pdfcontent" class="table">
         <table  mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="ID">
@@ -166,7 +164,7 @@
             <td
               mat-cell
               *matCellDef="let element"
-              style="min-width: 350px"
+              style="min-width: 400px"
               [innerHTML]="filterDescriptionMitigations(element) | safeHtml"
             ></td>
           </ng-container>

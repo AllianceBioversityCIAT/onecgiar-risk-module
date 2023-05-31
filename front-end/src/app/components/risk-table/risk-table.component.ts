@@ -38,6 +38,8 @@ export class RiskTableComponent {
 
   @Output() refresh: EventEmitter<any> = new EventEmitter<any>();
 
+  @Input() savePdf: EventEmitter<any> = new EventEmitter<any>();
+
   @Input() showingVersion: boolean = false;
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 
@@ -98,6 +100,9 @@ export class RiskTableComponent {
   riskUsers: any;
   my_roles: any;
   async ngOnInit() {
+    this.savePdf.subscribe(()=>{
+      this.SavePDF()
+    })
     this.user_info = this.userService.getLogedInUser();
     // my_roles
 
@@ -163,7 +168,7 @@ export class RiskTableComponent {
     const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(
-        `<tr style="border: 1px black solid !important;"><td style="border:none !important;width:70%;border-top: 1px solid #e0e0e0 !important;text-align: justify;">${mitigation.description}</td><td style="border:none !important;;width:30%;border-top: 1px solid #e0e0e0 !important;">${mitigation.status}</td></tr>`
+        `<tr style="border: 1px black solid !important;"><td style="padding-right: 5px;border:none !important;width:65%;border-top: 1px solid #e0e0e0 !important;text-align: justify;">${mitigation.description}</td><td style="padding-left: 5px;border:none !important;;width:25%;border-top: 1px solid #e0e0e0 !important;">${mitigation.status}</td></tr>`
       );
     });
     let html = `

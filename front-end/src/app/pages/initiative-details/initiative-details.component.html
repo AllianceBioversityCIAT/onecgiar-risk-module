@@ -43,6 +43,12 @@
         >
           Export to excel
         </button>
+        <button
+        (click)="exportPdf()"
+        class="primaryButton mt-1"
+      >
+        Export to pdf
+      </button>
         <!-- <button class="primaryButton mt-1"  (click)="openPublishDialog()">Publish</button> -->
         <button
           [disabled]="!canEdit()"
@@ -61,6 +67,7 @@
       </p>
     </div>
     <app-risk-table
+      [savePdf]="savePdf"
       [dataSource]="dataSource"
       (refresh)="refresh($event)"
     ></app-risk-table>

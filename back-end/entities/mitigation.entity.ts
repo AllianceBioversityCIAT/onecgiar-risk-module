@@ -20,7 +20,7 @@ export class Mitigation {
   @JoinColumn({ name: 'risk_id' })
   risk: Risk;
   @ApiProperty()
-  @Column()
+  @Column({type:'text'})
   description: string;
   @ApiProperty()
   @Column()

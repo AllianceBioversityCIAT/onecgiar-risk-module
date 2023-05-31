@@ -39,7 +39,7 @@ export class Risk {
   @JoinColumn({ name: 'risk_owner_id' })
   risk_owner: InitiativeRoles;
   @ApiProperty()
-  @Column()
+  @Column({type:'text'})
   description: string;
   @ApiProperty()
   @Column()
