@@ -53,7 +53,6 @@ export class InitiativeDetailsComponent {
     private toastr: ToastrService,
     private userService: UserService
   ) {}
-
   editRisk(data: any) {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',

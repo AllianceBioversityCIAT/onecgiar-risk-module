@@ -60,7 +60,10 @@
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
     </div>
-<app-risk-table [dataSource]="dataSource" (refresh)="refresh($event)" ></app-risk-table>
+    <app-risk-table
+      [dataSource]="dataSource"
+      (refresh)="refresh($event)"
+    ></app-risk-table>
   </div>
 </ng-container>
 
