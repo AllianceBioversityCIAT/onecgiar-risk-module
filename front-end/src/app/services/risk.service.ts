@@ -30,10 +30,21 @@ export class RiskService extends MainService {
       .get(this.backend_url + '/risk/' + riskId, { headers: this.headers })
       .toPromise();
   }
-  getRisks(iniitave_id: number) {
+  getRisks(initiative_id: number, filters: any = null) {
+
+    let finalFilters: any = {};
+    if(filters)
+    Object.keys(filters).forEach((element) => {
+      if (typeof filters[element] === 'string')
+        filters[element] = filters[element].trim();
+
+      if (filters[element] != null && filters[element] != '')
+        finalFilters[element] = filters[element];
+    });
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/risk/' + iniitave_id, {
+        .get(this.backend_url + '/risk', {
+          params: { initiative_id, ...finalFilters },
           headers: this.headers,
         })
         .pipe(map((d: any) => d))
@@ -111,11 +122,19 @@ export class RiskService extends MainService {
   }
 
   getRiskCategories() {
-    return firstValueFrom(this.http
-      .get(this.backend_url + '/risk-categories', { headers: this.headers }).pipe(map(d=>d))) 
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/risk-categories', { headers: this.headers })
+        .pipe(map((d) => d))
+    );
   }
-  getRiskUsers(id:number){
-    return firstValueFrom(this.http
-      .get(this.backend_url + `/initiative/${id}/roles`, { headers: this.headers }).pipe(map(d=>d))) 
+  getRiskUsers(id: number) {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + `/initiative/${id}/roles`, {
+          headers: this.headers,
+        })
+        .pipe(map((d) => d))
+    );
   }
 }

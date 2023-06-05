@@ -16,7 +16,7 @@ export class SearchRisksComponent {
     public initiativeService: InitiativesService
   ) {}
   categories: any;
-  filterForm: FormGroup = new FormGroup({});
+  filterForm:any;
 
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
 
@@ -25,8 +25,12 @@ export class SearchRisksComponent {
   sort = [
     { name: 'Risk ID (ASC)', value: 'id,ASC' },
     { name: 'Risk ID (DESC)', value: 'id,DESC' },
-    { name: 'Risk Title (DESC)', value: 'title,ASC' },
+    { name: 'Risk Title (ASC)', value: 'title,ASC' },
     { name: 'Risk Title (DESC)', value: 'title,DESC' },
+    { name: 'Current risk level (DESC)', value: 'current_level,DESC' },
+    { name: 'Current risk level (ASC)', value: 'current_level,ASC' },
+    { name: 'Target risk level (DESC)', value: 'target_level,DESC' },
+    { name: 'Target risk level (ASC)', value: 'target_level,ASC' },
   ];
   myIni: boolean = false;
   myIniChange() {
@@ -50,8 +54,13 @@ export class SearchRisksComponent {
   async export() {
     await this.initiativeService.getExport();
   }
+  riskUsers:any
+  riskRaiser:any
   async ngOnInit() {
     let time: any = null;
+    this.riskUsers = await this.riskService.getRiskUsers(1);
+    this.riskRaiser= this.riskUsers.filter((d:any)=>d.user)
+    console.log( this.riskUsers);
     this.setForm();
     this.categories = await this.riskService.getRiskCategories();
     this.filterForm.valueChanges.subscribe(() => {

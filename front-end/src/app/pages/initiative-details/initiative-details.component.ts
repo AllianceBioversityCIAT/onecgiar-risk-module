@@ -103,7 +103,6 @@ export class InitiativeDetailsComponent {
     });
   }
 
-
   dataSource: any = new MatTableDataSource<any>([]);
   initiative: any = null;
   @ViewChild(MatPaginator) paginator: any;
@@ -116,12 +115,11 @@ export class InitiativeDetailsComponent {
     await this.initiativeService.getExportByinititave(id, official_code);
   }
   savePdf: EventEmitter<any> = new EventEmitter<any>();
-  exportPdf(){
+  exportPdf() {
     this.savePdf.emit();
   }
-  refresh(data:any=null){
-
-    this.loadInitiative()
+  refresh(data: any = null) {
+    this.loadInitiative();
   }
   async publish(id: number) {
     this.dialog
@@ -147,7 +145,15 @@ export class InitiativeDetailsComponent {
 
   async loadInitiative() {
     this.initiative = await this.initiativeService.getInitiative(this.id);
-    this.dataSource = new MatTableDataSource<any>(this.initiative.risks);
+    this.dataSource = new MatTableDataSource<any>(
+      await this.riskService.getRisks(this.id)
+    );
+  }
+
+  async loadRisks(filters: any) {
+    this.dataSource = new MatTableDataSource<any>(
+      await this.riskService.getRisks(this.id, filters)
+    );
   }
   versionId: any;
   initiativeId: any;
@@ -169,7 +175,6 @@ export class InitiativeDetailsComponent {
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
     this.loadInitiative();
-   
   }
 
   canPublish() {
@@ -178,7 +183,9 @@ export class InitiativeDetailsComponent {
     );
     return this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD);
   }
-
+  filter(filters: any) {
+    this.loadRisks(filters);
+  }
   canEdit() {
     return (
       this.user_info.role == 'admin' ||
@@ -206,5 +213,4 @@ export class InitiativeDetailsComponent {
     if (mitigationsList.length) return html; // ;
     else return '';
   }
-
 }

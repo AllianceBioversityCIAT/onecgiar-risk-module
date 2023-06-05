@@ -4,7 +4,7 @@
   </mat-card-header>
 
   <mat-card-content>
-    <form [formGroup]="filterForm">
+    <form *ngIf="filterForm" [formGroup]="filterForm">
       <mat-form-field class="w-30" appearance="outline">
         <input formControlName="title" matInput placeholder="Title" />
       </mat-form-field>
@@ -19,26 +19,18 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field class="w-auto" appearance="outline">
-        <mat-select placeholder="Risk Raiser" formControlName="category">
+        <mat-select placeholder="Risk Raiser" formControlName="created_by">
           <mat-option>None</mat-option>
-          <mat-option *ngFor="let riskCat of categories" [value]="riskCat.id">
-            {{ riskCat.title }}
-
-            <mat-icon matTooltip="Risk Categories" matSuffix
-              >help_outline</mat-icon
-            >
+          <mat-option *ngFor="let user of riskRaiser" [value]="user.user.id">
+            {{ user?.user?.full_name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="w-auto" appearance="outline">
-        <mat-select placeholder="Risk Owner" formControlName="category">
+        <mat-select placeholder="Risk Owner" formControlName="owner">
           <mat-option>None</mat-option>
-          <mat-option *ngFor="let riskCat of categories" [value]="riskCat.id">
-            {{ riskCat.title }}
-
-            <mat-icon matTooltip="Risk Categories" matSuffix
-              >help_outline</mat-icon
-            >
+          <mat-option *ngFor="let user of riskUsers" [value]="user.id">
+            {{ user?.user?.full_name ||  user?.email }}
           </mat-option>
         </mat-select>
       </mat-form-field>

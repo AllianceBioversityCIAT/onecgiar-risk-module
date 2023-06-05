@@ -9,6 +9,7 @@ import {
   OneToMany,
   JoinTable,
   ManyToMany,
+  Index,
 } from 'typeorm';
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Initiative } from './initiative.entity';
@@ -28,6 +29,8 @@ export class Risk {
   @ManyToOne(() => Initiative, (initiative) => initiative.risks)
   @JoinColumn({ name: 'initiative_id' })
   initiative: Initiative;
+
+  @Index({ fulltext: true })
   @ApiProperty()
   @Column()
   title: string;
@@ -35,11 +38,15 @@ export class Risk {
   @ApiProperty()
   @Column()
   risk_owner_id: number;
-  @ManyToOne(() => InitiativeRoles, (initiativeRoles) => initiativeRoles.risks,{onUpdate:'CASCADE',onDelete:'CASCADE'})
+  @ManyToOne(
+    () => InitiativeRoles,
+    (initiativeRoles) => initiativeRoles.risks,
+    { onUpdate: 'CASCADE', onDelete: 'CASCADE' },
+  )
   @JoinColumn({ name: 'risk_owner_id' })
   risk_owner: InitiativeRoles;
   @ApiProperty()
-  @Column({type:'text'})
+  @Column({ type: 'text' })
   description: string;
   @ApiProperty()
   @Column()
@@ -47,6 +54,15 @@ export class Risk {
   @ApiProperty()
   @Column()
   target_impact: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'int',
+    generatedType: 'STORED',
+    asExpression: `target_likelihood * target_impact`,
+  })
+  target_level: number;
+
   @ApiProperty()
   @Column()
   current_likelihood: number;
@@ -54,18 +70,26 @@ export class Risk {
   @ApiProperty()
   @Column()
   current_impact: number;
-
+  @ApiProperty()
+  @Column({
+    type: 'int',
+    generatedType: 'STORED',
+    asExpression: `target_likelihood * target_impact`,
+  })
+  current_level: number;
   @ManyToOne(() => RiskCategory, (category) => category.risks)
   @JoinColumn({ name: 'category_id' })
   category: RiskCategory;
 
-
   @ApiProperty()
   @Column()
   category_id: number;
-  
-  @ApiProperty({ type: () => [Mitigation], })
-  @OneToMany(() => Mitigation, (mitigation) => mitigation.risk,{onUpdate:'CASCADE',onDelete:'CASCADE'})
+
+  @ApiProperty({ type: () => [Mitigation] })
+  @OneToMany(() => Mitigation, (mitigation) => mitigation.risk, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinTable()
   mitigations: Array<Mitigation>;
 
@@ -73,12 +97,10 @@ export class Risk {
   @JoinColumn({ name: 'created_by_user_id' })
   created_by: User;
   @Optional()
-  @Column({default:null})
-  created_by_user_id:number
+  @Column({ default: null })
+  created_by_user_id: number;
 
   @Optional()
-  @Column({default:false})
-  redundant:boolean
-  
-  
+  @Column({ default: false })
+  redundant: boolean;
 }

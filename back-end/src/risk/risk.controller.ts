@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -19,20 +20,36 @@ import {
 } from '@nestjs/swagger';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
+import { query } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ILike } from 'typeorm';
 import { RiskService } from './risk.service';
 @ApiTags('Risk')
 @Controller('risk')
 export class RiskController {
   constructor(private riskService: RiskService) {}
-
+  sort(query) {
+    if (query?.sort) {
+      let obj = {};
+      const sorts = query.sort.split(',');
+      obj[sorts[0]] = sorts[1];
+      return obj;
+    } else return { id: 'ASC' };
+  }
   @Get('')
   @ApiCreatedResponse({
     description: '',
     type: [Risk],
   })
-  getRisk() {
+  getRisk(@Query() query) {
     return this.riskService.riskRepository.find({
+      where: {
+        title:query?.title ?  ILike(`%${query.title}%`) : null, 
+        initiative_id: query.initiative_id,
+        category_id: query?.category ? query?.category : null,
+        created_by_user_id:query?.created_by ? query?.created_by : null,
+        risk_owner_id:query?.owner ? query?.owner : null,
+      },
       relations: [
         'category',
         'initiative',
@@ -40,7 +57,7 @@ export class RiskController {
         'created_by',
         'risk_owner',
       ],
-      order: { id: 'ASC' },
+      order: { ...this.sort(query) },
     });
   }
   @ApiCreatedResponse({
@@ -111,5 +128,4 @@ export class RiskController {
     await this.riskService.updateInitiativeUpdateDateToNowByRiskID(id);
     return this.riskService.riskRepository.findOne({ where: { id } });
   }
-  
 }
