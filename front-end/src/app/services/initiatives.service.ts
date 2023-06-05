@@ -68,9 +68,13 @@ export class InitiativesService extends MainService {
   }
 
   async getInitiativesWithFilters(filters: any) {
-    let finalFilters:any = {};
+    let finalFilters: any = {};
     Object.keys(filters).forEach((element) => {
-      if (filters[element] != null && filters[element] !='' && filters[element].trim() !='') finalFilters[element] = filters[element];
+      if (typeof filters[element] === 'string')
+        filters[element] = filters[element].trim();
+
+      if (filters[element] != null && filters[element] != '')
+        finalFilters[element] = filters[element];
     });
     return await firstValueFrom(
       this.http

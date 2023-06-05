@@ -1,0 +1,61 @@
+<mat-card>
+  <mat-card-header>
+    <!-- <mat-card-subtitle>Filters</mat-card-subtitle> -->
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="filterForm">
+      <mat-form-field class="w-30" appearance="outline">
+        <input formControlName="title" matInput placeholder="Title" />
+      </mat-form-field>
+      <mat-form-field class="w-auto" appearance="outline">
+        <mat-select placeholder="Risk Category" formControlName="category">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let riskCat of categories" [value]="riskCat.id">
+            {{ riskCat.title }}
+
+            <mat-icon matTooltip="Category" matSuffix>help_outline</mat-icon>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-auto" appearance="outline">
+        <mat-select placeholder="Risk Raiser" formControlName="category">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let riskCat of categories" [value]="riskCat.id">
+            {{ riskCat.title }}
+
+            <mat-icon matTooltip="Risk Categories" matSuffix
+              >help_outline</mat-icon
+            >
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-auto" appearance="outline">
+        <mat-select placeholder="Risk Owner" formControlName="category">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let riskCat of categories" [value]="riskCat.id">
+            {{ riskCat.title }}
+
+            <mat-icon matTooltip="Risk Categories" matSuffix
+              >help_outline</mat-icon
+            >
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-auto" appearance="outline">
+        <mat-select placeholder="Sort" formControlName="sort">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let item of sort" [value]="item.value">
+            {{ item.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="resetForm()">
+      Reset
+    </button>
+    <!-- <button mat-raised-button color="primary"  (click)="resetForm()">Filter</button> -->
+  </mat-card-actions>
+</mat-card>

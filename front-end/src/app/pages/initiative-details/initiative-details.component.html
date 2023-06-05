@@ -61,11 +61,17 @@
       </div>
     </div>
     <div>
+      <app-search-risks></app-search-risks>
+    </div>
+   
+    <div>
       <p style="float: right">
         This is a draft version until it get published. last update at
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
+      
     </div>
+    
     <app-risk-table
       [savePdf]="savePdf"
       [dataSource]="dataSource"

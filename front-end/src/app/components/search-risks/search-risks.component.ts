@@ -5,11 +5,11 @@ import { RiskService } from 'src/app/services/risk.service';
 import { ROLES } from '../new-team-member/new-team-member.component';
 
 @Component({
-  selector: 'app-search-initiatives',
-  templateUrl: './search-initiatives.component.html',
-  styleUrls: ['./search-initiatives.component.scss'],
+  selector: 'app-search-risks',
+  templateUrl: './search-risks.component.html',
+  styleUrls: ['./search-risks.component.scss'],
 })
-export class SearchInitiativesComponent {
+export class SearchRisksComponent {
   constructor(
     private fb: FormBuilder,
     private riskService: RiskService,
@@ -23,31 +23,22 @@ export class SearchInitiativesComponent {
   roles = [ROLES.CO_LEADER, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
-    { name: 'Initiative ID (ASC)', value: 'id,ASC' },
-    { name: 'Initiative ID (DESC)', value: 'id,DESC' },
-    { name: 'Initiative Name (DESC)', value: 'official_code,ASC' },
-    { name: 'Initiative Name (DESC)', value: 'official_code,DESC' },
+    { name: 'Risk ID (ASC)', value: 'id,ASC' },
+    { name: 'Risk ID (DESC)', value: 'id,DESC' },
+    { name: 'Risk Title (DESC)', value: 'title,ASC' },
+    { name: 'Risk Title (DESC)', value: 'title,DESC' },
   ];
   myIni: boolean = false;
   myIniChange() {
     this.filterForm.controls['my_ini'].setValue(this.myIni);
   }
   setForm() {
-    let time: any = null;
     this.filterForm = this.fb.group({
-      initiative_id: [null],
-      name: [null],
+      title: [null],
       category: [null],
       created_by: [null],
-      my_role: [null],
+      owner: [null],
       sort: [null],
-      my_ini: [false],
-    });
-    this.filterForm.valueChanges.subscribe(() => {
-      if (time) clearTimeout(time);
-      time = setTimeout(() => {
-        this.filters.emit(this.filterForm.value);
-      }, 500);
     });
   }
 
@@ -60,9 +51,14 @@ export class SearchInitiativesComponent {
     await this.initiativeService.getExport();
   }
   async ngOnInit() {
-  
+    let time: any = null;
     this.setForm();
     this.categories = await this.riskService.getRiskCategories();
-  
+    this.filterForm.valueChanges.subscribe(() => {
+      if (time) clearTimeout(time);
+      time = setTimeout(() => {
+        this.filters.emit(this.filterForm.value);
+      }, 500);
+    });
   }
 }
