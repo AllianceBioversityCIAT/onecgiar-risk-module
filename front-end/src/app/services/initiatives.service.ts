@@ -27,9 +27,13 @@ export class InitiativesService extends MainService {
   async Publish(id: number, reason: any) {
     return await firstValueFrom(
       this.http
-        .post(this.backend_url + '/initiative/' + id + '/create_version', reason, {
-          headers: this.headers,
-        })
+        .post(
+          this.backend_url + '/initiative/' + id + '/create_version',
+          reason,
+          {
+            headers: this.headers,
+          }
+        )
         .pipe(map((d: any) => d))
     );
   }
@@ -61,6 +65,21 @@ export class InitiativesService extends MainService {
           })
           .pipe(map((d: any) => d))
       );
+  }
+
+  async getInitiativesWithFilters(filters: any) {
+    let finalFilters:any = {};
+    Object.keys(filters).forEach((element) => {
+      if (filters[element] != null && filters[element] !='' && filters[element].trim() !='') finalFilters[element] = filters[element];
+    });
+    return await firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/', {
+          params: finalFilters,
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
   }
 
   getInitiative(initiativeId: number): Promise<any> {

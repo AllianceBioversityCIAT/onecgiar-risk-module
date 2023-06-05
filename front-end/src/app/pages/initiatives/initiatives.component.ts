@@ -47,9 +47,15 @@ export class InitiativesComponent {
     this.dataSource.paginator = this.paginator;
     this.getInitiatives();
   }
-
-  async getInitiatives() {
+  filter(filters:any){
+    this.getInitiatives(filters)
+  }
+  async getInitiatives(filters = null) {
+    if(filters)
+    var Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
+    else
     var Initiatives: any = await this.initiativeService.getInitiatives();
+
     this.dataSource = new MatTableDataSource<any>(Initiatives);
     this.length = Initiatives.length;
     // this.pageSize =  this.dataSource.meta.itemsPerPage;
@@ -60,9 +66,7 @@ export class InitiativesComponent {
       this.navigationSubscription.unsubscribe();
     }
   }
-  async export() {
-    await this.initiativeService.getExport();
-  }
+
   filterCategories(categories: any) {
     var list = '';
     list = categories.map((d: any) => d?.category?.title).join(', ');

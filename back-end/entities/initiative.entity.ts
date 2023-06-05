@@ -10,6 +10,7 @@ import {
   ManyToOne,
   JoinColumn,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Risk } from './risk.entity';
@@ -25,6 +26,8 @@ export class Initiative {
   @ApiProperty()
   @Column()
   clarisa_id: string;
+
+  @Index({ fulltext: true })
   @ApiProperty()
   @Column()
   name: string;

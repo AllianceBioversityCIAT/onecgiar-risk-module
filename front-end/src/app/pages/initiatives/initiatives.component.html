@@ -3,6 +3,7 @@
     <div class="globalContainer">
         <h1 class="primaryColor">Initiatives Dashboard</h1>
         <div class="tableContainer">
+          <app-search-initiatives  (filters)="filter($event)"></app-search-initiatives>
           <div class="table">
             <table mat-table [dataSource]="dataSource">
               <ng-container matColumnDef="INIT-ID">
@@ -54,13 +55,6 @@
         aria-label="Select page">
       </mat-paginator>
     
-        
-       
-        <div class="export">
-            <h2 class="primaryColor">Export all my risks to excel</h2>
-            <button (click)="export()" class="primaryButton">Export</button>
-        </div>
-        
     </div>
 </ng-container>
 <router-outlet></router-outlet>

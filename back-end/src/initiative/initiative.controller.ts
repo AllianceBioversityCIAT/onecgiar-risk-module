@@ -7,7 +7,8 @@ import {
   Param,
   Post,
   Put,
-  Request,
+  Query,
+  Req,
   Res,
   StreamableFile,
   UseGuards,
@@ -26,9 +27,10 @@ import * as XLSX from 'xlsx';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { RiskService } from 'src/risk/risk.service';
-import { In, IsNull } from 'typeorm';
+import { ILike, In, IsNull } from 'typeorm';
 import { unlink } from 'fs/promises';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Request } from 'express';
 @ApiTags('Initiative')
 @Controller('initiative')
 export class InitiativeController {
@@ -36,15 +38,46 @@ export class InitiativeController {
     private iniService: InitiativeService,
     private riskService: RiskService,
   ) {}
+
+  offical(query) {
+    return query.initiative_id != null
+      ? query.initiative_id <= 9
+        ? 'INIT-0' + query.initiative_id
+        : query.initiative_id
+        ? 'INIT-' + query.initiative_id
+        : null
+      : null;
+  }
+  roles(query, req) {
+    if (query?.my_role )
+      return { roles: { user_id: req.user.id, role: query?.my_role } };
+      else if(query?.my_ini == 'true')
+      return { roles: { user_id: req.user.id } };
+    else return {};
+  }
+  sort(query) {
+    if (query?.sort) {
+      let obj = {};
+      const sorts = query.sort.split(',');
+      obj[sorts[0]] = sorts[1];
+      return obj;
+    } else return { id: 'ASC' };
+  }
   @UseGuards(JwtAuthGuard)
   @Get()
   @ApiCreatedResponse({
     description: '',
     type: [Initiative],
   })
-  getInitiative() {
+  getInitiative(@Query() query: any, @Req() req) {
     return this.iniService.iniRepository.find({
-      where: { parent_id: IsNull() },
+      where: {
+        name:query?.name ?  ILike(`%${query.name}%`) : null, 
+        parent_id: IsNull(),
+        official_code: this.offical(query),
+        ...this.roles(query, req),
+        risks: { category_id: query?.category },
+      },
       relations: [
         'risks',
         'risks.category',
@@ -52,7 +85,7 @@ export class InitiativeController {
         'roles',
         'roles.user',
       ],
-      order: { id: 'ASC', risks: { id: 'DESC' } },
+      order: { ...this.sort(query), risks: { id: 'DESC' } },
     });
   }
   getTemplate(width = false) {
@@ -278,7 +311,7 @@ export class InitiativeController {
   createVersion(
     @Param('id') id: number,
     @Body('reason') reason: string,
-    @Request() req,
+    @Req() req,
   ): Promise<Initiative> {
     return this.iniService.createINIT(id, reason, req.user);
   }

@@ -37,6 +37,7 @@ import {MatCardModule} from '@angular/material/card';
 
 import {MatDividerModule} from '@angular/material/divider';
 import { RiskTableComponent } from './components/risk-table/risk-table.component';
+import { SearchInitiativesComponent } from './components/search-initiatives/search-initiatives.component';
 
 
 
@@ -55,7 +56,7 @@ import { RiskTableComponent } from './components/risk-table/risk-table.component
     NewRiskComponent,
     NewTeamMemberComponent,
     NewProposedComponent,
-    VersionDetailsComponent,LoginDialog, ConfirmComponent,PublishDialog,Safe, RiskTableComponent
+    VersionDetailsComponent,LoginDialog, ConfirmComponent,PublishDialog,Safe, RiskTableComponent, SearchInitiativesComponent
   ],
   imports: [
     BrowserModule,
