@@ -35,12 +35,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { VersionDetailsComponent } from './pages/version-details/version-details.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { ToastrModule } from 'ngx-toastr';
 import { Safe } from './pipes/safe';
 import { MatCardModule } from '@angular/material/card';
-
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { RiskTableComponent } from './components/risk-table/risk-table.component';
 import { SearchInitiativesComponent } from './components/search-initiatives/search-initiatives.component';
@@ -52,6 +52,7 @@ import { GeneralFormComponent } from './components/general-form/general-form.com
 import { UserFormComponent } from './pages/admin/users/user-form/user-form.component';
 import { CategoriesComponent } from './pages/admin/categories/categories.component';
 import { CategoryFormComponent } from './pages/admin/categories/category-form/category-form.component';
+import { HttpRequestInterceptor } from './services/http-request-interceptor';
 
 @NgModule({
   declarations: [
@@ -104,9 +105,12 @@ import { CategoryFormComponent } from './pages/admin/categories/category-form/ca
     FormsModule,
     MatCardModule,
     MatDividerModule,
+    MatProgressBarModule,
     ToastrModule.forRoot(),
   ],
-  providers: [BreadcrumbService],
+  providers: [BreadcrumbService, 
+    { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

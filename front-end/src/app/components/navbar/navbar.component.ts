@@ -10,6 +10,8 @@ import {
   ConfirmComponent,
   ConfirmDialogModel,
 } from '../confirm/confirm.component';
+import { LoadingService } from 'src/app/services/loading.service';
+import { delay } from 'rxjs';
 @Component({
   selector: 'login-dialog',
   templateUrl: 'login-dialog.html',
@@ -39,20 +41,25 @@ export class LoginDialog {
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    private loadingService: LoadingService
+  ) {}
   user_info: any;
   bredcrumbs: any[] = [
     { label: 'home', path: '/' },
     { label: 'id', path: '/' },
     { label: 'pag', path: '/' },
   ];
-
+  loading = true;
   ngOnInit() {
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       this.user_info = jwt_decode(access_token);
-      console.log('user_info', this.user_info);
     }
+    this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
+      this.loading = d;
+    });
   }
   logout() {
     this.dialog
