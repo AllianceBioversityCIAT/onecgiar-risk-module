@@ -1,69 +1,54 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
-import jwt_decode from 'jwt-decode';
 import { MainService } from './main.service';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService extends MainService {
+export class CategoryService extends MainService {
   constructor(private http: HttpClient) {
     super();
   }
 
-  async login(email: string) {
-    let result = await firstValueFrom(
-      this.http
-        .post(this.backend_url + `/auth/login`, {
-          username: email,
-          password: '123',
-        })
-        .pipe(map((d) => d))
-    ).catch((e) => false);
 
-    return result;
-  }
 
-  async getUsers() {
+  async getCategories() {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/users`, {
+        .get(this.backend_url + `/risk-categories`, {
           headers: this.headers,
         })
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
 
-  async addUser(data:any) {
+  async addCategory(data:any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + `/users`,data, {
+        .post(this.backend_url + `/risk-categories`,data, {
           headers: this.headers,
         })
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
 
-  async updateUser(data:any) {
+  async updateCategory(data:any) {
     return firstValueFrom(
       this.http
-        .put(this.backend_url + `/users`,data, {
+        .put(this.backend_url + `/risk-categories`,data, {
           headers: this.headers,
         })
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
-  async deleteUser(id:any) {
+  async deleteCategory(id:any) {
     return firstValueFrom(
       this.http
-        .delete(this.backend_url + `/users/${id}`, {
+        .delete(this.backend_url + `/risk-categories/${id}`, {
           headers: this.headers,
         })
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
 
-  getLogedInUser(): any {
-    return jwt_decode(localStorage.getItem('access_token') as string);
-  }
 }

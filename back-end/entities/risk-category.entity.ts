@@ -11,6 +11,10 @@ export class RiskCategory {
   @Column()
   title: string;
 
+  @ApiProperty()
+  @Column({type:'text'})
+  description: string;
+
   @ApiProperty({ type: () => [Risk] })
   @OneToMany(() => Risk, (risk) => risk.initiative)
   @JoinTable()

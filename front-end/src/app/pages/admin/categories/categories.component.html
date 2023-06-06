@@ -1,0 +1,18 @@
+<ng-container>
+    <div class="globalContainer">
+      <div class="head">
+        <h1 class="primaryColor">Categories</h1>
+        <div class="buttons">
+          <button (click)="add()" mat-raised-button color="primary">Create Category</button>
+        </div>
+      </div>
+      <div class="tableContainer">
+        <app-general-tabel
+          (actionEvent)="action($event)"
+          [actions]="actions"
+          [dataSource]="dataSource"
+          [columns]="columns"
+        ></app-general-tabel>
+      </div>
+    </div>
+  </ng-container>

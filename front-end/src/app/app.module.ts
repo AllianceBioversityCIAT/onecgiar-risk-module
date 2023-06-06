@@ -45,6 +45,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { RiskTableComponent } from './components/risk-table/risk-table.component';
 import { SearchInitiativesComponent } from './components/search-initiatives/search-initiatives.component';
 import { SearchRisksComponent } from './components/search-risks/search-risks.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { UsersComponent } from './pages/admin/users/users.component';
+import { GeneralTabelComponent } from './components/general-tabel/general-tabel.component';
+import { GeneralFormComponent } from './components/general-form/general-form.component';
+import { UserFormComponent } from './pages/admin/users/user-form/user-form.component';
+import { CategoriesComponent } from './pages/admin/categories/categories.component';
+import { CategoryFormComponent } from './pages/admin/categories/category-form/category-form.component';
 
 @NgModule({
   declarations: [
@@ -62,11 +69,18 @@ import { SearchRisksComponent } from './components/search-risks/search-risks.com
     VersionDetailsComponent,
     LoginDialog,
     ConfirmComponent,
+    GeneralFormComponent,
+    UserFormComponent,
     PublishDialog,
     Safe,
     RiskTableComponent,
     SearchInitiativesComponent,
     SearchRisksComponent,
+    AdminComponent,
+    UsersComponent,
+    GeneralTabelComponent,
+    CategoriesComponent,
+    CategoryFormComponent
   ],
   imports: [
     BrowserModule,

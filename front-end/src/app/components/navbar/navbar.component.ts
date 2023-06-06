@@ -67,17 +67,21 @@ export class NavbarComponent {
       .subscribe((dialogResult) => {
         if (dialogResult) {
           localStorage.removeItem('access_token');
+          this.user_info = null;
           window.location.href = window.location.href;
         }
       });
   }
   login() {
-    const dialogRef = this.dialog.open(LoginDialog, {
-      data: { email: '' },
-    });
+    if (this.user_info) this.logout();
+    else {
+      const dialogRef = this.dialog.open(LoginDialog, {
+        data: { email: '' },
+      });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-    });
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log(result);
+      });
+    }
   }
 }

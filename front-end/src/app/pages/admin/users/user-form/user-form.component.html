@@ -1,0 +1,50 @@
+<h1 mat-dialog-title> {{ data?.act?.action == 'edit' ? 'Update' : 'New'  }}  User</h1>
+
+<div mat-dialog-content>
+  <form *ngIf="userForm" [formGroup]="userForm">
+    <mat-form-field class="w-30" appearance="outline">
+      <input formControlName="first_name" matInput placeholder="First name" />
+      <mat-error
+        class="error"
+        *ngIf="userForm.controls?.first_name.errors?.['required']"
+        >First name is Required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="w-30" appearance="outline">
+      <input formControlName="last_name" matInput placeholder="Last name" />
+      <mat-error
+        class="error"
+        *ngIf="userForm.controls?.last_name.errors?.['required']"
+        >Last name is Required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="w-30" appearance="outline">
+      <input formControlName="email" matInput placeholder="Email" />
+      <mat-error
+        class="error"
+        *ngIf="userForm.controls?.email.errors?.['required']"
+        >Email is Required</mat-error
+      >
+      <mat-error
+        class="error"
+        *ngIf="userForm.controls?.email.errors?.['email']"
+        >Valid Email is Required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="w-30" appearance="outline">
+      <mat-select placeholder="Role" formControlName="role">
+        <mat-option value="user">User</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+      </mat-select>
+      <mat-error
+        class="error"
+        *ngIf="userForm.controls?.role.errors?.['required']"
+        >Role is Required</mat-error
+      >
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="buttons" mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onConfirm()">Save</button>
+</div>
