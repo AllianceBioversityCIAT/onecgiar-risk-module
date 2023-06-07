@@ -74,9 +74,18 @@ export class Risk {
   @Column({
     type: 'int',
     generatedType: 'STORED',
-    asExpression: `target_likelihood * target_impact`,
+    asExpression: `current_likelihood * current_impact`,
   })
   current_level: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'bool',
+    generatedType: 'STORED',
+    asExpression: `current_likelihood * current_impact > 5`,
+  })
+  flag: boolean;
+
   @ManyToOne(() => RiskCategory, (category) => category.risks)
   @JoinColumn({ name: 'category_id' })
   category: RiskCategory;

@@ -103,6 +103,7 @@ export class InitiativeController {
       'Current Risk Level': null,
       Category: null,
       'Risk raiser': null,
+      "Flag to SGD":null,
       Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
@@ -126,17 +127,18 @@ export class InitiativeController {
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
     template.Redundant = element.redundant;
+    template['Flag to SGD'] = element.flag;
   }
 
   prepareDataExcel(risks) {
     let finaldata = [this.getTemplate(true)];
     let merges = [
       {
-        s: { c: 14, r: 0 },
-        e: { c: 15, r: 0 },
+        s: { c: 15, r: 0 },
+        e: { c: 16, r: 0 },
       },
     ];
-    for (let index = 0; index < 14; index++) {
+    for (let index = 0; index < 15; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -147,7 +149,7 @@ export class InitiativeController {
       const template = this.getTemplate();
       this.mapTemplate(template, element);
       if (element.mitigations.length) {
-        for (let index = 0; index < 14; index++) {
+        for (let index = 0; index < 15; index++) {
           merges.push({
             s: { c: index, r: base },
             e: { c: index, r: base + element.mitigations.length - 1 },
