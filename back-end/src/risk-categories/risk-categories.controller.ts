@@ -1,8 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, StreamableFile } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RiskCategory } from 'entities/risk-category.entity';
+import { createReadStream } from 'fs';
+import { unlink } from 'fs/promises';
+import { join } from 'path';
 import { Repository } from 'typeorm';
+import * as XLSX from 'xlsx';
 @ApiTags('Risk Categories')
 @Controller('risk-categories')
 export class RiskCategoriesController {
@@ -38,5 +42,31 @@ export class RiskCategoriesController {
   @Delete(':id')
   deleteCategory(@Param('id') id:number) {
     return this.riskcatRepository.delete(id)
+  }
+
+  @Get('export/all')
+  async export() {
+    let categories = await this.riskcatRepository.find();
+
+    const file_name = 'All-Users.xlsx';
+    var wb = XLSX.utils.book_new();
+
+    const ws = XLSX.utils.json_to_sheet(categories);
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Users');
+    await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+    const file = createReadStream(
+      join(process.cwd(), 'generated_files', file_name),
+    );
+
+    setTimeout(async () => {
+      try {
+        await unlink(join(process.cwd(), 'generated_files', file_name));
+      } catch (e) {}
+    }, 9000);
+    return new StreamableFile(file, {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      disposition: `attachment; filename="${file_name}"`,
+    });
   }
 }

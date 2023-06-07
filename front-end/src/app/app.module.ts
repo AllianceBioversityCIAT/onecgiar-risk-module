@@ -53,6 +53,7 @@ import { UserFormComponent } from './pages/admin/users/user-form/user-form.compo
 import { CategoriesComponent } from './pages/admin/categories/categories.component';
 import { CategoryFormComponent } from './pages/admin/categories/category-form/category-form.component';
 import { HttpRequestInterceptor } from './services/http-request-interceptor';
+import { SearchUsersComponent } from './pages/admin/users/search-users/search-users.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { HttpRequestInterceptor } from './services/http-request-interceptor';
     UsersComponent,
     GeneralTabelComponent,
     CategoriesComponent,
-    CategoryFormComponent
+    CategoryFormComponent,
+    SearchUsersComponent
   ],
   imports: [
     BrowserModule,

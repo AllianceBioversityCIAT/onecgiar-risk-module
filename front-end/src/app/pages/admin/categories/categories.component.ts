@@ -98,4 +98,8 @@ export class CategoriesComponent implements OnInit {
           }
         });
   }
+
+  async export() {
+    await this.categoriesService.exportCategories();
+  }
 }

@@ -60,7 +60,7 @@ export class InitiativeDetailsComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.loadInitiative();
+      this.loadRisks();
     });
   }
   async deleteRisk(risk: any) {
@@ -76,7 +76,7 @@ export class InitiativeDetailsComponent {
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.riskService.deleteRisk(risk.id);
-          this.loadInitiative();
+          this.loadRisks();
           this.toastr.success('Success', `${risk.title} has been deleted`);
         }
       });
@@ -99,7 +99,7 @@ export class InitiativeDetailsComponent {
       data: { initiative_id: this.id },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      this.loadInitiative();
+      this.loadRisks();
     });
   }
 
@@ -119,7 +119,7 @@ export class InitiativeDetailsComponent {
     this.savePdf.emit();
   }
   refresh(data: any = null) {
-    this.loadInitiative();
+    this.loadRisks();
   }
   async publish(id: number) {
     this.dialog
@@ -150,9 +150,9 @@ export class InitiativeDetailsComponent {
     );
   }
 
-  async loadRisks(filters: any) {
+  async loadRisks() {
     this.dataSource = new MatTableDataSource<any>(
-      await this.riskService.getRisks(this.id, filters)
+      await this.riskService.getRisks(this.id, this.filters)
     );
   }
   versionId: any;
@@ -183,8 +183,10 @@ export class InitiativeDetailsComponent {
     );
     return this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD);
   }
+  filters:any
   filter(filters: any) {
-    this.loadRisks(filters);
+    this.filters = filters;
+    this.loadRisks();
   }
   canEdit() {
     return (

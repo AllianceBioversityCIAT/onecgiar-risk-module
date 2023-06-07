@@ -32,13 +32,13 @@ export class UsersComponent implements OnInit {
     { title: 'Delete', action: 'delete', icon: 'delete' },
   ];
   dataSource: any = [];
+  filters: any = null;
   async ngOnInit() {
     await this.init();
-    console.log(this.dataSource);
   }
 
   async init() {
-    this.dataSource = await this.users.getUsers();
+    this.dataSource = await this.users.getUsers(this.filters);
   }
   add() {
     this.dialog
@@ -100,5 +100,12 @@ export class UsersComponent implements OnInit {
             await this.init();
           }
         });
+  }
+  async filter(filters: any) {
+    this.filters = filters;
+    await this.init();
+  }
+  async export() {
+    await this.users.exportUsers();
   }
 }
