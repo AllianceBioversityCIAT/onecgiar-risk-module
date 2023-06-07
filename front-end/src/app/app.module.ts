@@ -56,6 +56,8 @@ import { HttpRequestInterceptor } from './services/http-request-interceptor';
 import { SearchUsersComponent } from './pages/admin/users/search-users/search-users.component';
 import { EmailsComponent } from './pages/admin/emails/emails.component';
 import { EmailBodyDialogComponent } from './components/email-body-dialog/email-body-dialog.component';
+import { AnnouncementComponent } from './pages/admin/announcement/announcement.component';
+import { NgxEditorModule } from 'ngx-editor';
 
 @NgModule({
   declarations: [
@@ -86,7 +88,8 @@ import { EmailBodyDialogComponent } from './components/email-body-dialog/email-b
     CategoriesComponent,
     CategoryFormComponent,
     SearchUsersComponent,EmailsComponent,
-    EmailBodyDialogComponent
+    EmailBodyDialogComponent,
+    AnnouncementComponent
   ],
   imports: [
     BrowserModule,
@@ -112,6 +115,7 @@ import { EmailBodyDialogComponent } from './components/email-body-dialog/email-b
     MatDividerModule,
     MatProgressBarModule,
     MatPaginatorModule,
+    NgxEditorModule,
     ToastrModule.forRoot(),
   ],
   providers: [BreadcrumbService, 
