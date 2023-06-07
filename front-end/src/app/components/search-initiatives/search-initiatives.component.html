@@ -18,7 +18,7 @@
           <mat-option *ngFor="let riskCat of categories" [value]="riskCat.id">
             {{ riskCat.title }}
 
-            <mat-icon matTooltip="Risk Categories" matSuffix
+            <mat-icon [matTooltip]="riskCat.description" matSuffix
               >help_outline</mat-icon
             >
           </mat-option>
