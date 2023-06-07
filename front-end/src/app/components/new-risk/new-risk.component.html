@@ -57,7 +57,7 @@
             [value]="riskCat.id"
           >
             {{ riskCat.title }}
-            <mat-icon matTooltip="Info about the action" matSuffix
+            <mat-icon [matTooltip]="riskCat.description" matSuffix
               >help_outline</mat-icon
             >
           </mat-option>
