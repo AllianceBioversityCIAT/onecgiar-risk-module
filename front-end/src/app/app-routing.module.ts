@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './pages/admin/admin.component';
 import { CategoriesComponent } from './pages/admin/categories/categories.component';
+import { EmailsComponent } from './pages/admin/emails/emails.component';
 import { UsersComponent } from './pages/admin/users/users.component';
 import { InitiativeDetailsComponent } from './pages/initiative-details/initiative-details.component';
 import { InitiativesComponent } from './pages/initiatives/initiatives.component';
@@ -25,6 +26,11 @@ const routes: Routes = [
         path: 'categories', 
         component: CategoriesComponent ,
       },
+      { 
+        path: 'emails', 
+        component: EmailsComponent ,
+      },
+      
     ]
   },
   {

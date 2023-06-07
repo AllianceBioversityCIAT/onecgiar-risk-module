@@ -13,6 +13,7 @@ import { RiskModule } from './risk/risk.module';
 import { RiskCategoriesModule } from './risk-categories/risk-categories.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { EmailsModule } from './emails/emails.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UsersModule } from './users/users.module';
     RiskModule,
     InitiativeModule,
     ScheduleModule.forRoot(),
+    EmailsModule,
     RiskCategoriesModule, 
     AuthModule,
     UsersModule,

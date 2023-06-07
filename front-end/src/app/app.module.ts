@@ -54,6 +54,8 @@ import { CategoriesComponent } from './pages/admin/categories/categories.compone
 import { CategoryFormComponent } from './pages/admin/categories/category-form/category-form.component';
 import { HttpRequestInterceptor } from './services/http-request-interceptor';
 import { SearchUsersComponent } from './pages/admin/users/search-users/search-users.component';
+import { EmailsComponent } from './pages/admin/emails/emails.component';
+import { EmailBodyDialogComponent } from './components/email-body-dialog/email-body-dialog.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,8 @@ import { SearchUsersComponent } from './pages/admin/users/search-users/search-us
     GeneralTabelComponent,
     CategoriesComponent,
     CategoryFormComponent,
-    SearchUsersComponent
+    SearchUsersComponent,EmailsComponent,
+    EmailBodyDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -108,6 +111,7 @@ import { SearchUsersComponent } from './pages/admin/users/search-users/search-us
     MatCardModule,
     MatDividerModule,
     MatProgressBarModule,
+    MatPaginatorModule,
     ToastrModule.forRoot(),
   ],
   providers: [BreadcrumbService, 
