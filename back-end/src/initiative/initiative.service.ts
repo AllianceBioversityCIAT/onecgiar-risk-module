@@ -69,6 +69,10 @@ export class InitiativeService {
     if (old_Risks.length)
       for (let risk of old_Risks) {
         delete risk.id;
+        delete risk.current_level;
+        delete risk.target_level;
+        delete risk.flag;
+
         if (risk?.mitigations)
           risk.mitigations.forEach((mitigation) => {
             delete mitigation.id;

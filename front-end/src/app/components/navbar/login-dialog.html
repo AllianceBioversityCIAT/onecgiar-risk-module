@@ -1,10 +1,13 @@
 <h1 mat-dialog-title>Login</h1>
 <div mat-dialog-content>
-  <p>please write your email</p>
-  <mat-form-field>
+  <p>Please enter your email</p>
+  <mat-form-field style="width:100%">
     <mat-label>Email</mat-label>
-    <input matInput [(ngModel)]="data.email">
+    <input matInput [(ngModel)]="data.email" />
+   
+   
   </mat-form-field>
+  <mat-error *ngIf="error" class="error" > {{error}}</mat-error>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>

@@ -26,12 +26,15 @@ export class LoginDialog {
   onNoClick(): void {
     this.dialogRef.close();
   }
+  error: string | null = null;
   async login() {
     const result: any = await this.userService.login(this.data.email);
+    console.log(result);
     if (result) {
+      this.error = null;
       localStorage.setItem('access_token', result.access_token);
       window.location.href = window.location.href;
-    }
+    } else this.error = 'Please enter a valid email address';
   }
 }
 
@@ -83,6 +86,7 @@ export class NavbarComponent {
     if (this.user_info) this.logout();
     else {
       const dialogRef = this.dialog.open(LoginDialog, {
+          minWidth: '350px',
         data: { email: '' },
       });
 

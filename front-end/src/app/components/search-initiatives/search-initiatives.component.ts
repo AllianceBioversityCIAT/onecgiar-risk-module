@@ -25,7 +25,7 @@ export class SearchInitiativesComponent {
   sort = [
     { name: 'Initiative ID (ASC)', value: 'id,ASC' },
     { name: 'Initiative ID (DESC)', value: 'id,DESC' },
-    { name: 'Initiative Name (DESC)', value: 'official_code,ASC' },
+    { name: 'Initiative Name (ASC)', value: 'official_code,ASC' },
     { name: 'Initiative Name (DESC)', value: 'official_code,DESC' },
   ];
   myIni: boolean = false;

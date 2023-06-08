@@ -7,7 +7,7 @@
       <mat-error
         class="error"
         *ngIf="userForm.controls?.first_name.errors?.['required']"
-        >First name is Required</mat-error
+        >First name is required</mat-error
       >
     </mat-form-field>
     <mat-form-field class="w-30" appearance="outline">
@@ -15,7 +15,7 @@
       <mat-error
         class="error"
         *ngIf="userForm.controls?.last_name.errors?.['required']"
-        >Last name is Required</mat-error
+        >Last name is required</mat-error
       >
     </mat-form-field>
     <mat-form-field class="w-30" appearance="outline">
@@ -23,12 +23,12 @@
       <mat-error
         class="error"
         *ngIf="userForm.controls?.email.errors?.['required']"
-        >Email is Required</mat-error
+        >Email is required</mat-error
       >
       <mat-error
         class="error"
         *ngIf="userForm.controls?.email.errors?.['email']"
-        >Valid Email is Required</mat-error
+        >Valid Email is required</mat-error
       >
     </mat-form-field>
     <mat-form-field class="w-30" appearance="outline">
@@ -39,7 +39,7 @@
       <mat-error
         class="error"
         *ngIf="userForm.controls?.role.errors?.['required']"
-        >Role is Required</mat-error
+        >Role is required</mat-error
       >
     </mat-form-field>
   </form>

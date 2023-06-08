@@ -22,8 +22,8 @@
       <mat-form-field class="w-auto" appearance="outline">
         <mat-select placeholder="Risk Raiser" formControlName="created_by">
           <mat-option>None</mat-option>
-          <mat-option *ngFor="let user of riskRaiser" [value]="user.user.id">
-            {{ user?.user?.full_name }}
+          <mat-option *ngFor="let user of riskRaiser" [value]="user.id">
+            {{ user?.full_name }}
           </mat-option>
         </mat-select>
       </mat-form-field>

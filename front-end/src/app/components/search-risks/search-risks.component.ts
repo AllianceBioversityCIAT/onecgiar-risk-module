@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
@@ -16,7 +16,9 @@ export class SearchRisksComponent {
     public initiativeService: InitiativesService
   ) {}
   categories: any;
-  filterForm:any;
+  filterForm: any;
+
+  @Input() initiative_id: number | null = null;
 
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
 
@@ -54,13 +56,24 @@ export class SearchRisksComponent {
   async export() {
     await this.initiativeService.getExport();
   }
-  riskUsers:any
-  riskRaiser:any
+  riskUsers: any;
+  riskRaiser: any;
   async ngOnInit() {
     let time: any = null;
-    this.riskUsers = await this.riskService.getRiskUsers(1);
-    this.riskRaiser= this.riskUsers.filter((d:any)=>d.user)
-    console.log( this.riskUsers);
+    const ini = await this.initiativeService.getInitiative(
+      this.initiative_id as number
+    );
+    this.riskRaiser = [
+      ...new Map(
+        ini.risks
+          .map((risk: any) => risk?.created_by)
+          .map((item: any) => [item['id'], item])
+      ).values(),
+    ];
+    this.riskUsers = await this.riskService.getRiskUsers(
+      this.initiative_id as number
+    );
+    console.log(this.riskRaiser);
     this.setForm();
     this.categories = await this.riskService.getRiskCategories();
     this.filterForm.valueChanges.subscribe(() => {

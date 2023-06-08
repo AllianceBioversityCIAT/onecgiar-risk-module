@@ -60,6 +60,8 @@ export class UsersController {
   @Put()
   updateUser(@Body() data: any) {
     const user = this.usersService.userRepository.create();
+    if(data?.email)
+    data['email'] = data?.email.toLowerCase()
     Object.assign(user, data);
     return this.usersService.userRepository.save(user, { reload: true });
   }
@@ -67,6 +69,8 @@ export class UsersController {
   @Post()
   async addUser(@Body() data: any) {
     const user = this.usersService.userRepository.create();
+    if(data?.email)
+    data['email'] = data?.email.toLowerCase()
     Object.assign(user, data);
     await this.usersService.userRepository.save(user, { reload: true });
 

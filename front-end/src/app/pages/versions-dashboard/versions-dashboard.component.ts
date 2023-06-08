@@ -37,13 +37,11 @@ export class VersionsDashboardComponent {
  async ngOnInit() {
     this.path = window.location.pathname
     const params:any =  this.activatedRoute.parent?.snapshot.params
-  
+    const iniitave = await this.initiativeService.getInitiative(params.id)
     const iniitaves = await this.initiativeService.getInitiatives(params.id)
-    console.log(iniitaves);
     this.initiativeId = params.id;
     this.dataSource.paginator = this.paginator;
-   
-    this.initiative_name =  iniitaves[0].name;
+    this.initiative_name =  iniitave.name;
     this.dataSource.data = iniitaves;
 
   }

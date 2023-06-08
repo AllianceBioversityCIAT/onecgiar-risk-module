@@ -61,7 +61,7 @@
       </div>
     </div>
     <div>
-      <app-search-risks (filters)="filter($event)"></app-search-risks>
+      <app-search-risks *ngIf="initiative?.id" [initiative_id]="initiative.id" (filters)="filter($event)"></app-search-risks>
     </div>
    
     <div>
@@ -74,6 +74,7 @@
     
     <app-risk-table
       [savePdf]="savePdf"
+     
       [dataSource]="dataSource"
       (refresh)="refresh($event)"
     ></app-risk-table>

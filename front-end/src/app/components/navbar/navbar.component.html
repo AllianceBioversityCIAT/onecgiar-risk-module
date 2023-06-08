@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="currentUser">
-    <button mat-raised-button color="primary" routerLink="/admin"  *ngIf="user_info?.role =='admin'" >Admin Aarea</button>
+    <button mat-raised-button color="primary" routerLink="/admin"  *ngIf="user_info?.role =='admin'" >Admin area</button>
 
     <button mat-raised-button color="primary" (click)="login()" >{{ user_info?.id? user_info.full_name:'Login' }}</button>
 
