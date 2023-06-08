@@ -75,7 +75,10 @@ export class UserService extends MainService {
   }
 
   getLogedInUser(): any {
+    if(localStorage.getItem('access_token') as string)
     return jwt_decode(localStorage.getItem('access_token') as string);
+    else
+    return false;
   }
 
   async exportUsers() {

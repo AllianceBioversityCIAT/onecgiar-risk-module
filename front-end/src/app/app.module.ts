@@ -19,7 +19,6 @@ import {
   InitiativeDetailsComponent,
   PublishDialog,
 } from './pages/initiative-details/initiative-details.component';
-import { RiskDashboardComponent } from './pages/risk-dashboard/risk-dashboard.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -58,6 +57,7 @@ import { EmailsComponent } from './pages/admin/emails/emails.component';
 import { EmailBodyDialogComponent } from './components/email-body-dialog/email-body-dialog.component';
 import { AnnouncementComponent } from './pages/admin/announcement/announcement.component';
 import { NgxEditorModule } from 'ngx-editor';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,6 @@ import { NgxEditorModule } from 'ngx-editor';
     NavbarComponent,
     InitiativesComponent,
     InitiativeDetailsComponent,
-    RiskDashboardComponent,
     PublishDialogComponent,
     NewRiskComponent,
     NewTeamMemberComponent,
@@ -89,7 +88,8 @@ import { NgxEditorModule } from 'ngx-editor';
     CategoryFormComponent,
     SearchUsersComponent,EmailsComponent,
     EmailBodyDialogComponent,
-    AnnouncementComponent
+    AnnouncementComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

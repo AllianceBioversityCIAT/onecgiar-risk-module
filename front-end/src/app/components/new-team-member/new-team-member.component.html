@@ -10,7 +10,7 @@
     <form [formGroup]="memberForm">
         <mat-form-field class="w-90" appearance="outline">
             <input formControlName="email" matInput placeholder="Email">
-            <mat-error class="error" *ngIf="memberForm.controls['email'].errors?.['required']">Email is Required</mat-error>
+            <mat-error class="error" *ngIf="memberForm.controls['email'].errors?.['required']">Email is required</mat-error>
             <mat-error class="error" *ngIf="memberForm.controls['email'].errors?.['email']">Wrong Email</mat-error>
         </mat-form-field>
         <mat-form-field class="w-90" appearance="outline">
@@ -19,7 +19,7 @@
                 {{role.viewValue}}
               </mat-option>
             </mat-select>
-          <mat-error class="error" *ngIf="memberForm.controls['userRole'].errors?.['required']">User Role is Required</mat-error>
+          <mat-error class="error" *ngIf="memberForm.controls['userRole'].errors?.['required']">User Role is required</mat-error>
         </mat-form-field>
         <div class="end">
           <button class="primaryButton" (click)="submit()">SAVE</button>

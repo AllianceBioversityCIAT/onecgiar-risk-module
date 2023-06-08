@@ -1,50 +1,55 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminGuard } from './guards/admin.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { AdminComponent } from './pages/admin/admin.component';
 import { AnnouncementComponent } from './pages/admin/announcement/announcement.component';
 import { CategoriesComponent } from './pages/admin/categories/categories.component';
 import { EmailsComponent } from './pages/admin/emails/emails.component';
 import { UsersComponent } from './pages/admin/users/users.component';
+import { HomeComponent } from './pages/home/home.component';
 import { InitiativeDetailsComponent } from './pages/initiative-details/initiative-details.component';
 import { InitiativesComponent } from './pages/initiatives/initiatives.component';
-import { RiskDashboardComponent } from './pages/risk-dashboard/risk-dashboard.component';
 import { TeamMembersComponent } from './pages/team-members/team-members.component';
 import { VersionDetailsComponent } from './pages/version-details/version-details.component';
 import { VersionsDashboardComponent } from './pages/versions-dashboard/versions-dashboard.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/risk-dashboard/initiatives', pathMatch: 'full' },
+  {
+    path: '',
+    component: HomeComponent,
+  },
   {
     path: 'admin',
     component: AdminComponent,
+    canActivate: [AuthGuard, AdminGuard],
     children: [
       { path: '', redirectTo: '/admin/categories', pathMatch: 'full' },
-      { 
-        path: 'users', 
-        component: UsersComponent ,
+      {
+        path: 'users',
+        component: UsersComponent,
       },
-      { 
-        path: 'categories', 
-        component: CategoriesComponent ,
+      {
+        path: 'categories',
+        component: CategoriesComponent,
       },
-      { 
-        path: 'emails', 
-        component: EmailsComponent ,
+      {
+        path: 'emails',
+        component: EmailsComponent,
       },
-      { 
-        path: 'announcement', 
-        component: AnnouncementComponent ,
+      {
+        path: 'announcement',
+        component: AnnouncementComponent,
       },
-      
-    ]
+    ],
   },
   {
-    path: 'risk-dashboard',
-    component: RiskDashboardComponent,
+    path: 'initiatives',
+    canActivate: [AuthGuard],
     children: [
-      { 
-        path: 'initiatives', 
-        component: InitiativesComponent ,
+      {
+        path: '',
+        component: InitiativesComponent,
         children: [
           {
             path: ':id/:initiativeId',
@@ -52,7 +57,7 @@ const routes: Routes = [
             children: [
               {
                 path: 'team-members',
-                component: TeamMembersComponent
+                component: TeamMembersComponent,
               },
               {
                 path: 'versions',
@@ -60,20 +65,20 @@ const routes: Routes = [
                 children: [
                   {
                     path: ':versionId',
-                    component: VersionDetailsComponent
+                    component: VersionDetailsComponent,
                   },
-                ]
-              }
-            ]
-          }
-        ]
+                ],
+              },
+            ],
+          },
+        ],
       },
-    ]
-  }
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

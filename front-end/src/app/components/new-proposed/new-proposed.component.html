@@ -11,7 +11,7 @@
         <mat-form-field class="w-90" appearance="outline">
             <textarea formControlName="description" rows="4" matInput placeholder="Mitigation Description"></textarea>
             <mat-icon  matTooltip="Info about the action" matSuffix>help_outline</mat-icon>
-            <mat-error class="error" *ngIf="proposedForm.controls['description'].errors?.['required']">Mitigation Description is Required</mat-error>
+            <mat-error class="error" *ngIf="proposedForm.controls['description'].errors?.['required']">Mitigation Description is required</mat-error>
             <mat-error
             class="error"
             *ngIf="proposedForm.controls?.description?.errors?.maxword"

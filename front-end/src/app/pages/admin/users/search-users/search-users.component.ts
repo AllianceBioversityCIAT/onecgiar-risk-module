@@ -25,7 +25,7 @@ export class SearchUsersComponent {
   sort = [
     { name: 'ID (ASC)', value: 'id,ASC' },
     { name: 'ID (DESC)', value: 'id,DESC' },
-    { name: 'Name (DESC)', value: 'full_name,ASC' },
+    { name: 'Name (ASC)', value: 'full_name,ASC' },
     { name: 'Name (DESC)', value: 'full_name,DESC' },
   ];
   setForm() {
