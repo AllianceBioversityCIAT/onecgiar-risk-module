@@ -105,6 +105,24 @@ export class RiskTableComponent {
     })
     this.user_info = this.userService.getLogedInUser();
     // my_roles
+    if(this.user_info.role != 'admin'){
+      this.displayedColumns = [    
+      'ID',
+      'Risk Title',
+      'Risk Description',
+      'Risk Category',
+      'Current Likelihood',
+      'Current Impact',
+      'Current Risk Level',
+      'Target Likelihood',
+      'Target Impact',
+      'Target Risk Level',
+      'Mitigation Action',
+      'Risk Owner',
+      'created_by',
+      'Redundant'
+      ]; 
+    }
 
     const params: any = this.activatedRoute?.snapshot.params;
 

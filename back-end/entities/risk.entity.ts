@@ -82,7 +82,7 @@ export class Risk {
   @Column({
     type: 'bool',
     generatedType: 'STORED',
-    asExpression: `current_likelihood * current_impact > 5`,
+    asExpression: `current_likelihood * current_impact >= 16`,
   })
   flag: boolean;
 
