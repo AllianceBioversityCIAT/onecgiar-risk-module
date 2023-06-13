@@ -131,8 +131,8 @@ export class NewRiskComponent {
       .open(ConfirmComponent, {
         maxWidth: '400px',
         data: new ConfirmDialogModel(
-          'Delete',
-          `Are you sure you want to delete Mitigation ?`
+          'Confirm the deletion',
+          `Are you sure you want to delete this action ?`
         ),
       })
       .afterClosed()
