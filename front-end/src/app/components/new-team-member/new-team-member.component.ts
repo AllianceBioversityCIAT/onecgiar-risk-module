@@ -3,9 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export enum ROLES {
-  LEAD = 'Lead / Coordinator',
+  LEAD = 'Lead',
   MEMBER = 'Team Member',
-  CO_LEADER = 'Co-leader',
+  COORDINATOR = 'Coordinator',
 }
 @Component({
   selector: 'app-new-team-member',
@@ -22,7 +22,7 @@ export class NewTeamMemberComponent {
   Roles: any[] = [
     { value: ROLES.LEAD, viewValue:ROLES.LEAD},
     { value: ROLES.MEMBER, viewValue: ROLES.MEMBER },
-    { value: ROLES.CO_LEADER, viewValue: ROLES.CO_LEADER },
+    { value: ROLES.COORDINATOR, viewValue: ROLES.COORDINATOR },
   ];
 
   memberForm: any;

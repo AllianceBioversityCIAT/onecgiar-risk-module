@@ -22,7 +22,7 @@ export class SearchRisksComponent {
 
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
 
-  roles = [ROLES.CO_LEADER, ROLES.LEAD, ROLES.MEMBER];
+  roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
     { name: 'Risk ID (ASC)', value: 'id,ASC' },

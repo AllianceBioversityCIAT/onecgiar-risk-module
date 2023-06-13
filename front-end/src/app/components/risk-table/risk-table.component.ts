@@ -178,7 +178,7 @@ export class RiskTableComponent {
     return (
       this.user_info.role == 'admin' ||
       this.my_roles.includes(ROLES.LEAD) ||
-      this.my_roles.includes(ROLES.CO_LEADER)
+      this.my_roles.includes(ROLES.COORDINATOR)
     );
   }
 
