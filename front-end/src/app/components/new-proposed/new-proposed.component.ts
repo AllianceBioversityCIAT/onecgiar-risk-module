@@ -21,6 +21,7 @@ export class NewProposedComponent {
   ) {}
 
   Actions: any[] = [
+    { value: 'Not-started', viewValue: 'Not started' },
     { value: 'Delayed', viewValue: 'Delayed' },
     { value: 'Completed', viewValue: 'Completed' },
     { value: 'Ongoing and on track', viewValue: 'Ongoing and On Track' },
