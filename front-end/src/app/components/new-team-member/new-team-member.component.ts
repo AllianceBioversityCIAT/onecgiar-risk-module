@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export enum ROLES {
-  LEAD = 'Lead',
+  LEAD = 'Leader',
   MEMBER = 'Team Member',
   COORDINATOR = 'Coordinator',
 }
