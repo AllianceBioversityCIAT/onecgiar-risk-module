@@ -56,11 +56,11 @@
     </div>
 
     <div *ngIf="reload">
-      <p *ngIf="latest_version.submit_date != initiative?.last_updated_date" style="float: right">
+      <p *ngIf="latest_version?.submit_date != initiative?.last_updated_date" style="float: right">
         This is a draft version until it get published. last update at
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
-      <p *ngIf="latest_version.submit_date == initiative?.last_updated_date" style="float: right">
+      <p *ngIf="latest_version?.submit_date == initiative?.last_updated_date" style="float: right">
         This initiative risks published in
         {{ latest_version.submit_date | date : "short" }}
       </p>
