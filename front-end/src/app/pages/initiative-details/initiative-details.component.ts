@@ -148,6 +148,7 @@ export class InitiativeDetailsComponent {
     this.dataSource = new MatTableDataSource<any>(
       await this.riskService.getRisks(this.id)
     );
+    this.NumberOfRisks = this.dataSource._renderData._value.length;
   }
 
   async loadRisks() {
@@ -155,6 +156,7 @@ export class InitiativeDetailsComponent {
       await this.riskService.getRisks(this.id, this.filters)
     );
   }
+  NumberOfRisks:any;
   versionId: any;
   initiativeId: any;
   user_info: any;
