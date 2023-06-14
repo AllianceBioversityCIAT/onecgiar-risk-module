@@ -180,10 +180,7 @@ export class InitiativeDetailsComponent {
   }
 
   canPublish() {
-    console.log(
-      this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD)
-    );
-    return this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD);
+    return this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD) || this.my_roles.includes(ROLES.COORDINATOR);
   }
   filters:any
   filter(filters: any) {
