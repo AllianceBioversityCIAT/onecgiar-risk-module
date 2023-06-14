@@ -21,7 +21,7 @@ export class NewProposedComponent {
   ) {}
 
   Actions: any[] = [
-    { value: 'Not-started', viewValue: 'Not started' , toolTip: ''},
+    { value: 'Not-started', viewValue: 'Not yet started' , toolTip: ' the action has not started yet but not considered to be delayed. It has not started but this is according to plan'},
     { value: 'Completed', viewValue: 'Completed', toolTip: ' the action has been completed (could be an one-off action taken or the establishment of a control to manage risk i.e. a standing review introduced or a process has been put in place' },
     { value: 'Ongoing and on track', viewValue: 'Ongoing and On Track' , toolTip: 'an action is underway, has not been completed but it is considered to be on track according to schedule'},
     { value: 'Delayed', viewValue: 'Delayed' , toolTip: ' an action is planned or underway, has not been completed but running behind schedule'},
