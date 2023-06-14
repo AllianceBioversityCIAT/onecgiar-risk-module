@@ -39,7 +39,7 @@ export class RiskTableComponent {
   @Output() refresh: EventEmitter<any> = new EventEmitter<any>();
 
   @Input() savePdf: EventEmitter<any> = new EventEmitter<any>();
-
+  @Input() my_risks: any;
   @Input() showingVersion: boolean = false;
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 
@@ -47,11 +47,11 @@ export class RiskTableComponent {
 
   public SavePDF(): void {
     this.toPdf = true;
-   let  actions = false
-   if(this.displayedColumns.includes('Actions')){
-   this.displayedColumns.pop();
-   actions = true
-  }
+    let actions = false;
+    if (this.displayedColumns.includes('Actions')) {
+      this.displayedColumns.pop();
+      actions = true;
+    }
     setTimeout(() => {
       let content = this.pdfcontent.nativeElement;
       this.pdfcontent.nativeElement.width;
@@ -60,20 +60,16 @@ export class RiskTableComponent {
         unit: 'px',
         format: [
           this.pdfcontent.nativeElement.scrollWidth,
-          this.pdfcontent.nativeElement.scrollHeight+3,
+          this.pdfcontent.nativeElement.scrollHeight + 3,
         ],
       });
-      doc.html(
-        content.innerHTML,
-        {
-          callback: (doc) => {
-            doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
-            this.toPdf = false;
-            if(actions)
-            this.displayedColumns.push('Actions')
-          },
-        }
-      );
+      doc.html(content.innerHTML, {
+        callback: (doc) => {
+          doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
+          this.toPdf = false;
+          if (actions) this.displayedColumns.push('Actions');
+        },
+      });
     }, 500);
   }
   displayedColumns: string[] = [
@@ -100,28 +96,28 @@ export class RiskTableComponent {
   riskUsers: any;
   my_roles: any;
   async ngOnInit() {
-    this.savePdf.subscribe(()=>{
-      this.SavePDF()
-    })
+    this.savePdf.subscribe(() => {
+      this.SavePDF();
+    });
     this.user_info = this.userService.getLogedInUser();
     // my_roles
-    if(this.user_info.role != 'admin'){
-      this.displayedColumns = [    
-      'ID',
-      'Risk Title',
-      'Risk Description',
-      'Risk Category',
-      'Current Likelihood',
-      'Current Impact',
-      'Current Risk Level',
-      'Target Likelihood',
-      'Target Impact',
-      'Target Risk Level',
-      'Mitigation Action',
-      'Risk Owner',
-      'created_by',
-      'Redundant'
-      ]; 
+    if (this.user_info.role != 'admin') {
+      this.displayedColumns = [
+        'ID',
+        'Risk Title',
+        'Risk Description',
+        'Risk Category',
+        'Current Likelihood',
+        'Current Impact',
+        'Current Risk Level',
+        'Target Likelihood',
+        'Target Impact',
+        'Target Risk Level',
+        'Mitigation Action',
+        'Risk Owner',
+        'created_by',
+        'Redundant',
+      ];
     }
 
     const params: any = this.activatedRoute?.snapshot.params;
@@ -134,6 +130,10 @@ export class RiskTableComponent {
       .map((d: any) => d.role);
     if (this.canEdit() && !this.showingVersion && !this.toPdf)
       this.displayedColumns.push('Actions');
+    setTimeout(() => {
+      if (this.my_risks?.length && !this.canEdit()) this.displayedColumns.push('OwnerActions');
+      console.log('OwnerActions', this.my_risks);
+    }, 1000);
   }
 
   editRisk(data: any) {
@@ -181,7 +181,9 @@ export class RiskTableComponent {
       this.my_roles.includes(ROLES.COORDINATOR)
     );
   }
-
+  canEditOwner(element: any) {
+    return this.my_risks.filter((d: any) => d.id == element.id).length > 0;
+  }
   filterDescriptionMitigations(element: any) {
     const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {

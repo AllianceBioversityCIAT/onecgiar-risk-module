@@ -1,10 +1,5 @@
 <ng-container
-  *ngIf="
-    router.isActive(
-      '/initiatives/' + id + '/' + initiativeId,
-      true
-    )
-  "
+  *ngIf="router.isActive('/initiatives/' + id + '/' + initiativeId, true)"
 >
   <div class="globalContainer">
     <div class="head">
@@ -14,10 +9,7 @@
         }})
       </h3>
       <div class="buttons">
-        <button
-          class="primaryButton mt-1"
-          routerLink="./team-members"
-        >
+        <button class="primaryButton mt-1" routerLink="./team-members">
           Team Members
         </button>
         <button
@@ -30,7 +22,7 @@
         <button
           [disabled]="!canPublish() || this.NumberOfRisks <= 0"
           (click)="publish(initiative.id)"
-          [ngClass]="{ disabled: !canPublish()  || this.NumberOfRisks <= 0}"
+          [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 }"
           class="primaryButton mt-1"
         >
           Publish
@@ -41,12 +33,9 @@
         >
           Export to excel
         </button>
-        <button
-        (click)="exportPdf()"
-        class="primaryButton mt-1"
-      >
-        Export to pdf
-      </button>
+        <button (click)="exportPdf()" class="primaryButton mt-1">
+          Export to pdf
+        </button>
         <!-- <button class="primaryButton mt-1"  (click)="openPublishDialog()">Publish</button> -->
         <button
           [disabled]="!canEdit()"
@@ -59,20 +48,23 @@
       </div>
     </div>
     <div>
-      <app-search-risks *ngIf="initiative?.id" [initiative_id]="initiative.id" (filters)="filter($event)"></app-search-risks>
+      <app-search-risks
+        *ngIf="initiative?.id"
+        [initiative_id]="initiative.id"
+        (filters)="filter($event)"
+      ></app-search-risks>
     </div>
-   
+
     <div>
       <p style="float: right">
         This is a draft version until it get published. last update at
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
-      
     </div>
-    
+
     <app-risk-table
+      [my_risks]="my_risks"
       [savePdf]="savePdf"
-     
       [dataSource]="dataSource"
       (refresh)="refresh($event)"
     ></app-risk-table>

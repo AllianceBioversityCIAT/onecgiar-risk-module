@@ -142,9 +142,21 @@ export class InitiativeDetailsComponent {
   async checkValue(id: number, value: any) {
     await this.riskService.updateRedundant(id, value);
   }
-
+  my_risks: any=null;
   async loadInitiative() {
     this.initiative = await this.initiativeService.getInitiative(this.id);
+    this.my_risks = [
+      ...new Map(
+        this.initiative.risks
+          .filter(
+            (d: any) =>
+              d?.risk_owner && d?.risk_owner?.user?.id == this.user_info.id
+          )
+          .map((d: any) => d)
+          .map((item: any) => [item['risk_id'], item])
+      ).values(),
+    ];
+    console.log('initiative  this.riskOwners', this.my_risks);
     this.dataSource = new MatTableDataSource<any>(
       await this.riskService.getRisks(this.id)
     );
@@ -156,7 +168,7 @@ export class InitiativeDetailsComponent {
       await this.riskService.getRisks(this.id, this.filters)
     );
   }
-  NumberOfRisks:any;
+  NumberOfRisks: any;
   versionId: any;
   initiativeId: any;
   user_info: any;
@@ -172,17 +184,22 @@ export class InitiativeDetailsComponent {
     this.id = +params.id;
     this.initiativeId = params.initiativeId;
     this.riskUsers = await this.riskService.getRiskUsers(this.id);
-    console.log(' riskUsers', this.riskUsers);
+
     this.my_roles = this.riskUsers
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
+    console.log(this.my_roles);
     this.loadInitiative();
   }
 
   canPublish() {
-    return this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD) || this.my_roles.includes(ROLES.COORDINATOR);
+    return (
+      this.user_info.role == 'admin' ||
+      this.my_roles.includes(ROLES.LEAD) ||
+      this.my_roles.includes(ROLES.COORDINATOR)
+    );
   }
-  filters:any
+  filters: any;
   filter(filters: any) {
     this.filters = filters;
     this.loadRisks();
