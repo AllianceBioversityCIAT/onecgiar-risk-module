@@ -338,6 +338,26 @@ export class InitiativeController {
     });
   }
 
+  @Get(':id/versions/latest')
+  @ApiCreatedResponse({
+    description: '',
+    type: Initiative,
+  })
+  getLatestVersons(@Param('id') id: number) {
+    return this.iniService.iniRepository.findOne({
+      where: { parent_id: id },
+      relations: [
+        'risks',
+        'risks.category',
+        'risks.risk_owner',
+        'roles',
+        'roles.user',
+        'created_by',
+      ],
+      order: { id: 'DESC', risks: { id: 'DESC' } },
+    });
+  }
+
   @Get(':id/roles')
   @ApiCreatedResponse({
     description: '',

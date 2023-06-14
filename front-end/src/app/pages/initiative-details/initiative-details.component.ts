@@ -131,11 +131,12 @@ export class InitiativeDetailsComponent {
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.initiativeService.Publish(id, dialogResult);
-          console.log(this.initiative);
+         
           this.toastr.success(
             'Success',
             `Risks for ${this.initiative.name} has been published successfully`
           );
+          this.loadRisks()
         }
       });
   }
@@ -145,6 +146,7 @@ export class InitiativeDetailsComponent {
   my_risks: any=null;
   async loadInitiative() {
     this.initiative = await this.initiativeService.getInitiative(this.id);
+    this.latest_version = await this.initiativeService.getInitiativeLatestVersion(this.id)
     this.my_risks = [
       ...new Map(
         this.initiative.risks
@@ -167,6 +169,11 @@ export class InitiativeDetailsComponent {
     this.dataSource = new MatTableDataSource<any>(
       await this.riskService.getRisks(this.id, this.filters)
     );
+    this.reload = false
+    setTimeout( async() => {
+     await this.loadInitiative()
+      this.reload = true
+    }, 500);
   }
   NumberOfRisks: any;
   versionId: any;
@@ -175,16 +182,19 @@ export class InitiativeDetailsComponent {
   my_roles: string[] = [];
   riskUsers: any;
   id: number = 0;
+  latest_version:any;
+  reload= true
   async ngOnInit() {
     this.user_info = this.userService.getLogedInUser();
     // my_roles
+
 
     const params: any = this.activatedRoute?.snapshot.params;
 
     this.id = +params.id;
     this.initiativeId = params.initiativeId;
     this.riskUsers = await this.riskService.getRiskUsers(this.id);
-
+    this.latest_version = await this.initiativeService.getInitiativeLatestVersion(this.id)
     this.my_roles = this.riskUsers
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);

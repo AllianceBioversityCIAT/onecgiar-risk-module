@@ -82,6 +82,10 @@ export class InitiativeService {
         risk.initiative_id = new_init.id;
         await this.riskService.createRisk(risk);
       }
+      let date = new Date()
+      await this.iniRepository.update(old_init_id,{last_updated_date:date})
+      await this.iniRepository.update(new_init.id,{submit_date:date})
+
     return await this.iniRepository.findOne({
       where: { id: new_init.id },
       relations: ['risks'],

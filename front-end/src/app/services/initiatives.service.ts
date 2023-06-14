@@ -86,6 +86,16 @@ export class InitiativesService extends MainService {
     );
   }
 
+  getInitiativeLatestVersion(initiativeId: number): Promise<any> {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/' + initiativeId+'/versions/latest', {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
+  }
+
   getInitiative(initiativeId: number): Promise<any> {
     return firstValueFrom(
       this.http
