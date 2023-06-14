@@ -94,7 +94,12 @@ export class InitiativeService {
       relations: ['roles'],
     });
     if (!init) throw new NotFoundException();
-    return await this.iniRolesRepository.save(role, { reload: true });
+    const newRole = {
+      initiative_id: initiative_id,
+      email: role.email.toLowerCase(),
+      role: role.role
+    }
+    return await this.iniRolesRepository.save(newRole, { reload: true });
   }
   async syncFromClarisa() {
     try {
