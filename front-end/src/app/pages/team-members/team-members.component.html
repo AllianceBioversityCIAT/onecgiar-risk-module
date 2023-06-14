@@ -2,7 +2,7 @@
     <div class="head">
         <h2 class="primaryColor">Team Members</h2>
         <div class="buttons">
-            <button class="primaryButton" (click)="openNewTeamMemberDialog()">Add New Team Member</button>
+            <button *ngIf="canEdit()" class="primaryButton" (click)="openNewTeamMemberDialog()">Add New Team Member</button>
         </div>
     </div>
     <div class="tableContainer">
