@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
+import { EmailsService } from 'src/emails/emails.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -15,6 +17,7 @@ export class RiskService {
     public mitigationRepository: Repository<Mitigation>,
     @InjectRepository(Initiative)
     public initativeRepository: Repository<Initiative>,
+    private emailsService: EmailsService,
   ) {}
   async updateInitiativeUpdateDateToNow(initiative_id) {
     await this.initativeRepository.update(initiative_id, {
@@ -44,7 +47,7 @@ export class RiskService {
     await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
   }
 
-  async updateRisk(id, risk: Risk) {
+  async updateRisk(id, risk: Risk, user: User) {
     let tobeadded = { ...risk };
     if (tobeadded.mitigations) delete tobeadded.mitigations;
     const created_risk = await this.riskRepository.save(
@@ -60,6 +63,24 @@ export class RiskService {
       );
     }
     await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
+    const initiative: Initiative = await this.initativeRepository.findOne({
+      where: { id: risk.initiative_id },
+      relations: ['roles', 'roles.user'],
+    });
+
+    if (
+      initiative.roles
+        .filter((d) => d.id == risk?.risk_owner_id)
+        .filter((d) => d.user_id == user.id).length
+    )
+      initiative.roles.forEach((role: InitiativeRoles) => {
+        if (
+          (role.role == 'Leader' || role?.role == 'Coordinator') &&
+          role?.user?.id
+        )
+          this.emailsService.sendEmailTobyVarabel(role?.user, 1, 2);
+      });
+
     return created_risk;
   }
   async createRisk(risk: Risk, user: User = null) {

@@ -22,7 +22,7 @@ export class EmailsComponent implements OnInit {
   
   visable = false;
   
-  displayedColumns: string[] = ['id', 'name', 'email', 'status', 'createdAt' , 'action'];
+  displayedColumns: string[] = ['id', 'name','subject', 'email', 'status', 'createdAt' , 'action'];
   emailLogs: any;
   formData: any;
   pipe = new DatePipe('en-US');

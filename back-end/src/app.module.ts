@@ -14,6 +14,7 @@ import { RiskCategoriesModule } from './risk-categories/risk-categories.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { EmailsModule } from './emails/emails.module';
+import { VariablesModule } from './variables/variables.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { EmailsModule } from './emails/emails.module';
     RiskCategoriesModule, 
     AuthModule,
     UsersModule,
+    VariablesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

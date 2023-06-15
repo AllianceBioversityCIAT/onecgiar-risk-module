@@ -13,6 +13,10 @@ export class Email {
 
     @ApiProperty()
     @Column()
+    subject: string;
+
+    @ApiProperty()
+    @Column()
     email: string;
 
     @ApiProperty()

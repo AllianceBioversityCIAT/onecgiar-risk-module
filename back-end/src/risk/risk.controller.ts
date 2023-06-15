@@ -90,13 +90,14 @@ export class RiskController {
     console.log(risk);
     return this.riskService.createRisk(risk, req.user);
   }
+  @UseGuards(JwtAuthGuard)
   @ApiCreatedResponse({
     description: '',
     type: Risk,
   })
   @Put(':id')
-  setRisk(@Body() risk: Risk, @Param('id') id: number) {
-    return this.riskService.updateRisk(id, risk);
+  setRisk(@Body() risk: Risk, @Param('id') id: number, @Request() req) {
+    return this.riskService.updateRisk(id, risk, req.user);
   }
   @Delete(':risk_id')
   @ApiCreatedResponse({

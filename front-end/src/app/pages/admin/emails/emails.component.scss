@@ -33,3 +33,18 @@ mat-card {
 .w-100 {
   width: 100%;
 }
+$pendingColor:  #eccf96;
+$approvedColor: #8fe0a3;
+.areaSpan {
+    padding: 0.4em 0.5em; 
+    color: #fff; 
+    border-radius: 3px;
+}
+.pending {
+    @extend .areaSpan;
+    background-color: $pendingColor;
+}
+.approved {
+    @extend .areaSpan;
+    background-color: $approvedColor;
+}
