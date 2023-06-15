@@ -4,18 +4,20 @@ import { firstValueFrom, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { MainService } from './main.service';
+import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root',
 })
 export class InitiativesService extends MainService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private userService: UserService) {
     super();
   }
 
-  async getExport() {
+  async getExport() { 
+    const userInfo = this.userService.getLogedInUser();
     const data = await firstValueFrom(
       this.http
-        .get(this.backend_url + '/initiative/all/excel', {
+        .get(this.backend_url + `/initiative/all/excel?user=${userInfo.role}`, {
           headers: this.headers,
           responseType: 'blob',
         })
@@ -38,9 +40,10 @@ export class InitiativesService extends MainService {
     );
   }
   async getExportByinititave(id: number, official_code = '') {
+    const userInfo = this.userService.getLogedInUser();
     const data = await firstValueFrom(
       this.http
-        .get(this.backend_url + '/initiative/' + id + '/excel', {
+        .get(this.backend_url + '/initiative/' + id + `/excel?user=${userInfo.role}`, {
           headers: this.headers,
           responseType: 'blob',
         })

@@ -88,7 +88,7 @@ export class InitiativeController {
       order: { ...this.sort(query), risks: { id: 'DESC' } },
     });
   }
-  getTemplate(width = false) {
+  getTemplateAdmin(width = false) {
     return {
       ID: null,
       Initiative: null,
@@ -110,7 +110,7 @@ export class InitiativeController {
     };
   }
 
-  mapTemplate(template, element) {
+  mapTemplateAdmin(template, element) {
     template.ID = element.id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
@@ -130,8 +130,8 @@ export class InitiativeController {
     template['Flag to SGD'] = element.flag;
   }
 
-  prepareDataExcel(risks) {
-    let finaldata = [this.getTemplate(true)];
+  prepareDataExcelAdmin(risks) {
+    let finaldata = [this.getTemplateAdmin(true)];
     let merges = [
       {
         s: { c: 15, r: 0 },
@@ -146,8 +146,8 @@ export class InitiativeController {
     }
     let base = 2;
     risks.forEach((element, indexbase) => {
-      const template = this.getTemplate();
-      this.mapTemplate(template, element);
+      const template = this.getTemplateAdmin();
+      this.mapTemplateAdmin(template, element);
       if (element.mitigations.length) {
         for (let index = 0; index < 15; index++) {
           merges.push({
@@ -166,7 +166,97 @@ export class InitiativeController {
           template.mitigations_status = d.status;
           finaldata.push(template);
         } else {
-          const template2 = this.getTemplate();
+          const template2 = this.getTemplateAdmin();
+          template2.Mitigations = d.description;
+          template2.mitigations_status = d.status;
+          finaldata.push(template2);
+        }
+      });
+    });
+    return { finaldata, merges };
+  }
+
+  getTemplateUser(width = false) {
+    return {
+      ID: null,
+      Initiative: null,
+      Title: null,
+      Description: null,
+      'Risk owner': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+      'Current likelihood': null,
+      'Current impact': null,
+      'Current Risk Level': null,
+      Category: null,
+      'Risk raiser': null,
+      // "Flag to SGD":null,
+      Redundant: false,
+      Mitigations: width ? 'Description' : null,
+      mitigations_status: width ? 'Status' : null,
+    };
+  }
+
+  mapTemplateUser(template, element) {
+    template.ID = element.id;
+    template.Title = element.title;
+    template.Initiative = element.initiative.official_code;
+    template.Description = element.description;
+    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+    template['Current likelihood'] = element.current_likelihood;
+    template['Current impact'] = element.current_impact;
+    template['Current Risk Level'] =
+      element.current_likelihood * element.current_impact;
+    template.Category = element.category.title;
+    template['Risk raiser'] = element.created_by?.full_name;
+    template.Redundant = element.redundant;
+    // template['Flag to SGD'] = element.flag;
+  }
+
+  prepareDataExcelUser(risks) {
+    let finaldata = [this.getTemplateUser(true)];
+    let merges = [
+      {
+        s: { c: 14, r: 0 },
+        e: { c: 16, r: 0 },
+      },
+    ];
+    for (let index = 0; index < 14; index++) {
+      merges.push({
+        s: { c: index, r: 0 },
+        e: { c: index, r: 1 },
+      });
+      // console.log(merges[0].s);
+    }
+
+    let base = 2;
+    risks.forEach((element, indexbase) => {
+      const template = this.getTemplateUser();
+      this.mapTemplateUser(template, element);
+      if (element.mitigations.length) {
+        for (let index = 0; index < 15; index++) {
+          merges.push({
+            s: { c: index, r: base },
+            e: { c: index, r: base + element.mitigations.length - 1 },
+          });
+        }
+        base += element.mitigations.length;
+      } else {
+        finaldata.push(template);
+        base += 1;
+      }
+      element.mitigations.forEach((d, index) => {
+        if (index == 0) {
+          template.Mitigations = d.description;
+          template.mitigations_status = d.status;
+          finaldata.push(template);
+        } else {
+          const template2 = this.getTemplateUser();
           template2.Mitigations = d.description;
           template2.mitigations_status = d.status;
           finaldata.push(template2);
@@ -209,7 +299,7 @@ export class InitiativeController {
     description: '',
     type: Initiative,
   })
-  async exportAlltoExcel() {
+  async exportAlltoExcel(@Query() userRole: any) {
     let ininit = await this.iniService.iniRepository.find({
       select: ['id'],
       where: { parent_id: IsNull() },
@@ -227,27 +317,53 @@ export class InitiativeController {
         'initiative.roles.user',
       ],
     });
-    const file_name = 'All-Risks-.xlsx';
-    var wb = XLSX.utils.book_new();
-    const { finaldata, merges } = this.prepareDataExcel(risks);
-    const ws = XLSX.utils.json_to_sheet(finaldata);
-    ws['!merges'] = merges;
+    if(userRole.user == 'admin') {
+      const file_name = 'All-Risks-.xlsx';
+      var wb = XLSX.utils.book_new();
+      const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
+      const ws = XLSX.utils.json_to_sheet(finaldata);
+      ws['!merges'] = merges;
+  
+      XLSX.utils.book_append_sheet(wb, ws, 'Risks');
+      await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+      const file = createReadStream(
+        join(process.cwd(), 'generated_files', file_name),
+      );
+  
+      setTimeout(async () => {
+        try {
+          await unlink(join(process.cwd(), 'generated_files', file_name));
+        } catch (e) {}
+      }, 9000);
+      return new StreamableFile(file, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        disposition: `attachment; filename="${file_name}"`,
+      });
+    }
+    else {
+      const file_name = 'All-Risks-.xlsx';
+      var wb = XLSX.utils.book_new();
+      const { finaldata, merges } = this.prepareDataExcelUser(risks);
+      const ws = XLSX.utils.json_to_sheet(finaldata);
+      ws['!merges'] = merges;
+  
+      XLSX.utils.book_append_sheet(wb, ws, 'Risks');
+      await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+      const file = createReadStream(
+        join(process.cwd(), 'generated_files', file_name),
+      );
+  
+      setTimeout(async () => {
+        try {
+          await unlink(join(process.cwd(), 'generated_files', file_name));
+        } catch (e) {}
+      }, 9000);
+      return new StreamableFile(file, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        disposition: `attachment; filename="${file_name}"`,
+      });
+    }
 
-    XLSX.utils.book_append_sheet(wb, ws, 'Risks');
-    await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
-    const file = createReadStream(
-      join(process.cwd(), 'generated_files', file_name),
-    );
-
-    setTimeout(async () => {
-      try {
-        await unlink(join(process.cwd(), 'generated_files', file_name));
-      } catch (e) {}
-    }, 9000);
-    return new StreamableFile(file, {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      disposition: `attachment; filename="${file_name}"`,
-    });
   }
 
   @Get(':id/excel')
@@ -255,7 +371,7 @@ export class InitiativeController {
     description: '',
     type: Initiative,
   })
-  async exportExcel(@Param('id') id: number) {
+  async exportExcel(@Param('id') id: number, @Query() userRole: any) {
     let init = await this.iniService.iniRepository.findOne({
       where: { id },
       relations: [
@@ -277,31 +393,61 @@ export class InitiativeController {
 
     const risks = init.risks;
 
-    // to be
-    const { finaldata, merges } = this.prepareDataExcel(risks);
-    const ws = XLSX.utils.json_to_sheet(finaldata);
-    ws['!merges'] = merges;
+    if(userRole.user == 'admin') {
+      // to be
+      const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
+      console.log({ finaldata, merges })
+      const ws = XLSX.utils.json_to_sheet(finaldata);
+      ws['!merges'] = merges;
 
-    XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
-    await XLSX.writeFile(
-      wb,
-      join(process.cwd(), 'generated_files', file_name),
-      { cellStyles: true },
-    );
-    const file = createReadStream(
-      join(process.cwd(), 'generated_files', file_name),
-    );
+      XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+      await XLSX.writeFile(
+        wb,
+        join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
+      );
+      const file = createReadStream(
+        join(process.cwd(), 'generated_files', file_name),
+      );
 
-    setTimeout(async () => {
-      try {
-        await unlink(join(process.cwd(), 'generated_files', file_name));
-      } catch (e) {}
-    }, 9000);
+      setTimeout(async () => {
+        try {
+          await unlink(join(process.cwd(), 'generated_files', file_name));
+        } catch (e) {}
+      }, 9000);
 
-    return new StreamableFile(file, {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      disposition: `attachment; filename="${file_name}"`,
-    });
+      return new StreamableFile(file, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        disposition: `attachment; filename="${file_name}"`,
+      });
+    }
+    else {
+      const { finaldata, merges } = this.prepareDataExcelUser(risks);
+      console.log({ finaldata, merges })
+      const ws = XLSX.utils.json_to_sheet(finaldata);
+      ws['!merges'] = merges;
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+      await XLSX.writeFile(
+        wb,
+        join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
+      );
+      const file = createReadStream(
+        join(process.cwd(), 'generated_files', file_name),
+      );
+
+      setTimeout(async () => {
+        try {
+          await unlink(join(process.cwd(), 'generated_files', file_name));
+        } catch (e) {}
+      }, 9000);
+
+      return new StreamableFile(file, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        disposition: `attachment; filename="${file_name}"`,
+      });
+    }
   }
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
