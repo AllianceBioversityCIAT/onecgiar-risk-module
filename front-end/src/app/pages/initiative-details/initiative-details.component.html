@@ -62,7 +62,7 @@
       </p>
       <p *ngIf="latest_version?.submit_date == initiative?.last_updated_date" style="float: right">
         This initiative risks published in
-        {{ latest_version.submit_date | date : "short" }}
+        {{ latest_version?.submit_date | date : "short" }}
       </p>
     </div>
 

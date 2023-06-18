@@ -1,30 +1,94 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Editor, Toolbar } from 'ngx-editor';
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { AnnouncementFormComponent } from './announcement-form/announcement-form.component';
+import { AnnouncementService } from 'src/app/services/announcement.service';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { SendEmailFormComponent } from './send-email-form/send-email-form.component';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-announcement',
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.scss'],
 })
-export class AnnouncementComponent implements OnInit, OnDestroy {
-  editor: Editor= new Editor();
-  html:string = '';
-  toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    ['link'],
-    ['text_color', 'background_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-  ];
+export class AnnouncementComponent implements OnInit {
+  constructor(private dialog: MatDialog,private announcementService: AnnouncementService,
+    private toster: ToastrService,
+    ){}
+  announcementData:any;
+
 
   ngOnInit(): void {
-    this.editor = new Editor();
+    this.getData();
   }
 
-  // make sure to destory the editor
-  ngOnDestroy(): void {
-    this.editor.destroy();
+
+  displayedColumns: string[] = [
+    'id',
+    'subject',
+    'description',
+    'status',
+    'created_at',
+    'updated_at',
+    'send_date',
+    'actions'
+  ];
+
+  getData() {
+    this.announcementService.getAnnouncement().subscribe(res => {
+      this.announcementData = res;
+    })
+  }
+
+
+  openFormDialog(id:any){
+    const _popup = this.dialog.open(AnnouncementFormComponent,{
+      width:'auto',
+      maxHeight: '650px',
+      data:{
+        id:id
+      }
+    });
+    _popup.afterClosed().subscribe(response => {
+      this.getData();
+    });
+  }
+
+  editannouncement(id: number) {
+    this.openFormDialog(id);
+  }
+
+  sendTest(id: number) {
+    const _popup = this.dialog.open(SendEmailFormComponent,{
+      width:'300px',
+      maxHeight: '200px',
+      data:{
+        id:id,
+      }
+    });
+    _popup.afterClosed().subscribe(response => {
+      this.getData();
+    });
+  }
+
+  sendAll(id: number, status: string) {
+    const _popup = this.dialog.open(ConfirmComponent,{
+      width:'auto',
+      maxHeight: 'auto',
+      data:{
+        id:id,
+        title:'Send to all users',
+        message: 'Are you sure you want to send this Announcement to all users in the system?'
+      }
+    });
+    _popup.afterClosed().subscribe(response => {
+      if(response == true) {
+        this.announcementService.updateAnnouncementStatus(id, status).subscribe(res => {
+          this.getData();
+          this.toster.success('Sent successfully');
+        });
+      }
+    });
   }
 }

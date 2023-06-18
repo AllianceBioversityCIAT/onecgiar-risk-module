@@ -1,0 +1,21 @@
+:host ::ng-deep {
+    .NgxEditor__Wrapper,
+    .NgxEditor {
+      min-height: 300px;
+    }
+  }
+.input{ 
+  width: 100%;
+}
+.footer{ 
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px 0;
+  button:nth-child(2){
+    margin-left: 10px;
+  }
+}
+.alert p {
+  color: red;
+}

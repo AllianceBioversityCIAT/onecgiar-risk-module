@@ -58,6 +58,8 @@ import { EmailBodyDialogComponent } from './components/email-body-dialog/email-b
 import { AnnouncementComponent } from './pages/admin/announcement/announcement.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { HomeComponent } from './pages/home/home.component';
+import { AnnouncementFormComponent } from './pages/admin/announcement/announcement-form/announcement-form.component';
+import { SendEmailFormComponent } from './pages/admin/announcement/send-email-form/send-email-form.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +91,9 @@ import { HomeComponent } from './pages/home/home.component';
     SearchUsersComponent,EmailsComponent,
     EmailBodyDialogComponent,
     AnnouncementComponent,
-    HomeComponent
+    HomeComponent,
+    AnnouncementFormComponent,
+    SendEmailFormComponent
   ],
   imports: [
     BrowserModule,
