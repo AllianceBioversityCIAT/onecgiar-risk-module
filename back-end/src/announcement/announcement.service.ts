@@ -42,6 +42,8 @@ export class AnnouncementService {
                 {
                     where: {id: id}
                 });
+            const updatedDate = new Date();
+            announcement.updatedAt = updatedDate;
             announcement.subject = data.subject;
             announcement.description = data.description;
             return await this.AnnouncementRepository.save(announcement);
@@ -55,9 +57,9 @@ export class AnnouncementService {
                 {
                     where: {id: id}
                 });
-            const date = new Date();
+            const sentDate = new Date();
             announcement.status = !data.status;
-            announcement.sendDate = date;
+            announcement.sendDate = sentDate;
             return await this.AnnouncementRepository.save(announcement);
         } catch (error) {
             console.error(error);

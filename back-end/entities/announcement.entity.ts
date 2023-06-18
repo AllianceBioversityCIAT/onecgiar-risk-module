@@ -25,6 +25,6 @@ export class Announcement {
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', default:null })
+  @Column({ type: 'timestamp', default:null })
   updatedAt: Date;
 }
