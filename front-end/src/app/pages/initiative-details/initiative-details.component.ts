@@ -181,7 +181,9 @@ export class InitiativeDetailsComponent {
   id: number = 0;
   latest_version: any;
   reload = true;
+  publishLocalStoreg!:any;
   async ngOnInit() {
+    this.publishLocalStoreg = localStorage.getItem('Publish');
     this.user_info = this.userService.getLogedInUser();
     // my_roles
 

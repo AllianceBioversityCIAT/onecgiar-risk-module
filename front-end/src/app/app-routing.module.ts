@@ -13,6 +13,7 @@ import { InitiativesComponent } from './pages/initiatives/initiatives.component'
 import { TeamMembersComponent } from './pages/team-members/team-members.component';
 import { VersionDetailsComponent } from './pages/version-details/version-details.component';
 import { VersionsDashboardComponent } from './pages/versions-dashboard/versions-dashboard.component';
+import { SettingComponent } from './pages/admin/setting/setting.component';
 
 const routes: Routes = [
   {
@@ -40,6 +41,10 @@ const routes: Routes = [
       {
         path: 'announcement',
         component: AnnouncementComponent,
+      },
+      {
+        path: 'Setting',
+        component: SettingComponent,
       },
     ],
   },

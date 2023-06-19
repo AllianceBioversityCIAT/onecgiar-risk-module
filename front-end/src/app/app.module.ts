@@ -40,6 +40,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { Safe } from './pipes/safe';
 import { MatCardModule } from '@angular/material/card';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { RiskTableComponent } from './components/risk-table/risk-table.component';
 import { SearchInitiativesComponent } from './components/search-initiatives/search-initiatives.component';
@@ -60,6 +61,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { HomeComponent } from './pages/home/home.component';
 import { AnnouncementFormComponent } from './pages/admin/announcement/announcement-form/announcement-form.component';
 import { SendEmailFormComponent } from './pages/admin/announcement/send-email-form/send-email-form.component';
+import { SettingComponent } from './pages/admin/setting/setting.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +95,8 @@ import { SendEmailFormComponent } from './pages/admin/announcement/send-email-fo
     AnnouncementComponent,
     HomeComponent,
     AnnouncementFormComponent,
-    SendEmailFormComponent
+    SendEmailFormComponent,
+    SettingComponent
   ],
   imports: [
     BrowserModule,
@@ -119,6 +122,7 @@ import { SendEmailFormComponent } from './pages/admin/announcement/send-email-fo
     MatDividerModule,
     MatProgressBarModule,
     MatPaginatorModule,
+    MatSlideToggleModule,
     NgxEditorModule,
     ToastrModule.forRoot(),
   ],
