@@ -6,6 +6,7 @@ import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
 import { EmailsService } from 'src/emails/emails.service';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -18,6 +19,8 @@ export class RiskService {
     @InjectRepository(Initiative)
     public initativeRepository: Repository<Initiative>,
     private emailsService: EmailsService,
+    @InjectRepository(InitiativeRoles)
+    public initativeRolesRepository: Repository<InitiativeRoles>,
   ) {}
   async updateInitiativeUpdateDateToNow(initiative_id) {
     await this.initativeRepository.update(initiative_id, {
@@ -100,6 +103,16 @@ export class RiskService {
     }
 
     await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
+
+    if (created_risk?.risk_owner_id) {
+      const risk_owner_role = await this.initativeRolesRepository.findOne({
+        where: { id: created_risk.risk_owner_id },
+        relations: ['user'],
+      });
+      if (risk_owner_role?.user)
+        this.emailsService.sendEmailTobyVarabel(risk_owner_role?.user, 5, 6);
+    }
+
     return created_risk;
   }
   async updateMitigation(risk_id, id, mitigation: Mitigation) {

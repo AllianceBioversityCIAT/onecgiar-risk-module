@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   IPaginationOptions,
@@ -18,7 +18,7 @@ export class EmailsService {
     private variabelService: VariablesService,
     private usersService: UsersService,
   ) {}
-
+  private readonly logger = new Logger(EmailsService.name);
   async sendEmailWithSendGrid(to, subject, html) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
@@ -54,7 +54,7 @@ export class EmailsService {
     name: 'email-notifications',
   })
   private async sendEmailNotifications() {
-    console.log('email-notifications');
+    this.logger.log('Email Notifications Runing');
     let emails = await this.getEmailsByStatus(false);
     if (emails.length <= 10)
       emails.forEach(async (email) => {

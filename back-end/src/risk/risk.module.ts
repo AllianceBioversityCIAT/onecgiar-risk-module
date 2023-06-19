@@ -14,6 +14,7 @@ import { Variables } from 'entities/variables.entity';
 import { EmailsService } from 'src/emails/emails.service';
 import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
+import { InitiativeRoles } from 'entities/initiative-roles.entity';
 
 @Module({
   controllers: [RiskController],
@@ -26,6 +27,7 @@ import { UsersService } from 'src/users/users.service';
       Email,
       Variables,
       User,
+      InitiativeRoles
     ]),
     SharedModule,
   ],
