@@ -14,3 +14,10 @@
 .mt-1 {
     margin-top: 5px !important;
 }
+.message-text{
+    display: flex;
+    align-items: center;
+    .mat-icon {
+        margin-left: 5px;
+    }
+}

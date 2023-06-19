@@ -60,9 +60,10 @@
         This is a draft version until it get published. last update at
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
-      <p *ngIf="latest_version?.submit_date == initiative?.last_updated_date" style="float: right">
+      <p class="message-text" *ngIf="latest_version?.submit_date == initiative?.last_updated_date" style="float: right">
         This initiative risks published in
         {{ latest_version?.submit_date | date : "short" }}
+        <mat-icon  matTooltip="Any changes to the published version will change convert it into the draft mode.">help_outline</mat-icon>
       </p>
     </div>
 
