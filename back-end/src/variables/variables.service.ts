@@ -7,4 +7,12 @@ import { Repository } from 'typeorm';
 export class VariablesService {
     constructor(  @InjectRepository(Variables)
     public variablesRepository: Repository<Variables>,){}
+    getVariable() {
+        return this.variablesRepository.findOne({where: { id: 9 }})
+    }
+    async changeVariable(value: any) {
+        const publish =  await this.variablesRepository.findOne({ where: { id: 9 } });
+        publish.value =  value.status;
+        return await this.variablesRepository.save(publish);
+    }
 }

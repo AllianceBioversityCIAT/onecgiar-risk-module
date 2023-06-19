@@ -20,7 +20,7 @@
           Published Versions
         </button>
         <button
-          [disabled]="!canPublish() || this.NumberOfRisks <= 0 || publishLocalStoreg == 'false'"
+          [disabled]="!canPublish() || this.NumberOfRisks <= 0 || publishStatus == '0'"
           (click)="publish(initiative.id)"
           [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 }"
           class="primaryButton mt-1"

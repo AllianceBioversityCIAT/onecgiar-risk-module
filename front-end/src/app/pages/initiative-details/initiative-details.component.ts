@@ -18,6 +18,7 @@ import { PublishDialogComponent } from 'src/app/components/publish-dialog/publis
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 import { UserService } from 'src/app/services/user.service';
+import { VariableService } from 'src/app/services/variable.service';
 
 @Component({
   selector: 'publish-dialog',
@@ -51,7 +52,8 @@ export class InitiativeDetailsComponent {
     private initiativeService: InitiativesService,
     private riskService: RiskService,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private variableService: VariableService
   ) {}
   editRisk(data: any) {
     const dialogRef = this.dialog.open(NewRiskComponent, {
@@ -181,9 +183,11 @@ export class InitiativeDetailsComponent {
   id: number = 0;
   latest_version: any;
   reload = true;
-  publishLocalStoreg!:any;
+  publishStatus!:any;
   async ngOnInit() {
-    this.publishLocalStoreg = localStorage.getItem('Publish');
+    this.variableService.getPublishStatus().subscribe(val => {
+      this.publishStatus = val.value
+    })
     this.user_info = this.userService.getLogedInUser();
     // my_roles
 
