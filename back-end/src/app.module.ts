@@ -16,6 +16,8 @@ import { UsersModule } from './users/users.module';
 import { EmailsModule } from './emails/emails.module';
 import { VariablesModule } from './variables/variables.module';
 import { EventsModule } from './events/events.module';
+import { AnnouncementModule } from './announcement/announcement.module';
+import { MitigationStatusModule } from './mitigation-status/mitigation-status.module';
 
 @Module({
   imports: [
@@ -40,7 +42,9 @@ import { EventsModule } from './events/events.module';
     AuthModule,
     UsersModule,
     VariablesModule,
-    EventsModule
+    EventsModule,
+    AnnouncementModule,
+    MitigationStatusModule
   ],
   controllers: [AppController],
   providers: [AppService],

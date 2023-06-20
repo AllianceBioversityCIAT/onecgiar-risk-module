@@ -54,6 +54,7 @@ export class RiskController {
         'category',
         'initiative',
         'mitigations',
+        'mitigations.status',
         'created_by',
         'risk_owner',
       ],
@@ -72,6 +73,7 @@ export class RiskController {
         'category',
         'initiative',
         'mitigations',
+        'mitigations.status',
         'created_by',
         'risk_owner',
       ],
@@ -97,6 +99,10 @@ export class RiskController {
   })
   @Put(':id')
   setRisk(@Body() risk: Risk, @Param('id') id: number, @Request() req) {
+    console.log(risk);
+    console.log(id);
+    // console.log( req.user);
+
     return this.riskService.updateRisk(id, risk, req.user);
   }
   @Delete(':risk_id')

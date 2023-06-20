@@ -70,7 +70,7 @@ export class InitiativeService {
 
     const old_Risks = await this.riskService.riskRepository.find({
       where: { initiative_id: old_init_id },
-      relations: ['mitigations'],
+      relations: ['mitigations','mitigations.status'],
     });
     if (old_Risks.length)
       for (let risk of old_Risks) {

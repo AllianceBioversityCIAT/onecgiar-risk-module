@@ -17,6 +17,7 @@ import { NewProposedComponent } from '../new-proposed/new-proposed.component';
 import jwt_decode from 'jwt-decode';
 import { Socket } from 'ngx-socket-io';
 import { AppSocket } from 'src/app/services/socket.service';
+import { MitigationStatusService } from 'src/app/services/mitigation-status.service';
 @Component({
   selector: 'app-new-risk',
   templateUrl: './new-risk.component.html',
@@ -30,7 +31,8 @@ export class NewRiskComponent {
     @Inject(MAT_DIALOG_DATA) public data: any = {},
     private riskService: RiskService,
     private toastr: ToastrService,
-    private socket: AppSocket
+    private socket: AppSocket,
+    private mitigationService: MitigationStatusService
   ) {}
 
   riskApi: any = null;
@@ -85,7 +87,13 @@ export class NewRiskComponent {
       );
     }
   }
-
+  actions:any
+  async getMitigationActions(){
+   this.actions = await this.mitigationService.getMitigation()
+  }
+  getStatusByID(id:number){
+   return  this.actions.filter((d:any)=>d.id == id)[0].title
+  }
   async submit() {
     this.newRiskForm.markAllAsTouched();
     this.newRiskForm.updateValueAndValidity();
@@ -181,6 +189,7 @@ export class NewRiskComponent {
 
   async ngOnInit() {
     this.populateNewRiskForm();
+    this.getMitigationActions();
     this.riskCategories = await this.riskService.getRiskCategories();
     if (this?.data?.initiative_id || this?.data?.risk?.initiative_id)
       this.riskUsers = await this.riskService.getRiskUsers(

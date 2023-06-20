@@ -30,7 +30,7 @@ export class RiskService {
   async setMitigation(risk_id, mitigation: Mitigation) {
     let risk = await this.riskRepository.findOne({
       where: { id: risk_id },
-      relations: ['mitigations', 'risk_owner'],
+      relations: ['mitigations','mitigations.status', 'risk_owner'],
     });
     if (!risk) throw new NotFoundException();
     return await this.mitigationRepository.save(mitigation, { reload: true });

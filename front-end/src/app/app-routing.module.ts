@@ -14,6 +14,7 @@ import { TeamMembersComponent } from './pages/team-members/team-members.componen
 import { VersionDetailsComponent } from './pages/version-details/version-details.component';
 import { VersionsDashboardComponent } from './pages/versions-dashboard/versions-dashboard.component';
 import { SettingComponent } from './pages/admin/setting/setting.component';
+import { MitigationStatusComponent } from './pages/admin/mitigation-status/mitigation-status.component';
 
 const routes: Routes = [
   {
@@ -43,8 +44,12 @@ const routes: Routes = [
         component: AnnouncementComponent,
       },
       {
-        path: 'Setting',
+        path: 'Settings',
         component: SettingComponent,
+      },
+      {
+        path: 'Mitigation-status',
+        component: MitigationStatusComponent,
       },
     ],
   },

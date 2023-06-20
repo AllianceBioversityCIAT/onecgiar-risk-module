@@ -210,7 +210,7 @@ export class RiskTableComponent {
     const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(
-        `<tr style="border:none !important;"><td style="padding-right: 5px;border:none !important;width:65%;border-top: 1px solid #e0e0e0 !important;text-align: justify;">${mitigation.description}</td><td style="padding-left: 5px;border:none !important;;width:25%;border-top: 1px solid #e0e0e0 !important;">${mitigation.status}</td></tr>`
+        `<tr style="border:none !important;"><td style="padding-right: 5px;border:none !important;width:65%;border-top: 1px solid #e0e0e0 !important;text-align: justify;">${mitigation.description}</td><td style="padding-left: 5px;border:none !important;;width:25%;border-top: 1px solid #e0e0e0 !important;">${mitigation?.status?.title}</td></tr>`
       );
     });
     let html = `

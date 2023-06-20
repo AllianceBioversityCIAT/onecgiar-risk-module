@@ -7,6 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Risk } from './risk.entity';
+import { MitigationStatus } from './mitigation-status.entity';
 
 @Entity()
 export class Mitigation {
@@ -22,8 +23,12 @@ export class Mitigation {
   @ApiProperty()
   @Column({type:'text'})
   description: string;
+
   @ApiProperty()
   @Column()
-  status: string;
-  
+  mitigation_status_id: number;
+
+  @ManyToOne(() => MitigationStatus, (mitigation_status) => mitigation_status.mitigations,{onUpdate:'CASCADE',onDelete:'CASCADE'})
+  @JoinColumn({ name: 'mitigation_status_id' })
+  status: MitigationStatus;
 }

@@ -290,7 +290,7 @@
             <th class="big bold spacing" mat-header-cell *matHeaderCellDef>
               Status of Action
             </th>
-            <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+            <td mat-cell *matCellDef="let element">{{ element?.status?.title || getStatusByID(element?.mitigation_status_id) }}</td>
           </ng-container>
 
           <ng-container matColumnDef="Actions">

@@ -311,6 +311,7 @@ export class InitiativeController {
         'category',
         'created_by',
         'mitigations',
+        'mitigations.status',
         'risk_owner',
         'risk_owner.user',
         'initiative.roles',

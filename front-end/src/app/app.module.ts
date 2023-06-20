@@ -65,6 +65,8 @@ import { SettingComponent } from './pages/admin/setting/setting.component';
 import { AppSocket } from './services/socket.service';
 import { AvatarModule, AvatarSource } from 'ngx-avatars';
 const avatarSourcesOrder = [AvatarSource.INITIALS];
+import { MitigationStatusComponent } from './pages/admin/mitigation-status/mitigation-status.component';
+import { MitigationFormComponent } from './pages/admin/mitigation-status/mitigation-form/mitigation-form.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +101,9 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     HomeComponent,
     AnnouncementFormComponent,
     SendEmailFormComponent,
-    SettingComponent
+    SettingComponent,
+    MitigationStatusComponent,
+    MitigationFormComponent
   ],
   imports: [
     BrowserModule,

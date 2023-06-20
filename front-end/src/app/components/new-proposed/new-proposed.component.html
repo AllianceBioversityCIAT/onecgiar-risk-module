@@ -19,15 +19,15 @@
           >
         </mat-form-field>
         <mat-form-field class="w-90" appearance="outline">
-            <mat-select placeholder="Mitigation Action" formControlName="status">
-              <mat-option *ngFor="let action of Actions" [value]="action.value">
-                {{action.viewValue}}
-                  <mat-icon  matTooltip="{{action.toolTip}}" matSuffix>help_outline</mat-icon>
+            <mat-select placeholder="Mitigation Action" formControlName="mitigation_status_id">
+              <mat-option *ngFor="let action of Actions" [value]="action.id">
+                {{action.title}}
+                  <mat-icon  matTooltip="{{action.description}}" matSuffix>help_outline</mat-icon>
               </mat-option>
              
             </mat-select>
             <mat-icon  matTooltip="Info about the action" matSuffix>help_outline</mat-icon>
-          <mat-error class="error" *ngIf="proposedForm.controls['status'].errors?.['required']">Action status is required</mat-error>
+          <mat-error class="error" *ngIf="proposedForm.controls['mitigation_status_id'].errors?.['required']">Action status is required</mat-error>
         </mat-form-field>
         
         <div class="end">
