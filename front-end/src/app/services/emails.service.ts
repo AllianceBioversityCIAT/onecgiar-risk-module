@@ -11,7 +11,7 @@ export class EmailsService {
   get headers() {
     return {
       'content-type': 'application/json',
-      'authorization': 'Bearer ' + localStorage.getItem('token'),
+      'authorization': 'Bearer ' + localStorage.getItem('access_token'),
     }
   }
 

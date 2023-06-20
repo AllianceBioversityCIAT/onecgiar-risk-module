@@ -1,6 +1,6 @@
 
-    <div class="tableContainer">
-      <div #pdfcontent id="pdfcontent" class="table">
+    <div class="tableContainer"  *ngIf="connection" >
+      <div #pdfcontent id="pdfcontent"class="table">
         <table  mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="ID">
             <th
@@ -261,6 +261,7 @@
               *matCellDef="let element"
               style="min-width: 105px"
             >
+            <ng-container *ngIf="!locked[element.id]" >
               <button
                 matTooltip="Update"
                 class="actionButton"
@@ -301,6 +302,11 @@
                   />
                 </svg>
               </button>
+            </ng-container>
+            <ng-container  *ngIf="locked[element.id]">
+              <ngx-avatars size="35" [matTooltip]="locked[element.id]?.user?.full_name +' is editing'" [name]="locked[element.id]?.user?.full_name"></ngx-avatars>
+            </ng-container>
+
             </td>
           </ng-container>
           <ng-container  matColumnDef="OwnerActions" stickyEnd>

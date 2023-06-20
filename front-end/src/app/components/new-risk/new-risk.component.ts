@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
   MatDialog,
@@ -15,6 +15,8 @@ import {
 } from '../confirm/confirm.component';
 import { NewProposedComponent } from '../new-proposed/new-proposed.component';
 import jwt_decode from 'jwt-decode';
+import { Socket } from 'ngx-socket-io';
+import { AppSocket } from 'src/app/services/socket.service';
 @Component({
   selector: 'app-new-risk',
   templateUrl: './new-risk.component.html',
@@ -27,28 +29,38 @@ export class NewRiskComponent {
     private dialogRef: MatDialogRef<NewRiskComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any = {},
     private riskService: RiskService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private socket: AppSocket
   ) {}
 
   riskApi: any = null;
 
   errorMessage: any = '';
   riskCategories: any;
-  riskUsers:any;
+  riskUsers: any;
   newRiskForm: any;
-  user_info:any;
+  user_info: any;
 
   populateNewRiskForm() {
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       this.user_info = jwt_decode(access_token);
     }
+    if (this.data?.risk?.id)
+      this.socket.emit('risk-lock', this.data?.risk?.id);
+
     this.newRiskForm = this.fb.group({
       risk_raiser: [this.user_info.email],
       risk_owner_id: [this?.data?.risk?.risk_owner?.id, Validators.required],
       category_id: [this?.data?.risk?.category.id, Validators.required],
-      title: [this?.data?.risk?.title,[ Validators.required, WordCountValidators.max(50)]],
-      description: [this?.data?.risk?.description, [Validators.required, WordCountValidators.max(150)]],
+      title: [
+        this?.data?.risk?.title,
+        [Validators.required, WordCountValidators.max(50)],
+      ],
+      description: [
+        this?.data?.risk?.description,
+        [Validators.required, WordCountValidators.max(150)],
+      ],
       target_likelihood: [
         String(this?.data?.risk?.target_likelihood | 0),
         Validators.required,
@@ -170,7 +182,9 @@ export class NewRiskComponent {
   async ngOnInit() {
     this.populateNewRiskForm();
     this.riskCategories = await this.riskService.getRiskCategories();
-    if(this?.data?.initiative_id || this?.data?.risk?.initiative_id)
-    this.riskUsers = await this.riskService.getRiskUsers(this?.data?.initiative_id | this?.data?.risk?.initiative_id);
+    if (this?.data?.initiative_id || this?.data?.risk?.initiative_id)
+      this.riskUsers = await this.riskService.getRiskUsers(
+        this?.data?.initiative_id | this?.data?.risk?.initiative_id
+      );
   }
 }

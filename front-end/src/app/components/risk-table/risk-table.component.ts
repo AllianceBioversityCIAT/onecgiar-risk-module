@@ -19,6 +19,8 @@ import {
 import { NewRiskComponent } from '../new-risk/new-risk.component';
 import { ROLES } from '../new-team-member/new-team-member.component';
 import { jsPDF } from 'jspdf';
+import { AppSocket } from 'src/app/services/socket.service';
+import { LoadingService } from 'src/app/services/loading.service';
 @Component({
   selector: 'app-risk-table',
   templateUrl: './risk-table.component.html',
@@ -32,7 +34,9 @@ export class RiskTableComponent {
     private initiativeService: InitiativesService,
     private riskService: RiskService,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private socket: AppSocket,
+    private loading: LoadingService
   ) {}
   @Input() dataSource: any;
 
@@ -95,7 +99,20 @@ export class RiskTableComponent {
   initiativeId: any;
   riskUsers: any;
   my_roles: any;
+  locked: any;
+  connection = true;
   async ngOnInit() {
+    this.socket.on('locked', (data: any) => {
+      this.locked = data;
+      console.log('locked = >>>>>>>>', data);
+    });
+    this.socket.on('connect', () => {
+      this.connection = true;
+    });
+    this.socket.on('disconnect', () => {
+      this.dialog.closeAll();
+      this.connection = false;
+    });
     this.savePdf.subscribe(() => {
       this.SavePDF();
     });
@@ -131,11 +148,15 @@ export class RiskTableComponent {
     if (this.canEdit() && !this.showingVersion && !this.toPdf)
       this.displayedColumns.push('Actions');
     setTimeout(() => {
-      if (this.my_risks?.length && !this.canEdit()) this.displayedColumns.push('OwnerActions');
+      if (this.my_risks?.length && !this.canEdit())
+        this.displayedColumns.push('OwnerActions');
       console.log('OwnerActions', this.my_risks);
     }, 1000);
   }
-
+  unlock(risk_id: any) {
+    console.log('unlock');
+    this.socket.emit('risk-unlock', risk_id);
+  }
   editRisk(data: any) {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
@@ -144,6 +165,7 @@ export class RiskTableComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       this.refresh.emit(result);
+      this.unlock(data.id);
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -7,6 +7,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Socket } from 'ngx-socket-io';
 import { ToastrService } from 'ngx-toastr';
 import {
   ConfirmComponent,
@@ -17,6 +18,7 @@ import { ROLES } from 'src/app/components/new-team-member/new-team-member.compon
 import { PublishDialogComponent } from 'src/app/components/publish-dialog/publish-dialog.component';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
+import { AppSocket } from 'src/app/services/socket.service';
 import { UserService } from 'src/app/services/user.service';
 import { VariableService } from 'src/app/services/variable.service';
 
@@ -27,8 +29,7 @@ import { VariableService } from 'src/app/services/variable.service';
 export class PublishDialog {
   constructor(
     public dialogRef: MatDialogRef<PublishDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private toastr: ToastrService
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   onNoClick(): void {
@@ -44,7 +45,7 @@ export class PublishDialog {
   templateUrl: './initiative-details.component.html',
   styleUrls: ['./initiative-details.component.scss'],
 })
-export class InitiativeDetailsComponent {
+export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
   constructor(
     public router: Router,
     public dialog: MatDialog,
@@ -53,18 +54,11 @@ export class InitiativeDetailsComponent {
     private riskService: RiskService,
     private toastr: ToastrService,
     private userService: UserService,
-    private variableService: VariableService
+    private variableService: VariableService,
+    private socket: AppSocket
   ) {}
-  editRisk(data: any) {
-    const dialogRef = this.dialog.open(NewRiskComponent, {
-      height: '90vh',
-      data: { taskRole: 'edit', risk: data },
-    });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      this.loadRisks();
-    });
-  }
+
   async deleteRisk(risk: any) {
     this.dialog
       .open(ConfirmComponent, {
@@ -183,11 +177,8 @@ export class InitiativeDetailsComponent {
   id: number = 0;
   latest_version: any;
   reload = true;
-  publishStatus!:any;
+  publishLocalStoreg!: any;
   async ngOnInit() {
-    this.variableService.getPublishStatus().subscribe(val => {
-      this.publishStatus = val.value
-    })
     this.user_info = this.userService.getLogedInUser();
     // my_roles
 
@@ -203,8 +194,14 @@ export class InitiativeDetailsComponent {
       .map((d: any) => d.role);
     console.log(this.my_roles);
     this.loadInitiative();
+     
+    this.socket.connect()
+ 
   }
-
+  
+  ngOnDestroy(): void {
+    this.socket.disconnect()
+  }
   canPublish() {
     return (
       this.user_info.role == 'admin' ||

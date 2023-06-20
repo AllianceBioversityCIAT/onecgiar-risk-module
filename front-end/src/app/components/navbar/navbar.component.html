@@ -10,8 +10,8 @@
   </div>
   <div class="currentUser">
     <button mat-raised-button color="primary" routerLink="/admin"  *ngIf="user_info?.role =='admin'" >Admin area</button>
-
-    <button mat-raised-button color="primary" (click)="login()" >{{ user_info?.id? user_info.full_name:'Login' }}</button>
+    <ngx-avatars *ngIf="user_info" size="35" matTooltip="Logout" (clickOnAvatar)="login()" [name]="user_info?.full_name"></ngx-avatars>
+    <button *ngIf="!user_info" mat-raised-button color="primary" (click)="login()" > Login</button>
 
   </div>
 </nav>

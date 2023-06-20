@@ -18,8 +18,6 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('request.url',request.url)
-    
     this._loading.setLoading(true, request.url);
     return next
       .handle(request)

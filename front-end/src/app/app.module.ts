@@ -62,6 +62,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { AnnouncementFormComponent } from './pages/admin/announcement/announcement-form/announcement-form.component';
 import { SendEmailFormComponent } from './pages/admin/announcement/send-email-form/send-email-form.component';
 import { SettingComponent } from './pages/admin/setting/setting.component';
+import { AppSocket } from './services/socket.service';
+import { AvatarModule, AvatarSource } from 'ngx-avatars';
+const avatarSourcesOrder = [AvatarSource.INITIALS];
 
 @NgModule({
   declarations: [
@@ -125,8 +128,11 @@ import { SettingComponent } from './pages/admin/setting/setting.component';
     MatSlideToggleModule,
     NgxEditorModule,
     ToastrModule.forRoot(),
+    AvatarModule.forRoot({
+      sourcePriorityOrder: avatarSourcesOrder
+    })
   ],
-  providers: [BreadcrumbService, 
+  providers: [BreadcrumbService, AppSocket,
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

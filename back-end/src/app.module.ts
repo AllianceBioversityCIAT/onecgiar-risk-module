@@ -15,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { EmailsModule } from './emails/emails.module';
 import { VariablesModule } from './variables/variables.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { VariablesModule } from './variables/variables.module';
     AuthModule,
     UsersModule,
     VariablesModule,
+    EventsModule
   ],
   controllers: [AppController],
   providers: [AppService],
