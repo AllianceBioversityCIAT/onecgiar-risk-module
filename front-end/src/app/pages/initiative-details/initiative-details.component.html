@@ -22,7 +22,7 @@
         <button
           [disabled]="!canPublish() || this.NumberOfRisks <= 0 || publishStatus == '0'"
           (click)="publish(initiative.id)"
-          [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 }"
+          [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 || publishStatus == '0'}"
           class="primaryButton mt-1"
         >
           Publish
