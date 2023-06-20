@@ -58,8 +58,6 @@ export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
     private socket: AppSocket
   ) {}
 
-  publishStatus='0'
-
   async deleteRisk(risk: any) {
     this.dialog
       .open(ConfirmComponent, {
