@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import {
   MatDialog,
   MatDialogRef,
@@ -79,6 +79,7 @@ export class NewRiskComponent {
         String(this?.data?.risk?.current_impact | 0),
         Validators.required,
       ],
+      due_date: [ this?.data?.risk?.due_date, (c: AbstractControl) => (new Date(c.value).getTime() < Date.now() ? { invalid: true } : null) ]
     });
 
     if (this?.data?.risk?.mitigations) {
@@ -188,6 +189,7 @@ export class NewRiskComponent {
   proposed = new MatTableDataSource<any>([]);
 
   async ngOnInit() {
+    console.log(this.data)
     this.populateNewRiskForm();
     this.getMitigationActions();
     this.riskCategories = await this.riskService.getRiskCategories();

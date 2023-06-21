@@ -69,6 +69,8 @@ import { MitigationFormComponent } from './pages/admin/mitigation-status/mitigat
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -136,10 +138,12 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
       sourcePriorityOrder: avatarSourcesOrder
     }),
     NgSelectModule,
-    DragDropModule
+    DragDropModule,
     
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
-  providers: [BreadcrumbService, AppSocket,
+  providers: [BreadcrumbService, AppSocket,  MatDatepickerModule, 
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

@@ -153,6 +153,20 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="due date">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+              style="min-width: 150px"
+            >
+            Deu date to reach target level
+            </th>
+            <td class="center" mat-cell *matCellDef="let element">
+              {{ element.due_date |  date : 'dd/MM/yyyy'}}
+            </td>
+          </ng-container>
+
           <ng-container matColumnDef="Mitigation Action">
             <th
               class="big bold center spacing"

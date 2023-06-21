@@ -103,6 +103,14 @@
         margin-top: 0.5em;
         color: rgb(233, 91, 91);
     }
+    .date-section {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        .input {
+            margin-left: 1em;
+        }
+    }
 }
 .mt-2 {
     margin-top: 2em;
@@ -118,3 +126,15 @@
 }
 
 
+::ng-deep .mat-calendar-content table td{
+    border-left: none !important;
+    border-bottom:  none !important;
+}
+::ng-deep .mat-calendar-content table {
+    border: none !important;
+}
+
+::ng-deep .mat-calendar-table-header th {
+    border-left: none !important;
+    border-bottom:  none !important;
+}

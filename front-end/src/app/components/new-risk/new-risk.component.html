@@ -261,6 +261,20 @@
           }}
         </p>
       </div>
+      <div class="date-section">
+        <h2>
+          Deu date to reach target level
+        </h2>
+        <mat-form-field class="input">
+          <mat-label>Due date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="due_date">
+          <mat-datepicker-toggle matIconSuffix [for]="picker">
+            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="!newRiskForm.controls.date?.valid">Error date</mat-error>
+        </mat-form-field>
+      </div>
       <hr />
       <div class="head">
         <h2>
