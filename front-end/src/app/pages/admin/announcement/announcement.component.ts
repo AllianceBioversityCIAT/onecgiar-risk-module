@@ -35,10 +35,8 @@ export class AnnouncementComponent implements OnInit {
     'actions'
   ];
 
-  getData() {
-    this.announcementService.getAnnouncement().subscribe(res => {
-      this.announcementData = res;
-    })
+  async getData() {
+    this.announcementData = await this.announcementService.getAnnouncement();
   }
 
 
@@ -82,12 +80,11 @@ export class AnnouncementComponent implements OnInit {
         message: 'Are you sure you want to send this Announcement to all users in the system?'
       }
     });
-    _popup.afterClosed().subscribe(response => {
+    _popup.afterClosed().subscribe(async response => {
       if(response == true) {
-        this.announcementService.updateAnnouncementStatus(id, status).subscribe(res => {
-          this.getData();
-          this.toster.success('Sent successfully');
-        });
+        await this.announcementService.updateAnnouncementStatus(id, status);
+        this.getData();
+        this.toster.success('Sent successfully');
       }
     });
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MainService } from './main.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +12,12 @@ export class VariableService  extends MainService {
     super();
   }
 
-  getPublishStatus(): Observable<any> {
-    const url = this.backend_url + '/variables/system-publish';
-    return this.http.get(url, this.headers);
+  async getPublishStatus() {
+    return firstValueFrom(this.http.get(this.backend_url + '/variables/system-publish', this.headers).pipe(map(d=>d))).catch((e) => false);
   }
 
-  updatePublishStatus(status: any): Observable<any> {
+  async updatePublishStatus(status: any) {
     const data = {status: status};
-    const url = this.backend_url + `/variables/update-system-publish`;
-    return this.http.patch(url, data ,this.headers);
+    return firstValueFrom(this.http.patch(this.backend_url + `/variables/update-system-publish`, data ,this.headers).pipe(map(d=>d))).catch((e) => false);
   }
 }

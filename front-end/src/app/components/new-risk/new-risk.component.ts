@@ -89,7 +89,7 @@ export class NewRiskComponent {
   }
   actions:any
   async getMitigationActions(){
-   this.actions = await this.mitigationService.getMitigation()
+   this.actions = await this.mitigationService.getMitigationStatus()
   }
   getStatusByID(id:number){
    return  this.actions.filter((d:any)=>d.id == id)[0].title

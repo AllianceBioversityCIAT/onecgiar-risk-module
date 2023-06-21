@@ -55,6 +55,6 @@ export class NewProposedComponent {
     this.getMitigationAction();
   }
  async getMitigationAction(){
-    this.Actions = await this.mitigationService.getMitigation()
+    this.Actions = await this.mitigationService.getMitigationStatus()
   }
 }

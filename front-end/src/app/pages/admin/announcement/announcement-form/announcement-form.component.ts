@@ -18,7 +18,7 @@ export class AnnouncementFormComponent implements OnInit, OnDestroy {
     private toster: ToastrService,
     ){}
 
-
+  dataToEdit:any;
   editor: Editor= new Editor();
   html:string = '';
   toolbar: Toolbar = [
@@ -50,35 +50,32 @@ export class AnnouncementFormComponent implements OnInit, OnDestroy {
     this.editor.destroy();
   }
 
-  onSubmit() {
+  async onSubmit() {
     const announcemenId = this.announcementForm.getRawValue().id;
     if(announcemenId != '' && announcemenId != null){
       if(this.announcementForm.valid){
-        this.announcementService.updateAnnouncement(announcemenId ,this.announcementForm.value).subscribe(response => {
-          this.onClose();
-          this.toster.success('updated successfully');
-        });
+        this.announcementService.updateAnnouncement(announcemenId ,this.announcementForm.value);
+        this.onClose();
+        this.toster.success('updated successfully');
       }
     }
     else{
       if(this.announcementForm.valid){
-        this.announcementService.addAnnouncement(this.announcementForm.value).subscribe(res => {
-          this.toster.success('Added successfully');
-          this.onClose();
-        });
+        this.announcementService.addAnnouncement(this.announcementForm.value);
+        this.toster.success('Added successfully');
+        this.onClose();
       }
     }
   }
 
 
-  setValue() {
+  async setValue() {
     if(this.announcementId.id != '' && this.announcementId.id != null){
-      this.announcementService.getAnnouncementById(this.announcementId.id).subscribe(vaule => {
-        this.announcementForm.patchValue({
-          id: vaule[0].id,
-          subject: vaule[0].subject,
-          description: vaule[0].description,
-        });
+      this.dataToEdit = await this.announcementService.getAnnouncementById(this.announcementId.id);
+      this.announcementForm.patchValue({
+        id: this.dataToEdit[0].id,
+        subject: this.dataToEdit[0].subject,
+        description: this.dataToEdit[0].description,
       });
     }
   }

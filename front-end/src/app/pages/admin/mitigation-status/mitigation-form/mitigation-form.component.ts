@@ -9,7 +9,7 @@ import { MitigationStatusService } from 'src/app/services/mitigation-status.serv
   styleUrls: ['./mitigation-form.component.scss']
 })
 export class MitigationFormComponent implements OnInit{
-
+  dataToEdit: any;
   constructor(   
   private mitigationStatusService: MitigationStatusService,
   @Inject(MAT_DIALOG_DATA) public data:any,
@@ -28,36 +28,33 @@ export class MitigationFormComponent implements OnInit{
   });
 
 
-  onSubmit() {
+  async onSubmit() {
     const id = this.mitigationForm.getRawValue().id;
     if(id != '' && id != null){
       if(this.mitigationForm.valid){
-        this.mitigationStatusService.updateMitigation(id ,this.mitigationForm.value).subscribe(response => {
+        this.mitigationStatusService.updateMitigationStatus(id ,this.mitigationForm.value);
           this.onClose();
           this.toster.success('updated successfully');
-        });
       }
     }
     else{
       if(this.mitigationForm.valid){
-        this.mitigationStatusService.addMitigation(this.mitigationForm.value).subscribe(res => {
+        this.mitigationStatusService.addMitigationStatus(this.mitigationForm.value);
           this.toster.success('Added successfully');
           this.onClose();
-        });
       }
     }
   }
 
 
-  setValue() {
+  async setValue() {
     if(this.data.id != '' && this.data.id != null){
-      this.mitigationStatusService.getMitigationById(this.data.id).subscribe(vaule => {
+      this.dataToEdit = await this.mitigationStatusService.getMitigationStatusById(this.data.id);
         this.mitigationForm.patchValue({
-          id: vaule[0].id,
-          title: vaule[0].title,
-          description: vaule[0].description,
+          id: this.dataToEdit[0].id,
+          title: this.dataToEdit[0].title,
+          description: this.dataToEdit[0].description,
         });
-      });
     }
   }
 

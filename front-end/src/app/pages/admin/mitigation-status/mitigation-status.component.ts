@@ -33,7 +33,7 @@ export class MitigationStatusComponent implements OnInit{
 
 
    async getData() {
-      this.mitigations = await  this.mitigationService.getMitigation();
+      this.mitigations = await  this.mitigationService.getMitigationStatus();
     }
 
 
@@ -65,12 +65,11 @@ export class MitigationStatusComponent implements OnInit{
           message: `Are you sure you want to delete ${record.title}`
         }
       });
-      _popup.afterClosed().subscribe(response => {
+      _popup.afterClosed().subscribe(async response => {
         if(response == true) {
-          this.mitigationService.deleteMitigation(record.id).subscribe(res => {
-            this.getData();
-            this.toster.error(`Delete ${record.title} successfully`);
-          });
+          await this.mitigationService.deleteMitigationStatus(record.id)
+          this.getData();
+          this.toster.error(`Delete ${record.title} successfully`);
         }
       });
     }

@@ -179,9 +179,7 @@ export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
   publishStatus!:any;
   publishLocalStoreg!: any;
   async ngOnInit() {
-    this.variableService.getPublishStatus().subscribe(val => {
-      this.publishStatus = val.value
-    })
+    this.publishStatus = await this.variableService.getPublishStatus();
     this.user_info = this.userService.getLogedInUser();
     // my_roles
 

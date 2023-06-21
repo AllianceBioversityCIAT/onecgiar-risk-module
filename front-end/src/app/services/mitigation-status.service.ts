@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MainService } from './main.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,28 +12,23 @@ export class MitigationStatusService extends MainService{
     super();
   }
 
-  addMitigation(data:any): Observable<any> {
-    const url = this.backend_url + '/mitigation-status';
-    return this.http.post(url, data, this.headers);
+  async addMitigationStatus(data:any) {
+    return firstValueFrom(this.http.post(this.backend_url + `/mitigation-status`,data, {headers: this.headers,}).pipe(map((d) => d))).catch((e) => false);
   }
 
-  getMitigation(){
-    const url = this.backend_url + '/mitigation-status';
-    return firstValueFrom(this.http.get(url, this.headers).pipe(map(d=>d))) ;
+  async getMitigationStatus() {
+    return firstValueFrom(this.http.get(this.backend_url + '/mitigation-status', this.headers).pipe(map(d=>d))).catch((e) => false);
   }
 
-  getMitigationById(id: number): Observable<any> {
-    const url = this.backend_url + `/mitigation-status/${id}`;
-    return this.http.get(url, this.headers);
+  async getMitigationStatusById(id: number) {
+    return firstValueFrom(this.http.get(this.backend_url + `/mitigation-status/${id}`, this.headers).pipe(map(d=>d))).catch((e) => false);
   }
 
-  updateMitigation(id: any, data: any): Observable<any> {
-    const url = this.backend_url + `/mitigation-status/${id}`;
-    return this.http.put(url, data ,this.headers);
+  async updateMitigationStatus(id: any, data: any) {
+    return firstValueFrom(this.http.put(this.backend_url + `/mitigation-status/${id}`, data ,this.headers).pipe(map(d=>d))).catch((e) => false);
   }
 
-  deleteMitigation(id: any): Observable<any> {
-    const url = this.backend_url + `/mitigation-status/${id}`;
-    return this.http.delete(url, this.headers);
+  async deleteMitigationStatus(id: any) {
+    return firstValueFrom(this.http.delete(this.backend_url + `/mitigation-status/${id}`, this.headers).pipe(map(d=>d))).catch((e) => false);
   }
 }

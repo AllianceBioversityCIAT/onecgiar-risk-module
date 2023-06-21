@@ -7,26 +7,26 @@ import { VariableService } from 'src/app/services/variable.service';
 })
 export class SettingComponent implements OnInit{
   canPublish!: boolean;
+  publishValue:any;
   constructor(private variableService: VariableService){
   }
+
   ngOnInit(): void {
     this.getPublishStatus()
   }
 
-  getPublishStatus() {
-    this.variableService.getPublishStatus().subscribe(res => {
-      if(res.value == '0') {
+  async getPublishStatus() {
+    this.publishValue = await this.variableService.getPublishStatus();
+      if(this.publishValue.value == '0') {
         this.canPublish = false;
       }
       else {
         this.canPublish = true;
       }
-    })
   }
 
-  toggle() {
+  async toggle() {
     this.canPublish = !this.canPublish;
-    this.variableService.updatePublishStatus(this.canPublish).subscribe(val => {
-    });
+    this.variableService.updatePublishStatus(this.canPublish);
   }
 }
