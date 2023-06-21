@@ -118,6 +118,7 @@ export class InitiativeService {
     if (!init) throw new NotFoundException();
     const newRole = {
       initiative_id: initiative_id,
+      user_id: role.user_id,
       email: role.email.toLowerCase(),
       role: role.role,
     };

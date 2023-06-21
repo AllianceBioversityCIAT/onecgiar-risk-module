@@ -125,6 +125,7 @@ export class InitiativesService extends MainService {
         {
           initiative_id: role.initiative_id,
           email: role.email,
+          user_id: role.user_id,
           role: role.role,
         },
         { headers: this.headers }
@@ -140,6 +141,7 @@ export class InitiativesService extends MainService {
           initiative_id: role.initiative_id,
           id: role.id,
           email: role.email,
+          user_id: role.user_id,
           role: role.role,
         },
         { headers: this.headers }

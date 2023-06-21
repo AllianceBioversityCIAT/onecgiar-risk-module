@@ -67,6 +67,7 @@ import { AvatarModule, AvatarSource } from 'ngx-avatars';
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 import { MitigationStatusComponent } from './pages/admin/mitigation-status/mitigation-status.component';
 import { MitigationFormComponent } from './pages/admin/mitigation-status/mitigation-form/mitigation-form.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,9 @@ import { MitigationFormComponent } from './pages/admin/mitigation-status/mitigat
     ToastrModule.forRoot(),
     AvatarModule.forRoot({
       sourcePriorityOrder: avatarSourcesOrder
-    })
+    }),
+    NgSelectModule
+    
   ],
   providers: [BreadcrumbService, AppSocket,
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }

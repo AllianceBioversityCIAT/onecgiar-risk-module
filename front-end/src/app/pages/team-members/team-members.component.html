@@ -15,9 +15,12 @@
       
           <ng-container matColumnDef="Email">
             <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Email </th>
-            <td  class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element.email}} </td>
+            <td  class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element?.user?.email || element.email}} </td>
           </ng-container>
-
+          <ng-container matColumnDef="User">
+            <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> User name </th>
+            <td  class="center" mat-cell *matCellDef="let element" style="min-width: 190px;"> {{element?.user?.full_name}} </td>
+          </ng-container>
           <ng-container matColumnDef="Creation Date">
             <th class="big bold center  spacing" mat-header-cell *matHeaderCellDef> Creation Date </th>
             <td  class="center" mat-cell *matCellDef="let element" style="min-width: 150px;"> {{element.createdAt | date:'MMMM d, y'}} </td>

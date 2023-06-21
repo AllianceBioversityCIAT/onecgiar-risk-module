@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { UserService } from 'src/app/services/user.service';
 
 export enum ROLES {
   LEAD = 'Leader',
@@ -16,41 +17,75 @@ export class NewTeamMemberComponent {
   constructor(
     public fb: FormBuilder,
     private dialogRef: MatDialogRef<NewTeamMemberComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any = {}
+    @Inject(MAT_DIALOG_DATA) public data: any = {},
+    private usersService: UserService
   ) {}
+  ages: any[] = [
+    { value: '<18', label: 'Under 18' },
+    { value: '18', label: '18' },
+    { value: '>18', label: 'More than 18' },
+  ];
 
+  confirmation: any = '';
+  users: any = [];
+  showConfirm(content: any) {
+    console.log(content);
+  }
   Roles: any[] = [
-    { value: ROLES.LEAD, viewValue:ROLES.LEAD},
+    { value: ROLES.LEAD, viewValue: ROLES.LEAD },
     { value: ROLES.MEMBER, viewValue: ROLES.MEMBER },
     { value: ROLES.COORDINATOR, viewValue: ROLES.COORDINATOR },
   ];
+  private atLeastOneValidator = () => {
+    return (controlGroup: any) => {
+      let controls = controlGroup.controls;
+      if (controls) {
+        console.log(controls);
+        if (controls.email.value == '' && (controls.user_id.value == '' || controls.user_id.value == null)) {
+          return {
+            atLeastOneRequired: {
+              text: 'At least one should be selected',
+            },
+          };
+        }
+      }
+      return null;
+    };
+  };
 
   memberForm: any;
   populateMemberForm() {
     this.memberForm = this.fb.group({
       email: [
         this.data.role == 'add' ? '' : this.data.member.email,
-        [Validators.required, Validators.email],
+        [Validators.email],
       ],
       userRole: [
         this.data.role == 'add' ? '' : this.data.member.role,
         Validators.required,
       ],
+      user_id: [this.data.role == 'add' ? '' : this.data.member.user_id],
     });
+    this.memberForm.setValidators(this.atLeastOneValidator());
   }
-
+  showerror:boolean=false
   submit() {
     this.memberForm.markAllAsTouched();
     this.memberForm.updateValueAndValidity();
     if (this.memberForm.valid) {
+      this.showerror =  false;
       this.dialogRef.close({
         role: this.data.role,
         formValue: this.memberForm.value,
       });
+    }else{
+      this.showerror =  true;
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.users = await this.usersService.getUsers();
+    console.log(this.users);
     this.populateMemberForm();
   }
 }

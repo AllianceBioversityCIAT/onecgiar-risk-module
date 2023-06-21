@@ -49,9 +49,9 @@ export class TeamMembersComponent {
       .map((d: any) => d.role);
     if (this.canEdit()) this.displayedColumns.push('Actions');
   }
+
   async init() {}
   canEdit() {
-
     return (
       this.user_info.role == 'admin' ||
       this.my_roles?.includes(ROLES.LEAD) ||
@@ -86,7 +86,7 @@ export class TeamMembersComponent {
       data: { role: 'add', member: null },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
-      if (result.role == 'add') {
+      if (result?.role == 'add') {
         // access new data => result.formValue
         const email = result.formValue.email;
         const userRole = result.formValue.userRole;
@@ -98,6 +98,7 @@ export class TeamMembersComponent {
             initiative_id: this.initiativeId,
             email: result.formValue.email,
             role: result.formValue.userRole,
+            user_id: result.formValue.user_id,
           }
         );
         this.toastr.success('Success', `User role has been added`);
@@ -112,7 +113,7 @@ export class TeamMembersComponent {
       data: { role: 'edit', member: role },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
-      if (result.role == 'edit') {
+      if (result?.role == 'edit') {
         console.log('edit');
         // access edited data => result.formValue
         await this.initiativeService.updateInitiativeRole(
@@ -121,6 +122,7 @@ export class TeamMembersComponent {
           {
             initiative_id: this.initiativeId,
             id: roleId,
+            user_id: result.formValue.user_id,
             email: result.formValue.email,
             role: result.formValue.userRole,
           }
@@ -133,6 +135,7 @@ export class TeamMembersComponent {
 
   displayedColumns: string[] = [
     /*'User Name',*/ 'Email',
+    'User',
     'Role',
     'Creation Date',
     'Status',

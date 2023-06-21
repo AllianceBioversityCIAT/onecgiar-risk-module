@@ -25,5 +25,8 @@
         width: 100%;
         display: flex;
         justify-content: flex-end;
+        .error{
+            margin-right: 30px;
+        }
     }
 }

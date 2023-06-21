@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'ngx-toastr/toastr';
+@import "~@ng-select/ng-select/themes/material.theme.css";
 html, body { height: 100%; background-color: rgb(247, 247, 247); }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
 
 .globalContainer {
     padding: 2em !important;

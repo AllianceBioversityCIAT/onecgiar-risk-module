@@ -1,28 +1,82 @@
 <div class="dialogHeader">
-    <h1 mat-dialog-title>{{ data.role == 'add'?  'Add New' :'Update'}} Team Member</h1>
-    <button mat-dialog-close class="closeButton">
-      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-      </svg>
-    </button>
+  <h1 mat-dialog-title>
+    {{ data.role == "add" ? "Add New" : "Update" }} Team Member
+  </h1>
+  <button mat-dialog-close class="closeButton">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="25"
+      fill="currentColor"
+      class="bi bi-x-lg"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"
+      />
+    </svg>
+  </button>
 </div>
 <div class="dialogBody">
-    <form [formGroup]="memberForm">
-        <mat-form-field class="w-90" appearance="outline">
-            <input formControlName="email" matInput placeholder="Email">
-            <mat-error class="error" *ngIf="memberForm.controls['email'].errors?.['required']">Email is required</mat-error>
-            <mat-error class="error" *ngIf="memberForm.controls['email'].errors?.['email']">Wrong Email</mat-error>
-        </mat-form-field>
-        <mat-form-field class="w-90" appearance="outline">
-            <mat-select placeholder="Role" formControlName="userRole">
-              <mat-option *ngFor="let role of Roles" [value]="role.value">
-                {{role.viewValue}}
-              </mat-option>
-            </mat-select>
-          <mat-error class="error" *ngIf="memberForm.controls['userRole'].errors?.['required']">User Role is required</mat-error>
-        </mat-form-field>
-        <div class="end">
-          <button class="primaryButton" (click)="submit()">SAVE</button>
-        </div>
-    </form>
+  <form *ngIf="memberForm" [formGroup]="memberForm">
+    <div>
+      <ng-select
+        appearance="outline"
+        #agesSelect
+        [items]="users"
+        bindValue="id"
+        labelForId="id"
+        placeholder="Select user"
+        bindLabel="full_name"
+        placeholder="Select User"
+        formControlName="user_id"
+      >
+      </ng-select>
+
+      <h1
+        *ngIf="
+          memberForm.controls['user_id']?.value == '' ||
+          memberForm.controls['user_id']?.value == null
+        "
+      >
+        Or invite by email
+      </h1>
+
+      <mat-form-field
+        *ngIf="
+          memberForm.controls['user_id']?.value == '' ||
+          memberForm.controls['user_id']?.value == null
+        "
+        class="w-90"
+        appearance="outline"
+      >
+        <input formControlName="email" matInput placeholder="Email" />
+        <mat-error
+          class="error"
+          *ngIf="memberForm.controls['email'].errors?.['email']"
+          >Wrong Email format</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <mat-form-field class="w-90" appearance="outline">
+      <mat-select placeholder="Role" formControlName="userRole">
+        <mat-option *ngFor="let role of Roles" [value]="role.value">
+          {{ role.viewValue }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        class="error"
+        *ngIf="memberForm.controls['userRole'].errors?.['required']"
+        >User Role is required</mat-error
+      >
+    </mat-form-field>
+    <div class="end">
+      <mat-error
+        class="error"
+        *ngIf="memberForm?.errors?.['atLeastOneRequired'] && showerror"
+        >Email or User must be not empty</mat-error
+      >
+      <button class="primaryButton" (click)="submit()">SAVE</button>
+    </div>
+  </form>
 </div>
