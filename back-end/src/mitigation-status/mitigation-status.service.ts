@@ -10,7 +10,11 @@ export class MitigationStatusService {
     ) {}
     async getMitigation() {
         try {
-            return await this.MitigationRepository.find();
+            return await this.MitigationRepository.find({
+                order: {
+                    title: 'ASC'
+                }
+            });
         } catch (error) {
             console.error(error);
         }
