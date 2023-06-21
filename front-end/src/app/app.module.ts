@@ -22,7 +22,6 @@ import {
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { PublishDialogComponent } from './components/publish-dialog/publish-dialog.component';
 import { NewRiskComponent } from './components/new-risk/new-risk.component';
 import { NewTeamMemberComponent } from './components/new-team-member/new-team-member.component';
 import { NewProposedComponent } from './components/new-proposed/new-proposed.component';
@@ -68,6 +67,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
 import { MitigationStatusComponent } from './pages/admin/mitigation-status/mitigation-status.component';
 import { MitigationFormComponent } from './pages/admin/mitigation-status/mitigation-form/mitigation-form.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -77,7 +77,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NavbarComponent,
     InitiativesComponent,
     InitiativeDetailsComponent,
-    PublishDialogComponent,
     NewRiskComponent,
     NewTeamMemberComponent,
     NewProposedComponent,
@@ -136,7 +135,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     AvatarModule.forRoot({
       sourcePriorityOrder: avatarSourcesOrder
     }),
-    NgSelectModule
+    NgSelectModule,
+    DragDropModule
     
   ],
   providers: [BreadcrumbService, AppSocket,

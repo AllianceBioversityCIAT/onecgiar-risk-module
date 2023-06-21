@@ -112,4 +112,8 @@ export class Risk {
   @Optional()
   @Column({ default: false })
   redundant: boolean;
+
+  @Optional()
+  @Column({ default: 999 })
+  top: number;
 }

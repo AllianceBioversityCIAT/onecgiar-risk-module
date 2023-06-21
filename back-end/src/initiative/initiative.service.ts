@@ -4,6 +4,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
+import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
 import { firstValueFrom, map } from 'rxjs';
 import { EmailsService } from 'src/emails/emails.service';
@@ -52,11 +53,18 @@ export class InitiativeService {
     else throw new NotFoundException();
   }
 
-  async createINIT(old_init_id: number, reason, user) {
+  async createINIT(old_init_id: number, reason, user, top: Risk[]) {
     const old_initiative = await this.iniRepository.findOne({
       where: { id: old_init_id },
       relations: ['roles', 'roles.user'],
     });
+    let num = 1;
+    if (top.length)
+      for (const risk of top) {
+        risk.top = num++;
+        await this.riskService.updateRisk(risk.id, risk, user);
+      }
+
     const initiative = this.iniRepository.create();
     initiative.clarisa_id = old_initiative.clarisa_id;
     initiative.name = old_initiative.name;
@@ -70,7 +78,7 @@ export class InitiativeService {
 
     const old_Risks = await this.riskService.riskRepository.find({
       where: { initiative_id: old_init_id },
-      relations: ['mitigations','mitigations.status'],
+      relations: ['mitigations', 'mitigations.status'],
     });
     if (old_Risks.length)
       for (let risk of old_Risks) {

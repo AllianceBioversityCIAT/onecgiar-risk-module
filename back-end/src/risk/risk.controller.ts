@@ -34,7 +34,7 @@ export class RiskController {
       const sorts = query.sort.split(',');
       obj[sorts[0]] = sorts[1];
       return obj;
-    } else return { id: 'ASC' };
+    } else return {  top:'ASC', id: 'ASC' };
   }
   @Get('')
   @ApiCreatedResponse({

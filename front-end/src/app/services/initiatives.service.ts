@@ -99,6 +99,17 @@ export class InitiativesService extends MainService {
     );
   }
 
+
+  getTopRisks(initiativeId: number): Promise<any> {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/' + initiativeId+'/top', {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
+  }
+
   getInitiative(initiativeId: number): Promise<any> {
     return firstValueFrom(
       this.http

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -15,28 +22,75 @@ import {
 } from 'src/app/components/confirm/confirm.component';
 import { NewRiskComponent } from 'src/app/components/new-risk/new-risk.component';
 import { ROLES } from 'src/app/components/new-team-member/new-team-member.component';
-import { PublishDialogComponent } from 'src/app/components/publish-dialog/publish-dialog.component';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 import { AppSocket } from 'src/app/services/socket.service';
 import { UserService } from 'src/app/services/user.service';
 import { VariableService } from 'src/app/services/variable.service';
-
+import {
+  CdkDrag,
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 @Component({
   selector: 'publish-dialog',
   templateUrl: 'publish-dialog.html',
+  styleUrls: ['./publish-dialog.scss'],
 })
-export class PublishDialog {
+export class PublishDialog implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PublishDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private initiativeService: InitiativesService
   ) {}
+  tops: any = null;
+  error: boolean = false;
 
+  async ngOnInit() {
+    this.tops = await this.initiativeService.getTopRisks(
+      this.data.initiative_id
+    );
+    this.top = this.tops.top as [];
+    this.similar = this.tops.similar as [];
+  }
   onNoClick(): void {
     this.dialogRef.close(false);
   }
   async publish() {
-    this.dialogRef.close(this.data);
+    this.error = false;
+    if (this.data.top.length == 5 && this.data.reason != '')
+      this.dialogRef.close(this.data);
+    else this.error = true;
+  }
+  toparray = [];
+
+  similararray = [];
+
+  top: any[] = [];
+
+  similar: any[] = [];
+  evenPredicate(item: any): any {
+    return this.data?.length < 5;
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+
+    this.data.top = this.top;
   }
 }
 
@@ -45,7 +99,7 @@ export class PublishDialog {
   templateUrl: './initiative-details.component.html',
   styleUrls: ['./initiative-details.component.scss'],
 })
-export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
+export class InitiativeDetailsComponent implements OnInit, OnDestroy {
   constructor(
     public router: Router,
     public dialog: MatDialog,
@@ -82,12 +136,6 @@ export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
     });
   }
 
-  openPublishDialog() {
-    this.dialog.open(PublishDialogComponent, {
-      width: '600px',
-    });
-  }
-
   openNewRiskDialog() {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
@@ -119,8 +167,8 @@ export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
   async publish(id: number) {
     this.dialog
       .open(PublishDialog, {
-        maxWidth: '400px',
-        data: { reason: '' },
+        maxWidth: '500px',
+        data: { reason: '', initiative_id: this.id, top: [] },
       })
       .afterClosed()
       .subscribe(async (dialogResult) => {
@@ -176,7 +224,7 @@ export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
   id: number = 0;
   latest_version: any;
   reload = true;
-  publishStatus!:any;
+  publishStatus!: any;
   publishLocalStoreg!: any;
   async ngOnInit() {
     this.publishStatus = await this.variableService.getPublishStatus();
@@ -195,13 +243,12 @@ export class InitiativeDetailsComponent implements OnInit ,OnDestroy {
       .map((d: any) => d.role);
     console.log(this.my_roles);
     this.loadInitiative();
-     
-    this.socket.connect()
- 
+
+    this.socket.connect();
   }
-  
+
   ngOnDestroy(): void {
-    this.socket.disconnect()
+    this.socket.disconnect();
   }
   canPublish() {
     return (

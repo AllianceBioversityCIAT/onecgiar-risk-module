@@ -1,7 +1,10 @@
 <h1 mat-dialog-title>Publish Risks</h1>
 
 <div mat-dialog-content>
-  <p>Please make sure the submitted data is accurate. Take note that no further changes can be made after publication.</p>
+  <p>
+    Please make sure the submitted data is accurate. Take note that no further
+    changes can be made after publication.
+  </p>
   <mat-form-field style="width: 100%">
     <textarea
       [(ngModel)]="data.reason"
@@ -10,6 +13,43 @@
       matInput
     ></textarea>
   </mat-form-field>
+
+  <hr />
+  <div class="drag-container">
+    <h2>Top 5 Risks</h2>
+
+    <div
+      cdkDropList
+      #todoList="cdkDropList"
+      [cdkDropListData]="top"
+      [cdkDropListConnectedTo]="[doneList]"
+      class="drag-list"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListEnterPredicate]="evenPredicate"
+    >
+      <div class="drag-box" *ngFor="let item of top" cdkDrag>
+        {{item.title}} ({{item.current_level}})  
+      </div>
+    </div>
+  </div>
+
+  <div class="drag-container">
+    <h2>Risks</h2>
+    <div
+      cdkDropList
+      #doneList="cdkDropList"
+      [cdkDropListData]="similar"
+      [cdkDropListConnectedTo]="[todoList]"
+      class="drag-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="drag-box" *ngFor="let item of similar" cdkDrag>
+        {{item.title}} ({{item.current_level}})  
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="error" class="error">please fill publish reason and chose your top 5 risks</p>
 </div>
 
 <div mat-dialog-actions>

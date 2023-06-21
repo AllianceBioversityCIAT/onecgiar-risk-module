@@ -27,10 +27,11 @@ import * as XLSX from 'xlsx';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { RiskService } from 'src/risk/risk.service';
-import { ILike, In, IsNull } from 'typeorm';
+import { ILike, In, IsNull, LessThan, MoreThan, Not } from 'typeorm';
 import { unlink } from 'fs/promises';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Request } from 'express';
+import { Risk } from 'entities/risk.entity';
 @ApiTags('Initiative')
 @Controller('initiative')
 export class InitiativeController {
@@ -49,9 +50,9 @@ export class InitiativeController {
       : null;
   }
   roles(query, req) {
-    if (query?.my_role )
+    if (query?.my_role)
       return { roles: { user_id: req.user.id, role: query?.my_role } };
-      else if(query?.my_ini == 'true')
+    else if (query?.my_ini == 'true')
       return { roles: { user_id: req.user.id } };
     else return {};
   }
@@ -72,7 +73,7 @@ export class InitiativeController {
   getInitiative(@Query() query: any, @Req() req) {
     return this.iniService.iniRepository.find({
       where: {
-        name:query?.name ?  ILike(`%${query.name}%`) : null, 
+        name: query?.name ? ILike(`%${query.name}%`) : null,
         parent_id: IsNull(),
         official_code: this.offical(query),
         ...this.roles(query, req),
@@ -85,7 +86,7 @@ export class InitiativeController {
         'roles',
         'roles.user',
       ],
-      order: { ...this.sort(query), risks: { id: 'DESC' } },
+      order: { ...this.sort(query), risks: { id: 'DESC',top:'ASC'} },
     });
   }
   getTemplateAdmin(width = false) {
@@ -103,7 +104,7 @@ export class InitiativeController {
       'Current Risk Level': null,
       Category: null,
       'Risk raiser': null,
-      "Flag to SGD":null,
+      'Flag to SGD': null,
       Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
@@ -286,7 +287,7 @@ export class InitiativeController {
           'roles',
           'roles.user',
         ],
-        order: { id: 'DESC', risks: { id: 'DESC' } },
+        order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
       })
       .catch((d) => {
         throw new NotFoundException();
@@ -318,19 +319,22 @@ export class InitiativeController {
         'initiative.roles.user',
       ],
     });
-    if(userRole.user == 'admin') {
+    if (userRole.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
       const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
-  
+
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
-      await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+      await XLSX.writeFile(
+        wb,
+        join(process.cwd(), 'generated_files', file_name),
+      );
       const file = createReadStream(
         join(process.cwd(), 'generated_files', file_name),
       );
-  
+
       setTimeout(async () => {
         try {
           await unlink(join(process.cwd(), 'generated_files', file_name));
@@ -340,20 +344,22 @@ export class InitiativeController {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${file_name}"`,
       });
-    }
-    else {
+    } else {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
       const { finaldata, merges } = this.prepareDataExcelUser(risks);
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
-  
+
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
-      await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+      await XLSX.writeFile(
+        wb,
+        join(process.cwd(), 'generated_files', file_name),
+      );
       const file = createReadStream(
         join(process.cwd(), 'generated_files', file_name),
       );
-  
+
       setTimeout(async () => {
         try {
           await unlink(join(process.cwd(), 'generated_files', file_name));
@@ -364,7 +370,6 @@ export class InitiativeController {
         disposition: `attachment; filename="${file_name}"`,
       });
     }
-
   }
 
   @Get(':id/excel')
@@ -394,10 +399,10 @@ export class InitiativeController {
 
     const risks = init.risks;
 
-    if(userRole.user == 'admin') {
+    if (userRole.user == 'admin') {
       // to be
       const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
-      console.log({ finaldata, merges })
+      console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
@@ -421,10 +426,9 @@ export class InitiativeController {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${file_name}"`,
       });
-    }
-    else {
+    } else {
       const { finaldata, merges } = this.prepareDataExcelUser(risks);
-      console.log({ finaldata, merges })
+      console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
@@ -460,9 +464,10 @@ export class InitiativeController {
   createVersion(
     @Param('id') id: number,
     @Body('reason') reason: string,
+    @Body('top') top: any,
     @Req() req,
   ): Promise<Initiative> {
-    return this.iniService.createINIT(id, reason, req.user);
+    return this.iniService.createINIT(id, reason, req.user,top);
   }
 
   @Get(':id/versions')
@@ -481,7 +486,7 @@ export class InitiativeController {
         'roles.user',
         'created_by',
       ],
-      order: { id: 'DESC', risks: { id: 'DESC' } },
+      order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
     });
   }
 
@@ -501,7 +506,7 @@ export class InitiativeController {
         'roles.user',
         'created_by',
       ],
-      order: { id: 'DESC', risks: { id: 'DESC' } },
+      order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
     });
   }
 
@@ -563,5 +568,47 @@ export class InitiativeController {
     @Param('initiative_roles_id') initiative_roles_id: number,
   ) {
     return this.iniService.deleteRole(initiative_id, initiative_roles_id);
+  }
+
+  @Get(':id/top')
+  @ApiCreatedResponse({
+    description: '',
+  })
+  async top(@Param('id') id: number) {
+    const top_5 = await this.riskService.riskRepository.find({
+      where: { initiative_id: id },
+      order: { current_level: 'DESC' },
+      take: 5,
+    });
+    const current_impact = top_5.map((d) => d.current_level);
+    const current_ids = top_5.map((d) => d.id);
+
+    const similar = await this.riskService.riskRepository.find({
+      where: {
+        initiative_id: id,
+        current_level: In(current_impact),
+        id: Not(In(current_ids)),
+      },
+      order: { current_level: 'DESC' },
+      take: 5,
+    });
+    // const top_5 = all_risks.slice(0,4)
+    const similar1 = [
+      ...similar,
+      ...top_5.filter((d) =>
+        similar.map((d) => d.current_level).includes(d.current_level),
+      ),
+    ];
+
+    const top = await this.riskService.riskRepository.find({
+      where: {
+        initiative_id: id,
+        id: Not(In(similar1.map((d) => d.id))),
+        current_level: MoreThan(similar1[0] ? similar1[0].current_level : null),
+      },
+      order: { current_level: 'DESC' },
+      take: 5,
+    });
+    return { top, similar: similar1 };
   }
 }
