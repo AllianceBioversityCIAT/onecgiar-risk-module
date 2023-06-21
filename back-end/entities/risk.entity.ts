@@ -116,6 +116,8 @@ export class Risk {
   @Optional()
   @Column({ default: 999 })
   top: number;
-  @Column({ type: 'timestamp' })
+
+  @Optional()
+  @Column({ type: 'timestamp' , default:null })
   due_date: Date;
 }
