@@ -40,7 +40,7 @@ export class Initiative {
   @ApiProperty({ type: () => [InitiativeRoles] })
   @OneToMany(
     () => InitiativeRoles,
-    (initiative_roles) => initiative_roles.initiative,{onUpdate:'CASCADE',onDelete:'CASCADE'}
+    (initiative_roles) => initiative_roles.initiative,{onUpdate:'RESTRICT',onDelete:'RESTRICT'}
   )
   @JoinTable()
   roles: Array<InitiativeRoles>;
@@ -64,7 +64,6 @@ export class Initiative {
   @Optional()
   @Column({default:null})
   created_by_user_id:number
-
 
   @Optional()
   @Column({default:null})

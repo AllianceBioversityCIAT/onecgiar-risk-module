@@ -35,13 +35,16 @@ export class Risk {
   @Column()
   title: string;
 
+
+
   @ApiProperty()
-  @Column()
+  @Optional()
+  @Column({ default: null })
   risk_owner_id: number;
   @ManyToOne(
     () => InitiativeRoles,
     (initiativeRoles) => initiativeRoles.risks,
-    { onUpdate: 'CASCADE', onDelete: 'CASCADE' },
+    { onUpdate: 'SET NULL', onDelete: 'SET NULL' },
   )
   @JoinColumn({ name: 'risk_owner_id' })
   risk_owner: InitiativeRoles;

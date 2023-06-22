@@ -57,6 +57,7 @@ export class RiskController {
         'mitigations.status',
         'created_by',
         'risk_owner',
+        'risk_owner.user',
       ],
       order: { ...this.sort(query) },
     });

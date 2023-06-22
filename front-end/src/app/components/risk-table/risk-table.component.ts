@@ -100,7 +100,7 @@ export class RiskTableComponent {
   initiativeId: any;
   riskUsers: any;
   my_roles: any;
-  locked: any;
+  locked: any={};
   connection = true;
   async ngOnInit() {
     this.socket.on('locked', (data: any) => {

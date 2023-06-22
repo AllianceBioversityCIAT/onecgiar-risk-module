@@ -275,7 +275,7 @@
               *matCellDef="let element"
               style="min-width: 105px"
             >
-            <ng-container *ngIf="!locked[element.id]" >
+            <ng-container *ngIf="locked && !locked[element.id]" >
               <button
                 matTooltip="Update"
                 class="actionButton"

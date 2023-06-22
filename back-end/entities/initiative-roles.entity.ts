@@ -51,7 +51,7 @@ export class InitiativeRoles {
   updatedAt: Date;
 
   @ApiProperty({ type: () => [Risk] })
-  @OneToMany(() => Risk, (risk) => risk.risk_owner,{onUpdate:'CASCADE',onDelete:'CASCADE'})
+  @OneToMany(() => Risk, (risk) => risk.risk_owner,{onUpdate: 'SET NULL', onDelete: 'SET NULL'})
   @JoinTable()
   risks: Array<Risk>;
 }
