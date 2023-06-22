@@ -105,6 +105,7 @@ export class InitiativeController {
       Category: null,
       'Risk raiser': null,
       'Flag to SGD': null,
+      'Deu date': null,
       Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
@@ -128,6 +129,7 @@ export class InitiativeController {
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
     template.Redundant = element.redundant;
+    template['Deu date'] = (element.due_date === null) ? 'null' : new Date(element.due_date).toLocaleDateString(); 
     template['Flag to SGD'] = element.flag;
   }
 
@@ -135,11 +137,11 @@ export class InitiativeController {
     let finaldata = [this.getTemplateAdmin(true)];
     let merges = [
       {
-        s: { c: 15, r: 0 },
-        e: { c: 16, r: 0 },
+        s: { c: 16, r: 0 },
+        e: { c: 17, r: 0 },
       },
     ];
-    for (let index = 0; index < 15; index++) {
+    for (let index = 0; index < 16; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -164,12 +166,12 @@ export class InitiativeController {
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
           template.Mitigations = d.description;
-          template.mitigations_status = d.status;
+          template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateAdmin();
           template2.Mitigations = d.description;
-          template2.mitigations_status = d.status;
+          template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
       });
@@ -193,6 +195,7 @@ export class InitiativeController {
       Category: null,
       'Risk raiser': null,
       // "Flag to SGD":null,
+      'Deu Date': null,
       Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
@@ -215,6 +218,7 @@ export class InitiativeController {
       element.current_likelihood * element.current_impact;
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
+    template['Deu Date'] = (element.due_date === null) ? 'null' : new Date(element.due_date).toLocaleDateString(); 
     template.Redundant = element.redundant;
     // template['Flag to SGD'] = element.flag;
   }
@@ -223,11 +227,11 @@ export class InitiativeController {
     let finaldata = [this.getTemplateUser(true)];
     let merges = [
       {
-        s: { c: 14, r: 0 },
+        s: { c: 15, r: 0 },
         e: { c: 16, r: 0 },
       },
     ];
-    for (let index = 0; index < 14; index++) {
+    for (let index = 0; index < 15; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -254,12 +258,12 @@ export class InitiativeController {
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
           template.Mitigations = d.description;
-          template.mitigations_status = d.status;
+          template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateUser();
           template2.Mitigations = d.description;
-          template2.mitigations_status = d.status;
+          template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
       });
@@ -385,6 +389,7 @@ export class InitiativeController {
         'risks.category',
         'risks.created_by',
         'risks.mitigations',
+        'risks.mitigations.status',
         'risks.risk_owner',
         'risks.risk_owner.user',
         'roles',
