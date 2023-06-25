@@ -14,5 +14,6 @@
     }
 }
 
-
-
+::ng-deep .tableContainer:first-of-type{
+    overflow: hidden !important;
+}
