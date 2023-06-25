@@ -270,7 +270,17 @@ export class InitiativeController {
     });
     return { finaldata, merges };
   }
-
+  @Get('allversions')
+  @ApiCreatedResponse({
+    description: '',
+    type: Initiative,
+  })
+  getAllVersons() {
+    return this.iniService.iniRepository.find({
+      where: { parent_id: Not(IsNull())},
+      order: { id: 'DESC'},
+    });
+  }
   @Get(':id')
   @ApiCreatedResponse({
     description: '',
@@ -459,6 +469,7 @@ export class InitiativeController {
       });
     }
   }
+
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':id/create_version')

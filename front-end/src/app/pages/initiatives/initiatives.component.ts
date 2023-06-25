@@ -37,6 +37,7 @@ export class InitiativesComponent {
     'Risk Category',
     'Number of risks',
     'My Role',
+    'status',
     'Actions',
   ];
   dataSource = new MatTableDataSource<any>([]);
@@ -84,8 +85,9 @@ export class InitiativesComponent {
     if (list == '') list = 'Guest';
     return list;
   }
-
+  allInitVersion: any [] = [];
   async ngOnInit() {
     this.getInitiatives();
+    this.allInitVersion = await this.initiativeService.getInitiativeAllVersion();
   }
 }

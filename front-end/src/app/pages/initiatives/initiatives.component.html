@@ -78,6 +78,25 @@
               {{ filterRoles(element["roles"]) }}
             </td>
           </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              status
+            </th>
+            <td
+              mat-cell
+              class="center"
+              *matCellDef="let element"
+              style="min-width: 150px"
+            >
+              {{ element.official_code | status : allInitVersion : element.last_updated_date }}
+            </td>
+          </ng-container>
+
           <ng-container
             matColumnDef="Actions"
             style="margin-right: 3px"
