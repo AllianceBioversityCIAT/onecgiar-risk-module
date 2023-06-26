@@ -7,7 +7,7 @@ export class AppSocket extends Socket {
 
     constructor() {
       const token=  localStorage.getItem('access_token');
-        super({ url: 'http://localhost:3000', options: { autoConnect:false, auth:{authorization:'Barer '+token}} });
+        super({ url: environment.backend_url, options: { autoConnect:false, auth:{authorization:'Barer '+token}} });
     }
 
 }
