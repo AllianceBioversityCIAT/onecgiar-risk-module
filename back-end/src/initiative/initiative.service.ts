@@ -174,68 +174,44 @@ export class InitiativeService {
   @Cron(CronExpression.EVERY_10_SECONDS)
   async filterStatus() {
     this.logger.log('filterStatus is runing');
-    const versions = await this.iniRepository.find({
-      where: { parent_id: Not(IsNull())},
-      order: { id: 'DESC'},
-    });
-
     const allInit = await this.iniRepository.find({
-      where: { parent_id: IsNull()},
-      order: { id: 'DESC'},
+      where: { parent_id: IsNull() },
+      order: { id: 'DESC' },
     });
 
-
-  //  for(let int of allInit){
-      // Latest version
-  //  lastversion = // await this.iniRepository.findOne()
-
-  ///lastversion.dat== asda 
-
-   // }
-      let initHaveVersions = [];
-      for(let x = 0; x< allInit.length; x++){
-        for(let j = 0; j< versions.length; j++){
-        if(allInit[x].id == versions[j].parent_id) {
-          if(!initHaveVersions.includes(allInit[x])) {
-            initHaveVersions.push(allInit[x]);
+    for(let init of allInit){
+      const lastVersion = await this.iniRepository.findOne({
+        where: { parent_id: init.id },
+        relations: ['risks'],
+        order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } }
+      })
+      if(lastVersion != null) {
+        if(init.id == lastVersion.parent_id) {
+          if (new Date(init.last_updated_date).valueOf() == new Date(lastVersion.submit_date).valueOf()) {
+            this.iniRepository
+              .createQueryBuilder()
+              .update(Initiative)
+              .set({
+                status: true,
+                last_updated_date: init.last_updated_date,
+              })
+              .where(`id = ${init.id}`)
+              .execute();
+          }
+          else if(new Date(init.last_updated_date).valueOf() != new Date(lastVersion.submit_date).valueOf()) {
+            this.iniRepository
+            .createQueryBuilder()
+            .update(Initiative)
+            .set({
+              status: false,
+              last_updated_date: new Date()
+            })
+            .where(`id = ${init.id}`)
+            .execute();
           }
         }
       }
     }
-
-    let latestVersoinsOfInit = [];
-    for(let init of initHaveVersions){
-      const lastVersion = await this.iniRepository.findOne({
-        where: { parent_id: init.id },
-        relations: [
-          'risks'
-        ],
-        order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
-      });
-      latestVersoinsOfInit.push(lastVersion);
-    }
- 
-    for(var x in initHaveVersions) {
-
-      if(initHaveVersions[x].official_code == latestVersoinsOfInit[x].official_code) {
-        if(new Date(initHaveVersions[x].last_updated_date).valueOf() == new Date(latestVersoinsOfInit[x].submit_date).valueOf()){
-           this.iniRepository.createQueryBuilder().update(Initiative).set({
-            status: true,
-            last_updated_date: initHaveVersions[x].last_updated_date
-          })
-          .where(`id = ${initHaveVersions[x].id}`)
-          .execute()
-        }
-         else if(new Date(initHaveVersions[x].last_updated_date).valueOf() != new Date(latestVersoinsOfInit[x].submit_date).valueOf()) {
-           this.iniRepository.createQueryBuilder().update(Initiative).set({
-            status: false,
-            last_updated_date: new Date()
-          })
-          .where(`id = ${initHaveVersions[x].id}`)
-          .execute()
-        }
-      }
-   }
    this.logger.log('filterStatus is finish');
   }
 

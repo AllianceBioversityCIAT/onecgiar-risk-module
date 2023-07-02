@@ -99,16 +99,6 @@ export class InitiativesService extends MainService {
     );
   }
 
-  getInitiativeAllVersion(): Promise<any> {
-    return firstValueFrom(
-      this.http
-        .get(this.backend_url + '/initiative/filterStatus', {
-          headers: this.headers,
-        })
-        .pipe(map((d: any) => d))
-    );
-  }
-
 
   getTopRisks(initiativeId: number): Promise<any> {
     return firstValueFrom(

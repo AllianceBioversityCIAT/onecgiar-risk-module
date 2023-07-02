@@ -42,7 +42,7 @@
       </mat-form-field>
       <mat-form-field class="w-auto" appearance="outline">
         <mat-select placeholder="Status" formControlName="status">
-            <mat-option>None</mat-option>
+            <mat-option>All</mat-option>
           <mat-option *ngFor="let statusOption of status" [value]="statusOption.value">
             {{ statusOption.name }}
           </mat-option>

@@ -85,9 +85,7 @@ export class InitiativesComponent {
     if (list == '') list = 'Guest';
     return list;
   }
-  allInitVersion: any [] = [];
   async ngOnInit() {
-    this.allInitVersion = await this.initiativeService.getInitiativeAllVersion();
     this.getInitiatives();
   }
 }
