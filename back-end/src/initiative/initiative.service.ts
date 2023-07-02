@@ -186,19 +186,19 @@ export class InitiativeService {
         order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } }
       })
       if(lastVersion != null) {
-        if(init.id == lastVersion.parent_id) {
-          if (new Date(init.last_updated_date).valueOf() == new Date(lastVersion.submit_date).valueOf()) {
-            this.iniRepository
-              .createQueryBuilder()
-              .update(Initiative)
-              .set({
-                status: true,
-                last_updated_date: init.last_updated_date,
-              })
-              .where(`id = ${init.id}`)
-              .execute();
-          }
-          else if(new Date(init.last_updated_date).valueOf() != new Date(lastVersion.submit_date).valueOf()) {
+        if (new Date(init.last_updated_date).valueOf() == new Date(lastVersion.submit_date).valueOf()) {
+          this.iniRepository
+            .createQueryBuilder()
+            .update(Initiative)
+            .set({
+              status: true,
+              last_updated_date: init.last_updated_date,
+            })
+            .where(`id = ${init.id}`)
+            .execute();
+        }
+        else if(init.status == true) {
+          if(new Date(init.last_updated_date).valueOf() != new Date(lastVersion.submit_date).valueOf()) {
             this.iniRepository
             .createQueryBuilder()
             .update(Initiative)
