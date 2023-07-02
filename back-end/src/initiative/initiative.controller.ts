@@ -116,7 +116,7 @@ export class InitiativeController {
       Category: null,
       'Risk raiser': null,
       'Flag to SGD': null,
-      'Deu date': null,
+      'Due date': null,
       Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
@@ -140,7 +140,7 @@ export class InitiativeController {
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
     template.Redundant = element.redundant;
-    template['Deu date'] =
+    template['Due date'] =
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
@@ -209,7 +209,7 @@ export class InitiativeController {
       Category: null,
       'Risk raiser': null,
       // "Flag to SGD":null,
-      'Deu Date': null,
+      'Due Date': null,
       Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
@@ -232,7 +232,7 @@ export class InitiativeController {
       element.current_likelihood * element.current_impact;
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
-    template['Deu Date'] =
+    template['Due Date'] =
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
