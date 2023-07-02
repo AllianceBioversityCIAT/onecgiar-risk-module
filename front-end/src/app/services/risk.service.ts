@@ -128,6 +128,20 @@ export class RiskService extends MainService {
         .pipe(map((d) => d))
     );
   }
+  getInitiativeCategories(id:number) {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/'+id+'/categories', { headers: this.headers })
+        .pipe(map((d) => d))
+    );
+  }
+  getInitiativesCategories() {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/all/categories', { headers: this.headers })
+        .pipe(map((d) => d))
+    );
+  }
   getRiskUsers(id: number) {
     return firstValueFrom(
       this.http

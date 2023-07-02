@@ -27,7 +27,16 @@ import * as XLSX from 'xlsx';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { RiskService } from 'src/risk/risk.service';
-import { ILike, In, IsNull, LessThan, MoreThan, Not } from 'typeorm';
+import {
+  DataSource,
+  ILike,
+  In,
+  IsNull,
+  LessThan,
+  MoreThan,
+  Not,
+  createQueryBuilder,
+} from 'typeorm';
 import { unlink } from 'fs/promises';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Request } from 'express';
@@ -38,6 +47,7 @@ export class InitiativeController {
   constructor(
     private iniService: InitiativeService,
     private riskService: RiskService,
+    private dataSource: DataSource,
   ) {}
 
   offical(query) {
@@ -480,6 +490,52 @@ export class InitiativeController {
     @Req() req,
   ): Promise<Initiative> {
     return this.iniService.createINIT(id, reason, req.user, top);
+  }
+  @Get('all/categories')
+  @ApiCreatedResponse({
+    description: '',
+    type: Initiative,
+  })
+  getAllCategories() {
+    return this.dataSource
+      .createQueryBuilder()
+      .from('initiative', 'initiative')
+      .distinct(true)
+      .addSelect('risk_category.id', 'id')
+      .addSelect('risk_category.title', 'title')
+      .addSelect('risk_category.description', 'description')
+      .innerJoin('risk', 'risk', 'initiative.id = risk.initiative_id')
+      .innerJoin(
+        'risk_category',
+        'risk_category',
+        'risk_category.id = risk.category_id',
+      )
+      .orderBy('risk_category.title', 'ASC')
+      .execute();
+  }
+
+  @Get(':id/categories')
+  @ApiCreatedResponse({
+    description: '',
+    type: Initiative,
+  })
+  getCategories(@Param('id') id: number) {
+    return this.dataSource
+      .createQueryBuilder()
+      .from('initiative', 'initiative')
+      .distinct(true)
+      .addSelect('risk_category.id', 'id')
+      .addSelect('risk_category.title', 'title')
+      .addSelect('risk_category.description', 'description')
+      .innerJoin('risk', 'risk', 'initiative.id = risk.initiative_id')
+      .innerJoin(
+        'risk_category',
+        'risk_category',
+        'risk_category.id = risk.category_id',
+      )
+      .where('initiative.id = :id', { id })
+      .orderBy('risk_category.title', 'ASC')
+      .execute();
   }
 
   @Get(':id/versions')

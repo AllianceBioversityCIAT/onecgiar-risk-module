@@ -69,7 +69,7 @@ export class SearchInitiativesComponent {
   async ngOnInit() {
   
     this.setForm();
-    this.categories = await this.riskService.getRiskCategories();
+    this.categories = await this.riskService.getInitiativesCategories();
   
   }
 }

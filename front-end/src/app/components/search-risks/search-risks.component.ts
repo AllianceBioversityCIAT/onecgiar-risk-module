@@ -73,9 +73,10 @@ export class SearchRisksComponent {
     this.riskUsers = await this.riskService.getRiskUsers(
       this.initiative_id as number
     );
-    console.log(this.riskRaiser);
     this.setForm();
-    this.categories = await this.riskService.getRiskCategories();
+    this.categories = await this.riskService.getInitiativeCategories(
+      this.initiative_id as number
+    );
     this.filterForm.valueChanges.subscribe(() => {
       if (time) clearTimeout(time);
       time = setTimeout(() => {
