@@ -71,7 +71,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { StatusPipe } from './pages/initiatives/status.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -107,7 +106,6 @@ import { StatusPipe } from './pages/initiatives/status.pipe';
     SettingComponent,
     MitigationStatusComponent,
     MitigationFormComponent,
-    StatusPipe
   ],
   imports: [
     BrowserModule,

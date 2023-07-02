@@ -87,7 +87,7 @@ export class InitiativesComponent {
   }
   allInitVersion: any [] = [];
   async ngOnInit() {
-    this.getInitiatives();
     this.allInitVersion = await this.initiativeService.getInitiativeAllVersion();
+    this.getInitiatives();
   }
 }

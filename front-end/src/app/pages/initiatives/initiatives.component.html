@@ -93,7 +93,7 @@
               *matCellDef="let element"
               style="min-width: 150px"
             >
-              {{ element.official_code | status : allInitVersion : element.last_updated_date }}
+              {{element.status == 1 ? 'published' : 'draft'}}
             </td>
           </ng-container>
 

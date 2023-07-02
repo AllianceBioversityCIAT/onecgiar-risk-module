@@ -78,6 +78,7 @@ export class InitiativeController {
         official_code: this.offical(query),
         ...this.roles(query, req),
         risks: { category_id: query?.category },
+        status: query.status
       },
       relations: [
         'risks',
@@ -270,16 +271,65 @@ export class InitiativeController {
     });
     return { finaldata, merges };
   }
-  @Get('allversions')
+  @Get('filterStatus')
   @ApiCreatedResponse({
     description: '',
     type: Initiative,
   })
-  getAllVersons() {
-    return this.iniService.iniRepository.find({
+  async filterStatus() {
+    const versions = await this.iniService.iniRepository.find({
       where: { parent_id: Not(IsNull())},
       order: { id: 'DESC'},
     });
+
+    const allInit = await this.iniService.iniRepository.find({
+      where: { parent_id: IsNull()},
+      order: { id: 'DESC'},
+    });
+
+      let initHaveVersions = [];
+      for(let x = 0; x< allInit.length; x++){
+        for(let j = 0; j< versions.length; j++){
+        if(allInit[x].official_code == versions[j].official_code) {
+          if(!initHaveVersions.includes(allInit[x])) {
+            initHaveVersions.push(allInit[x]);
+          }
+        }
+      }
+    }
+
+    let latestVersoinsOfInit = [];
+    for(let init of initHaveVersions){
+      const lastVersion = await this.iniService.iniRepository.findOne({
+        where: { parent_id: init.id },
+        relations: [
+          'risks'
+        ],
+        order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
+      });
+      latestVersoinsOfInit.push(lastVersion);
+    }
+ 
+    for(var x in initHaveVersions) {
+      if(initHaveVersions[x].official_code == latestVersoinsOfInit[x].official_code) {
+        if(new Date(initHaveVersions[x].last_updated_date).valueOf() == new Date(latestVersoinsOfInit[x].submit_date).valueOf()){
+           this.iniService.iniRepository.createQueryBuilder().update(Initiative).set({
+            status: true,
+            last_updated_date: initHaveVersions[x].last_updated_date
+          })
+          .where(`id = ${initHaveVersions[x].id}`)
+          .execute()
+        }
+         else if(new Date(initHaveVersions[x].last_updated_date).valueOf() != new Date(latestVersoinsOfInit[x].submit_date).valueOf()) {
+           this.iniService.iniRepository.createQueryBuilder().update(Initiative).set({
+            status: false,
+            last_updated_date: initHaveVersions[x].last_updated_date
+          })
+          .where(`id = ${initHaveVersions[x].id}`)
+          .execute()
+        }
+      }
+   }
   }
   @Get(':id')
   @ApiCreatedResponse({

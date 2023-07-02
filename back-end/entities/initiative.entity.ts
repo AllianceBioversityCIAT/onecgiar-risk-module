@@ -68,4 +68,8 @@ export class Initiative {
   @Optional()
   @Column({default:null})
   publish_reason:string
+
+  @ApiProperty()
+  @Column({type: 'bool', default: false})
+  status: boolean;
 }

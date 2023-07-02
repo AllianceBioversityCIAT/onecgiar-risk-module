@@ -28,6 +28,12 @@ export class SearchInitiativesComponent {
     { name: 'Initiative Name (ASC)', value: 'name,ASC' },
     { name: 'Initiative Name (DESC)', value: 'name,DESC' },
   ];
+
+  status = [
+    { name: 'published', value: '1' },
+    { name: 'draft', value: '0' }
+  ];
+
   myIni: boolean = false;
   myIniChange() {
     this.filterForm.controls['my_ini'].setValue(this.myIni);
@@ -42,6 +48,7 @@ export class SearchInitiativesComponent {
       my_role: [null],
       sort: [null],
       my_ini: [false],
+      status:[null]
     });
     this.filterForm.valueChanges.subscribe(() => {
       if (time) clearTimeout(time);
