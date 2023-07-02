@@ -78,7 +78,7 @@ export class InitiativeController {
         official_code: this.offical(query),
         ...this.roles(query, req),
         risks: { category_id: query?.category },
-        status: query.status
+        status: query.status,
       },
       relations: [
         'risks',
@@ -87,7 +87,7 @@ export class InitiativeController {
         'roles',
         'roles.user',
       ],
-      order: { ...this.sort(query), risks: { id: 'DESC',top:'ASC'} },
+      order: { ...this.sort(query), risks: { id: 'DESC', top: 'ASC' } },
     });
   }
   getTemplateAdmin(width = false) {
@@ -130,7 +130,10 @@ export class InitiativeController {
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
     template.Redundant = element.redundant;
-    template['Deu date'] = (element.due_date === null) ? 'null' : new Date(element.due_date).toLocaleDateString(); 
+    template['Deu date'] =
+      element.due_date === null
+        ? 'null'
+        : new Date(element.due_date).toLocaleDateString();
     template['Flag to SGD'] = element.flag;
   }
 
@@ -219,7 +222,10 @@ export class InitiativeController {
       element.current_likelihood * element.current_impact;
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
-    template['Deu Date'] = (element.due_date === null) ? 'null' : new Date(element.due_date).toLocaleDateString(); 
+    template['Deu Date'] =
+      element.due_date === null
+        ? 'null'
+        : new Date(element.due_date).toLocaleDateString();
     template.Redundant = element.redundant;
     // template['Flag to SGD'] = element.flag;
   }
@@ -278,20 +284,20 @@ export class InitiativeController {
   })
   async filterStatus() {
     const versions = await this.iniService.iniRepository.find({
-      where: { parent_id: Not(IsNull())},
-      order: { id: 'DESC'},
+      where: { parent_id: Not(IsNull()) },
+      order: { id: 'DESC' },
     });
 
     const allInit = await this.iniService.iniRepository.find({
-      where: { parent_id: IsNull()},
-      order: { id: 'DESC'},
+      where: { parent_id: IsNull() },
+      order: { id: 'DESC' },
     });
 
-      let initHaveVersions = [];
-      for(let x = 0; x< allInit.length; x++){
-        for(let j = 0; j< versions.length; j++){
-        if(allInit[x].official_code == versions[j].official_code) {
-          if(!initHaveVersions.includes(allInit[x])) {
+    let initHaveVersions = [];
+    for (let x = 0; x < allInit.length; x++) {
+      for (let j = 0; j < versions.length; j++) {
+        if (allInit[x].official_code == versions[j].official_code) {
+          if (!initHaveVersions.includes(allInit[x])) {
             initHaveVersions.push(allInit[x]);
           }
         }
@@ -299,37 +305,49 @@ export class InitiativeController {
     }
 
     let latestVersoinsOfInit = [];
-    for(let init of initHaveVersions){
+    for (let init of initHaveVersions) {
       const lastVersion = await this.iniService.iniRepository.findOne({
         where: { parent_id: init.id },
-        relations: [
-          'risks'
-        ],
-        order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
+        relations: ['risks'],
+        order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
       });
       latestVersoinsOfInit.push(lastVersion);
     }
- 
-    for(var x in initHaveVersions) {
-      if(initHaveVersions[x].official_code == latestVersoinsOfInit[x].official_code) {
-        if(new Date(initHaveVersions[x].last_updated_date).valueOf() == new Date(latestVersoinsOfInit[x].submit_date).valueOf()){
-           this.iniService.iniRepository.createQueryBuilder().update(Initiative).set({
-            status: true,
-            last_updated_date: initHaveVersions[x].last_updated_date
-          })
-          .where(`id = ${initHaveVersions[x].id}`)
-          .execute()
-        }
-         else if(new Date(initHaveVersions[x].last_updated_date).valueOf() != new Date(latestVersoinsOfInit[x].submit_date).valueOf()) {
-           this.iniService.iniRepository.createQueryBuilder().update(Initiative).set({
-            status: false,
-            last_updated_date: initHaveVersions[x].last_updated_date
-          })
-          .where(`id = ${initHaveVersions[x].id}`)
-          .execute()
+
+    for (var x in initHaveVersions) {
+      if (
+        initHaveVersions[x].official_code ==
+        latestVersoinsOfInit[x].official_code
+      ) {
+        if (
+          new Date(initHaveVersions[x].last_updated_date).valueOf() ==
+          new Date(latestVersoinsOfInit[x].submit_date).valueOf()
+        ) {
+          this.iniService.iniRepository
+            .createQueryBuilder()
+            .update(Initiative)
+            .set({
+              status: true,
+              last_updated_date: initHaveVersions[x].last_updated_date,
+            })
+            .where(`id = ${initHaveVersions[x].id}`)
+            .execute();
+        } else if (
+          new Date(initHaveVersions[x].last_updated_date).valueOf() !=
+          new Date(latestVersoinsOfInit[x].submit_date).valueOf()
+        ) {
+          this.iniService.iniRepository
+            .createQueryBuilder()
+            .update(Initiative)
+            .set({
+              status: false,
+              last_updated_date: initHaveVersions[x].last_updated_date,
+            })
+            .where(`id = ${initHaveVersions[x].id}`)
+            .execute();
         }
       }
-   }
+    }
   }
   @Get(':id')
   @ApiCreatedResponse({
@@ -351,7 +369,7 @@ export class InitiativeController {
           'roles',
           'roles.user',
         ],
-        order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
+        order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
       })
       .catch((d) => {
         throw new NotFoundException();
@@ -533,7 +551,7 @@ export class InitiativeController {
     @Body('top') top: any,
     @Req() req,
   ): Promise<Initiative> {
-    return this.iniService.createINIT(id, reason, req.user,top);
+    return this.iniService.createINIT(id, reason, req.user, top);
   }
 
   @Get(':id/versions')
@@ -552,7 +570,7 @@ export class InitiativeController {
         'roles.user',
         'created_by',
       ],
-      order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
+      order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
     });
   }
 
@@ -572,7 +590,7 @@ export class InitiativeController {
         'roles.user',
         'created_by',
       ],
-      order: { id: 'DESC', risks: { id: 'DESC' ,top:'ASC' } },
+      order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
     });
   }
 
@@ -646,6 +664,7 @@ export class InitiativeController {
       order: { current_level: 'DESC' },
       take: 5,
     });
+
     const current_impact = top_5.map((d) => d.current_level);
     const current_ids = top_5.map((d) => d.id);
 
@@ -670,7 +689,7 @@ export class InitiativeController {
       where: {
         initiative_id: id,
         id: Not(In(similar1.map((d) => d.id))),
-        current_level: MoreThan(similar1[0] ? similar1[0].current_level : null),
+        current_level: MoreThan(similar1[0] ? similar1[0].current_level : 0),
       },
       order: { current_level: 'DESC' },
       take: 5,
