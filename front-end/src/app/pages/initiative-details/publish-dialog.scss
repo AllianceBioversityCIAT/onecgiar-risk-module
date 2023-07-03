@@ -55,3 +55,20 @@
 .error{
     color: red;
 }
+
+.dialog {
+  overflow: hidden !important;
+}
+
+
+.dialogFooter {
+  background-color: rgb(255, 255, 255);
+  position: sticky;
+  z-index: 2;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px !important;
+
+} 

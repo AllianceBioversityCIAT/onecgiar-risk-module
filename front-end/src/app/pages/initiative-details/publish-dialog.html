@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Publish Risks</h1>
 
-<div mat-dialog-content>
+<div mat-dialog-content class="dialog">
   <p>
     Please make sure the submitted data is accurate. Take note that no further
     changes can be made after publication.
@@ -52,7 +52,7 @@
   <p *ngIf="error" class="error">please fill publish reason and chose your top 5 risks</p>
 </div>
 
-<div mat-dialog-actions>
+<div mat-dialog-actions class="dialogFooter">
   <button mat-button (click)="onNoClick()">Cancel</button>
   <button mat-raised-button color="primary" (click)="publish()">Publish</button>
 </div>

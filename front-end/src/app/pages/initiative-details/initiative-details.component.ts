@@ -167,7 +167,8 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
   async publish(id: number) {
     this.dialog
       .open(PublishDialog, {
-        maxWidth: '500px',
+        height: '800px',
+        maxWidth: '700px',
         data: { reason: '', initiative_id: this.id, top: [] },
       })
       .afterClosed()
