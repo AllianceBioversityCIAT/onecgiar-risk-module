@@ -42,7 +42,7 @@ export class AnnouncementComponent implements OnInit {
 
   openFormDialog(id:any){
     const _popup = this.dialog.open(AnnouncementFormComponent,{
-      width:'auto',
+      maxWidth:'750px',
       maxHeight: '650px',
       data:{
         id:id
