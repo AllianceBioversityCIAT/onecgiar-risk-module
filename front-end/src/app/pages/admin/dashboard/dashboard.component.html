@@ -1,0 +1,35 @@
+<ng-container>
+  <div class="globalContainer">
+    <div class="head">
+      <h1 class="primaryColor">Dashboard</h1>
+      <div class="buttons"></div>
+    </div>
+    <div class="tableContainer dashboard">
+      <highcharts-chart
+        *ngIf="risk_profile_current_chartOptions"
+        [Highcharts]="Highcharts"
+        [options]="risk_profile_current_chartOptions"
+      >
+      </highcharts-chart>
+      <highcharts-chart
+        *ngIf="risk_profile_target_chartOptions"
+        [Highcharts]="Highcharts"
+        [options]="risk_profile_target_chartOptions"
+      >
+      </highcharts-chart>
+    </div>
+    <div class="tableContainer dashboard">
+      <highcharts-chart
+        *ngIf="avg_level_chartOptions"
+        [Highcharts]="Highcharts"
+        [options]="avg_level_chartOptions"
+      >
+      </highcharts-chart>
+      <highcharts-chart
+      *ngIf="status_of_action_chartOptions"
+      [Highcharts]="Highcharts"
+      [options]="status_of_action_chartOptions"
+    >
+    </highcharts-chart>
+    </div></div
+></ng-container>

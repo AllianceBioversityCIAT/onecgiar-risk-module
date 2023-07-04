@@ -15,6 +15,7 @@ import { VersionDetailsComponent } from './pages/version-details/version-details
 import { VersionsDashboardComponent } from './pages/versions-dashboard/versions-dashboard.component';
 import { SettingComponent } from './pages/admin/setting/setting.component';
 import { MitigationStatusComponent } from './pages/admin/mitigation-status/mitigation-status.component';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,8 @@ const routes: Routes = [
     component: AdminComponent,
     canActivate: [AuthGuard, AdminGuard],
     children: [
-      { path: '', redirectTo: '/admin/categories', pathMatch: 'full' },
+      { path: '',
+      component: DashboardComponent,},
       {
         path: 'users',
         component: UsersComponent,

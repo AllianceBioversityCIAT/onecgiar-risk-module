@@ -71,6 +71,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -106,6 +108,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     SettingComponent,
     MitigationStatusComponent,
     MitigationFormComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -142,6 +145,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     
     MatDatepickerModule,
     MatNativeDateModule,
+    HighchartsChartModule
   ],
   providers: [BreadcrumbService, AppSocket,  MatDatepickerModule, 
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }

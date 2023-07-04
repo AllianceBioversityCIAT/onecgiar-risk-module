@@ -35,5 +35,6 @@ import { VariablesService } from 'src/variables/variables.service';
     AuthModule,
   ],
   providers: [InitiativeService, RiskService, EmailsService, VariablesService],
+  exports:[InitiativeService,RiskService]
 })
 export class InitiativeModule {}

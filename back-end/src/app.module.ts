@@ -2,9 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Initiative } from 'entities/initiative.entity';
-import { Risk } from 'entities/risk.entity';
-import { User } from 'entities/user.entitiy';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +15,8 @@ import { VariablesModule } from './variables/variables.module';
 import { EventsModule } from './events/events.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { MitigationStatusModule } from './mitigation-status/mitigation-status.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+
 
 @Module({
   imports: [
@@ -44,7 +43,8 @@ import { MitigationStatusModule } from './mitigation-status/mitigation-status.mo
     VariablesModule,
     EventsModule,
     AnnouncementModule,
-    MitigationStatusModule
+    MitigationStatusModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [AppService],
