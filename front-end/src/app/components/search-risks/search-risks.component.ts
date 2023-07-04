@@ -38,6 +38,11 @@ export class SearchRisksComponent {
   myIniChange() {
     this.filterForm.controls['my_ini'].setValue(this.myIni);
   }
+
+  redundant: boolean = false;
+  redundantChange() {
+    this.filterForm.controls['redundant'].setValue(this.redundant);
+  }
   setForm() {
     this.filterForm = this.fb.group({
       title: [null],
@@ -45,10 +50,12 @@ export class SearchRisksComponent {
       created_by: [null],
       owner: [null],
       sort: [null],
+      redundant: [false],
     });
   }
 
   resetForm() {
+    this.redundant = false;
     this.myIni = false;
     this.filterForm.reset();
     this.filterForm.markAsUntouched();

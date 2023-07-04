@@ -45,6 +45,8 @@ export class RiskTableComponent {
   @Input() savePdf: EventEmitter<any> = new EventEmitter<any>();
   @Input() my_risks: any;
   @Input() showingVersion: boolean = false;
+  @Input() showReduntent: boolean = true;
+
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 
   toPdf: boolean = false;
@@ -52,9 +54,14 @@ export class RiskTableComponent {
   public SavePDF(): void {
     this.toPdf = true;
     let actions = false;
+    let redundant = false;
     if (this.displayedColumns.includes('Actions')) {
       this.displayedColumns.pop();
       actions = true;
+      if (this.displayedColumns.includes('Redundant')) {
+        this.displayedColumns.pop();
+        redundant = true;
+      }
     }
     setTimeout(() => {
       let content = this.pdfcontent.nativeElement;
@@ -71,6 +78,7 @@ export class RiskTableComponent {
         callback: (doc) => {
           doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
           this.toPdf = false;
+          if (redundant) this.displayedColumns.push('Redundant');
           if (actions) this.displayedColumns.push('Actions');
         },
       });
@@ -154,6 +162,10 @@ export class RiskTableComponent {
         this.displayedColumns.push('OwnerActions');
       console.log('OwnerActions', this.my_risks);
     }, 1000);
+
+    if(this.showReduntent == false && this.displayedColumns.includes('Redundant')) {
+      this.displayedColumns.pop();
+    }
   }
   unlock(risk_id: any) {
     console.log('unlock');

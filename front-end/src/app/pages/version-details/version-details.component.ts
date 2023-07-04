@@ -18,7 +18,7 @@ export class VersionDetailsComponent {
   ) {}
 
   dataSource = new MatTableDataSource<any>([]);
-
+  showReduntent: boolean = false;
   @ViewChild(MatPaginator) paginator: any;
 
   ngAfterViewInit() {

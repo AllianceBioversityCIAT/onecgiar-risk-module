@@ -125,7 +125,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.riskService.deleteRisk(risk.id);
-          this.loadRisks();
+          this.loadInitiative();
           this.toastr.success('Success', `${risk.title} has been deleted`);
         }
       });
@@ -142,7 +142,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
       data: { initiative_id: this.id },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      this.loadRisks();
+      this.loadInitiative();
     });
   }
 
@@ -162,7 +162,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
     this.savePdf.emit();
   }
   refresh(data: any = null) {
-    this.loadRisks();
+    this.loadInitiative();
   }
   async publish(id: number) {
     this.dialog
@@ -180,7 +180,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
             'Success',
             `Risks for ${this.initiative.name} has been published successfully`
           );
-          this.loadRisks();
+          this.loadInitiative();
         }
       });
   }
@@ -210,11 +210,12 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
     this.dataSource = new MatTableDataSource<any>(
       await this.riskService.getRisks(this.id, this.filters)
     );
-    this.reload = false;
-    setTimeout(async () => {
-      this.loadInitiative()
-      this.reload = true;
-    }, 500);
+    
+    // this.reload = false;
+    // setTimeout(async () => {
+    //   await this.loadInitiative();
+    //   this.reload = true;
+    // }, 500);
   }
   NumberOfRisks: any;
   versionId: any;

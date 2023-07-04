@@ -117,7 +117,7 @@ export class InitiativeController {
       'Risk raiser': null,
       'Flag to SGD': null,
       'Due date': null,
-      Redundant: false,
+      // Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
@@ -139,7 +139,7 @@ export class InitiativeController {
       element.current_likelihood * element.current_impact;
     template.Category = element.category.title;
     template['Risk raiser'] = element.created_by?.full_name;
-    template.Redundant = element.redundant;
+    // template.Redundant = element.redundant;
     template['Due date'] =
       element.due_date === null
         ? 'null'
@@ -151,11 +151,11 @@ export class InitiativeController {
     let finaldata = [this.getTemplateAdmin(true)];
     let merges = [
       {
-        s: { c: 16, r: 0 },
-        e: { c: 17, r: 0 },
+        s: { c: 15, r: 0 },
+        e: { c: 16, r: 0 },
       },
     ];
-    for (let index = 0; index < 16; index++) {
+    for (let index = 0; index < 15; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -210,7 +210,7 @@ export class InitiativeController {
       'Risk raiser': null,
       // "Flag to SGD":null,
       'Due Date': null,
-      Redundant: false,
+      // Redundant: false,
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
@@ -236,7 +236,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template.Redundant = element.redundant;
+    // template.Redundant = element.redundant;
     // template['Flag to SGD'] = element.flag;
   }
 
@@ -244,11 +244,11 @@ export class InitiativeController {
     let finaldata = [this.getTemplateUser(true)];
     let merges = [
       {
-        s: { c: 15, r: 0 },
-        e: { c: 16, r: 0 },
+        s: { c: 14, r: 0 },
+        e: { c: 15, r: 0 },
       },
     ];
-    for (let index = 0; index < 15; index++) {
+    for (let index = 0; index < 14; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -295,7 +295,7 @@ export class InitiativeController {
   async getInitiatives(@Param('id') id: number) {
     let asd = await this.iniService.iniRepository
       .findOneOrFail({
-        where: { id },
+        where: { id , risks: { redundant : false }},
         relations: [
           'risks',
           'risks.category',
@@ -326,7 +326,7 @@ export class InitiativeController {
       where: { parent_id: IsNull() },
     });
     const risks = await this.riskService.riskRepository.find({
-      where: { initiative_id: In(ininit.map((d) => d.id)) },
+      where: { initiative_id: In(ininit.map((d) => d.id)) , redundant: false},
       relations: [
         'initiative',
         'category',
@@ -399,7 +399,7 @@ export class InitiativeController {
   })
   async exportExcel(@Param('id') id: number, @Query() userRole: any) {
     let init = await this.iniService.iniRepository.findOne({
-      where: { id },
+      where: { id , risks: { redundant: false } },
       relations: [
         'risks',
         'risks.category',
@@ -644,7 +644,7 @@ export class InitiativeController {
   })
   async top(@Param('id') id: number) {
     const top_5 = await this.riskService.riskRepository.find({
-      where: { initiative_id: id },
+      where: { initiative_id: id , redundant: false },
       order: { current_level: 'DESC' },
       take: 5,
     });
@@ -657,6 +657,7 @@ export class InitiativeController {
         initiative_id: id,
         current_level: In(current_impact),
         id: Not(In(current_ids)),
+        redundant: false
       },
       order: { current_level: 'DESC' },
       take: 5,
@@ -674,6 +675,7 @@ export class InitiativeController {
         initiative_id: id,
         id: Not(In(similar1.map((d) => d.id))),
         current_level: MoreThan(similar1[0] ? similar1[0].current_level : 0),
+        redundant: false
       },
       order: { current_level: 'DESC' },
       take: 5,

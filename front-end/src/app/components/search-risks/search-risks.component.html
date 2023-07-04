@@ -46,6 +46,13 @@
     </form>
   </mat-card-content>
   <mat-card-actions>
+    <mat-checkbox
+    labelPosition="before"
+      [(ngModel)]="redundant"
+      (ngModelChange)="redundantChange()"
+    >
+    Show Redundant risk
+    </mat-checkbox>
     <button mat-raised-button color="accent" (click)="resetForm()">
       Reset
     </button>
