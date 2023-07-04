@@ -59,7 +59,7 @@ export class PublishDialog implements OnInit {
   }
   async publish() {
     this.error = false;
-    if (this.data.top.length == 5 && this.data.reason != '')
+    if (this.data.top.length <= 5 && this.data.reason != '')
       this.dialogRef.close(this.data);
     else this.error = true;
   }
@@ -201,7 +201,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
 
     console.log('initiative  this.riskOwners', this.my_risks);
     this.dataSource = new MatTableDataSource<any>(
-      await this.riskService.getRisks(this.id)
+      await this.riskService.getRisks(this.id,this.filters)
     );
     this.NumberOfRisks = this.dataSource._renderData._value.length;
   }
@@ -212,7 +212,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
     );
     this.reload = false;
     setTimeout(async () => {
-      await this.loadInitiative();
+      this.loadInitiative()
       this.reload = true;
     }, 500);
   }
