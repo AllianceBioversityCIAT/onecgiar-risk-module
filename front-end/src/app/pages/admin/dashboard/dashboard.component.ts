@@ -100,6 +100,9 @@ export class DashboardComponent implements OnInit {
         plotShadow: false,
         type: 'pie',
       },
+      credits: {
+        enabled: false,
+      },
       title: {
         text: 'Status of action',
         align: 'center',
@@ -149,7 +152,9 @@ export class DashboardComponent implements OnInit {
       legend: {
         enabled: false,
       },
-
+      credits: {
+        enabled: false,
+      },
       title: {
         text: type + ' Risk profile',
       },
