@@ -79,7 +79,7 @@ export class NewRiskComponent {
         String(this?.data?.risk?.current_impact | 0),
         Validators.required,
       ],
-      due_date: [ this?.data?.risk?.due_date, (c: AbstractControl) => (new Date(c.value).getTime() < Date.now() ? { invalid: true } : null) ]
+      due_date: [ this?.data?.risk?.due_date, [(c: AbstractControl) => (new Date(c.value).getTime() < Date.now() ? { invalid: true } : null), Validators.required]]
     });
 
     if (this?.data?.risk?.mitigations) {

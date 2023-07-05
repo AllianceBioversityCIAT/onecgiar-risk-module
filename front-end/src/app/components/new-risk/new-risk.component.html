@@ -272,7 +272,8 @@
             <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
           </mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="!newRiskForm.controls.date?.valid">Invalid date format</mat-error>
+          <mat-error *ngIf="newRiskForm.controls['due_date'].errors?.['required'] && this.newRiskForm.controls['due_date'].value == null">Due date is required</mat-error>
+          <mat-error *ngIf="newRiskForm.controls['due_date'].errors?.['invalid'] && this.newRiskForm.controls['due_date'].value != null">Invalid date format</mat-error>
         </mat-form-field>
       </div>
       <hr />
