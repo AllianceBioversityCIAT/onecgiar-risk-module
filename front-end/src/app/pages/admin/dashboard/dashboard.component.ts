@@ -11,17 +11,22 @@ require('highcharts/highcharts-more.js')(Highcharts);
 })
 export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService) {}
-  asd: any = null;
   data: any = null;
   status: any = null;
+  categoriesCount: any = null;
   risk_profile_current_chartOptions: any = null;
   risk_profile_target_chartOptions: any = null;
   avg_level_chartOptions: any = null;
+  categories_count_chartOptions: any = null;
   status_of_action_chartOptions: any = null;
-  categories: any = null;
+  categoriesLevels: any = null;
+  details: any = null;
   async ngOnInit() {
     this.data = await this.dashboardService.current();
-    this.categories = await this.dashboardService.categories();
+    this.details = await this.dashboardService.details();
+    this.categoriesLevels = await this.dashboardService.categoriesLevels();
+    this.categoriesCount = await this.dashboardService.categoriesCount();
+    console.log(this.categoriesCount);
     this.status = await this.dashboardService.status();
     this.risk_profile_target_chartOptions = this.riskProfile(
       this.data,
@@ -41,7 +46,7 @@ export class DashboardComponent implements OnInit {
         align: 'center',
       },
       xAxis: {
-        categories: this.categories
+        categories: this.categoriesLevels
           .filter((d: any) => d.current_level)
           .map((d: any) => d.title),
         title: {
@@ -80,14 +85,14 @@ export class DashboardComponent implements OnInit {
         {
           name: 'Current',
           colorByPoint: true,
-          data: this.categories
+          data: this.categoriesLevels
             .filter((d: any) => d.current_level)
             .map((d: any) => +d.current_level),
         },
         {
           name: 'Target',
           colorByPoint: true,
-          data: this.categories
+          data: this.categoriesLevels
             .filter((d: any) => d.target_level)
             .map((d: any) => +d.target_level),
         },
@@ -137,7 +142,48 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
-
+    this.categories_count_chartOptions = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+      },
+      credits: {
+        enabled: false,
+      },
+      title: {
+        text: 'Risk Categories',
+        align: 'center',
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%',
+        },
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          },
+        },
+      },
+      series: [
+        {
+          name: 'Usage',
+          colorByPoint: true,
+          data: this.categoriesCount.map((d: any) => {
+            return { name: d.title, y: +d.total_count };
+          }),
+        },
+      ],
+    };
   }
   Highcharts: typeof Highcharts = Highcharts;
 
@@ -225,5 +271,22 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
+  }
+
+  color(level: number) {
+    switch (level) {
+      case 25:
+        return ` background-color: #1f6ca6;`;
+
+      case 16:
+        return ` background-color: #257fc2;`;
+      case 12:
+        return ` background-color: #3090d9;`;
+      case 9:
+        return ` background-color: #0091ff;`;
+
+      default:
+        return ` background-color: #6ab8f2;`;
+    }
   }
 }

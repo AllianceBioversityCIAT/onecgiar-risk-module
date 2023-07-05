@@ -13,10 +13,16 @@ export class DashboardService extends MainService {
   }
 
   async current() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/initiative/score', this.headers).pipe(map(d=>d))).catch((e) => false);
   }
-  async categories() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories', this.headers).pipe(map(d=>d))).catch((e) => false);
+  async details() {
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/initiative/details', this.headers).pipe(map(d=>d))).catch((e) => false);
+  }
+  async categoriesLevels() {
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/levels', this.headers).pipe(map(d=>d))).catch((e) => false);
+  }
+  async categoriesCount() {
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/count', this.headers).pipe(map(d=>d))).catch((e) => false);
   }
 
   async status() {

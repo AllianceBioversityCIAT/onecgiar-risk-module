@@ -4,14 +4,32 @@ import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { InitiativeService } from 'src/initiative/initiative.service';
-import { DataSource, ILike } from 'typeorm';
+import { DataSource, ILike, IsNull } from 'typeorm';
 
 @ApiTags('Dashboard')
 @Controller('Dashboard')
 export class DashboardController {
-  constructor(private dataSource: DataSource) {}
-  @Get()
-  getInitiative() {
+  constructor(private dataSource: DataSource,private iniService: InitiativeService) {}
+
+  
+  @Get('initiative/details')
+  getInitiativeDetails() {
+    return this.iniService.iniRepository.find({
+        where: {
+          parent_id: IsNull(),
+        },
+        relations: [
+          'risks',
+          'risks.category',
+          'risks.risk_owner',
+          'roles',
+          'roles.user',
+        ],
+        order: {   risks: { current_level: 'DESC' } },
+      });
+  }
+  @Get('initiative/score')
+  getInitiativeScore() {
     return this.dataSource
       .createQueryBuilder()
       .from('initiative', 'initiative')
@@ -51,7 +69,7 @@ export class DashboardController {
       .execute();
   }
 
-  @Get('categories')
+  @Get('categories/levels')
   getCategories() {
     return this.dataSource
       .createQueryBuilder()
@@ -71,6 +89,21 @@ export class DashboardController {
           .from(Risk, 'risk');
       }, 'current_level')
 
+      .execute();
+  }
+  @Get('categories/count')
+  getcategoeis() {
+    return this.dataSource
+      .createQueryBuilder()
+      .from('risk_category', 'risk_category')
+      .addSelect('risk_category.id', 'id')
+      .addSelect('risk_category.title', 'title')
+      .addSelect((subQuery) => {
+        return subQuery
+          .addSelect(`COUNT(risk.id)`, 'total_count')
+          .where('risk.category_id = risk_category.id')
+          .from(Risk, 'risk');
+      }, 'total_count')
       .execute();
   }
 

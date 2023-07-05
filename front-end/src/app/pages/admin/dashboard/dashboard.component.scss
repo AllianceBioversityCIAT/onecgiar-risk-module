@@ -12,3 +12,21 @@
 highcharts-chart{
     width: 48% !important;
 }
+
+.one highcharts-chart{
+    width: 100% !important;
+ 
+}
+mat-card{
+    width: 100% !important;
+    padding: 30px;
+    tabel{
+        border: none;
+    }
+}
+.level{
+    background-color: #0091ff;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
