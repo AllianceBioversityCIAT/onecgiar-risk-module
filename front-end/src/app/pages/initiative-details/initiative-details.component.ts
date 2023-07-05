@@ -163,6 +163,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
   openNewRiskDialog() {
     const dialogRef = this.dialog.open(NewRiskComponent, {
       height: '90vh',
+      width: '1300px',
       data: { initiative_id: this.id },
     });
     dialogRef.afterClosed().subscribe((result) => {
