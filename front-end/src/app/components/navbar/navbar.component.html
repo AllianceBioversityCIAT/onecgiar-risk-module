@@ -8,6 +8,7 @@
       </ng-template>
     </div>
   </div>
+  <p class="warning">This tool is in a testing mode. Please expect some technical glitches (incl. data loss) due to development works</p>
   <div class="currentUser">
     <button mat-raised-button color="primary" routerLink="/admin"  *ngIf="user_info?.role =='admin'" >Admin area</button>
     <ngx-avatars *ngIf="user_info" size="35" matTooltip="Logout" (clickOnAvatar)="login()" [name]="user_info?.full_name"></ngx-avatars>

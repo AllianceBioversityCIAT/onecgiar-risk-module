@@ -4,6 +4,10 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 1em 2em;
+  .warning {
+    color: red;
+    margin:0;
+  }
   .logoAndBredcrumb {
     display: flex;
     align-items: center;
