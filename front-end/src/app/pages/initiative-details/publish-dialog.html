@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <p *ngIf="error" class="error">please fill publish reason and chose your top 5 risks</p>
+  <p *ngIf="error != ''" class="error">{{error}}</p>
 </div>
 
 <div mat-dialog-actions class="dialogFooter">
