@@ -130,6 +130,11 @@ export class InitiativeService {
       email: role.email.toLowerCase(),
       role: role.role,
     };
+    //To the user that was added by the Admin or Leader/Coordinator
+    const user = await this.userService.userRepository.findOne({
+      where: { id: role.user_id },
+    });
+    this.emailsService.sendEmailTobyVarabel(user, 10, 11);
 
     return await this.iniRolesRepository.save(newRole, { reload: true });
   }
@@ -179,14 +184,17 @@ export class InitiativeService {
       order: { id: 'DESC' },
     });
 
-    for(let init of allInit){
+    for (let init of allInit) {
       const lastVersion = await this.iniRepository.findOne({
         where: { parent_id: init.id },
         relations: ['risks'],
-        order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } }
-      })
-      if(lastVersion != null) {
-        if (new Date(init.last_updated_date).valueOf() == new Date(lastVersion.submit_date).valueOf()) {
+        order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
+      });
+      if (lastVersion != null) {
+        if (
+          new Date(init.last_updated_date).valueOf() ==
+          new Date(lastVersion.submit_date).valueOf()
+        ) {
           this.iniRepository
             .createQueryBuilder()
             .update(Initiative)
@@ -196,23 +204,25 @@ export class InitiativeService {
             })
             .where(`id = ${init.id}`)
             .execute();
-        }
-        else if(init.status == true) {
-          if(new Date(init.last_updated_date).valueOf() != new Date(lastVersion.submit_date).valueOf()) {
+        } else if (init.status == true) {
+          if (
+            new Date(init.last_updated_date).valueOf() !=
+            new Date(lastVersion.submit_date).valueOf()
+          ) {
             this.iniRepository
-            .createQueryBuilder()
-            .update(Initiative)
-            .set({
-              status: false,
-              last_updated_date: new Date()
-            })
-            .where(`id = ${init.id}`)
-            .execute();
+              .createQueryBuilder()
+              .update(Initiative)
+              .set({
+                status: false,
+                last_updated_date: new Date(),
+              })
+              .where(`id = ${init.id}`)
+              .execute();
           }
         }
       }
     }
-   this.logger.log('filterStatus is finish');
+    this.logger.log('filterStatus is finish');
   }
 
   async syncUserRoles() {

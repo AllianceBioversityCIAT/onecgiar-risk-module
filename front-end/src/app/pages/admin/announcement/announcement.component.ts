@@ -13,16 +13,16 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./announcement.component.scss'],
 })
 export class AnnouncementComponent implements OnInit {
-  constructor(private dialog: MatDialog,private announcementService: AnnouncementService,
-    private toster: ToastrService,
-    ){}
-  announcementData:any;
-
+  constructor(
+    private dialog: MatDialog,
+    private announcementService: AnnouncementService,
+    private toster: ToastrService
+  ) {}
+  announcementData: any;
 
   ngOnInit(): void {
     this.getData();
   }
-
 
   displayedColumns: string[] = [
     'id',
@@ -32,23 +32,22 @@ export class AnnouncementComponent implements OnInit {
     'created_at',
     'updated_at',
     'send_date',
-    'actions'
+    'actions',
   ];
 
   async getData() {
     this.announcementData = await this.announcementService.getAnnouncement();
   }
 
-
-  openFormDialog(id:any){
-    const _popup = this.dialog.open(AnnouncementFormComponent,{
-      maxWidth:'750px',
+  openFormDialog(id: any) {
+    const _popup = this.dialog.open(AnnouncementFormComponent, {
+      maxWidth: '750px',
       maxHeight: '650px',
-      data:{
-        id:id
-      }
+      data: {
+        id: id,
+      },
     });
-    _popup.afterClosed().subscribe(response => {
+    _popup.afterClosed().subscribe((response) => {
       this.getData();
     });
   }
@@ -58,31 +57,36 @@ export class AnnouncementComponent implements OnInit {
   }
 
   sendTest(id: number) {
-    const _popup = this.dialog.open(SendEmailFormComponent,{
-      width:'300px',
+    const _popup = this.dialog.open(SendEmailFormComponent, {
+      width: '300px',
       maxHeight: '200px',
-      data:{
-        id:id,
-      }
+      data: {
+        id: id,
+      },
     });
-    _popup.afterClosed().subscribe(response => {
-      this.getData();
+    _popup.afterClosed().subscribe(async (response) => {
+      if (response) {
+        await this.announcementService.sendTest(id, response);
+        this.getData();
+        this.toster.success('Sent successfully');
+      }
     });
   }
 
   sendAll(id: number, status: string) {
-    const _popup = this.dialog.open(ConfirmComponent,{
-      width:'auto',
+    const _popup = this.dialog.open(ConfirmComponent, {
+      width: 'auto',
       maxHeight: 'auto',
-      data:{
-        id:id,
-        title:'Send to all users',
-        message: 'Are you sure you want to send this Announcement to all users in the system?'
-      }
+      data: {
+        id: id,
+        title: 'Send to all users',
+        message:
+          'Are you sure you want to send this Announcement to all users in the system?',
+      },
     });
-    _popup.afterClosed().subscribe(async response => {
-      if(response == true) {
-        await this.announcementService.updateAnnouncementStatus(id, status);
+    _popup.afterClosed().subscribe(async (response) => {
+      if (response == true) {
+        await this.announcementService.send(id);
         this.getData();
         this.toster.success('Sent successfully');
       }
