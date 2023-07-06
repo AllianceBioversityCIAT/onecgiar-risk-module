@@ -51,13 +51,23 @@ export class InitiativeController {
   ) {}
 
   offical(query) {
-    return query.initiative_id != null
-      ? query.initiative_id <= 9
-        ? 'INIT-0' + query.initiative_id
-        : query.initiative_id
-        ? 'INIT-' + query.initiative_id
-        : null
-      : null;
+    if(query.initiative_id != null) {
+      if(query.initiative_id.charAt(0) == '0') {
+        const id =  query.initiative_id.substring(1);
+        if(id <= 9) {
+          return 'INIT-0' + id;
+        }
+      }
+      else {
+        if(query.initiative_id <= 9) {
+          return 'INIT-0' + query.initiative_id
+        }
+        else {
+          return 'INIT-' + query.initiative_id;
+        }
+      }
+    }
+    return query.initiative_id;
   }
   roles(query, req) {
     if (query?.my_role)
