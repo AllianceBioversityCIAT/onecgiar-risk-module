@@ -76,6 +76,14 @@ export class InitiativeService {
       reload: true,
     });
 
+    await this.iniRepository.createQueryBuilder().update(Initiative)
+    .set({
+      last_version_id: new_init.id,
+      last_updated_date: old_initiative.last_updated_date,
+    })
+    .where(`id = ${old_initiative.id}`)
+    .execute();
+
     const old_Risks = await this.riskService.riskRepository.find({
       where: { initiative_id: old_init_id },
       relations: ['mitigations', 'mitigations.status'],

@@ -51,6 +51,11 @@ export class Initiative {
   parent_id: number;
 
   @ApiProperty()
+  @Optional()
+  @Column({default:null})
+  last_version_id: number;
+
+  @ApiProperty()
   @CreateDateColumn()
   submit_date: Date;
 
