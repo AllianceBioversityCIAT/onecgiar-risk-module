@@ -266,6 +266,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 130px"
             >
               Actions
             </th>
@@ -273,7 +274,7 @@
               class="center"
               mat-cell
               *matCellDef="let element"
-              style="min-width: 105px"
+              style="min-width: 130px"
             >
             <ng-container *ngIf="locked && !locked[element.id]" >
               <button
@@ -328,6 +329,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
+              style="min-width: 130px"
             >
               Actions
             </th>
@@ -336,7 +338,7 @@
               mat-cell
               *matCellDef="let element"
             
-              style="min-width: 105px"
+              style="min-width: 130px"
             >
               <button
                 matTooltip="Update"
