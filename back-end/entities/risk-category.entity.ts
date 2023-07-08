@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinTable, ManyToOne, JoinColumn } from 'typeorm';
 import { Risk } from './risk.entity';
+import { Optional } from '@nestjs/common';
+import { CategoryGroup } from './categories-groups';
 
 @Entity()
 export class RiskCategory {
@@ -19,5 +21,12 @@ export class RiskCategory {
   @OneToMany(() => Risk, (risk) => risk.initiative)
   @JoinTable()
   risks: Array<Risk>;
+  
+  @Optional()
+  @Column({default:null})
+  category_group_id:number
 
+  @ManyToOne(() => CategoryGroup, (category_group) => category_group.risk_categories)
+  @JoinColumn({ name: 'category_group_id' })
+  category_group: CategoryGroup;
 }

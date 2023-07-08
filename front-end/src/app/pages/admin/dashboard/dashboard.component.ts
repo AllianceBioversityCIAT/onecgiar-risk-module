@@ -19,14 +19,21 @@ export class DashboardComponent implements OnInit {
   avg_level_chartOptions: any = null;
   categories_count_chartOptions: any = null;
   status_of_action_chartOptions: any = null;
+  action_areas_chartOptions: any = null;
+  category_group_chartOptions: any = null;
   categoriesLevels: any = null;
   details: any = null;
+  groups: any = null;
+  action_areas: any = null;
   async ngOnInit() {
     this.data = await this.dashboardService.current();
     this.details = await this.dashboardService.details();
     this.categoriesLevels = await this.dashboardService.categoriesLevels();
     this.categoriesCount = await this.dashboardService.categoriesCount();
-    console.log(this.categoriesCount);
+    this.groups = await this.dashboardService.category_groups();
+    this.action_areas = await this.dashboardService.actionAreas();
+
+    console.log(this.groups,this.action_areas)
     this.status = await this.dashboardService.status();
     this.risk_profile_target_chartOptions = this.riskProfile(
       this.data,
@@ -181,6 +188,93 @@ export class DashboardComponent implements OnInit {
           data: this.categoriesCount.map((d: any) => {
             return { name: d.title, y: +d.total_count };
           }),
+        },
+      ],
+    };
+
+    this.action_areas_chartOptions = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+      },
+      credits: {
+        enabled: false,
+      },
+      title: {
+        text: 'Action Areas',
+        align: 'center',
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%',
+        },
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          },
+        },
+      },
+      series: [
+        {
+          name: 'Usage',
+          colorByPoint: true,
+          data: this.action_areas
+            .map((d: any) => {
+              return { name: d.name, y: +d.total_count };
+            }),
+        },
+      ],
+    };
+    this.category_group_chartOptions = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+      },
+      credits: {
+        enabled: false,
+      },
+      title: {
+        text: 'Categories groups',
+        align: 'center',
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+      },
+      accessibility: {
+        point: {
+          valueSuffix: '%',
+        },
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          },
+        },
+      },
+      series: [
+        {
+          name: 'Usage',
+          colorByPoint: true,
+          data: this.groups
+            .map((d: any) => {
+              return { name: d.name, y: +d.total_count };
+            }),
         },
       ],
     };

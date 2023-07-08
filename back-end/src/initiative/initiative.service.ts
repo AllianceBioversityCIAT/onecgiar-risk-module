@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ActionArea } from 'entities/action-area';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { Risk } from 'entities/risk.entity';
@@ -19,6 +20,8 @@ export class InitiativeService {
     public iniRepository: Repository<Initiative>,
     @InjectRepository(InitiativeRoles)
     public iniRolesRepository: Repository<InitiativeRoles>,
+    @InjectRepository(ActionArea)
+    public actionAreaRepository: Repository<ActionArea>,
     private http: HttpService,
     private riskService: RiskService,
     private userService: UsersService,
@@ -146,6 +149,29 @@ export class InitiativeService {
 
     return await this.iniRolesRepository.save(newRole, { reload: true });
   }
+
+  async syncActionAreaFromClarisa(){
+    const clarisa_action_area = await firstValueFrom(
+      this.http
+        .get(`${process.env.CLARISA_URL}/api/action-areas`, {
+          auth: this.clarisa_auth(),
+        })
+        .pipe(map((d) => d.data)),
+    );
+    for (const action_area of clarisa_action_area) {
+      let actionArea;
+      actionArea = await this.actionAreaRepository.findOne({
+        where: { id: action_area.id },
+      });
+      if (!actionArea) {
+        actionArea = this.actionAreaRepository.create();
+        actionArea.id = action_area.id;
+      }
+      actionArea.name = action_area.name;
+      actionArea.description = action_area.description;
+      await this.actionAreaRepository.save(actionArea);
+    }
+  }
   async syncFromClarisa() {
     try {
       const clarisa_initiatives = await firstValueFrom(
@@ -167,7 +193,7 @@ export class InitiativeService {
         }
         initiative.name = clarisa_initiative.name;
         initiative.official_code = clarisa_initiative.official_code;
-
+        initiative.action_area_id  = clarisa_initiative.action_area_id;
         await this.iniRepository.save(initiative);
       }
       this.logger.log('Sync CLARISA initiative Data ');
@@ -178,6 +204,7 @@ export class InitiativeService {
   @Cron(CronExpression.EVERY_HOUR)
   syncClarisa() {
     this.syncFromClarisa();
+    this.syncActionAreaFromClarisa();
   }
 
   @Cron(CronExpression.EVERY_10_SECONDS)

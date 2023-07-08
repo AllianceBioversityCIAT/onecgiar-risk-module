@@ -24,7 +24,12 @@ export class DashboardService extends MainService {
   async categoriesCount() {
     return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/count', this.headers).pipe(map(d=>d))).catch((e) => false);
   }
-
+  async category_groups() {
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/groups/count', this.headers).pipe(map(d=>d))).catch((e) => false);
+  }
+  async actionAreas() {
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/action_areas/count', this.headers).pipe(map(d=>d))).catch((e) => false);
+  }
   async status() {
     return firstValueFrom(this.http.get(this.backend_url + '/dashboard/status', this.headers).pipe(map(d=>d))).catch((e) => false);
   }

@@ -15,6 +15,7 @@ import {
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
+import { ActionArea } from './action-area';
 @Entity()
 export class Initiative {
   @ApiProperty()
@@ -77,4 +78,12 @@ export class Initiative {
   @ApiProperty()
   @Column({type: 'bool', default: false})
   status: boolean;
+
+  @Optional()
+  @Column({default:null})
+  action_area_id:number
+
+  @ManyToOne(() => ActionArea, (action_area) => action_area.initiatives)
+  @JoinColumn({ name: 'action_area_id' })
+  action_area: ActionArea;
 }

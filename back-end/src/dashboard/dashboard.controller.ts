@@ -38,34 +38,34 @@ export class DashboardController {
       .where('initiative.parent_id is null')
       .addSelect('initiative.official_code', 'official_code')
       .addSelect('initiative.name', 'name')
+      .innerJoin(Risk,'risk','risk.initiative_id = initiative.id')
       .addSelect((subQuery) => {
         return subQuery
-          .addSelect(`ROUND(AVG(risk.target_impact))`, 'target_impact')
+          .addSelect(`AVG(risk.target_impact)`, 'target_impact')
           .where('risk.initiative_id = initiative.id')
           .from(Risk, 'risk');
       }, 'target_impact')
       .addSelect((subQuery) => {
         return subQuery
-          .addSelect(`ROUND(AVG(risk.target_likelihood))`, 'target_likelihood')
+          .addSelect(`AVG(risk.target_likelihood)`, 'target_likelihood')
           .where('risk.initiative_id = initiative.id')
           .from(Risk, 'risk');
       }, 'target_likelihood')
       .addSelect((subQuery) => {
         return subQuery
-          .addSelect(`ROUND(AVG(risk.current_impact))`, 'current_impact')
+          .addSelect(`AVG(risk.current_impact)`, 'current_impact')
           .where('risk.initiative_id = initiative.id')
           .from(Risk, 'risk');
       }, 'current_impact')
       .addSelect((subQuery) => {
         return subQuery
           .addSelect(
-            `ROUND(AVG(risk.current_likelihood))`,
+            `AVG(risk.current_likelihood)`,
             'current_likelihood',
           )
           .where('risk.initiative_id = initiative.id')
           .from(Risk, 'risk');
       }, 'current_likelihood')
-
       .execute();
   }
 
@@ -78,13 +78,13 @@ export class DashboardController {
       .addSelect('risk_category.title', 'title')
       .addSelect((subQuery) => {
         return subQuery
-          .addSelect(`ROUND(AVG(risk.target_level))`, 'target_level')
+          .addSelect(`AVG(risk.target_level)`, 'target_level')
           .where('risk.category_id = risk_category.id')
           .from(Risk, 'risk');
       }, 'target_level')
       .addSelect((subQuery) => {
         return subQuery
-          .addSelect(`ROUND(AVG(risk.current_level))`, 'current_level')
+          .addSelect(`AVG(risk.current_level)`, 'current_level')
           .where('risk.category_id = risk_category.id')
           .from(Risk, 'risk');
       }, 'current_level')
@@ -104,6 +104,38 @@ export class DashboardController {
           .where('risk.category_id = risk_category.id')
           .from(Risk, 'risk');
       }, 'total_count')
+      .execute();
+  }
+
+  @Get('categories/groups/count')
+  getCategoriesGroups() {
+    return this.dataSource
+      .createQueryBuilder()
+      .from('category_group', 'category_group')
+      .addSelect('category_group.id', 'id')
+      .addSelect('category_group.name', 'name')
+      .leftJoin('risk_category','risk_category','risk_category.category_group_id = category_group.id ')
+      .addSelect((subQuery) => {
+        return subQuery
+          .addSelect(`COUNT(risk.id)`, 'total_count')
+          .where('risk.category_id = risk_category.id')
+          .from(Risk, 'risk');
+      }, 'total_count')
+      .addGroupBy('id')
+      .execute();
+  }
+
+  @Get('action_areas/count')
+  getActionAreasCount() {
+    return this.dataSource
+      .createQueryBuilder()
+      .from('action_area', 'action_area')
+      .addSelect('action_area.id', 'id')
+      .addSelect('action_area.name', 'name')
+      .addSelect('COUNT(risk.id)', 'total_count')
+      .leftJoin('initiative','initiative','initiative.action_area_id = action_area.id')
+      .leftJoin('risk','risk','risk.initiative_id = initiative.id')
+      .addGroupBy('action_area.id')
       .execute();
   }
 

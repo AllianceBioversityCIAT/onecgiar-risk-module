@@ -32,6 +32,20 @@
       >
       </highcharts-chart>
     </div>
+    <div class="tableContainer dashboard">
+      <highcharts-chart
+        *ngIf="category_group_chartOptions"
+        [Highcharts]="Highcharts"
+        [options]="category_group_chartOptions"
+      >
+      </highcharts-chart>
+      <highcharts-chart
+        *ngIf="action_areas_chartOptions"
+        [Highcharts]="Highcharts"
+        [options]="action_areas_chartOptions"
+      >
+      </highcharts-chart>
+    </div>
     <div class="tableContainer dashboard one">
       <mat-card>
         <mat-card-title style="text-align: center;">Initiative by risk score</mat-card-title>

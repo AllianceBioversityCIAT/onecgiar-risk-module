@@ -16,6 +16,7 @@ import { Email } from 'src/emails/email.entity';
 import { User } from 'entities/user.entitiy';
 import { Variables } from 'entities/variables.entity';
 import { VariablesService } from 'src/variables/variables.service';
+import { ActionArea } from 'entities/action-area';
 
 @Module({
   controllers: [InitiativeController],
@@ -28,6 +29,7 @@ import { VariablesService } from 'src/variables/variables.service';
       Email,
       User,
       Variables,
+      ActionArea
     ]),
     SharedModule,
     RiskModule,
