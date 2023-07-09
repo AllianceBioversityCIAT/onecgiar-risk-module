@@ -22,7 +22,7 @@
             <mat-select placeholder="Action status" formControlName="mitigation_status_id">
               <mat-option *ngFor="let action of Actions" [value]="action.id">
                 {{action.title}}
-                  <mat-icon  matTooltip="{{action.description}}" matSuffix>help_outline</mat-icon>
+                  <mat-icon  matTooltip="{{action.description}}" [matTooltipPosition]="'left'" matSuffix>help_outline</mat-icon>
               </mat-option>
              
             </mat-select>
