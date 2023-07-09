@@ -125,7 +125,7 @@ export class InitiativeController {
       'Current Risk Level': null,
       Category: null,
       'Risk raiser': null,
-      'Flag to SGD': null,
+      'Flagged': null,
       'Due date': null,
       // Redundant: false,
       Mitigations: width ? 'Description' : null,
@@ -154,7 +154,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Flag to SGD'] = element.flag;
+    template['Flagged'] = element.flag;
   }
 
   prepareDataExcelAdmin(risks) {
