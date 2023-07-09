@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, StreamableFile } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, StreamableFile } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RiskCategory } from 'entities/risk-category.entity';
@@ -42,6 +42,22 @@ export class RiskCategoriesController {
   @Delete(':id')
   deleteCategory(@Param('id') id:number) {
     return this.riskcatRepository.delete(id)
+  }
+
+  @Patch()
+  async disabledCategory(@Body() data: any) {
+    const category = await this.riskcatRepository.findOne({ where : { id : data.item.id } });
+    if(data.act.action == 'disabledCatigory') {
+      category.disabled = false;
+      await this.riskcatRepository.save(category);
+      return true
+    }
+    else {
+      category.disabled = true;
+      await this.riskcatRepository.save(category);
+      return true
+    }
+
   }
 
   @Get('export/all')

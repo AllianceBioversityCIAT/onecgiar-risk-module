@@ -42,6 +42,17 @@ export class CategoryService extends MainService {
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
+
+  async disableCategory(data:any) {
+    return firstValueFrom(
+      this.http
+        .patch(this.backend_url + `/risk-categories`,data, {
+          headers: this.headers,
+        })
+        .pipe(map((d) => d))
+    ).catch((e) => false);
+  }
+
   async deleteCategory(id:any) {
     return firstValueFrom(
       this.http

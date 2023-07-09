@@ -24,6 +24,8 @@ export class CategoriesComponent implements OnInit {
   actions = [
     { title: 'Update', action: 'edit', icon: 'edit' },
     { title: 'Delete', action: 'delete', icon: 'delete' },
+    { title: 'Disabled catigory', action: 'disabledCatigory', icon: 'disabled_visible' },
+    { title: 'Enabled catigory', action: 'enableCatigory', icon: 'visibility' }
   ];
   dataSource: any = [];
   async ngOnInit() {
@@ -52,7 +54,7 @@ export class CategoriesComponent implements OnInit {
         }
       });
   }
-  action(data: any) {
+  async action(data: any) {
     console.log(data);
     if (data?.act?.action == 'edit')
       this.dialog
@@ -97,6 +99,26 @@ export class CategoriesComponent implements OnInit {
             await this.init()
           }
         });
+    else if(data?.act?.action ==  'disabledCatigory') {
+      const result =  await this.categoriesService.disableCategory(data)
+      if(result) {
+        this.toastr.success(
+          'Success',
+          `${data?.item?.title} has been Enabled`
+        );
+        await this.init()
+      }
+    }
+    else if(data?.act?.action ==  'enableCatigory') {
+      const result =  await this.categoriesService.disableCategory(data)
+      if(result) {
+        this.toastr.success(
+          'Success',
+          `${data?.item?.title} has been disabled`
+        );
+        await this.init()
+      }
+    }
   }
 
   async export() {

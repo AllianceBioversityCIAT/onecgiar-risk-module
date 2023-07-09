@@ -73,6 +73,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { FilterActionsPipe } from './components/general-tabel/filter-actions.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -109,6 +110,7 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
     MitigationStatusComponent,
     MitigationFormComponent,
     DashboardComponent,
+    FilterActionsPipe,
   ],
   imports: [
     BrowserModule,

@@ -15,13 +15,15 @@
       <mat-form-field class="w-auto" appearance="outline">
         <mat-select placeholder="Risk Categories" formControlName="category">
              <mat-option>None</mat-option>
-          <mat-option *ngFor="let riskCat of categories" [value]="riskCat.id">
+             <ng-container *ngFor="let riskCat of categories">
+          <mat-option *ngIf="riskCat.disabled == 0"  [value]="riskCat.id">
             {{ riskCat.title }}
 
             <mat-icon [matTooltip]="riskCat.description" matSuffix
               >help_outline</mat-icon
             >
           </mat-option>
+          </ng-container>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="w-auto" appearance="outline">

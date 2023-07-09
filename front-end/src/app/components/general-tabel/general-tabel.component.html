@@ -14,7 +14,7 @@
       style="min-width: 105px"
     >
       <button
-        *ngFor="let act of actions"
+        *ngFor="let act of actions | filterActions : element"
         mat-icon-button
         [matTooltip]="act?.title"
         (click)="action(act, element)"

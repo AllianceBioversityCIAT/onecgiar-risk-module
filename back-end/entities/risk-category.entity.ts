@@ -29,4 +29,8 @@ export class RiskCategory {
   @ManyToOne(() => CategoryGroup, (category_group) => category_group.risk_categories)
   @JoinColumn({ name: 'category_group_id' })
   category_group: CategoryGroup;
+
+  @ApiProperty()
+  @Column({type: 'bool', default: false})
+  disabled: boolean;
 }

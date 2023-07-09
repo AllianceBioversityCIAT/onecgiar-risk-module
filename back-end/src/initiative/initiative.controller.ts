@@ -514,6 +514,7 @@ export class InitiativeController {
       .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect('risk_category.description', 'description')
+      .addSelect('risk_category.disabled', 'disabled')
       .innerJoin('risk', 'risk', 'initiative.id = risk.initiative_id')
       .innerJoin(
         'risk_category',
@@ -537,6 +538,7 @@ export class InitiativeController {
       .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect('risk_category.description', 'description')
+      .addSelect('risk_category.disabled', 'disabled')
       .innerJoin('risk', 'risk', 'initiative.id = risk.initiative_id')
       .innerJoin(
         'risk_category',
