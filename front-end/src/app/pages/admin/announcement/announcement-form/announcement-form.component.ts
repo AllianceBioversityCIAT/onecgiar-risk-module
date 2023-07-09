@@ -73,9 +73,9 @@ export class AnnouncementFormComponent implements OnInit, OnDestroy {
     if(this.announcementId.id != '' && this.announcementId.id != null){
       this.dataToEdit = await this.announcementService.getAnnouncementById(this.announcementId.id);
       this.announcementForm.patchValue({
-        id: this.dataToEdit[0].id,
-        subject: this.dataToEdit[0].subject,
-        description: this.dataToEdit[0].description,
+        id: this.dataToEdit.id,
+        subject: this.dataToEdit.subject,
+        description: this.dataToEdit.description,
       });
     }
   }
