@@ -371,6 +371,8 @@ export class DashboardComponent implements OnInit {
     switch (level) {
       case 25:
         return ` background-color: #1f6ca6;`;
+      case 20:
+        return ` background-color: #357AAE;`;
 
       case 16:
         return ` background-color: #257fc2;`;
