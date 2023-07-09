@@ -305,7 +305,7 @@ export class InitiativeController {
   async getInitiatives(@Param('id') id: number) {
     let asd = await this.iniService.iniRepository
       .findOneOrFail({
-        where: { id , risks: { redundant : false }},
+        where: { id },
         relations: [
           'risks',
           'risks.category',
