@@ -19,7 +19,7 @@ export class CategoryGroup {
 
   @OneToMany(() => RiskCategory, (riskCategory) => riskCategory.category_group)
   @JoinTable()
-  risk_categories
+  risk_categories: RiskCategory;
 
 
 }

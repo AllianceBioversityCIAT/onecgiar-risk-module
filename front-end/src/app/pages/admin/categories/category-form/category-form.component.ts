@@ -5,20 +5,26 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import { CategoriesGroupsService } from 'src/app/services/categories-groups.service';
+
 @Component({
   selector: 'app-category-form',
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.scss'],
 })
 export class CategoryFormComponent implements OnInit {
+  categoryGroup: any;
   userForm: any;
   constructor(
     public dialogRef: MatDialogRef<CategoryFormComponent>,
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private categoriesGroupServices: CategoriesGroupsService
   ) {}
-  ngOnInit() {
+  async ngOnInit() {
+    this.categoryGroup = await this.categoriesGroupServices.getCategoriesGroup();
     this.userForm = this.fb.group({
+      category_group_id: [this.data?.item?.category_group_id || null, Validators.required],
       title: [this.data?.item?.title || null, Validators.required],
       description: [this.data?.item?.description || null, Validators.required],
       id: [this.data?.item?.id || null],

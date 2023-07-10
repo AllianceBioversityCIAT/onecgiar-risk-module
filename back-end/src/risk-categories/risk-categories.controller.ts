@@ -20,7 +20,19 @@ export class RiskCategoriesController {
   })
   @Get()
   get() {
-    return this.riskcatRepository.find({order:{title:'ASC'}});
+    return this.riskcatRepository.createQueryBuilder('riskCat')
+    .leftJoinAndSelect('riskCat.category_group', 'category_group')
+    .select([
+      'riskCat.id AS id',
+      'riskCat.title AS title',
+      'riskCat.description AS description',
+      'riskCat.disabled AS disabled',
+      'category_group.id AS category_group_id',
+      'category_group.name AS category_group_name',
+      'category_group.description AS category_group_description'
+        ])
+    .orderBy('riskCat.title', 'ASC')
+    .getRawMany()
   }
 
   @Put()
