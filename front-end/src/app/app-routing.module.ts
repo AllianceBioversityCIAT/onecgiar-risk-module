@@ -16,6 +16,7 @@ import { VersionsDashboardComponent } from './pages/versions-dashboard/versions-
 import { SettingComponent } from './pages/admin/setting/setting.component';
 import { MitigationStatusComponent } from './pages/admin/mitigation-status/mitigation-status.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { PopoverInfoComponent } from './components/new-risk/popover-info/popover-info.component';
 
 const routes: Routes = [
   {
@@ -87,6 +88,11 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'User-Guide',
+    canActivate: [AuthGuard],
+    component: PopoverInfoComponent
+  }
 ];
 
 @NgModule({

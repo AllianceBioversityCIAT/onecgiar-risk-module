@@ -74,6 +74,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { FilterActionsPipe } from './components/general-tabel/filter-actions.pipe';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SatPopoverModule } from '@ncstate/sat-popover';
+import { PopoverInfoComponent } from './components/new-risk/popover-info/popover-info.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -111,6 +115,7 @@ import { FilterActionsPipe } from './components/general-tabel/filter-actions.pip
     MitigationFormComponent,
     DashboardComponent,
     FilterActionsPipe,
+    PopoverInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -147,7 +152,9 @@ import { FilterActionsPipe } from './components/general-tabel/filter-actions.pip
     
     MatDatepickerModule,
     MatNativeDateModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    NoopAnimationsModule,
+    SatPopoverModule
   ],
   providers: [BreadcrumbService, AppSocket,  MatDatepickerModule, 
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }

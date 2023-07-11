@@ -141,3 +141,73 @@
 ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
     background-color: white !important;
 }
+.container {
+    position: relative;
+}
+.popover {
+    padding: 16px;
+    position: absolute;
+    background-color: #efefef;
+    width: 400px;
+    top: -28px;
+    left: 28px;
+    border-radius: 20px;
+
+    .head { 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        h3{
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .icon{
+            cursor: pointer;
+        }
+    }
+    .primaryButton {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        justify-content: space-between;
+    }
+}
+
+.popover::before {
+    content: "";
+    position: absolute;
+    left: -16px;
+    top: 16px;
+    border-top: 12px solid transparent;
+    border-right: 16px solid #efefef;
+    border-bottom: 12px solid transparent;
+}
+
+.footer-card {
+    border-radius: 20px;
+    top: -277px;
+    background-color: #efefef;
+    left: -775px;
+    position: absolute;
+    width: 800px;
+    mat-card-header{
+        justify-content: space-between;
+        .icon {
+            cursor: pointer;
+        }
+    }
+}
+
+.footer-card::before{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-top: 21px solid #efefef;
+    right: 16px;
+    bottom: -21px;
+}

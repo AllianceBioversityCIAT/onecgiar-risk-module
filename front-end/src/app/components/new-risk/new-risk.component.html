@@ -115,10 +115,25 @@
       </mat-form-field>
 
       <div class="radio">
-        <h3>
-          <mat-icon matTooltip="Info about the action">help_outline</mat-icon
-          >Current Likelihood
-        </h3>
+        <div class="container">
+          <h3>
+            <mat-icon  matTooltip="Click to more info"  [satPopoverAnchor]="popoverCurrentlikelihood" (click)="popoverCurrentlikelihood.toggle()">help_outline</mat-icon
+            >Current Likelihood
+          </h3>
+          <sat-popover #popoverCurrentlikelihood hasBackdrop>
+            <div class="popover">
+                <div class="head">
+                  <h3>Current likelihood</h3>
+                  <mat-icon class="icon" (click)="popoverCurrentlikelihood.close()">close</mat-icon>
+                </div>
+                <p>the likelihood of the risk materializing within a given time horizon that could result into the impact level assigned, taking into account any existing controls and actions in place and working</p>
+                <button class="primaryButton"  routerLink="User-Guide">
+                  Check user guide
+                  <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+          </sat-popover>
+        </div>
         <mat-radio-group
           formControlName="current_likelihood"
           aria-label="Select an option"
@@ -146,10 +161,25 @@
         >
       </div>
       <div class="radio">
-        <h3>
-          <mat-icon matTooltip="Info about the action">help_outline</mat-icon
-          >Current Impact &nbsp; &nbsp; &nbsp;
-        </h3>
+        <div class="container">
+          <h3>
+            <mat-icon  matTooltip="Click to more info"  [satPopoverAnchor]="popoverCurrentImpact" (click)="popoverCurrentImpact.toggle()">help_outline</mat-icon
+            >Current Impact &nbsp; &nbsp; &nbsp;
+          </h3>
+          <sat-popover #popoverCurrentImpact hasBackdrop>
+            <div class="popover">
+                <div class="head">
+                  <h3>Current Impact</h3>
+                  <mat-icon class="icon" (click)="popoverCurrentImpact.close()">close</mat-icon>
+                </div>
+                <p> the expected impact on objectives if the risk materialises, taking into account any existing controls and actions in place and working</p>
+                <button class="primaryButton" routerLink="User-Guide" >
+                  Check user guide
+                  <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+          </sat-popover>
+        </div>
         <mat-radio-group
           formControlName="current_impact"
           aria-label="Select an option"
@@ -190,10 +220,25 @@
       </div>
 
       <div class="radio">
+        <div class="container">
         <h3>
-          <mat-icon matTooltip="Info about the action">help_outline</mat-icon
+          <mat-icon matTooltip="Click to more info"  [satPopoverAnchor]="popoverTargetLikelihood" (click)="popoverTargetLikelihood.toggle()">help_outline</mat-icon
           >Target Likelihood &nbsp;
         </h3>
+        <sat-popover #popoverTargetLikelihood hasBackdrop>
+          <div class="popover">
+              <div class="head">
+                <h3>Target Likelihood</h3>
+                <mat-icon  class="icon" (click)="popoverTargetLikelihood.close()">close</mat-icon>
+              </div>
+              <p>the targeted likelihood of the risk occurring within a given time horizon that could result into the targeted impact level assigned. Target likelihood could be achieved by putting in place additional controls and actions to manage the risk likelihood</p>
+              <button class="primaryButton" routerLink="User-Guide">
+                Check user guide
+                <mat-icon>keyboard_arrow_right</mat-icon>
+              </button>
+          </div>
+        </sat-popover>
+      </div>
         <mat-radio-group
           formControlName="target_likelihood"
           aria-label="Select an option"
@@ -221,10 +266,25 @@
         >
       </div>
       <div class="radio">
-        <h3>
-          <mat-icon matTooltip="Info about the action">help_outline</mat-icon
-          >Target Impact &nbsp; &nbsp; &nbsp; &nbsp;
-        </h3>
+        <div class="container">
+          <h3>
+            <mat-icon   matTooltip="Click to more info"   [satPopoverAnchor]="popoverTargetImpact" (click)="popoverTargetImpact.toggle()">help_outline</mat-icon
+            >Target Impact &nbsp; &nbsp; &nbsp; &nbsp;
+          </h3>
+          <sat-popover #popoverTargetImpact hasBackdrop>
+            <div class="popover">
+                <div class="head">
+                  <h3>Target Impact</h3>
+                  <mat-icon class="icon" (click)="popoverTargetImpact.close()">close</mat-icon>
+                </div>
+                <p>the targeted expected impact on objectives if the risk materialises. Target impact could be achieved by putting in place additional controls and actions to manage risk impact</p>
+                <button class="primaryButton" routerLink="User-Guide">
+                  Check user guide
+                  <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+          </sat-popover>
+        </div>
         <mat-radio-group
           formControlName="target_impact"
           aria-label="Select an option"
@@ -375,36 +435,41 @@
     </form>
   </div>
   <div class="dialogFooter">
-    <mat-card class="example-card">
-      <!-- <mat-card-header>
-        <mat-card-subtitle>Instructions before you can save:</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <ul>
-          <li>
-            Review Risk Theme/Category and change if not correct (optional)
-          </li>
-          <li>Review Risk Owner and change if not correct (optional)</li>
-          <li>Update Risk Description (optional)</li>
-          <li>
-            Update Risk Targets (default will be same as risk level; and
-            adjustments to be made to target level – mandatory; no action =
-            targets same as risk level)
-          </li>
-          <li>Add additional Actions to Manage Risk (optional)</li>
-          <li>
-            Review Status of Actions for each risk; default is “Ongoing and
-            ontrack” (optional)
-          </li>
-        </ul>
-        <p>
-          Note: these steps are required even if the Risk is tagged as Complete.
-        </p>
-        <mat-divider></mat-divider>
-      </mat-card-content> -->
-      <mat-card-actions>
-        <button class="primaryButton" (click)="submit()">SAVE</button>
-      </mat-card-actions>
+      <mat-card class="example-card">
+        <sat-popover #popoverFooter hasBackdrop>
+          <div class="example-card footer-card">
+            <mat-card-header>
+              <mat-card-subtitle>Instructions before you can save:</mat-card-subtitle>
+              <mat-icon class="icon" (click)="popoverFooter.close()">close</mat-icon>
+            </mat-card-header>
+            <mat-card-content>
+              <ul>
+                <li>
+                  Review Risk Theme/Category and change if not correct (optional)
+                </li>
+                <li>Review Risk Owner and change if not correct (optional)</li>
+                <li>Update Risk Description (optional)</li>
+                <li>
+                  Update Risk Targets (default will be same as risk level; and
+                  adjustments to be made to target level – mandatory; no action =
+                  targets same as risk level)
+                </li>
+                <li>Add additional Actions to Manage Risk (optional)</li>
+                <li>
+                  Review Status of Actions for each risk; default is “Ongoing and
+                  ontrack” (optional)
+                </li>
+              </ul>
+              <p>
+                Note: these steps are required even if the Risk is tagged as Complete.
+              </p>
+            </mat-card-content>
+          </div>
+        </sat-popover>
+          <mat-card-actions>
+            <button class="primaryButton" (click)="submit()">SAVE</button>
+            <mat-icon   matTooltip="Click to more info" style="margin-right: 5px;"  [satPopoverAnchor]="popoverFooter" (click)="popoverFooter.toggle()">help_outline</mat-icon>
+          </mat-card-actions>
     </mat-card>
   </div> 
 </div>
