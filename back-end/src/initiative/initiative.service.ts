@@ -79,13 +79,15 @@ export class InitiativeService {
       reload: true,
     });
 
-    await this.iniRepository.createQueryBuilder().update(Initiative)
-    .set({
-      last_version_id: new_init.id,
-      last_updated_date: old_initiative.last_updated_date,
-    })
-    .where(`id = ${old_initiative.id}`)
-    .execute();
+    await this.iniRepository
+      .createQueryBuilder()
+      .update(Initiative)
+      .set({
+        last_version_id: new_init.id,
+        last_updated_date: old_initiative.last_updated_date,
+      })
+      .where(`id = ${old_initiative.id}`)
+      .execute();
 
     const old_Risks = await this.riskService.riskRepository.find({
       where: { initiative_id: old_init_id },
@@ -137,21 +139,21 @@ export class InitiativeService {
     if (!init) throw new NotFoundException();
     const newRole = {
       initiative_id: initiative_id,
-      user_id: role.user_id,
+      user_id: role?.user_id,
       email: role.email.toLowerCase(),
       role: role.role,
     };
     //To the user that was added by the Admin or Leader/Coordinator
-    const user = await this.userService.userRepository.findOne({
-      where: { id: role.user_id },
-    });
-    if(user)
-    this.emailsService.sendEmailTobyVarabel(user, 10, 11);
-
+    if (role?.user_id) {
+      const user = await this.userService.userRepository.findOne({
+        where: { id: role?.user_id },
+      });
+      if (user) this.emailsService.sendEmailTobyVarabel(user, 10, 11);
+    }
     return await this.iniRolesRepository.save(newRole, { reload: true });
   }
 
-  async syncActionAreaFromClarisa(){
+  async syncActionAreaFromClarisa() {
     const clarisa_action_area = await firstValueFrom(
       this.http
         .get(`${process.env.CLARISA_URL}/api/action-areas`, {
@@ -194,7 +196,7 @@ export class InitiativeService {
         }
         initiative.name = clarisa_initiative.name;
         initiative.official_code = clarisa_initiative.official_code;
-        initiative.action_area_id  = clarisa_initiative.action_area_id;
+        initiative.action_area_id = clarisa_initiative.action_area_id;
         await this.iniRepository.save(initiative);
       }
       this.logger.log('Sync CLARISA initiative Data ');
