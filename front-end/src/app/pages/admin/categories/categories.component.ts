@@ -19,7 +19,7 @@ export class CategoriesComponent implements OnInit {
   columns = [
     { title: 'ID', name: 'id' },
     { title: 'Category', name: 'title' },
-    { title: 'Categorie Group', name: 'category_group_name' },
+    { title: 'Category Group', name: 'category_group_name' },
     { title: 'Category description', name: 'description' },
   ];
   actions = [
