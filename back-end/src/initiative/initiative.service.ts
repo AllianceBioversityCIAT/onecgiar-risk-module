@@ -145,6 +145,7 @@ export class InitiativeService {
     const user = await this.userService.userRepository.findOne({
       where: { id: role.user_id },
     });
+    if(user)
     this.emailsService.sendEmailTobyVarabel(user, 10, 11);
 
     return await this.iniRolesRepository.save(newRole, { reload: true });
