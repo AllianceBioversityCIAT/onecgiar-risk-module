@@ -14,3 +14,12 @@
 
     }
 }
+.images {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    img:first-child {
+        margin-bottom: 2rem;
+    }
+}
