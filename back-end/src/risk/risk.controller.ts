@@ -24,6 +24,7 @@ import { query } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ILike } from 'typeorm';
 import { RiskService } from './risk.service';
+import { CreateRiskRequestDto, CreateRiskResponseDto, GetRiskDto, MitigationCreateRiskResponseDto, PatchRiskRequestDto, PatchRiskResponseDto, UpdateRiskRequestDto, UpdateRiskResponseDto } from 'DTO/risk.dto';
 @ApiTags('Risk')
 @Controller('risk')
 export class RiskController {
@@ -39,7 +40,7 @@ export class RiskController {
   @Get('')
   @ApiCreatedResponse({
     description: '',
-    type: [Risk],
+    type: GetRiskDto,
   })
   getRisk(@Query() query) {
     return this.riskService.riskRepository.find({
@@ -65,7 +66,7 @@ export class RiskController {
   }
   @ApiCreatedResponse({
     description: '',
-    type: Risk,
+    type: GetRiskDto,
   })
   @Get(':id')
   getRisks(@Param('id') id: number) {
@@ -85,8 +86,9 @@ export class RiskController {
 
   @ApiCreatedResponse({
     description: '',
-    type: Risk,
+    type: CreateRiskResponseDto,
   })
+  @ApiBody({ type: CreateRiskRequestDto })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -97,8 +99,9 @@ export class RiskController {
   @UseGuards(JwtAuthGuard)
   @ApiCreatedResponse({
     description: '',
-    type: Risk,
+    type: UpdateRiskResponseDto,
   })
+  @ApiBody({ type: UpdateRiskRequestDto })
   @Put(':id')
   setRisk(@Body() risk: Risk, @Param('id') id: number, @Request() req) {
     console.log(risk);
@@ -119,7 +122,7 @@ export class RiskController {
   @Get(':id/mitigation')
   @ApiCreatedResponse({
     description: '',
-    type: [Mitigation],
+    type: MitigationCreateRiskResponseDto,
   })
   getRoles(@Param('risk_id') risk_id: number): Promise<Mitigation[]> {
     return this.riskService.mitigationRepository.find({
@@ -130,8 +133,9 @@ export class RiskController {
   @Patch(':id/redundant')
   @ApiCreatedResponse({
     description: '',
-    type: [Risk],
+    type: PatchRiskResponseDto,
   })
+  @ApiBody({ type: PatchRiskRequestDto })
   async patchRedandant(@Param('id') id: number, @Body('redundant') redundant) {
     await this.riskService.riskRepository.update({ id }, { redundant });
     await this.riskService.updateInitiativeUpdateDateToNowByRiskID(id);

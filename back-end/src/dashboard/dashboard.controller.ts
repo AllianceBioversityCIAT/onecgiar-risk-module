@@ -1,5 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { getCategoriesLevels, getCategoriesCount, getInitiativeScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
+import { getInitiative } from 'DTO/initiative.dto';
 import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
@@ -13,6 +15,10 @@ export class DashboardController {
 
   
   @Get('initiative/details')
+  @ApiCreatedResponse({
+    description: '',
+    type: [getInitiative],
+  })
   getInitiativeDetails() {
     return this.iniService.iniRepository.find({
         where: {
@@ -29,6 +35,10 @@ export class DashboardController {
       });
   }
   @Get('initiative/score')
+  @ApiCreatedResponse({
+    description: '',
+    type: [getInitiativeScor],
+  })
   getInitiativeScore() {
     return this.dataSource
       .createQueryBuilder()
@@ -70,6 +80,10 @@ export class DashboardController {
   }
 
   @Get('categories/levels')
+  @ApiCreatedResponse({
+    description: '',
+    type: [getCategoriesLevels],
+  })
   getCategories() {
     return this.dataSource
       .createQueryBuilder()
@@ -92,6 +106,10 @@ export class DashboardController {
       .execute();
   }
   @Get('categories/count')
+  @ApiCreatedResponse({
+    description: '',
+    type: [getCategoriesCount],
+  })
   getcategoeis() {
     return this.dataSource
       .createQueryBuilder()
@@ -108,6 +126,10 @@ export class DashboardController {
   }
 
   @Get('categories/groups/count')
+  @ApiCreatedResponse({
+    description: '',
+    type: [getCategoriesGroupsCount],
+  })
   getCategoriesGroups() {
     return this.dataSource
       .createQueryBuilder()
@@ -126,6 +148,10 @@ export class DashboardController {
   }
 
   @Get('action_areas/count')
+  @ApiCreatedResponse({
+    description: '',
+    type: [getCategoriesGroupsCount],
+  })
   getActionAreasCount() {
     return this.dataSource
       .createQueryBuilder()
@@ -140,6 +166,10 @@ export class DashboardController {
   }
 
   @Get('status')
+  @ApiCreatedResponse({
+    description: '',
+    type: [getDashboardStatus],
+  })
   getstatus() {
     return this.dataSource
       .createQueryBuilder()

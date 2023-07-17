@@ -14,6 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import * as XLSX from 'xlsx';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiCreatedResponse,
   ApiProperty,
   ApiTags,
@@ -26,6 +27,7 @@ import { join } from 'path';
 import { unlink } from 'fs/promises';
 import { query } from 'express';
 import { ILike } from 'typeorm';
+import { createAndUpdateUsers, exportToExcel, getUsers } from 'DTO/users.dto';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @ApiCreatedResponse({
@@ -45,6 +47,10 @@ export class UsersController {
     } else return { id: 'ASC' };
   }
   @Get()
+  @ApiCreatedResponse({
+    description: '',
+    type: getUsers,
+  })
   getUsers(@Query() query) {
     return this.usersService.userRepository.find({
       where: {
@@ -58,6 +64,11 @@ export class UsersController {
   }
 
   @Put()
+  @ApiBody({ type : createAndUpdateUsers })
+  @ApiCreatedResponse({
+    description: '',
+    type: createAndUpdateUsers,
+  })
   updateUser(@Body() data: any) {
     const user = this.usersService.userRepository.create();
     if(data?.email)
@@ -67,6 +78,11 @@ export class UsersController {
   }
 
   @Post()
+  @ApiBody({ type : createAndUpdateUsers })
+  @ApiCreatedResponse({
+    description: '',
+    type: createAndUpdateUsers,
+  })
   async addUser(@Body() data: any) {
     const user = this.usersService.userRepository.create();
     if(data?.email)
@@ -82,9 +98,13 @@ export class UsersController {
     return this.usersService.userRepository.delete(id);
   }
   @Get('export/all')
+  @ApiCreatedResponse({
+    description: '',
+    type: exportToExcel,
+  })
   async export() {
     let users = await this.usersService.userRepository.find();
-
+    console.log(users)
     const file_name = 'All-Users.xlsx';
     var wb = XLSX.utils.book_new();
 

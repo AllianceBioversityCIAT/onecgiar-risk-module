@@ -41,6 +41,7 @@ import { unlink } from 'fs/promises';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Request } from 'express';
 import { Risk } from 'entities/risk.entity';
+import { AllExcel, TopSimilar, createRoleReq, createRoleRes, createVersion, deleteRoleRes, getAllCategories, getAllVersions, getInitiative, getInitiativeById, getRoles, reqBodyCreateVersion, updateRoleReq, updateRoleRes } from 'DTO/initiative.dto';
 @ApiTags('Initiative')
 @Controller('initiative')
 export class InitiativeController {
@@ -88,7 +89,7 @@ export class InitiativeController {
   @Get()
   @ApiCreatedResponse({
     description: '',
-    type: [Initiative],
+    type: [getInitiative],
   })
   getInitiative(@Query() query: any, @Req() req) {
     return this.iniService.iniRepository.find({
@@ -300,7 +301,7 @@ export class InitiativeController {
   @Get(':id')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: getInitiativeById,
   })
   async getInitiatives(@Param('id') id: number) {
     let asd = await this.iniService.iniRepository
@@ -328,7 +329,7 @@ export class InitiativeController {
   @Get('all/excel')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: AllExcel,
   })
   async exportAlltoExcel(@Query() userRole: any) {
     let ininit = await this.iniService.iniRepository.find({
@@ -405,7 +406,7 @@ export class InitiativeController {
   @Get(':id/excel')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: getInitiativeById,
   })
   async exportExcel(@Param('id') id: number, @Query() userRole: any) {
     let init = await this.iniService.iniRepository.findOne({
@@ -491,8 +492,9 @@ export class InitiativeController {
   @Post(':id/create_version')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: createVersion,
   })
+  @ApiBody({type : reqBodyCreateVersion})
   createVersion(
     @Param('id') id: number,
     @Body('reason') reason: string,
@@ -504,7 +506,7 @@ export class InitiativeController {
   @Get('all/categories')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: getAllCategories,
   })
   getAllCategories() {
     return this.dataSource
@@ -528,7 +530,7 @@ export class InitiativeController {
   @Get(':id/categories')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: getAllCategories,
   })
   getCategories(@Param('id') id: number) {
     return this.dataSource
@@ -553,7 +555,7 @@ export class InitiativeController {
   @Get(':id/versions')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: [getAllVersions],
   })
   getVersons(@Param('id') id: number) {
     return this.iniService.iniRepository.find({
@@ -573,7 +575,7 @@ export class InitiativeController {
   @Get(':id/versions/latest')
   @ApiCreatedResponse({
     description: '',
-    type: Initiative,
+    type: getAllVersions,
   })
   getLatestVersons(@Param('id') id: number) {
     return this.iniService.iniRepository.findOne({
@@ -593,7 +595,7 @@ export class InitiativeController {
   @Get(':id/roles')
   @ApiCreatedResponse({
     description: '',
-    type: [InitiativeRoles],
+    type: [getRoles],
   })
   getRoles(@Param('id') id: number): Promise<InitiativeRoles[]> {
     return this.iniService.iniRolesRepository.find({
@@ -605,10 +607,10 @@ export class InitiativeController {
   @Post(':initiative_id/roles')
   @ApiCreatedResponse({
     description: '',
-    type: [InitiativeRoles],
+    type: createRoleRes,
   })
   @ApiBody({
-    type: InitiativeRoles,
+    type: createRoleReq,
   })
   @ApiParam({
     name: 'initiative_id',
@@ -624,7 +626,10 @@ export class InitiativeController {
   @Put(':initiative_id/roles/:initiative_roles_id')
   @ApiCreatedResponse({
     description: '',
-    type: InitiativeRoles,
+    type: updateRoleRes,
+  })
+  @ApiBody({
+    type: updateRoleReq,
   })
   updateMitigation(
     @Body() roles: InitiativeRoles,
@@ -641,7 +646,7 @@ export class InitiativeController {
   @Delete(':initiative_id/roles/:initiative_roles_id')
   @ApiCreatedResponse({
     description: '',
-    type: InitiativeRoles,
+    type: deleteRoleRes,
   })
   deleteRoles(
     @Param('initiative_id') initiative_id: number,
@@ -653,6 +658,7 @@ export class InitiativeController {
   @Get(':id/top')
   @ApiCreatedResponse({
     description: '',
+    type: TopSimilar
   })
   async top(@Param('id') id: number) {
     const top_5 = await this.riskService.riskRepository.find({

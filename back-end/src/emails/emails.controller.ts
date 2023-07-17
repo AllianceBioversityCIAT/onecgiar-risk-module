@@ -6,8 +6,9 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { EmailsService } from './emails.service';
+import { filterStatusReq, getEmailsDto } from 'DTO/emails.dto';
 
 @ApiTags('emails')
 @Controller('emails')
@@ -16,6 +17,10 @@ export class EmailsController {
 
   @ApiBearerAuth()
   @Get('')
+  @ApiCreatedResponse({
+    description: '',
+    type: getEmailsDto,
+  })
   getEmailLogs(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
@@ -44,6 +49,7 @@ export class EmailsController {
   }
 
   @ApiBearerAuth()
+  @ApiParam({ name: 'status' , type: filterStatusReq})
   @Get('filter-status')
   async filterStatusLogsTable(@Query('status') status: any) {
     if (status == 'false') {

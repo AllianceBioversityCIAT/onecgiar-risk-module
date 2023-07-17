@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, StreamableFile } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
+import { createRiskCategoryReq, createRiskCategoryRes, disabledCategoryReq, disabledCategoryRes, getRiskCategory } from 'DTO/risk-category.dto';
 import { RiskCategory } from 'entities/risk-category.entity';
 import { createReadStream } from 'fs';
 import { unlink } from 'fs/promises';
@@ -16,7 +17,7 @@ export class RiskCategoriesController {
   ) {}
   @ApiCreatedResponse({
     description: '',
-    type: [RiskCategory],
+    type: [getRiskCategory],
   })
   @Get()
   get() {
@@ -36,6 +37,11 @@ export class RiskCategoriesController {
   }
 
   @Put()
+  @ApiCreatedResponse({
+    description: '',
+    type: createRiskCategoryReq,
+  })
+  @ApiBody({ type: createRiskCategoryReq})
   updateCategory(@Body() data: any) {
     const category = this.riskcatRepository.create();
     Object.assign(category, data);
@@ -43,6 +49,11 @@ export class RiskCategoriesController {
   }
 
   @Post()
+  @ApiCreatedResponse({
+    description: '',
+    type: createRiskCategoryRes,
+  })
+  @ApiBody({ type: createRiskCategoryReq})
   async addCategory(@Body() data: any) {
     const category = this.riskcatRepository.create();
     Object.assign(category, data);
@@ -57,6 +68,11 @@ export class RiskCategoriesController {
   }
 
   @Patch()
+  @ApiCreatedResponse({
+    description: '',
+    type: disabledCategoryRes,
+  })
+  @ApiBody({ type: disabledCategoryReq})
   async disabledCategory(@Body() data: any) {
     const category = await this.riskcatRepository.findOne({ where : { id : data.item.id } });
     if(data.act.action == 'disabledCatigory') {
@@ -73,6 +89,10 @@ export class RiskCategoriesController {
   }
 
   @Get('export/all')
+  @ApiCreatedResponse({
+    description: '',
+    type: [createRiskCategoryRes],
+  })
   async export() {
     let categories = await this.riskcatRepository.find();
 

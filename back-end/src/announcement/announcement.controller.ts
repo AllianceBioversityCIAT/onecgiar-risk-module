@@ -2,6 +2,10 @@ import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { UsersService } from 'src/users/users.service';
 import { EmailsService } from 'src/emails/emails.service';
+import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { cerateAnnouncementReq, cerateAnnouncementRes, sendAnnouncementReq, sendTestReq } from 'DTO/announcement.dto';
+
+@ApiTags('announcement')
 @Controller('announcement')
 export class AnnouncementController {
   constructor(
@@ -26,6 +30,11 @@ export class AnnouncementController {
     }
   }
   @Post('')
+  @ApiCreatedResponse({
+    description: '',
+    type: cerateAnnouncementRes,
+  })
+  @ApiBody({ type: cerateAnnouncementReq})
   addAnnouncement(@Body() data: any) {
     try {
       return this.announcementService.addAnnouncement(data);
@@ -34,6 +43,7 @@ export class AnnouncementController {
     }
   }
   @Put(':id')
+  @ApiBody({ type: cerateAnnouncementReq})
   updateAnnouncement(@Body() data: any, @Param('id') id: number) {
     try {
       return this.announcementService.updateAnnouncement(data, id);
@@ -51,6 +61,7 @@ export class AnnouncementController {
   }
 
   @Post(':id/send')
+  @ApiBody({ type: sendAnnouncementReq})
   async Send(@Param('id') id: number) {
     try {
       const announcement = await this.announcementService.getAnnouncementById(
@@ -79,6 +90,7 @@ export class AnnouncementController {
     }
   }
   @Post(':id/send-test')
+  @ApiBody({ type: sendTestReq})
   async SendTest(@Body('email') email: any, @Param('id') id: number) {
     try {
       const announcement = await this.announcementService.getAnnouncementById(

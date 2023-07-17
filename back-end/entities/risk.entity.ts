@@ -97,6 +97,21 @@ export class Risk {
   @Column()
   category_id: number;
 
+  @ApiProperty()
+  @Optional()
+  @Column({ default: false })
+  redundant: boolean;
+
+  @ApiProperty()
+  @Optional()
+  @Column({ default: 999 })
+  top: number;
+
+  @ApiProperty()
+  @Optional()
+  @Column({ type: 'timestamp' , default:null })
+  due_date: Date;
+
   @ApiProperty({ type: () => [Mitigation] })
   @OneToMany(() => Mitigation, (mitigation) => mitigation.risk, {
     onUpdate: 'CASCADE',
@@ -104,23 +119,13 @@ export class Risk {
   })
   @JoinTable()
   mitigations: Array<Mitigation>;
-
+  
+  @ApiProperty()
   @ManyToOne(() => User, (user) => user.risks)
   @JoinColumn({ name: 'created_by_user_id' })
   created_by: User;
+  @ApiProperty()
   @Optional()
   @Column({ default: null })
   created_by_user_id: number;
-
-  @Optional()
-  @Column({ default: false })
-  redundant: boolean;
-
-  @Optional()
-  @Column({ default: 999 })
-  top: number;
-
-  @Optional()
-  @Column({ type: 'timestamp' , default:null })
-  due_date: Date;
 }

@@ -28,6 +28,7 @@ export class Mitigation {
   @Column()
   mitigation_status_id: number;
 
+  @ApiProperty()
   @ManyToOne(() => MitigationStatus, (mitigation_status) => mitigation_status.mitigations,{onUpdate:'CASCADE',onDelete:'CASCADE'})
   @JoinColumn({ name: 'mitigation_status_id' })
   status: MitigationStatus;
