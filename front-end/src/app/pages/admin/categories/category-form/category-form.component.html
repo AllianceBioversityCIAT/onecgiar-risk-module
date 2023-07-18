@@ -26,7 +26,7 @@
       >
     </mat-form-field>
     <mat-form-field class="w-auto" appearance="outline">
-      <mat-select placeholder="Categorie group" formControlName="category_group_id">
+      <mat-select placeholder="Category group" formControlName="category_group_id">
         <mat-option *ngFor="let catGroup of categoryGroup" [value]="catGroup.id">
           {{ catGroup.name }}
         </mat-option>
