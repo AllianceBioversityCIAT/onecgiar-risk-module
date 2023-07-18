@@ -45,7 +45,7 @@ export class PublishDialog implements OnInit {
     private initiativeService: InitiativesService
   ) {}
   tops: any = null;
-  error: string = '';
+  error: any[] = [];
 
   async ngOnInit() {
     this.tops = await this.initiativeService.getTopRisks(
@@ -58,33 +58,47 @@ export class PublishDialog implements OnInit {
     this.dialogRef.close(false);
   }
   async publish() {
-    if(this.tops.top.length + this.tops.similar.length <= 5 && this.tops.similar.length == 0 && this.data.reason != '') {
-      this.dialogRef.close(this.data);
-    }
-    else if(this.tops.top.length + this.tops.similar.length > 5 && this.tops.top.length == 5 && this.data.reason != '') {
-      let current_level_for_top = this.tops.top.map((d: { current_level: any; }) => d.current_level);
-      let current_level_for_similar = this.tops.similar.map((d: { current_level: any; }) => d.current_level);
-
-      let similarHaveLevelMoreTop: any[] = [];
-
-      current_level_for_top.map((current_top: any) => {
-        current_level_for_similar.map((current_similar: any) => {
-          if(current_top < current_similar) {
-            similarHaveLevelMoreTop.push(current_similar);
-          }
-        })
-      })
-
-      if(similarHaveLevelMoreTop.length == 0){
+    this.error = [];
+    // case 1
+    if(this.tops.top.length + this.tops.similar.length <= 5) {
+      if(this.data.reason == '') {
+        this.error.push("please fill publish reason");
+      }
+      else {
         this.dialogRef.close(this.data);
       }
-      else{
-        this.error = "Please make sure that you have selected the top 5 risks";
+    }
+    //case 2
+    if(this.tops.top.length + this.tops.similar.length > 5) {
+
+      if(this.data.reason == '') {
+        this.error.push("please fill publish reason");
+      }
+      if(this.tops.top.length < 5) {
+        this.error.push("please make sure that you have selected the top 5 risks");
       }
 
-    }
-    else {
-      this.error = "please fill publish reason and chose your top 5 risks";
+      if(this.tops.top.length == 5) {
+        let current_level_for_top = this.tops.top.map((d: { current_level: any; }) => d.current_level);
+        let current_level_for_similar = this.tops.similar.map((d: { current_level: any; }) => d.current_level);
+  
+        let similarHaveLevelMoreTop: any[] = [];
+  
+        current_level_for_top.map((current_top: any) => {
+          current_level_for_similar.map((current_similar: any) => {
+            if(current_top < current_similar) {
+              similarHaveLevelMoreTop.push(current_similar);
+            }
+          })
+        })
+  
+        if(similarHaveLevelMoreTop.length == 0 && this.error.length == 0){
+          this.dialogRef.close(this.data);
+        }
+        else if(similarHaveLevelMoreTop.length != 0){
+          this.error.push("please make sure that you have selected the top 5 risks");
+        }
+      }
     }
   }
   toparray = [];

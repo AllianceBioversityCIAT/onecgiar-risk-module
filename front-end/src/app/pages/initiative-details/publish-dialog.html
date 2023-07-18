@@ -15,41 +15,64 @@
   </mat-form-field>
 
   <hr />
-  <div class="drag-container">
-    <h2>Top 5 Risks</h2>
+  <ng-container *ngIf="this.tops?.top?.length + this.tops?.similar?.length > 5">
+    <div class="drag-container">
+      <h2>Top 5 Risks</h2>
 
-    <div
-      cdkDropList
-      #todoList="cdkDropList"
-      [cdkDropListData]="top"
-      [cdkDropListConnectedTo]="[doneList]"
-      class="drag-list"
-      (cdkDropListDropped)="drop($event)"
-      [cdkDropListEnterPredicate]="evenPredicate"
-    >
-      <div class="drag-box" *ngFor="let item of top" cdkDrag>
-        {{item.title}} ({{item.current_level}})  
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="top"
+        [cdkDropListConnectedTo]="[doneList]"
+        class="drag-list"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListEnterPredicate]="evenPredicate"
+      >
+        <div class="drag-box" *ngFor="let item of top" cdkDrag>
+          {{item.title}} ({{item.current_level}})  
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="drag-container">
-    <h2>Risks</h2>
-    <div
-      cdkDropList
-      #doneList="cdkDropList"
-      [cdkDropListData]="similar"
-      [cdkDropListConnectedTo]="[todoList]"
-      class="drag-list"
-      (cdkDropListDropped)="drop($event)"
-    >
-      <div class="drag-box" *ngFor="let item of similar" cdkDrag>
-        {{item.title}} ({{item.current_level}})  
+    <div class="drag-container">
+      <h2>Risks</h2>
+      <div
+        cdkDropList
+        #doneList="cdkDropList"
+        [cdkDropListData]="similar"
+        [cdkDropListConnectedTo]="[todoList]"
+        class="drag-list"
+        (cdkDropListDropped)="drop($event)"
+      >
+        <div class="drag-box" *ngFor="let item of similar" cdkDrag>
+          {{item.title}} ({{item.current_level}})  
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 
-  <p *ngIf="error != ''" class="error">{{error}}</p>
+  <ng-container *ngIf="this.tops?.top?.length + this.tops?.similar?.length <= 5">
+    <div class="drag-container">
+      <h2>Top 5 Risks</h2>
+
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="top"
+        class="drag-list"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListEnterPredicate]="evenPredicate"
+      >
+        <div class="drag-box" *ngFor="let item of top" cdkDrag>
+          {{item.title}} ({{item.current_level}})  
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngFor="let errorMsg of error">
+    <p  class="error">{{errorMsg}}</p>
+  </ng-container>
 </div>
 
 <div mat-dialog-actions class="dialogFooter">
