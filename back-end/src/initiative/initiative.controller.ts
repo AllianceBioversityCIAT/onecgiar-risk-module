@@ -326,6 +326,34 @@ export class InitiativeController {
 
     return asd;
   }
+  @Get('InitForVersion/:id')
+  @ApiCreatedResponse({
+    description: '',
+    type: getInitiativeById,
+  })
+  async getInitiativesForVersion(@Param('id') id: number) {
+    let result = await this.iniService.iniRepository
+      .findOneOrFail({
+        where: { id , risks: { redundant: false}},
+        relations: [
+          'risks',
+          'risks.category',
+          'risks.mitigations',
+          'risks.created_by',
+          'risks.risk_owner',
+          'risks.risk_owner.user',
+          'created_by',
+          'roles',
+          'roles.user',
+        ],
+        order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
+      })
+      .catch((d) => {
+        throw new NotFoundException();
+      });
+
+    return result;
+  }
   @Get('all/excel')
   @ApiCreatedResponse({
     description: '',

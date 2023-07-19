@@ -32,7 +32,7 @@ export class VersionDetailsComponent {
     this.path = window.location.pathname;
     const params: any = this.activatedRoute.snapshot.params;
     this.id = params.versionId;
-    this.initiative = await this.initiativesService.getInitiative(this.id);
+    this.initiative = await this.initiativesService.getInitiativeForVersion(this.id);
     this.dataSource.data = this.initiative.risks;
   }
 

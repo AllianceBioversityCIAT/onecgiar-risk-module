@@ -120,6 +120,15 @@ export class InitiativesService extends MainService {
     );
   }
 
+  getInitiativeForVersion(initiativeId: number): Promise<any> {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/InitForVersion/' + initiativeId, {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
+  }
   // roles
   getInitiativeRoles(initiativeId: number) {
     return this.http
