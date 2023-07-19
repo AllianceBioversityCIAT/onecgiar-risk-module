@@ -42,6 +42,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Request } from 'express';
 import { Risk } from 'entities/risk.entity';
 import { AllExcel, TopSimilar, createRoleReq, createRoleRes, createVersion, deleteRoleRes, getAllCategories, getAllVersions, getInitiative, getInitiativeById, getRoles, reqBodyCreateVersion, updateRoleReq, updateRoleRes } from 'DTO/initiative.dto';
+import { RiskCategory } from 'entities/risk-category.entity';
 @ApiTags('Initiative')
 @Controller('initiative')
 export class InitiativeController {
@@ -52,18 +53,16 @@ export class InitiativeController {
   ) {}
 
   offical(query) {
-    if(query.initiative_id != null) {
-      if(query.initiative_id.charAt(0) == '0') {
-        const id =  query.initiative_id.substring(1);
-        if(id <= 9) {
+    if (query.initiative_id != null) {
+      if (query.initiative_id.charAt(0) == '0') {
+        const id = query.initiative_id.substring(1);
+        if (id <= 9) {
           return 'INIT-0' + id;
         }
-      }
-      else {
-        if(query.initiative_id <= 9) {
-          return 'INIT-0' + query.initiative_id
-        }
-        else {
+      } else {
+        if (query.initiative_id <= 9) {
+          return 'INIT-0' + query.initiative_id;
+        } else {
           return 'INIT-' + query.initiative_id;
         }
       }
@@ -84,6 +83,58 @@ export class InitiativeController {
       obj[sorts[0]] = sorts[1];
       return obj;
     } else return { id: 'ASC' };
+  }
+
+  @Get('import-file')
+  async importFile() {
+    const workbook = XLSX.readFile(
+      join(process.cwd(), 'Initiatives all risks.xlsx'),
+    );
+
+    const data: any = XLSX.utils.sheet_to_json(workbook.Sheets['2023 Update']);
+
+    for (let row of data) {
+      row['Current Impact'] = +row['Current Impact'];
+      row['Current Likelihood'] = +row['Current Likelihood'];
+      row['code'] = +row['INIT'].replace(/^\D+/g, '');
+      row['title'] =
+        row[
+          'Top 5 risks to achieving impact \r\n(note relevant Work Package numbers in brackets)'
+        ];
+      row['description'] = row['Description of risk (50 words max each)'];
+      if (row['Skip'] != '1') {
+        let risk = this.riskService.riskRepository.create();
+      
+        risk.description = row['description'];
+        risk.current_impact = row['Current Impact'];
+        risk.current_likelihood = row['Current Likelihood'];
+        risk.target_likelihood = 0
+        risk.target_impact = 0
+        risk.title = row['title'];
+if(row['title'].length >= 255){
+row['title'] = row['title'].trim().substring(0, 254);
+risk.title = row['title'];
+}
+        const risk_category = await this.dataSource
+          .createQueryBuilder()
+          .addFrom(RiskCategory, RiskCategory.name)
+          .where({ title: row['New categories mapping'] })
+          .execute();
+        risk.category_id = risk_category[0].id;
+
+        const initiative = await this.iniService.iniRepository.findOne({
+          where: {
+            parent_id: IsNull(),
+            official_code:
+              row.code <= 9 ? `INIT-0${row.code}` : `INIT-${row.code}`,
+          },
+        });
+        risk.initiative_id = initiative.id;
+        await this.riskService.riskRepository.save(risk);
+      }
+    }
+
+    return data;
   }
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -126,7 +177,7 @@ export class InitiativeController {
       'Current Risk Level': null,
       Category: null,
       'Risk raiser': null,
-      'Flagged': null,
+      Flagged: null,
       'Due date': null,
       // Redundant: false,
       Mitigations: width ? 'Description' : null,
@@ -365,7 +416,7 @@ export class InitiativeController {
       where: { parent_id: IsNull() },
     });
     const risks = await this.riskService.riskRepository.find({
-      where: { initiative_id: In(ininit.map((d) => d.id)) , redundant: false},
+      where: { initiative_id: In(ininit.map((d) => d.id)), redundant: false },
       relations: [
         'initiative',
         'category',
@@ -438,7 +489,7 @@ export class InitiativeController {
   })
   async exportExcel(@Param('id') id: number, @Query() userRole: any) {
     let init = await this.iniService.iniRepository.findOne({
-      where: { id , risks: { redundant: false } },
+      where: { id, risks: { redundant: false } },
       relations: [
         'risks',
         'risks.category',
@@ -690,7 +741,7 @@ export class InitiativeController {
   })
   async top(@Param('id') id: number) {
     const top_5 = await this.riskService.riskRepository.find({
-      where: { initiative_id: id , redundant: false },
+      where: { initiative_id: id, redundant: false },
       order: { current_level: 'DESC' },
       take: 5,
     });
@@ -703,7 +754,7 @@ export class InitiativeController {
         initiative_id: id,
         current_level: In(current_impact),
         id: Not(In(current_ids)),
-        redundant: false
+        redundant: false,
       },
       order: { current_level: 'DESC' },
       take: 5,
@@ -721,7 +772,7 @@ export class InitiativeController {
         initiative_id: id,
         id: Not(In(similar1.map((d) => d.id))),
         current_level: MoreThan(similar1[0] ? similar1[0].current_level : 0),
-        redundant: false
+        redundant: false,
       },
       order: { current_level: 'DESC' },
       take: 5,
