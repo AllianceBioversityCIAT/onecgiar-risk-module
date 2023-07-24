@@ -2,3 +2,69 @@ ngx-avatars{
     display: flex;
     justify-content: center;
 }
+
+
+  tr.example-detail-row {
+    height: 0 !important;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: #f3f3f3 !important;
+    cursor: pointer;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+  
+
+  .example-element-detail{ 
+    max-width: 1197.27px;
+    margin: auto;
+    .box {
+      margin-top: 8px;
+      margin-bottom: 8px;
+      padding: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      .title {
+        color:  rgb(74, 122, 255) !important;
+        letter-spacing: 1px !important;
+        font-size: 1.1em !important;
+        font-weight: bold !important;
+      }    
+      .number {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      p {
+        margin: 0;
+      }
+      .title-mitigation {
+        color: rgb(74, 122, 255) !important;
+        letter-spacing: 1px !important;
+        font-size: 1.1em !important;
+        font-weight: bold !important;
+        display: flex;
+        justify-content: center;
+      }
+    }
+    .sec{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .box {
+        flex-basis: 30%;
+      }
+      .box:last-child .title {
+        display: block;
+        margin-bottom: 16px;
+      }
+    }
+  }
+
+  .flagged {
+    background-color: rgb(255 212 90) !important;
+  }

@@ -1,10 +1,13 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   Output,
+  QueryList,
   ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,10 +24,23 @@ import { ROLES } from '../new-team-member/new-team-member.component';
 import { jsPDF } from 'jspdf';
 import { AppSocket } from 'src/app/services/socket.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import { MatSort } from '@angular/material/sort';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-risk-table',
   templateUrl: './risk-table.component.html',
   styleUrls: ['./risk-table.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0px' , display: 'none'})),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
+    ]),
+  ],
 })
 export class RiskTableComponent {
   constructor(
@@ -36,7 +52,9 @@ export class RiskTableComponent {
     private toastr: ToastrService,
     private userService: UserService,
     private socket: AppSocket,
-    private loading: LoadingService
+    private loading: LoadingService,
+    private cd: ChangeDetectorRef
+
   ) {}
   @Input() dataSource: any;
 
@@ -49,9 +67,61 @@ export class RiskTableComponent {
 
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 
+  @ViewChildren('innerTables') innerTables: QueryList<MatTable<any>>;
+  innerDisplayedColumns = ['full_name',  'target_impact', 'target_likelihood', 'current_impact', 'current_likelihood' , 'mitigations'];
+  expandedElement: any ;
+
+  toggleRow(element) {
+    element.data && (element.data as MatTableDataSource<any>).data.length ? (this.expandedElement = this.expandedElement === element ? null : element) : null;
+    this.cd.detectChanges();
+  }
+
+
   toPdf: boolean = false;
 
   public SavePDF(): void {
+    if (this.user_info.role != 'admin') {
+      this.displayedColumns = [
+        'ID',
+        'Risk Title',
+        'Risk Description',
+        'Risk Category',
+        'Current Likelihood',
+        'Current Impact',
+        'Current Risk Level',
+        'Target Likelihood',
+        'Target Impact',
+        'Target Risk Level',
+        'due date',
+        'Mitigation Action',
+        'Risk Owner',
+        'created_by',
+        'Redundant',
+        'Actions'
+      ];
+    }
+    else {
+      this.displayedColumns = [
+        'ID',
+        'Risk Title',
+        'Risk Description',
+        'Risk Category',
+        'Current Likelihood',
+        'Current Impact',
+        'Current Risk Level',
+        'Target Likelihood',
+        'Target Impact',
+        'Target Risk Level',
+        'due date',
+        'Mitigation Action',
+        'Risk Owner',
+        'created_by',
+        'Flag to SDG',
+        'Redundant',
+        'Actions'
+      ];
+    }
+
     this.toPdf = true;
     let actions = false;
     let redundant = false;
@@ -76,6 +146,15 @@ export class RiskTableComponent {
       });
       doc.html(content.innerHTML, {
         callback: (doc) => {
+          this.displayedColumns = [
+            'ID',
+            'Risk Title',
+            'Risk Category',
+            'Current Risk Level',
+            'Target Risk Level',
+            'Risk Owner',
+            'created_by',
+          ];
           doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
           this.toPdf = false;
           if (redundant) this.displayedColumns.push('Redundant');
@@ -87,19 +166,11 @@ export class RiskTableComponent {
   displayedColumns: string[] = [
     'ID',
     'Risk Title',
-    'Risk Description',
     'Risk Category',
-    'Current Likelihood',
-    'Current Impact',
     'Current Risk Level',
-    'Target Likelihood',
-    'Target Impact',
     'Target Risk Level',
-    'due date',
-    'Mitigation Action',
     'Risk Owner',
     'created_by',
-    'Flag to SDG',
     'Redundant',
   ];
 
@@ -127,25 +198,6 @@ export class RiskTableComponent {
     });
     this.user_info = this.userService.getLogedInUser();
     // my_roles
-    if (this.user_info.role != 'admin') {
-      this.displayedColumns = [
-        'ID',
-        'Risk Title',
-        'Risk Description',
-        'Risk Category',
-        'Current Likelihood',
-        'Current Impact',
-        'Current Risk Level',
-        'Target Likelihood',
-        'Target Impact',
-        'Target Risk Level',
-        'due date',
-        'Mitigation Action',
-        'Risk Owner',
-        'created_by',
-        'Redundant',
-      ];
-    }
 
     const params: any = this.activatedRoute?.snapshot.params;
 
@@ -224,7 +276,7 @@ export class RiskTableComponent {
     const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(
-        `<tr style="border:none !important;"><td style="padding-right: 5px;border:none !important;width:65%;border-top: 1px solid #e0e0e0 !important;text-align: justify;">${mitigation.description}</td><td style="padding-left: 5px;border:none !important;;width:25%;border-top: 1px solid #e0e0e0 !important;">${mitigation?.status?.title}</td></tr>`
+        `<tr style="border:none !important;"><td style="padding-right: 5px;border:none !important;width:65%;border-top: 1px solid #e0e0e0 !important;text-align: justify;">${mitigation.description}</td><td style=";padding-left: 5px;border:none !important;;width:25%;border-top: 1px solid #e0e0e0 !important;">${mitigation?.status?.title}</td></tr>`
       );
     });
     let html = `

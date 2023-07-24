@@ -1,7 +1,7 @@
 
     <div class="tableContainer"  *ngIf="connection" >
       <div #pdfcontent id="pdfcontent"class="table">
-        <table  mat-table [dataSource]="dataSource">
+        <table  mat-table [dataSource]="dataSource" multiTemplateDataRows>
           <ng-container matColumnDef="ID">
             <th
               class="big bold center spacing border-left-0"
@@ -27,7 +27,7 @@
               class="center"
               mat-cell
               *matCellDef="let element"
-              style="min-width: 300px ; text-align: justify  !important"
+              style="max-width: 300px ; text-align: justify  !important"
             >
               {{ element["title"] }}
             </td>
@@ -266,7 +266,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
-              style="min-width: 130px"
+              style="min-width: 200px"
             >
               Actions
             </th>
@@ -317,6 +317,10 @@
                   />
                 </svg>
               </button>
+              <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+                <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+              </button>
             </ng-container>
             <ng-container  *ngIf="locked[element.id]">
               <ngx-avatars size="35" [matTooltip]="locked[element.id]?.user?.full_name +' is editing'" [name]="locked[element.id]?.user?.full_name"></ngx-avatars>
@@ -365,8 +369,70 @@
               </button>
             </td>
           </ng-container>
+
+
+
+          <ng-container matColumnDef="expandedDetail" >
+            <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+              <div class="example-element-detail"
+                   [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <div class="box">
+                    <span class="title">Description</span>
+                    <p>{{element.description}}</p> 
+                </div>
+                <div class="sec">
+                  <div class="box">
+                    <div class="number">
+                      <span class="title">Current Likelihood</span> 
+                      <span>{{ element.current_likelihood }}</span>
+                    </div>
+                    <div class="number">
+                      <span class="title">Current Impact</span> 
+                      <span>{{ element.current_impact }}</span>
+                    </div>
+                  </div>
+                  <div class="box">
+                    <div class="number">
+                      <span class="title">Target Likelihood</span> 
+                      <span>{{ element.target_likelihood }}</span>
+                    </div>
+                    <div class="number">
+                      <span class="title">Target Impact</span> 
+                      <span>{{ element.target_impact }}</span>
+                    </div>
+                  </div>
+                  <div class="box">
+                    <span class="title">Due date to reach target level</span> <span>{{ element.due_date |  date : 'dd/MM/yyyy'}}</span>
+                  </div>
+                </div>
+                <div class="box" *ngIf="element.mitigations.length != 0">
+                  <span class="title-mitigation"> Actions/Controls to manage risks</span>
+                    <div [innerHTML]="filterDescriptionMitigations(element) | safeHtml"  ></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+              class="example-element-row"
+              [class.example-expanded-row]="expandedElement === element"
+              (click)="expandedElement = expandedElement === element ? null : element"
+              [ngClass]="{'flagged': element.flag == true}">
+          </tr>
+          <ng-container *ngIf="toPdf == false">
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </ng-container>
+
+          <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let element ;columns: displayedColumns;" 
+          [class.example-element-row]="element.data?.data?.length"
+          [class.example-expanded-row]="expandedElement === element" 
+          (click)="toggleRow(element)">
+         </tr>
+         <ng-container *ngIf="toPdf == false">
+         <tr mat-row *matRowDef="let element; columns: ['expandedDetail']" class="example-detail-row" ></tr>
+         </ng-container> -->
         </table>
       </div>
     </div>
