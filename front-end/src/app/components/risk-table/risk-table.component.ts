@@ -67,11 +67,11 @@ export class RiskTableComponent {
 
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 
-  @ViewChildren('innerTables') innerTables: QueryList<MatTable<any>>;
+  @ViewChildren('innerTables') innerTables: QueryList<MatTable<any>> | undefined;
   innerDisplayedColumns = ['full_name',  'target_impact', 'target_likelihood', 'current_impact', 'current_likelihood' , 'mitigations'];
   expandedElement: any ;
 
-  toggleRow(element) {
+  toggleRow(element: any) {
     element.data && (element.data as MatTableDataSource<any>).data.length ? (this.expandedElement = this.expandedElement === element ? null : element) : null;
     this.cd.detectChanges();
   }
