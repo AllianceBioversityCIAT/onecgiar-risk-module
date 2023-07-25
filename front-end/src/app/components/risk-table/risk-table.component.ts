@@ -57,6 +57,8 @@ export class RiskTableComponent {
 
   ) {}
   @Input() dataSource: any;
+  @Input() AllRisk: any;
+  
 
   @Output() refresh: EventEmitter<any> = new EventEmitter<any>();
 
@@ -67,7 +69,6 @@ export class RiskTableComponent {
 
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 
-  @ViewChildren('innerTables') innerTables: QueryList<MatTable<any>> | undefined;
   innerDisplayedColumns = ['full_name',  'target_impact', 'target_likelihood', 'current_impact', 'current_likelihood' , 'mitigations'];
   expandedElement: any ;
 

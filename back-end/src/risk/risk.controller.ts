@@ -42,8 +42,23 @@ export class RiskController {
     description: '',
     type: GetRiskDto,
   })
-  getRisk(@Query() query) {
-    return this.riskService.riskRepository.find({
+  async getRisk(@Query() query) {
+    const redundentRisk = await this.riskService.riskRepository.find({
+      where: {
+        initiative_id: query.initiative_id,
+        redundant: true
+      },
+      relations: [
+        'category',
+        'initiative',
+        'mitigations',
+        'mitigations.status',
+        'created_by',
+        'risk_owner',
+        'risk_owner.user',
+      ],
+    });
+    const risks = await this.riskService.riskRepository.find({
       where: {
         title:query?.title ?  ILike(`%${query.title}%`) : null, 
         initiative_id: query.initiative_id,
@@ -63,6 +78,11 @@ export class RiskController {
       ],
       order: { ...this.sort(query) },
     });
+    const result = {
+      risks: risks,
+      redundentRisk: redundentRisk
+    };
+    return result
   }
   @ApiCreatedResponse({
     description: '',

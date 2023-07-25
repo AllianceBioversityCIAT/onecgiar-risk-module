@@ -51,6 +51,7 @@
       <app-search-risks
         *ngIf="initiative?.id"
         [initiative_id]="initiative.id"
+        [AllRisk]="AllRisk"
         (filters)="filter($event)"
       ></app-search-risks>
     </div>
@@ -71,6 +72,7 @@
       [my_risks]="my_risks"
       [savePdf]="savePdf"
       [dataSource]="dataSource"
+      [AllRisk]="AllRisk"
       (refresh)="refresh($event)"
     ></app-risk-table>
   </div>

@@ -239,16 +239,14 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
       .map((d: any) => d);
 
     console.log('initiative  this.riskOwners', this.my_risks);
-    this.dataSource = new MatTableDataSource<any>(
-      await this.riskService.getRisks(this.id,this.filters)
-    );
+    this.AllRisk = await this.riskService.getRisks(this.id,this.filters);
+    this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.NumberOfRisks = this.dataSource._renderData._value.length;
   }
 
   async loadRisks() {
-    this.dataSource = new MatTableDataSource<any>(
-      await this.riskService.getRisks(this.id, this.filters)
-    );
+    this.AllRisk = await this.riskService.getRisks(this.id,this.filters);
+    this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     
     // this.reload = false;
     // setTimeout(async () => {
@@ -256,6 +254,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
     //   this.reload = true;
     // }, 500);
   }
+  AllRisk: any;
   NumberOfRisks: any;
   versionId: any;
   initiativeId: any;

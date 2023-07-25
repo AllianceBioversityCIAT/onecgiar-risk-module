@@ -17,6 +17,7 @@ export class SearchRisksComponent {
   ) {}
   categories: any;
   filterForm: any;
+  @Input() AllRisk: any;
 
   @Input() initiative_id: number | null = null;
 

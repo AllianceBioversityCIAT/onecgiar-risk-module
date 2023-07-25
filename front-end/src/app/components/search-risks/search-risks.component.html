@@ -53,7 +53,7 @@
       [(ngModel)]="redundant"
       (ngModelChange)="redundantChange()"
     >
-    Show Redundant risk
+    Show Redundant risk ({{this.AllRisk?.redundentRisk?.length}})
     </mat-checkbox>
     <button mat-raised-button color="accent" (click)="resetForm()">
       Reset
