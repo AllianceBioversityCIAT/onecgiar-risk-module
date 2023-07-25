@@ -418,7 +418,7 @@
               class="example-element-row"
               [class.example-expanded-row]="expandedElement === element"
               (click)="expandedElement = expandedElement === element ? null : element"
-              [ngClass]="{'flagged': element.flag == true}">
+              [ngClass]="{'flagged': element.flag == true && this.user_info.role == 'admin'}">
           </tr>
           <ng-container *ngIf="toPdf == false">
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
