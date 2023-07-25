@@ -95,6 +95,7 @@ export class InitiativeService {
     });
     if (old_Risks.length)
       for (let risk of old_Risks) {
+        risk.original_risk_id = risk.id;
         delete risk.id;
         delete risk.current_level;
         delete risk.target_level;

@@ -69,7 +69,7 @@ export class RiskTableComponent {
 
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 
-  innerDisplayedColumns = ['full_name',  'target_impact', 'target_likelihood', 'current_impact', 'current_likelihood' , 'mitigations'];
+
   expandedElement: any ;
 
   toggleRow(element: any) {

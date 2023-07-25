@@ -128,4 +128,9 @@ export class Risk {
   @Optional()
   @Column({ default: null })
   created_by_user_id: number;
+
+  @ApiProperty()
+  @Optional()
+  @Column({ default: null })
+  original_risk_id: number;
 }

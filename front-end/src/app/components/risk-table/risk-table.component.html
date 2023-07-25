@@ -11,7 +11,7 @@
               ID
             </th>
             <td class="border-left-0 center" mat-cell *matCellDef="let element">
-              {{ element.id }}
+              {{ showingVersion == true ? element.original_risk_id || element.id  : element.id }}
             </td>
           </ng-container>
 
@@ -266,7 +266,7 @@
               class="big bold center spacing"
               mat-header-cell
               *matHeaderCellDef
-              style="min-width: 200px"
+              style="min-width: 170px"
             >
               Actions
             </th>
