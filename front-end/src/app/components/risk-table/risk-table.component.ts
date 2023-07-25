@@ -27,6 +27,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { InitiativeDetailsComponent } from 'src/app/pages/initiative-details/initiative-details.component';
 @Component({
   selector: 'app-risk-table',
   templateUrl: './risk-table.component.html',
@@ -53,7 +54,8 @@ export class RiskTableComponent {
     private userService: UserService,
     private socket: AppSocket,
     private loading: LoadingService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private InitiativeDetailsComponent: InitiativeDetailsComponent
 
   ) {}
   @Input() dataSource: any;
@@ -262,6 +264,7 @@ export class RiskTableComponent {
   }
   async checkValue(id: number, value: any) {
     await this.riskService.updateRedundant(id, value);
+    this.InitiativeDetailsComponent.loadRisks();
   }
   canEdit() {
     return (
