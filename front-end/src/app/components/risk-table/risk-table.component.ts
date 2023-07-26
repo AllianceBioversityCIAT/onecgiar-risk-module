@@ -99,8 +99,8 @@ export class RiskTableComponent {
         'Mitigation Action',
         'Risk Owner',
         'created_by',
-        'Redundant',
-        'Actions'
+        // 'Redundant',
+        // 'Actions'
       ];
     }
     else {
@@ -120,7 +120,7 @@ export class RiskTableComponent {
         'Risk Owner',
         'created_by',
         'Flag to SDG',
-        'Redundant',
+        // 'Redundant',
         'Actions'
       ];
     }
@@ -157,7 +157,11 @@ export class RiskTableComponent {
             'Target Risk Level',
             'Risk Owner',
             'created_by',
+            'Redundant',
           ];
+          if(!this.canEdit()) {
+            this.displayedColumns.push('OwnerActions');
+          }
           doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
           this.toPdf = false;
           if (redundant) this.displayedColumns.push('Redundant');
