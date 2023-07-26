@@ -17,7 +17,7 @@
           matTooltip="Risks Versions"
           routerLink="./versions"
         >
-          Published Versions
+        submitted Versions
         </button>
         <button
           [disabled]="!canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || AllRisk?.risks?.length == AllRisk?.redundentRisk?.length"
@@ -25,7 +25,7 @@
           [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || AllRisk?.risks?.length == AllRisk?.redundentRisk?.length}"
           class="primaryButton mt-1"
         >
-          Publish
+          Submit
         </button>
         <button
           (click)="export(initiative.id, initiative.official_code)"
@@ -58,13 +58,13 @@
 
     <div *ngIf="reload">
       <p *ngIf="latest_version?.submit_date != initiative?.last_updated_date" style="float: right">
-        This is a draft version until it get published. last update at
+        This is a draft version until it get submitted. last update at
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
       <p class="message-text" *ngIf="latest_version?.submit_date == initiative?.last_updated_date" style="float: right">
-        This initiative risks published in
+        This initiative risks submitted in
         {{ latest_version?.submit_date | date : "short" }}
-        <mat-icon  matTooltip="Any changes to the published version will change convert it into the draft mode.">help_outline</mat-icon>
+        <mat-icon  matTooltip="Any changes to the submitted version will change convert it into the draft mode.">help_outline</mat-icon>
       </p>
     </div>
 
