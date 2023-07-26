@@ -242,18 +242,22 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
     this.AllRisk = await this.riskService.getRisks(this.id,this.filters);
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.NumberOfRisks = this.dataSource._renderData._value.length;
-  }
 
+    // check if all risks are redundent and show redundent are cheked 
+    this.isTrue = this.AllRisk.risks.every((obj : any) => obj.redundant == true);
+  }
   async loadRisks() {
     this.AllRisk = await this.riskService.getRisks(this.id,this.filters);
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
-    
+    this.isTrue = this.AllRisk.risks.every((obj : any) => obj.redundant == true);
+
     // this.reload = false;
     // setTimeout(async () => {
     //   await this.loadInitiative();
     //   this.reload = true;
     // }, 500);
   }
+  isTrue: boolean =false;
   AllRisk: any;
   NumberOfRisks: any;
   versionId: any;

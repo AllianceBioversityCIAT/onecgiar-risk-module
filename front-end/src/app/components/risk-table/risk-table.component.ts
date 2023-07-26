@@ -264,7 +264,7 @@ export class RiskTableComponent {
   }
   async checkValue(id: number, value: any) {
     await this.riskService.updateRedundant(id, value);
-    this.InitiativeDetailsComponent.loadRisks();
+    this.InitiativeDetailsComponent.loadInitiative();
   }
   canEdit() {
     return (
