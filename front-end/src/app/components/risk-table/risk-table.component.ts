@@ -286,7 +286,7 @@ export class RiskTableComponent {
     let html = `
   <table style="border:none !important;">
   <tr>
-  <th style="border:none !important; text-align:left;width:70%;">Description</th>
+  <th style="border:none !important; text-align:left;width:70%;">Actions/Controls description</th>
   <th style="border:none !important; text-align:center;width:30%;">Status</th>
  
 </tr>
