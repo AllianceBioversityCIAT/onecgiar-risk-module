@@ -22,49 +22,10 @@
   <div class="dialogBody">
     <form [formGroup]="newRiskForm">
       <mat-form-field class="w-90" appearance="outline">
-        <input [disabled]="true" [value]="data?.risk?.created_by?.full_name || user_info.full_name" matInput placeholder="Risk Raiser" />
+        <input [disabled]="true" [value]="data?.risk?.created_by?.full_name || user_info.full_name" matInput placeholder="Created by" />
         <mat-icon
-          matTooltip="The user raising a new risk for discussion with the team. This person will be detected by the system automatically"
+          matTooltip="The creator a new risk for discussion with the team. This person will be detected by the system automatically"
           matSuffix
-          >help_outline</mat-icon
-        >
-      </mat-form-field>
-      <mat-form-field class="w-90" appearance="outline">
-        <mat-select placeholder="Risk Owner" formControlName="risk_owner_id">
-            <mat-option
-              *ngFor="let riskrole of riskUsers"
-              [value]="riskrole.id"
-            >
-              {{ riskrole?.user?.full_name ||  riskrole.email }}
-            </mat-option>
-          </mat-select>
-        <mat-icon
-          matTooltip="The person proposed by the risk raiser and to be confirmed by the Initiative Lead/Co-lead"
-          matSuffix
-          >help_outline</mat-icon
-        >
-        <mat-error
-          class="error"
-          *ngIf="newRiskForm.controls?.risk_owner_id.errors?.['required']"
-          >Risk Owner is required</mat-error
-        >
-      </mat-form-field>
-
-      <mat-form-field class="w-90" appearance="outline">
-        <mat-select placeholder="Risk Category" formControlName="category_id">
-          <ng-container *ngFor="let riskCat of riskCategories">
-          <mat-option
-          *ngIf="riskCat.disabled == 0"
-            [value]="riskCat.id"
-          >
-            {{ riskCat.title }}
-            <mat-icon [matTooltip]="riskCat.description" matSuffix
-              >help_outline</mat-icon
-            >
-          </mat-option>
-          </ng-container>
-        </mat-select>
-        <mat-icon matTooltip="Info about the action" matSuffix
           >help_outline</mat-icon
         >
       </mat-form-field>
@@ -113,6 +74,49 @@
           }}</mat-error
         >
       </mat-form-field>
+
+
+      <mat-form-field class="w-90" appearance="outline">
+        <mat-select placeholder="Risk Category" formControlName="category_id">
+          <ng-container *ngFor="let riskCat of riskCategories">
+          <mat-option
+          *ngIf="riskCat.disabled == 0"
+            [value]="riskCat.id"
+          >
+            {{ riskCat.title }}
+            <mat-icon [matTooltip]="riskCat.description" matSuffix
+              >help_outline</mat-icon
+            >
+          </mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-icon matTooltip="Info about the action" matSuffix
+          >help_outline</mat-icon
+        >
+      </mat-form-field>
+
+      <mat-form-field class="w-90" appearance="outline">
+        <mat-select placeholder="Risk Owner" formControlName="risk_owner_id">
+            <mat-option
+              *ngFor="let riskrole of riskUsers"
+              [value]="riskrole.id"
+            >
+              {{ riskrole?.user?.full_name ||  riskrole.email }}
+            </mat-option>
+          </mat-select>
+        <mat-icon
+          matTooltip="The person proposed by the risk raiser and to be confirmed by the Initiative Lead/Co-lead"
+          matSuffix
+          >help_outline</mat-icon
+        >
+        <mat-error
+          class="error"
+          *ngIf="newRiskForm.controls?.risk_owner_id.errors?.['required']"
+          >Risk Owner is required</mat-error
+        >
+      </mat-form-field>
+
+
 
       <div class="radio">
         <div class="container">

@@ -176,7 +176,7 @@ risk.title = row['title'];
       'Current impact': null,
       'Current Risk Level': null,
       Category: null,
-      'Risk raiser': null,
+      'Created by': null,
       Flagged: null,
       'Due date': null,
       // Redundant: false,
@@ -200,7 +200,7 @@ risk.title = row['title'];
     template['Current Risk Level'] =
       element.current_likelihood * element.current_impact;
     template.Category = element.category.title;
-    template['Risk raiser'] = element.created_by?.full_name;
+    template['Created by'] = element.created_by?.full_name;
     // template.Redundant = element.redundant;
     template['Due date'] =
       element.due_date === null
@@ -269,7 +269,7 @@ risk.title = row['title'];
       'Current impact': null,
       'Current Risk Level': null,
       Category: null,
-      'Risk raiser': null,
+      'Created by': null,
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
@@ -293,7 +293,7 @@ risk.title = row['title'];
     template['Current Risk Level'] =
       element.current_likelihood * element.current_impact;
     template.Category = element.category.title;
-    template['Risk raiser'] = element.created_by?.full_name;
+    template['Created by'] = element.created_by?.full_name;
     template['Due Date'] =
       element.due_date === null
         ? 'null'
