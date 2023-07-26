@@ -10,7 +10,7 @@
             >
               ID
             </th>
-            <td class="border-left-0 center" mat-cell *matCellDef="let element">
+            <td class="border-left-0 center" mat-cell *matCellDef="let element" [ngClass]="{'flagged': element.flag == true && this.user_info.role == 'admin'}">
               {{ showingVersion == true ? element.original_risk_id || element.id  : element.id }}
             </td>
           </ng-container>
@@ -418,7 +418,7 @@
               class="example-element-row"
               [class.example-expanded-row]="expandedElement === element"
               (click)="expandedElement = expandedElement === element ? null : element"
-              [ngClass]="{'flagged': element.flag == true && this.user_info.role == 'admin'}">
+              >
           </tr>
           <ng-container *ngIf="toPdf == false">
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
