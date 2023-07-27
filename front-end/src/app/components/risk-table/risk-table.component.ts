@@ -59,6 +59,7 @@ export class RiskTableComponent {
 
   ) {}
   @Input() dataSource: any;
+  @Input() dataSourceForPdf: any;
   @Input() AllRisk: any;
   
 

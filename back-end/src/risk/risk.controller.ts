@@ -58,6 +58,21 @@ export class RiskController {
         'risk_owner.user',
       ],
     });
+    const notredundentRisk = await this.riskService.riskRepository.find({
+      where: {
+        initiative_id: query.initiative_id,
+        redundant: false
+      },
+      relations: [
+        'category',
+        'initiative',
+        'mitigations',
+        'mitigations.status',
+        'created_by',
+        'risk_owner',
+        'risk_owner.user',
+      ],
+    });
     const risks = await this.riskService.riskRepository.find({
       where: {
         title:query?.title ?  ILike(`%${query.title}%`) : null, 
@@ -80,7 +95,8 @@ export class RiskController {
     });
     const result = {
       risks: risks,
-      redundentRisk: redundentRisk
+      redundentRisk: redundentRisk,
+      notredundentRisk: notredundentRisk
     };
     return result
   }

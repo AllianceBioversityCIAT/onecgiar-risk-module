@@ -424,9 +424,7 @@
               (click)="expandedElement = expandedElement === element ? null : element"
               >
           </tr>
-          <ng-container *ngIf="toPdf == false">
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-        </ng-container>
         </table>
       </div>
       <div class="error" *ngIf="AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0">All risks are redundant, please select “Show Redundant risk” to show them</div>
@@ -446,7 +444,7 @@
 <ng-container *ngIf="toPdf">
     <div class="tableContainer pdf"  *ngIf="connection" >
       <div #pdfcontent id="pdfcontent"class="table">
-        <table  mat-table [dataSource]="dataSource">
+        <table  mat-table [dataSource]="dataSourceForPdf">
           <ng-container matColumnDef="ID">
             <th
               class="big bold center spacing border-left-0"
