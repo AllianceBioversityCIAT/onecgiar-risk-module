@@ -67,11 +67,15 @@ export class InitiativesComponent {
       this.navigationSubscription.unsubscribe();
     }
   }
-
+  listOfCategories: any[] = [];
   filterCategories(categories: any) {
-    var list = '';
-    list = categories.map((d: any) => d?.category?.title).join(', ');
-    return list;
+    this.listOfCategories = [];
+    for(let item of categories)
+    {
+      this.listOfCategories.push(item?.category?.title)
+    }
+    const result =  this.listOfCategories.filter((item, index) => this.listOfCategories.indexOf(item) === index).join(', ');
+    return result;
   }
 
   filterRoles(roles: any) {
