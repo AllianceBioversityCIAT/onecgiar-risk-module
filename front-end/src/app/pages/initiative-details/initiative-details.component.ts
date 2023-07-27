@@ -61,19 +61,11 @@ export class PublishDialog implements OnInit {
     this.error = [];
     // case 1
     if(this.tops.top.length + this.tops.similar.length <= 5) {
-      if(this.data.reason == '') {
-        this.error.push("please fill publish reason");
-      }
-      else {
         this.dialogRef.close(this.data);
-      }
     }
     //case 2
     if(this.tops.top.length + this.tops.similar.length > 5) {
 
-      if(this.data.reason == '') {
-        this.error.push("please fill publish reason");
-      }
       if(this.tops.top.length < 5) {
         this.error.push("please make sure that you have selected the top 5 risks");
       }
@@ -207,9 +199,9 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
   async publish(id: number) {
     this.dialog
       .open(PublishDialog, {
-        height: '800px',
+        maxHeight: '800px',
         maxWidth: '700px',
-        data: { reason: '', initiative_id: this.id, top: [] },
+        data: { initiative_id: this.id, top: [] },
       })
       .afterClosed()
       .subscribe(async (dialogResult) => {

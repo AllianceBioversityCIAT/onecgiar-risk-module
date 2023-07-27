@@ -14,7 +14,6 @@ export class getInitiative{
     submit_date: Date;
     last_updated_date: Date;
     created_by_user_id: number;
-    publish_reason: string;
     status: boolean;
     action_area_id: number;
     risks: Array<riskGetInitiative>;
@@ -100,7 +99,6 @@ export class getInitiativeById{
     submit_date: Date;
     last_updated_date: Date;
     created_by_user_id: number;
-    publish_reason: string;
     status: boolean;
     action_area_id: number;
     risks: Array<riskGetInitiativeById>;
@@ -187,7 +185,6 @@ export class initiative {
     submit_date: Date;
     last_updated_date: Date;
     created_by_user_id: number;
-    publish_reason:  string;
     status: boolean;
     action_area_id: number;
     roles: Array<roles>;
@@ -208,7 +205,6 @@ export class createVersion {
         submit_date: Date;
         last_updated_date: Date;
         created_by_user_id: number;
-        publish_reason: string;
         status: boolean;
         action_area_id:number;
         risks: Array<riskForCreateVersion>
@@ -237,7 +233,6 @@ export class riskForCreateVersion extends PickType(Risk, [
 
 //req create version
 export class reqBodyCreateVersion {
-    reason: string;
     initiative_id: number;
     top: Array<riskForCreateVersion>
 }

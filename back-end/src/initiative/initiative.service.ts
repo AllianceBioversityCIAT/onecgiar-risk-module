@@ -56,7 +56,7 @@ export class InitiativeService {
     else throw new NotFoundException();
   }
 
-  async createINIT(old_init_id: number, reason, user, top: Risk[]) {
+  async createINIT(old_init_id: number, user, top: Risk[]) {
     const old_initiative = await this.iniRepository.findOne({
       where: { id: old_init_id },
       relations: ['roles', 'roles.user'],
@@ -74,7 +74,6 @@ export class InitiativeService {
     initiative.official_code = old_initiative.official_code;
     initiative.parent_id = old_init_id;
     initiative.created_by_user_id = user.id;
-    initiative.publish_reason = reason;
     const new_init = await this.iniRepository.save(initiative, {
       reload: true,
     });

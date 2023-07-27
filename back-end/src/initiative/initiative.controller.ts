@@ -577,11 +577,10 @@ risk.title = row['title'];
   @ApiBody({type : reqBodyCreateVersion})
   createVersion(
     @Param('id') id: number,
-    @Body('reason') reason: string,
     @Body('top') top: any,
     @Req() req,
   ): Promise<Initiative> {
-    return this.iniService.createINIT(id, reason, req.user, top);
+    return this.iniService.createINIT(id, req.user, top);
   }
   @Get('all/categories')
   @ApiCreatedResponse({

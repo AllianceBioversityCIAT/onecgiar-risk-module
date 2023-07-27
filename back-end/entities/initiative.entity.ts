@@ -71,9 +71,6 @@ export class Initiative {
   @Column({default:null})
   created_by_user_id:number
 
-  @Optional()
-  @Column({default:null})
-  publish_reason:string
 
   @ApiProperty()
   @Column({type: 'bool', default: false})

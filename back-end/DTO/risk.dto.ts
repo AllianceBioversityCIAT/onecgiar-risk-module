@@ -48,7 +48,6 @@ export class Mitigations {
       submit_date: Date,
       last_updated_date: Date,
       created_by_user_id: number,
-      publish_reason: string,
       status: boolean,
       action_area_id: number
       };

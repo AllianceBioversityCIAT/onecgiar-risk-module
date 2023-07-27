@@ -23,7 +23,7 @@ export class VersionsDashboardComponent {
   
 
   initiative_name:string='';
-  displayedColumns: string[] = ['Version', 'publish_reason', 'Creation Date', 'Creation By', 'Actions'];
+  displayedColumns: string[] = ['Version', 'Creation Date', 'Creation By', 'Actions'];
   dataSource = new MatTableDataSource<any>([
   ]);
 
