@@ -73,3 +73,12 @@
   padding: 0 7px;
   font-weight: bold;
 }
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  h2 {
+    margin: 0;
+  }
+}

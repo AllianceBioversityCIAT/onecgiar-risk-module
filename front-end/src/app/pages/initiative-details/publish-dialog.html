@@ -9,7 +9,14 @@
   <hr />
   <ng-container *ngIf="this.tops?.top?.length + this.tops?.similar?.length > 5">
     <div class="drag-container">
-      <h2>Top 5 Risks</h2>
+      <div class="head">
+        <h2>Top 5 Risks</h2>
+        <mat-icon
+          matTooltip="To select the Top 5 risks please drag and drop 5 risks from the Risks field below"
+          matSuffix
+          >help_outline</mat-icon
+        >
+      </div>
 
       <div
         cdkDropList
@@ -45,7 +52,14 @@
 
   <ng-container *ngIf="this.tops?.top?.length + this.tops?.similar?.length <= 5">
     <div class="drag-container">
-      <h2>Top 5 Risks</h2>
+      <div class="head">
+        <h2>Top 5 Risks</h2>
+        <mat-icon
+          matTooltip="To select the Top 5 risks please drag and drop 5 risks from the Risks field below"
+          matSuffix
+          >help_outline</mat-icon
+        >
+      </div>
 
       <div
         cdkDropList
