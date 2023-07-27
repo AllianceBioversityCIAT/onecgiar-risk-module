@@ -20,8 +20,8 @@
         (cdkDropListDropped)="drop($event)"
         [cdkDropListEnterPredicate]="evenPredicate"
       >
-        <div class="drag-box" *ngFor="let item of top" cdkDrag>
-          {{item.title}} ({{item.current_level}})  
+        <div class="drag-box" *ngFor="let item of top; let i = index" [attr.data-index]="i" cdkDrag>
+          <span class="index">{{i+1}}</span> {{item.title}} ({{item.current_level}})  
         </div>
       </div>
     </div>
@@ -55,8 +55,8 @@
         (cdkDropListDropped)="drop($event)"
         [cdkDropListEnterPredicate]="evenPredicate"
       >
-        <div class="drag-box" *ngFor="let item of top" cdkDrag>
-          {{item.title}} ({{item.current_level}})  
+        <div class="drag-box" *ngFor="let item of top; let i = index" [attr.data-index]="i" cdkDrag>
+          <span class="index">{{i+1}}</span> {{item.title}} ({{item.current_level}})  
         </div>
       </div>
     </div>

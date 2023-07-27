@@ -22,7 +22,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  // justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
   background: white;
@@ -64,3 +64,12 @@
   padding: 16px 24px !important;
 
 } 
+
+.index {
+  position: relative;
+  margin-right: 10px;
+  border: solid 1px black;
+  border-radius: 25%;
+  padding: 0 7px;
+  font-weight: bold;
+}
