@@ -84,7 +84,7 @@ export class RiskTableComponent {
 
   public SavePDF(): void {
     if (this.user_info.role != 'admin') {
-      this.displayedColumns = [
+      this.displayedColumnsPdf = [
         'ID',
         'Risk Title',
         'Risk Description',
@@ -99,12 +99,10 @@ export class RiskTableComponent {
         'Mitigation Action',
         'Risk Owner',
         'created_by',
-        // 'Redundant',
-        // 'Actions'
       ];
     }
     else {
-      this.displayedColumns = [
+      this.displayedColumnsPdf = [
         'ID',
         'Risk Title',
         'Risk Description',
@@ -120,22 +118,10 @@ export class RiskTableComponent {
         'Risk Owner',
         'created_by',
         'Flag to SDG',
-        // 'Redundant',
-        'Actions'
       ];
     }
 
     this.toPdf = true;
-    let actions = false;
-    let redundant = false;
-    if (this.displayedColumns.includes('Actions')) {
-      this.displayedColumns.pop();
-      actions = true;
-      if (this.displayedColumns.includes('Redundant')) {
-        this.displayedColumns.pop();
-        redundant = true;
-      }
-    }
     setTimeout(() => {
       let content = this.pdfcontent.nativeElement;
       this.pdfcontent.nativeElement.width;
@@ -149,23 +135,8 @@ export class RiskTableComponent {
       });
       doc.html(content.innerHTML, {
         callback: (doc) => {
-          this.displayedColumns = [
-            'ID',
-            'Risk Title',
-            'Risk Category',
-            'Current Risk Level',
-            'Target Risk Level',
-            'Risk Owner',
-            'created_by',
-            'Redundant',
-          ];
-          if(!this.canEdit()) {
-            this.displayedColumns.push('OwnerActions');
-          }
           doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
           this.toPdf = false;
-          if (redundant) this.displayedColumns.push('Redundant');
-          if (actions) this.displayedColumns.push('Actions');
         },
       });
     }, 500);
@@ -180,6 +151,8 @@ export class RiskTableComponent {
     'created_by',
     'Redundant',
   ];
+
+  displayedColumnsPdf: string[] = [];
 
   user_info: any;
   id: any;
