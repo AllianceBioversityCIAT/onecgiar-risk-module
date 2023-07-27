@@ -69,7 +69,7 @@ export class MitigationStatusComponent implements OnInit{
         if(response == true) {
           await this.mitigationService.deleteMitigationStatus(record.id)
           this.getData();
-          this.toster.error(`Delete ${record.title} successfully`);
+          this.toster.success(`Delete ${record.title} successfully`);
         }
       });
     }
