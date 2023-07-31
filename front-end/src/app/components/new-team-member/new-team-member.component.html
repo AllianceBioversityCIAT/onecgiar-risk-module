@@ -27,10 +27,13 @@
         bindValue="id"
         labelForId="id"
         placeholder="Select user"
-        bindLabel="full_name"
-        placeholder="Select User"
+        [bindLabel]="haveSameChar == true ? bindValue.full_name : bindValue.email"
         formControlName="user_id"
+        (search)="search($event)"
       >
+      <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+        <span >{{ item.full_name }}</span> <span>({{item.email}})</span>
+      </ng-template>
       </ng-select>
 
       <h1

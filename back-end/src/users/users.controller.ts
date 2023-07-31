@@ -52,15 +52,24 @@ export class UsersController {
     type: getUsers,
   })
   getUsers(@Query() query) {
-    return this.usersService.userRepository.find({
-      where: {
-        full_name: query?.full_name ? ILike(`%${query?.full_name}%`) : null,
-        email: query?.email ? ILike(`%${query?.email}%`) : null,
-        id: query?.id ? query?.id : null,
-        role: query?.role ? query?.role : null,
-      },
-      order: { ...this.sort(query) },
-    });
+    if(query.search == 'teamMember') {
+      return this.usersService.userRepository.createQueryBuilder('users')
+      .where("users.full_name like :full_name", { full_name: `%${query.full_name}%` })
+      .orWhere("users.email like :email", { email: `%${query.email}%` })
+      .select(['users.id as id', 'users.full_name as full_name', 'users.email as email'])
+      .getRawMany()
+    }
+    else {
+      return this.usersService.userRepository.find({
+        where: {
+          full_name: query?.full_name ? ILike(`%${query?.full_name}%`) : null,
+          email: query?.email ? ILike(`%${query?.email}%`) : null,
+          id: query?.id ? query?.id : null,
+          role: query?.role ? query?.role : null,
+        },
+        order: { ...this.sort(query) },
+      });
+    }
   }
 
   @Put()

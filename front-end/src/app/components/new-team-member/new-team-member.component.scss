@@ -30,3 +30,7 @@
         }
     }
 }
+
+::ng-deep .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    padding: 8px ;
+}

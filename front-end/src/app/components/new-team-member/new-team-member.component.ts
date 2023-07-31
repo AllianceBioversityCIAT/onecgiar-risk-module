@@ -40,7 +40,7 @@ export class NewTeamMemberComponent {
     return (controlGroup: any) => {
       let controls = controlGroup.controls;
       if (controls) {
-        console.log(controls);
+        // console.log(controls);
         if (controls.email.value == '' && (controls.user_id.value == '' || controls.user_id.value == null)) {
           return {
             atLeastOneRequired: {
@@ -83,9 +83,38 @@ export class NewTeamMemberComponent {
     }
   }
 
+
+  bindValue: any = {
+    full_name: 'full_name',
+    email: 'email'
+  }
+
+
+  haveSameChar: boolean = false;
+  searchValue: string = '';
+  async search(event: any) {
+    this.searchValue = event.term;
+    const filters = {
+      full_name: this.searchValue,
+      email: this.searchValue,
+      search: 'teamMember'
+    }
+    this.users = await this.usersService.getUsers(filters);
+    let i = this.searchValue.length;
+
+    for(let user of this.users){
+      if(this.searchValue == user.full_name.substring(0, i)) {
+        this.haveSameChar = true;
+      }
+      else {
+        this.haveSameChar = false;
+      }
+    }
+  }
+  
   async ngOnInit() {
-    this.users = await this.usersService.getUsers();
-    console.log(this.users);
+    // this.users = await this.usersService.getUsers();
+    // console.log(this.users);
     this.populateMemberForm();
   }
 }
