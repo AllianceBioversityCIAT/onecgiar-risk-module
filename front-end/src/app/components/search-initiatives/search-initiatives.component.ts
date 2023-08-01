@@ -30,7 +30,7 @@ export class SearchInitiativesComponent {
   ];
 
   status = [
-    { name: 'published', value: '1' },
+    { name: 'submitted', value: '1' },
     { name: 'draft', value: '0' }
   ];
 
