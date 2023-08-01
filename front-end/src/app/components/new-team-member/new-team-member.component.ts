@@ -90,7 +90,7 @@ export class NewTeamMemberComponent {
   }
 
 
-  haveSameChar: boolean = false;
+  haveSameChar!: boolean;
   searchValue: string = '';
   async search(event: any) {
     this.searchValue = event.term;
@@ -106,7 +106,7 @@ export class NewTeamMemberComponent {
       if(this.searchValue == user.full_name.substring(0, i)) {
         this.haveSameChar = true;
       }
-      else {
+      else if(this.searchValue == user.email.substring(0, i)){
         this.haveSameChar = false;
       }
     }
