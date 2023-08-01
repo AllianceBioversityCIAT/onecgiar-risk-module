@@ -52,6 +52,7 @@
         <mat-card-content>
           <table>
             <tr>
+              <th>INIT-ID</th>
               <th>initiative</th>
               <th>Risk Category</th>
               <th>Risk</th>
@@ -60,6 +61,9 @@
             </tr>
             <ng-container *ngFor="let initiative of details">
               <tr *ngFor="let risk of initiative.risks; let i = index">
+                <td *ngIf="i == 0" [attr.rowspan]="initiative.risks.length" style="min-width: 60px;">
+                  {{ initiative.official_code }}
+                </td>
                 <td *ngIf="i == 0" [attr.rowspan]="initiative.risks.length">
                   {{ initiative.name }}
                 </td>
