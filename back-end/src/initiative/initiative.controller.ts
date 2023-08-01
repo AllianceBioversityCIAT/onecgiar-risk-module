@@ -164,6 +164,7 @@ risk.title = row['title'];
   }
   getTemplateAdmin(width = false) {
     return {
+      'top': null,
       ID: null,
       Initiative: null,
       Title: null,
@@ -186,7 +187,8 @@ risk.title = row['title'];
   }
 
   mapTemplateAdmin(template, element) {
-    template.ID = element.id;
+    template['top'] = element.top == 999 ? '' : element.top;
+    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
@@ -213,11 +215,11 @@ risk.title = row['title'];
     let finaldata = [this.getTemplateAdmin(true)];
     let merges = [
       {
-        s: { c: 15, r: 0 },
-        e: { c: 16, r: 0 },
+        s: { c: 16, r: 0 },
+        e: { c: 17, r: 0 },
       },
     ];
-    for (let index = 0; index < 15; index++) {
+    for (let index = 0; index < 16; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -257,6 +259,7 @@ risk.title = row['title'];
 
   getTemplateUser(width = false) {
     return {
+      'top': null,
       ID: null,
       Initiative: null,
       Title: null,
@@ -279,7 +282,8 @@ risk.title = row['title'];
   }
 
   mapTemplateUser(template, element) {
-    template.ID = element.id;
+    template['top'] = element.top == 999 ? '' : element.top;
+    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
@@ -306,11 +310,11 @@ risk.title = row['title'];
     let finaldata = [this.getTemplateUser(true)];
     let merges = [
       {
-        s: { c: 14, r: 0 },
-        e: { c: 15, r: 0 },
+        s: { c: 15, r: 0 },
+        e: { c: 16, r: 0 },
       },
     ];
-    for (let index = 0; index < 14; index++) {
+    for (let index = 0; index < 15; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -398,7 +402,8 @@ risk.title = row['title'];
           'roles',
           'roles.user',
         ],
-        order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
+        // order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
+        order: { risks: { top: 'ASC' } }
       })
       .catch((d) => {
         throw new NotFoundException();
@@ -429,6 +434,7 @@ risk.title = row['title'];
         'initiative.roles',
         'initiative.roles.user',
       ],
+      order: { initiative_id: 'ASC' ,top: 'ASC' }
     });
     if (userRole.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
@@ -503,6 +509,7 @@ risk.title = row['title'];
         'roles.user',
         'risks.initiative',
       ],
+      order: { risks: { top: 'ASC' } }
     });
     /// merges  Here s = start, r = row, c=col, e= end
 

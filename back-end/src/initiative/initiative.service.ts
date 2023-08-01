@@ -61,6 +61,14 @@ export class InitiativeService {
       where: { id: old_init_id },
       relations: ['roles', 'roles.user'],
     });
+    const allRisks = await this.riskService.riskRepository.find({
+      where: { initiative_id: old_init_id }
+    })
+    //set default value
+    for (const risks of allRisks) {
+      risks.top = 999;
+      await this.riskService.updateRisk(risks.id, risks, user);
+    }
     let num = 1;
     if (top.length)
       for (const risk of top) {
