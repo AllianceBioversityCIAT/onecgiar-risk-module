@@ -51,7 +51,8 @@ export class UsersController {
     description: '',
     type: getUsers,
   })
-  getUsers(@Query() query) {
+  async getUsers(@Query() query) {
+    console.log(query)
     if(query.search == 'teamMember') {
       return this.usersService.userRepository.createQueryBuilder('users')
       .where("users.full_name like :full_name", { full_name: `%${query.full_name}%` })
@@ -60,7 +61,9 @@ export class UsersController {
       .getRawMany()
     }
     else {
-      return this.usersService.userRepository.find({
+      const take = query.limit || 10
+      const skip=(Number(query.page)-1)*take;
+      const [result, total] = await this.usersService.userRepository.findAndCount({
         where: {
           full_name: query?.full_name ? ILike(`%${query?.full_name}%`) : null,
           email: query?.email ? ILike(`%${query?.email}%`) : null,
@@ -68,7 +71,13 @@ export class UsersController {
           role: query?.role ? query?.role : null,
         },
         order: { ...this.sort(query) },
+        take: take == null ? null : take,
+        skip: skip == null ? null : skip,
       });
+      return {
+        result: result,
+        count: total
+    }
     }
   }
 

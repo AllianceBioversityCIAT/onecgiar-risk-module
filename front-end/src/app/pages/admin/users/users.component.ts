@@ -7,6 +7,7 @@ import {
 } from 'src/app/components/confirm/confirm.component';
 import { UserService } from 'src/app/services/user.service';
 import { UserFormComponent } from './user-form/user-form.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-users',
@@ -32,13 +33,26 @@ export class UsersComponent implements OnInit {
     { title: 'Delete', action: 'delete', icon: 'delete' },
   ];
   dataSource: any = [];
+  data:any;
   filters: any = null;
+  userTable: boolean = true;
+  length!: number;
+  pageSize: number = 10;
+  pageIndex: number = 1;
   async ngOnInit() {
     await this.init();
   }
 
   async init() {
-    this.dataSource = await this.users.getUsers(this.filters);
+    this.data = await this.users.getUsers(this.filters, this.pageIndex, this.pageSize);
+    this.dataSource = this.data.result;
+    this.length = this.data.count;
+  }
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.data = await this.users.getUsers(this.filters,this.pageIndex,this.pageSize);
+    this.dataSource = this.data.result;
   }
   add() {
     this.dialog

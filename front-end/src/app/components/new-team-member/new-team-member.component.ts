@@ -99,7 +99,7 @@ export class NewTeamMemberComponent {
       email: this.searchValue,
       search: 'teamMember'
     }
-    this.users = await this.usersService.getUsers(filters);
+    this.users = await this.usersService.getUsersForTeamMember(filters);
     let i = this.searchValue.length;
 
     for(let user of this.users){

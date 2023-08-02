@@ -25,7 +25,26 @@ export class UserService extends MainService {
     return result;
   }
 
-  async getUsers(filters: any = null) {
+  async getUsers(filters: any = null, page: number, limit: number) {
+    let finalFilters: any = {};
+    if (filters)
+      Object.keys(filters).forEach((element) => {
+        if (typeof filters[element] === 'string')
+          filters[element] = filters[element].trim();
+
+        if (filters[element] != null && filters[element] != '')
+          finalFilters[element] = filters[element];
+      });
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + `/users?page=${page}&limit=${limit}`, {
+          params: finalFilters,
+          headers: this.headers,
+        })
+        .pipe(map((d) => d))
+    ).catch((e) => false);
+  }
+  async getUsersForTeamMember(filters: any = null) {
     let finalFilters: any = {};
     if (filters)
       Object.keys(filters).forEach((element) => {
