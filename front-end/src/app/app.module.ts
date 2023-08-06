@@ -77,6 +77,9 @@ import { FilterActionsPipe } from './components/general-tabel/filter-actions.pip
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SatPopoverModule } from '@ncstate/sat-popover';
 import { PopoverInfoComponent } from './components/new-risk/popover-info/popover-info.component';
+import { GlossaryComponent } from './pages/admin/glossary/glossary.component';
+import { GlossaryFormComponent } from './pages/admin/glossary/glossary-form/glossary-form.component';
+import { GlossaryUserComponent } from './pages/glossary-user/glossary-user.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +119,9 @@ import { PopoverInfoComponent } from './components/new-risk/popover-info/popover
     DashboardComponent,
     FilterActionsPipe,
     PopoverInfoComponent,
+    GlossaryComponent,
+    GlossaryFormComponent,
+    GlossaryUserComponent,
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ import { AnnouncementModule } from './announcement/announcement.module';
 import { MitigationStatusModule } from './mitigation-status/mitigation-status.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { CategoriesGroupsModule } from './categories-groups/categories-groups.module';
+import { GlossaryModule } from './glossary/glossary.module';
 
 
 @Module({
@@ -46,7 +47,8 @@ import { CategoriesGroupsModule } from './categories-groups/categories-groups.mo
     AnnouncementModule,
     MitigationStatusModule,
     DashboardModule,
-    CategoriesGroupsModule
+    CategoriesGroupsModule,
+    GlossaryModule
   ],
   controllers: [AppController],
   providers: [AppService],

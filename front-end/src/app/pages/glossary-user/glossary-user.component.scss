@@ -1,0 +1,38 @@
+.form {
+    margin-bottom: 25px;
+}
+.characters {
+    display: flex;
+    justify-content: center;
+    a {
+        margin-left: 24px;
+        cursor: pointer;
+    }
+}
+
+.content {
+    .box {
+        background-color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        margin-bottom: 8px;
+    }
+}
+
+.mat-mdc-paginator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 18%;
+    max-width: fit-content;
+    border: none;
+    margin: auto;
+    border-radius: 25px;
+}
+
+
+.active {
+    color: rgb(8 44 185) !important;
+    font-weight: bold;
+    border-bottom: 2px solid rgb(8 44 185);
+}

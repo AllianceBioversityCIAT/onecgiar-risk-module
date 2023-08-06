@@ -17,3 +17,13 @@
 ::ng-deep .tableContainer:first-of-type{
     overflow: hidden !important;
 }
+
+.head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    h1 {
+        margin: 0;
+    }
+}

@@ -54,14 +54,14 @@ export class AnnouncementFormComponent implements OnInit, OnDestroy {
     const announcemenId = this.announcementForm.getRawValue().id;
     if(announcemenId != '' && announcemenId != null){
       if(this.announcementForm.valid){
-        this.announcementService.updateAnnouncement(announcemenId ,this.announcementForm.value);
+        await this.announcementService.updateAnnouncement(announcemenId ,this.announcementForm.value);
         this.onClose();
         this.toster.success('updated successfully');
       }
     }
     else{
       if(this.announcementForm.valid){
-        this.announcementService.addAnnouncement(this.announcementForm.value);
+        await this.announcementService.addAnnouncement(this.announcementForm.value);
         this.toster.success('Added successfully');
         this.onClose();
       }

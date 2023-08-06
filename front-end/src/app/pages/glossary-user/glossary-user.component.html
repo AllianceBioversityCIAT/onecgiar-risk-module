@@ -1,0 +1,30 @@
+<div class="globalContainer">
+    <form class="form" [formGroup]="form">
+        <mat-form-field class="example-full-width">
+        <mat-label>Search by term</mat-label>
+        <input matInput  formControlName="search" >
+        </mat-form-field>
+
+        <div class="characters">
+            <ng-container *ngFor="let characters of alphabet">
+                <a class="primaryColor" (click)="setCharValue(characters.value)" (click)="addActiveClass($event)">{{characters.character}}</a>
+            </ng-container>
+        </div>
+    </form>
+    <p>Showing <span class="primaryColor"> {{data?.count}}</span> matching records</p>
+
+    <div class="content">
+        <div class="box" *ngFor="let item of glossary">
+            <h3 class="primaryColor">{{item.title}}</h3>
+            <p>{{item.description}}</p>
+        </div>
+        <mat-paginator
+            [length]="length"
+            [pageSize]="pageSize"
+            [pageIndex]="pageIndex - 1"
+            (page)="pagination($event)"
+            [hidePageSize]="true"
+            aria-label="Select page">
+        </mat-paginator>
+    </div>
+</div>

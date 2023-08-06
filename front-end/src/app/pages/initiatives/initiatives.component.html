@@ -1,6 +1,13 @@
 <ng-container *ngIf="router.isActive('initiatives', true)">
   <div class="globalContainer">
-    <h1 class="primaryColor">Initiatives Dashboard</h1>
+    <div class="head">
+      <h1 class="primaryColor">Initiatives Dashboard</h1>
+      <div class="nav">
+        <a mat-button routerLink="/glossary" class="primaryColor">Glossary</a>
+        <a mat-button routerLink="#" class="primaryColor">FAQ</a>
+        <a mat-button routerLink="#" class="primaryColor">About Risk</a>
+      </div>
+    </div>
     <div class="tableContainer">
       <app-search-initiatives
         (filters)="filter($event)"

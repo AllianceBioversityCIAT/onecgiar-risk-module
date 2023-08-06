@@ -32,14 +32,14 @@ export class MitigationFormComponent implements OnInit{
     const id = this.mitigationForm.getRawValue().id;
     if(id != '' && id != null){
       if(this.mitigationForm.valid){
-        this.mitigationStatusService.updateMitigationStatus(id ,this.mitigationForm.value);
+        await this.mitigationStatusService.updateMitigationStatus(id ,this.mitigationForm.value);
           this.onClose();
           this.toster.success('updated successfully');
       }
     }
     else{
       if(this.mitigationForm.valid){
-        this.mitigationStatusService.addMitigationStatus(this.mitigationForm.value);
+        await this.mitigationStatusService.addMitigationStatus(this.mitigationForm.value);
           this.toster.success('Added successfully');
           this.onClose();
       }

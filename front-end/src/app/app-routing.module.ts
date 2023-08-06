@@ -17,6 +17,8 @@ import { SettingComponent } from './pages/admin/setting/setting.component';
 import { MitigationStatusComponent } from './pages/admin/mitigation-status/mitigation-status.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { PopoverInfoComponent } from './components/new-risk/popover-info/popover-info.component';
+import { GlossaryComponent } from './pages/admin/glossary/glossary.component';
+import { GlossaryUserComponent } from './pages/glossary-user/glossary-user.component';
 
 const routes: Routes = [
   {
@@ -53,6 +55,10 @@ const routes: Routes = [
       {
         path: 'Mitigation-status',
         component: MitigationStatusComponent,
+      },
+      {
+        path: 'glossary',
+        component: GlossaryComponent,
       },
     ],
   },
@@ -92,6 +98,11 @@ const routes: Routes = [
     path: 'User-Guide',
     canActivate: [AuthGuard],
     component: PopoverInfoComponent
+  },
+  {
+    path: 'glossary',
+    canActivate: [AuthGuard],
+    component: GlossaryUserComponent
   }
 ];
 
