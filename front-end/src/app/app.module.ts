@@ -80,6 +80,10 @@ import { PopoverInfoComponent } from './components/new-risk/popover-info/popover
 import { GlossaryComponent } from './pages/admin/glossary/glossary.component';
 import { GlossaryFormComponent } from './pages/admin/glossary/glossary-form/glossary-form.component';
 import { GlossaryUserComponent } from './pages/glossary-user/glossary-user.component';
+import { FAQComponent } from './pages/admin/faq/faq.component';
+import { FaqFormComponent } from './pages/admin/faq/faq-form/faq-form.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { FAQUserComponent } from './pages/faq-user/faq-user.component';
 
 @NgModule({
   declarations: [
@@ -122,6 +126,9 @@ import { GlossaryUserComponent } from './pages/glossary-user/glossary-user.compo
     GlossaryComponent,
     GlossaryFormComponent,
     GlossaryUserComponent,
+    FAQComponent,
+    FaqFormComponent,
+    FAQUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -146,6 +153,7 @@ import { GlossaryUserComponent } from './pages/glossary-user/glossary-user.compo
     MatCardModule,
     MatDividerModule,
     MatProgressBarModule,
+    MatExpansionModule,
     MatPaginatorModule,
     MatSlideToggleModule,
     NgxEditorModule,

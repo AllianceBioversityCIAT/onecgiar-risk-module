@@ -18,6 +18,7 @@ import { MitigationStatusModule } from './mitigation-status/mitigation-status.mo
 import { DashboardModule } from './dashboard/dashboard.module';
 import { CategoriesGroupsModule } from './categories-groups/categories-groups.module';
 import { GlossaryModule } from './glossary/glossary.module';
+import { FaqModule } from './faq/faq.module';
 
 
 @Module({
@@ -48,7 +49,8 @@ import { GlossaryModule } from './glossary/glossary.module';
     MitigationStatusModule,
     DashboardModule,
     CategoriesGroupsModule,
-    GlossaryModule
+    GlossaryModule,
+    FaqModule
   ],
   controllers: [AppController],
   providers: [AppService],

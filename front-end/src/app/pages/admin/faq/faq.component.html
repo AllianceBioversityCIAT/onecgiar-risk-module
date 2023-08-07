@@ -1,0 +1,84 @@
+<div class="container">
+    <div class="header">
+        <h1 class="primaryColor">FAQ</h1>
+        <button  mat-raised-button color="primary" (click)="openFormDialog('', 'Add')">
+            Create FAQ
+        </button>
+    </div>
+
+    <div class="table" >
+          <table  mat-table [dataSource]="data">
+            <ng-container matColumnDef="id">
+              <th
+                class="big bold center spacing border-left-0"
+                mat-header-cell
+                *matHeaderCellDef
+              >
+                ID
+              </th>
+              <td class="border-left-0 center" mat-cell *matCellDef="let element">
+                {{ element.id }}
+              </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="question">
+              <th
+                class="big bold center spacing"
+                mat-header-cell
+                *matHeaderCellDef
+              >
+              question
+              </th>
+              <td
+                class="center"
+                mat-cell
+                *matCellDef="let element"
+                style="max-width: 200px"
+              >
+                {{ element.question }}
+              </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="answer">
+              <th
+                class="big bold center spacing"
+                mat-header-cell
+                *matHeaderCellDef
+              >
+              answer
+              </th>
+              <td
+                class="center"
+                mat-cell
+                *matCellDef="let element"
+                style="max-width: 400px"
+              >
+              {{ element.answer }}
+              </td>
+            </ng-container>
+  
+  
+            <ng-container matColumnDef="actions" stickyEnd>
+              <th
+                class="big bold center spacing"
+                mat-header-cell
+                *matHeaderCellDef
+              >
+              Actions
+              </th>
+              <td class="center" mat-cell *matCellDef="let element">
+                <button mat-icon-button matTooltip="Edit"  matTooltipPosition="above" (click)="editFAQ(element.id, 'Edit')">
+                    <mat-icon class="icon">edit</mat-icon>
+                </button>
+                <button mat-icon-button  matTooltip="Delete"  matTooltipPosition="above" (click)="deleteFAQ(element)">
+                    <mat-icon class="icon">delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+  
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+</div>

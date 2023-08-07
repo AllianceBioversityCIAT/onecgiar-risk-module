@@ -1,0 +1,19 @@
+<div class="globalContainer">
+    <ng-container  *ngFor="let item of data">
+        <mat-accordion multi>
+                <mat-expansion-panel  hideToggle="true" #example>
+                    <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <p>{{item.question}}</p>
+                                <div class="icons">
+                                    <mat-icon *ngIf="!example.expanded">add</mat-icon>
+                                    <mat-icon *ngIf="example.expanded">remove</mat-icon>
+                                </div>
+                            </mat-panel-title>        
+                    </mat-expansion-panel-header>
+                    <p>{{item.answer}}</p>
+                </mat-expansion-panel>
+        </mat-accordion>
+    </ng-container>
+</div>
+

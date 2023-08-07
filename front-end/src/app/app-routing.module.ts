@@ -19,6 +19,8 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { PopoverInfoComponent } from './components/new-risk/popover-info/popover-info.component';
 import { GlossaryComponent } from './pages/admin/glossary/glossary.component';
 import { GlossaryUserComponent } from './pages/glossary-user/glossary-user.component';
+import { FAQComponent } from './pages/admin/faq/faq.component';
+import { FAQUserComponent } from './pages/faq-user/faq-user.component';
 
 const routes: Routes = [
   {
@@ -60,6 +62,10 @@ const routes: Routes = [
         path: 'glossary',
         component: GlossaryComponent,
       },
+      {
+        path: 'FAQ',
+        component: FAQComponent,
+      },
     ],
   },
   {
@@ -97,13 +103,18 @@ const routes: Routes = [
   {
     path: 'User-Guide',
     canActivate: [AuthGuard],
-    component: PopoverInfoComponent
+    component: PopoverInfoComponent,
   },
   {
     path: 'glossary',
     canActivate: [AuthGuard],
-    component: GlossaryUserComponent
-  }
+    component: GlossaryUserComponent,
+  },
+  {
+    path: 'FAQ',
+    canActivate: [AuthGuard],
+    component: FAQUserComponent,
+  },
 ];
 
 @NgModule({
