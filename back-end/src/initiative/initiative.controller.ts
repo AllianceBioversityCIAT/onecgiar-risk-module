@@ -164,7 +164,7 @@ risk.title = row['title'];
   }
   getTemplateAdmin(width = false) {
     return {
-      'top': null,
+      // 'top': null,
       ID: null,
       Initiative: null,
       Title: null,
@@ -187,7 +187,7 @@ risk.title = row['title'];
   }
 
   mapTemplateAdmin(template, element) {
-    template['top'] = element.top == 999 ? '' : element.top;
+    // template['top'] = element.top == 999 ? '' : element.top;
     template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
@@ -215,11 +215,11 @@ risk.title = row['title'];
     let finaldata = [this.getTemplateAdmin(true)];
     let merges = [
       {
-        s: { c: 16, r: 0 },
+        s: { c: 15, r: 0 },
         e: { c: 17, r: 0 },
       },
     ];
-    for (let index = 0; index < 16; index++) {
+    for (let index = 0; index < 15; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -257,9 +257,107 @@ risk.title = row['title'];
     return { finaldata, merges };
   }
 
-  getTemplateUser(width = false) {
+
+  getTemplateVersionAdmin(width = false) {
     return {
       'top': null,
+      ID: null,
+      Initiative: null,
+      Title: null,
+      Description: null,
+      'Risk owner': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+      'Current likelihood': null,
+      'Current impact': null,
+      'Current Risk Level': null,
+      Category: null,
+      'Created by': null,
+      Flagged: null,
+      'Due date': null,
+      // Redundant: false,
+      Mitigations: width ? 'Description' : null,
+      mitigations_status: width ? 'Status' : null,
+    };
+  }
+
+
+  mapTemplateVersionAdmin(template, element) {
+    template['top'] = element.top == 999 ? '' : element.top;
+    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.Title = element.title;
+    template.Initiative = element.initiative.official_code;
+    template.Description = element.description;
+    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+    template['Current likelihood'] = element.current_likelihood;
+    template['Current impact'] = element.current_impact;
+    template['Current Risk Level'] =
+      element.current_likelihood * element.current_impact;
+    template.Category = element.category.title;
+    template['Created by'] = element.created_by?.full_name;
+    // template.Redundant = element.redundant;
+    template['Due date'] =
+      element.due_date === null
+        ? 'null'
+        : new Date(element.due_date).toLocaleDateString();
+    template['Flagged'] = element.flag;
+  }
+
+
+
+  prepareDataExcelVersionAdmin(risks) {
+    let finaldata = [this.getTemplateVersionAdmin(true)];
+    let merges = [
+      {
+        s: { c: 16, r: 0 },
+        e: { c: 17, r: 0 },
+      },
+    ];
+    for (let index = 0; index < 16; index++) {
+      merges.push({
+        s: { c: index, r: 0 },
+        e: { c: index, r: 1 },
+      });
+    }
+    let base = 2;
+    risks.forEach((element, indexbase) => {
+      const template = this.getTemplateVersionAdmin();
+      this.mapTemplateVersionAdmin(template, element);
+      if (element.mitigations.length) {
+        for (let index = 0; index < 15; index++) {
+          merges.push({
+            s: { c: index, r: base },
+            e: { c: index, r: base + element.mitigations.length - 1 },
+          });
+        }
+        base += element.mitigations.length;
+      } else {
+        finaldata.push(template);
+        base += 1;
+      }
+      element.mitigations.forEach((d, index) => {
+        if (index == 0) {
+          template.Mitigations = d.description;
+          template.mitigations_status = d.status.title;
+          finaldata.push(template);
+        } else {
+          const template2 = this.getTemplateVersionAdmin();
+          template2.Mitigations = d.description;
+          template2.mitigations_status = d.status.title;
+          finaldata.push(template2);
+        }
+      });
+    });
+    return { finaldata, merges };
+  }
+
+  getTemplateUser(width = false) {
+    return {
       ID: null,
       Initiative: null,
       Title: null,
@@ -282,7 +380,6 @@ risk.title = row['title'];
   }
 
   mapTemplateUser(template, element) {
-    template['top'] = element.top == 999 ? '' : element.top;
     template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
@@ -310,6 +407,108 @@ risk.title = row['title'];
     let finaldata = [this.getTemplateUser(true)];
     let merges = [
       {
+        s: { c: 14, r: 0 },
+        e: { c: 16, r: 0 },
+      },
+    ];
+    for (let index = 0; index < 14; index++) {
+      merges.push({
+        s: { c: index, r: 0 },
+        e: { c: index, r: 1 },
+      });
+      // console.log(merges[0].s);
+    }
+
+    let base = 2;
+    risks.forEach((element, indexbase) => {
+      const template = this.getTemplateUser();
+      this.mapTemplateUser(template, element);
+      if (element.mitigations.length) {
+        for (let index = 0; index < 14; index++) {
+          merges.push({
+            s: { c: index, r: base },
+            e: { c: index, r: base + element.mitigations.length - 1 },
+          });
+        }
+        base += element.mitigations.length;
+      } else {
+        finaldata.push(template);
+        base += 1;
+      }
+      element.mitigations.forEach((d, index) => {
+        if (index == 0) {
+          template.Mitigations = d.description;
+          template.mitigations_status = d.status.title;
+          finaldata.push(template);
+        } else {
+          const template2 = this.getTemplateUser();
+          template2.Mitigations = d.description;
+          template2.mitigations_status = d.status.title;
+          finaldata.push(template2);
+        }
+      });
+    });
+    return { finaldata, merges };
+  }
+
+
+  getTemplateVersionUser(width = false) {
+    return {
+      'top': null,
+      ID: null,
+      Initiative: null,
+      Title: null,
+      Description: null,
+      'Risk owner': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+      'Current likelihood': null,
+      'Current impact': null,
+      'Current Risk Level': null,
+      Category: null,
+      'Created by': null,
+      // "Flag to SGD":null,
+      'Due Date': null,
+      // Redundant: false,
+      Mitigations: width ? 'Description' : null,
+      mitigations_status: width ? 'Status' : null,
+    };
+  }
+
+
+
+  mapTemplateVersionUser(template, element) {
+    template['top'] = element.top == 999 ? '' : element.top;
+    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.Title = element.title;
+    template.Initiative = element.initiative.official_code;
+    template.Description = element.description;
+    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+    template['Current likelihood'] = element.current_likelihood;
+    template['Current impact'] = element.current_impact;
+    template['Current Risk Level'] =
+      element.current_likelihood * element.current_impact;
+    template.Category = element.category.title;
+    template['Created by'] = element.created_by?.full_name;
+    template['Due Date'] =
+      element.due_date === null
+        ? 'null'
+        : new Date(element.due_date).toLocaleDateString();
+    // template.Redundant = element.redundant;
+    // template['Flag to SGD'] = element.flag;
+  }
+
+
+
+  prepareDataExcelVersionUser(risks) {
+    let finaldata = [this.getTemplateVersionUser(true)];
+    let merges = [
+      {
         s: { c: 15, r: 0 },
         e: { c: 16, r: 0 },
       },
@@ -324,8 +523,8 @@ risk.title = row['title'];
 
     let base = 2;
     risks.forEach((element, indexbase) => {
-      const template = this.getTemplateUser();
-      this.mapTemplateUser(template, element);
+      const template = this.getTemplateVersionUser();
+      this.mapTemplateVersionUser(template, element);
       if (element.mitigations.length) {
         for (let index = 0; index < 15; index++) {
           merges.push({
@@ -344,7 +543,7 @@ risk.title = row['title'];
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
-          const template2 = this.getTemplateUser();
+          const template2 = this.getTemplateVersionUser();
           template2.Mitigations = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
@@ -494,7 +693,7 @@ risk.title = row['title'];
     description: '',
     type: getInitiativeById,
   })
-  async exportExcel(@Param('id') id: number, @Query() userRole: any) {
+  async exportExcel(@Param('id') id: number, @Query() req: any) {
     let init = await this.iniService.iniRepository.findOne({
       where: { id, risks: { redundant: false } },
       relations: [
@@ -518,10 +717,10 @@ risk.title = row['title'];
 
     const risks = init.risks;
 
-    if (userRole.user == 'admin') {
+    if (req.user == 'admin' && req.version == 'false') {
       // to be
       const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
-      console.log({ finaldata, merges });
+      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
@@ -545,33 +744,88 @@ risk.title = row['title'];
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${file_name}"`,
       });
-    } else {
-      const { finaldata, merges } = this.prepareDataExcelUser(risks);
-      console.log({ finaldata, merges });
-      const ws = XLSX.utils.json_to_sheet(finaldata);
-      ws['!merges'] = merges;
+    } else if(req.user == 'admin' && req.version == 'true') {
+        const { finaldata, merges } = this.prepareDataExcelVersionAdmin(risks);
+        // console.log({ finaldata, merges });
+        const ws = XLSX.utils.json_to_sheet(finaldata);
+        ws['!merges'] = merges;
 
-      XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
-      await XLSX.writeFile(
-        wb,
-        join(process.cwd(), 'generated_files', file_name),
-        { cellStyles: true },
-      );
-      const file = createReadStream(
-        join(process.cwd(), 'generated_files', file_name),
-      );
+        XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+        await XLSX.writeFile(
+          wb,
+          join(process.cwd(), 'generated_files', file_name),
+          { cellStyles: true },
+        );
+        const file = createReadStream(
+          join(process.cwd(), 'generated_files', file_name),
+        );
 
-      setTimeout(async () => {
-        try {
-          await unlink(join(process.cwd(), 'generated_files', file_name));
-        } catch (e) {}
-      }, 9000);
+        setTimeout(async () => {
+          try {
+            await unlink(join(process.cwd(), 'generated_files', file_name));
+          } catch (e) {}
+        }, 9000);
 
-      return new StreamableFile(file, {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        disposition: `attachment; filename="${file_name}"`,
-      });
+        return new StreamableFile(file, {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          disposition: `attachment; filename="${file_name}"`,
+        });
     }
+    else if(req.user == 'user' && req.version == 'false') {
+      const { finaldata, merges } = this.prepareDataExcelUser(risks);
+      // console.log({ finaldata, merges });
+      const ws = XLSX.utils.json_to_sheet(finaldata);
+      ws['!merges'] = merges;
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+      await XLSX.writeFile(
+        wb,
+        join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
+      );
+      const file = createReadStream(
+        join(process.cwd(), 'generated_files', file_name),
+      );
+
+      setTimeout(async () => {
+        try {
+          await unlink(join(process.cwd(), 'generated_files', file_name));
+        } catch (e) {}
+      }, 9000);
+
+      return new StreamableFile(file, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        disposition: `attachment; filename="${file_name}"`,
+      });
+  }
+  else if(req.user == 'user' && req.version == 'true') {
+    const { finaldata, merges } = this.prepareDataExcelVersionUser(risks);
+    // console.log({ finaldata, merges });
+    const ws = XLSX.utils.json_to_sheet(finaldata);
+    ws['!merges'] = merges;
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+    await XLSX.writeFile(
+      wb,
+      join(process.cwd(), 'generated_files', file_name),
+      { cellStyles: true },
+    );
+    const file = createReadStream(
+      join(process.cwd(), 'generated_files', file_name),
+    );
+
+    setTimeout(async () => {
+      try {
+        await unlink(join(process.cwd(), 'generated_files', file_name));
+      } catch (e) {}
+    }, 9000);
+
+    return new StreamableFile(file, {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      disposition: `attachment; filename="${file_name}"`,
+    });
+  }
+
   }
 
   @ApiBearerAuth()

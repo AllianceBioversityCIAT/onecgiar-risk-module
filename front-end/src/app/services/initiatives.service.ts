@@ -39,11 +39,11 @@ export class InitiativesService extends MainService {
         .pipe(map((d: any) => d))
     );
   }
-  async getExportByinititave(id: number, official_code = '') {
+  async getExportByinititave(id: number, official_code = '', versions: boolean) {
     const userInfo = this.userService.getLogedInUser();
     const data = await firstValueFrom(
       this.http
-        .get(this.backend_url + '/initiative/' + id + `/excel?user=${userInfo.role}`, {
+        .get(this.backend_url + '/initiative/' + id + `/excel?user=${userInfo.role}&version=${versions}`, {
           headers: this.headers,
           responseType: 'blob',
         })

@@ -37,6 +37,6 @@ export class VersionDetailsComponent {
   }
 
   async export() {
-    await this.initiativesService.getExportByinititave(this.id,  this.initiative.official_code);
+    await this.initiativesService.getExportByinititave(this.id,  this.initiative.official_code, true);
   }
 }

@@ -187,7 +187,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
   }
 
   async export(id: number, official_code: string) {
-    await this.initiativeService.getExportByinititave(id, official_code);
+    await this.initiativeService.getExportByinititave(id, official_code, false);
   }
   savePdf: EventEmitter<any> = new EventEmitter<any>();
   exportPdf() {
