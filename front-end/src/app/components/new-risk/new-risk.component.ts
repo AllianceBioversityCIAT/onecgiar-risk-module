@@ -79,6 +79,10 @@ export class NewRiskComponent {
         String(this?.data?.risk?.current_impact | 0),
         Validators.required,
       ],
+      request_assistance: [
+        Boolean(this?.data?.risk?.request_assistance),
+        Validators.required,
+      ],
       due_date: [ this?.data?.risk?.due_date, [(c: AbstractControl) => (new Date(c.value).getTime() < Date.now() ? { invalid: true } : null), Validators.required]]
     });
 
@@ -131,6 +135,30 @@ export class NewRiskComponent {
       this.dialog.closeAll();
     }
   }
+
+  checkedReqAssistance() {
+    if(this.newRiskForm.controls['request_assistance'].value == true) {
+      let current_likelihood = this.newRiskForm.controls['current_likelihood'].value;
+      let current_impact = this.newRiskForm.controls['current_impact'].value;
+  
+      this.newRiskForm.controls.target_likelihood.setValue(current_likelihood);
+      this.newRiskForm.controls.target_impact.setValue(current_impact);
+      this.newRiskForm.get('due_date').clearValidators();
+      this.newRiskForm.get('due_date').updateValueAndValidity();
+
+    }
+    else {
+      this.newRiskForm.controls["due_date"].setValidators(Validators.required);
+      this.newRiskForm.get('due_date').updateValueAndValidity();
+    }
+  }
+
+  disapledCheckBox() {
+    if(this.newRiskForm.controls['request_assistance'].value == true) {
+      this.newRiskForm.controls.request_assistance.setValue(false)
+    }
+  }
+
 
   arr: any[] = [];
   async openNewProposedDialog() {

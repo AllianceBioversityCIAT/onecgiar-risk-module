@@ -212,3 +212,7 @@
     right: 16px;
     bottom: -21px;
 }
+
+::ng-deep .mdc-form-field--align-end>label {
+    font-size: 16px !important;
+}

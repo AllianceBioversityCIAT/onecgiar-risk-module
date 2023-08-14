@@ -104,6 +104,24 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="Help requested">
+            <th
+              class="big bold center spacing"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+            Help Requested
+            </th>
+            <td
+              mat-cell
+              class="center"
+              *matCellDef="let element"
+              style="min-width: 150px"
+            >
+            {{ filterReqAssistance(element.risks) }}
+            </td>
+          </ng-container>
+
           <ng-container
             matColumnDef="Actions"
             style="margin-right: 3px"

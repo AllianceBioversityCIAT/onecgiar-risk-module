@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NavigationEnd, Router } from '@angular/router';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { UserService } from 'src/app/services/user.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-initiatives',
@@ -29,7 +30,7 @@ export class InitiativesComponent {
   pageSize = 100;
   pageSizeOptions: number[] = [10, 15, 50, 100];
   totalItems = 0;
-
+  userRole: any;
   pageChanged(event: any) {}
   displayedColumns: string[] = [
     'INIT-ID',
@@ -89,7 +90,27 @@ export class InitiativesComponent {
     if (list == '') list = 'Guest';
     return list;
   }
+  filterReqAssistance(risk: any) {
+    let column = '-';
+    for(let item of risk) {
+      if(item.request_assistance == true) {
+        column = 'Yes';
+        break;
+      }
+      else {
+        column = 'No'
+      }
+    }
+    return column;
+  }
   async ngOnInit() {
+    const access_token = localStorage.getItem('access_token');
+    if (access_token) {
+      this.userRole = jwt_decode(access_token);
+    }
+    if(this.userRole.role == 'admin') {
+      this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "Help requested");
+    }
     this.getInitiatives();
   }
 }

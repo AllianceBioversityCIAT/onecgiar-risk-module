@@ -238,19 +238,21 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
     this.dataSourceForPdf = new MatTableDataSource<any>(this.AllRisk.notredundentRisk);
     // check if all risks are redundent
     this.isTrue = this.AllRisk.risks.every((obj : any) => obj.redundant == true);
+    this.dontNeedHelp = this.AllRisk.risks.every((obj : any) => obj.request_assistance == false);
   }
   async loadRisks() {
     this.AllRisk = await this.riskService.getRisks(this.id,this.filters);
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.isTrue = this.AllRisk.risks.every((obj : any) => obj.redundant == true);
     this.dataSourceForPdf = new MatTableDataSource<any>(this.AllRisk.notredundentRisk);
-
+    this.dontNeedHelp = this.AllRisk.risks.every((obj : any) => obj.request_assistance == false);
     // this.reload = false;
     // setTimeout(async () => {
     //   await this.loadInitiative();
     //   this.reload = true;
     // }, 500);
   }
+  dontNeedHelp!: boolean;
   isTrue: boolean =false;
   AllRisk: any;
   NumberOfRisks: any;

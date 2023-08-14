@@ -258,6 +258,122 @@ risk.title = row['title'];
   }
 
 
+
+
+
+  getTemplateAllDataAdmin(width = false) {
+    return {
+      // 'top': null,
+      ID: null,
+      Initiative: null,
+      Title: null,
+      Description: null,
+      'Risk owner': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+      'Current likelihood': null,
+      'Current impact': null,
+      'Current Risk Level': null,
+
+      Category: null,
+      'Created by': null,
+      Flagged: null,
+      'Due date': null,
+      // Redundant: false,
+      Mitigations: width ? 'Description' : null,
+      mitigations_status: width ? 'Status' : null,
+      'Help requested': null,
+
+    };
+  }
+
+
+
+
+  mapTemplateAllDataAdmin(template, element) {
+    // template['top'] = element.top == 999 ? '' : element.top;
+
+    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.Title = element.title;
+    template.Initiative = element.initiative.official_code;
+    template.Description = element.description;
+    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+    template['Current likelihood'] = element.current_likelihood;
+    template['Current impact'] = element.current_impact;
+    template['Current Risk Level'] =
+      element.current_likelihood * element.current_impact;
+
+    template.Category = element.category.title;
+    template['Created by'] = element.created_by?.full_name;
+    // template.Redundant = element.redundant;
+    template['Due date'] =
+      element.due_date === null
+        ? 'null'
+        : new Date(element.due_date).toLocaleDateString();
+    template['Flagged'] = element.flag;
+    template['Help requested'] = element.request_assistance == true ? 'Yes' : 'No';
+
+  }
+
+
+
+
+
+
+  prepareAllDataExcelAdmin(risks) {
+    let finaldata = [this.getTemplateAllDataAdmin(true)];
+    let merges = [
+      {
+        s: { c: 16, r: 0 },
+        e: { c: 15, r: 0 },
+      },
+    ];
+    for (let index = 0; index < 16; index++) {
+      merges.push({
+        s: { c: index, r: 0 },
+        e: { c: index, r: 1 },
+      });
+    }
+
+
+    let base = 2;
+    risks.forEach((element, indexbase) => {
+      const template = this.getTemplateAllDataAdmin();
+      this.mapTemplateAllDataAdmin(template, element);
+      if (element.mitigations.length) {
+        
+        for (let index = 0; index < 16; index++) {
+          merges.push({
+            s: { c: index, r: base },
+            e: { c: index, r: base + element.mitigations.length - 1 },
+          });
+        }
+        base += element.mitigations.length;
+      } else {
+        finaldata.push(template);
+        base += 1;
+      }
+      element.mitigations.forEach((d, index) => {
+        console.log(index)
+        if (index == 0) {
+          template.Mitigations = d.description;
+          template.mitigations_status = d.status.title;
+          finaldata.push(template);
+        } else {
+          const template2 = this.getTemplateAllDataAdmin();
+          template2.Mitigations = d.description;
+          template2.mitigations_status = d.status.title;
+          finaldata.push(template2);
+        }
+      });
+    });
+    return { finaldata, merges };
+  }
   getTemplateVersionAdmin(width = false) {
     return {
       'top': null,
@@ -638,7 +754,7 @@ risk.title = row['title'];
     if (userRole.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
-      const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
+      const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks);
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 

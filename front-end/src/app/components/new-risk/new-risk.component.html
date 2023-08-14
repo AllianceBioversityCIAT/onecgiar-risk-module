@@ -141,6 +141,7 @@
         <mat-radio-group
           formControlName="current_likelihood"
           aria-label="Select an option"
+          (change)="checkedReqAssistance()"
         >
           <mat-radio-button class="radioValue" value="1"
             ><span>1</span></mat-radio-button
@@ -187,6 +188,7 @@
         <mat-radio-group
           formControlName="current_impact"
           aria-label="Select an option"
+          (change)="checkedReqAssistance()"
         >
           <mat-radio-button class="radioValue" value="1"
             ><span>1</span></mat-radio-button
@@ -242,10 +244,11 @@
               </button>
           </div>
         </sat-popover>
-      </div>
+        </div>
         <mat-radio-group
           formControlName="target_likelihood"
           aria-label="Select an option"
+          (change)="disapledCheckBox()"
         >
           <mat-radio-button class="radioValue" value="1"
             ><span>1</span></mat-radio-button
@@ -292,6 +295,7 @@
         <mat-radio-group
           formControlName="target_impact"
           aria-label="Select an option"
+          (change)="disapledCheckBox()"
         >
           <mat-radio-button class="radioValue" value="1"
             ><span>1</span></mat-radio-button
@@ -327,6 +331,15 @@
           }}
         </p>
       </div>
+      <mat-icon class="icon" matTooltip="If you cannot define the targets, they will retain the current likelihood and current impact risk levels and you will be contacted by the Risk Team to review the targets.">help_outline</mat-icon>
+      <mat-checkbox
+      class="check"
+      labelPosition="before"
+      formControlName="request_assistance"
+      (ngModelChange)="checkedReqAssistance()"
+      >
+      Request Assistance
+      </mat-checkbox>
       <div class="date-section">
         <h2>
           Due date to reach target level

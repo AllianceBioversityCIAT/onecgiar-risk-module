@@ -20,9 +20,9 @@
         submitted Versions
         </button>
         <button
-          [disabled]="!canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || this.isTrue"
+          [disabled]="!canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || this.isTrue || dontNeedHelp == false"
           (click)="publish(initiative.id)"
-          [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || this.isTrue}"
+          [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || this.isTrue || dontNeedHelp == false}"
           class="primaryButton mt-1"
         >
           Submit

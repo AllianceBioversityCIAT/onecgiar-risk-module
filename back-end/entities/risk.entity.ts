@@ -71,6 +71,10 @@ export class Risk {
   current_likelihood: number;
 
   @ApiProperty()
+  @Column({type : 'bool', default: false})
+  request_assistance: boolean;
+
+  @ApiProperty()
   @Column()
   current_impact: number;
   @ApiProperty()
