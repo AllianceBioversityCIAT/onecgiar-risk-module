@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { getCategoriesLevels, getCategoriesCount, getInitiativeScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
 import { getInitiative } from 'DTO/initiative.dto';
@@ -6,12 +6,13 @@ import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { InitiativeService } from 'src/initiative/initiative.service';
+import { RiskService } from 'src/risk/risk.service';
 import { DataSource, ILike, IsNull } from 'typeorm';
 
 @ApiTags('Dashboard')
 @Controller('Dashboard')
 export class DashboardController {
-  constructor(private dataSource: DataSource,private iniService: InitiativeService) {}
+  constructor(private dataSource: DataSource,private iniService: InitiativeService,private riskService: RiskService) {}
 
   
   @Get('initiative/details')
@@ -184,5 +185,15 @@ export class DashboardController {
       }, 'total_actions')
 
       .execute();
+  }
+
+  @Get('risks/:id')
+  risksCharts(@Param('id') id: number) {
+    return this.riskService.riskRepository.find(
+      {
+        where: { initiative_id: id, redundant: false },
+        select : ['original_risk_id','title','id','target_impact','target_likelihood','current_impact','current_likelihood']
+      }
+    );
   }
 }

@@ -21,6 +21,7 @@ import { GlossaryComponent } from './pages/admin/glossary/glossary.component';
 import { GlossaryUserComponent } from './pages/glossary-user/glossary-user.component';
 import { FAQComponent } from './pages/admin/faq/faq.component';
 import { FAQUserComponent } from './pages/faq-user/faq-user.component';
+import { RiskDashboardComponent } from './pages/risk-dashboard/risk-dashboard.component';
 
 const routes: Routes = [
   {
@@ -83,6 +84,10 @@ const routes: Routes = [
               {
                 path: 'team-members',
                 component: TeamMembersComponent,
+              },
+              {
+                path: 'risk-dashboard',
+                component: RiskDashboardComponent,
               },
               {
                 path: 'versions',

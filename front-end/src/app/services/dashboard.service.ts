@@ -33,4 +33,7 @@ export class DashboardService extends MainService {
   async status() {
     return firstValueFrom(this.http.get(this.backend_url + '/dashboard/status', this.headers).pipe(map(d=>d))).catch((e) => false);
   }
+  async riskDashboardData(initiative_id: any) {
+    return firstValueFrom(this.http.get(this.backend_url + `/dashboard/risks/${initiative_id}`, this.headers).pipe(map(d=>d))).catch((e) => false);
+  }
 }

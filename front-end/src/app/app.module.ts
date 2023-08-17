@@ -84,6 +84,7 @@ import { FAQComponent } from './pages/admin/faq/faq.component';
 import { FaqFormComponent } from './pages/admin/faq/faq-form/faq-form.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FAQUserComponent } from './pages/faq-user/faq-user.component';
+import { RiskDashboardComponent } from './pages/risk-dashboard/risk-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -129,6 +130,7 @@ import { FAQUserComponent } from './pages/faq-user/faq-user.component';
     FAQComponent,
     FaqFormComponent,
     FAQUserComponent,
+    RiskDashboardComponent,
   ],
   imports: [
     BrowserModule,
