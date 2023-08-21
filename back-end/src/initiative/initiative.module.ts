@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
@@ -17,7 +17,9 @@ import { User } from 'entities/user.entitiy';
 import { Variables } from 'entities/variables.entity';
 import { VariablesService } from 'src/variables/variables.service';
 import { ActionArea } from 'entities/action-area';
-
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from 'src/auth/constants';
+@Global()
 @Module({
   controllers: [InitiativeController],
   imports: [
@@ -35,6 +37,10 @@ import { ActionArea } from 'entities/action-area';
     RiskModule,
     UsersModule,
     AuthModule,
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '30d'},
+    })
   ],
   providers: [InitiativeService, RiskService, EmailsService, VariablesService],
   exports:[InitiativeService,RiskService]

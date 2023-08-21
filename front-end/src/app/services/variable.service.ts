@@ -13,11 +13,11 @@ export class VariableService  extends MainService {
   }
 
   async getPublishStatus() {
-    return firstValueFrom(this.http.get(this.backend_url + '/variables/system-publish', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/variables/system-publish', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
 
   async updatePublishStatus(status: any) {
     const data = {status: status};
-    return firstValueFrom(this.http.patch(this.backend_url + `/variables/update-system-publish`, data ,this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.patch(this.backend_url + `/variables/update-system-publish`, data ,{headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
 }

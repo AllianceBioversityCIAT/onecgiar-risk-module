@@ -1,16 +1,18 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { getCategoriesLevels, getCategoriesCount, getInitiativeScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
 import { getInitiative } from 'DTO/initiative.dto';
 import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { InitiativeService } from 'src/initiative/initiative.service';
 import { RiskService } from 'src/risk/risk.service';
 import { DataSource, ILike, IsNull } from 'typeorm';
 
 @ApiTags('Dashboard')
 @Controller('Dashboard')
+@UseGuards(JwtAuthGuard)
 export class DashboardController {
   constructor(private dataSource: DataSource,private iniService: InitiativeService,private riskService: RiskService) {}
 

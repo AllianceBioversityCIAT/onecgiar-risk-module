@@ -1,9 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FaqService } from './faq.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @ApiTags('FAQ')
 @Controller('faq')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class FaqController {
     constructor(
         private FaqService: FaqService,
@@ -24,6 +29,7 @@ export class FaqController {
           console.log('ERROR' + error);
         }
       }
+      @Roles(Role.Admin)
       @Post('')
       addFaq(@Body() data: any) {
         try {
@@ -32,6 +38,7 @@ export class FaqController {
           console.error(error);
         }
       }
+      @Roles(Role.Admin)
       @Put(':id')
       updateFaq(@Body() data: any, @Param('id') id: number) {
         try {
@@ -40,6 +47,7 @@ export class FaqController {
           console.error(error);
         }
       }
+      @Roles(Role.Admin)
       @Delete(':id')
       deleteFaq(@Param('id') id: number) {
         try {

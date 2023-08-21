@@ -16,7 +16,7 @@ export class GlossaryService extends MainService {
   async addGlossary(data: any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + '/Glossary', data, this.headers)
+        .post(this.backend_url + '/Glossary', data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -43,7 +43,7 @@ export class GlossaryService extends MainService {
   async getGlossaryById(id: number) {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/Glossary/${id}`, this.headers)
+        .get(this.backend_url + `/Glossary/${id}`, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -51,7 +51,7 @@ export class GlossaryService extends MainService {
   async updateGlossary(id: any, data: any) {
     return firstValueFrom(
       this.http
-        .put(this.backend_url + `/Glossary/${id}`, data, this.headers)
+        .put(this.backend_url + `/Glossary/${id}`, data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }

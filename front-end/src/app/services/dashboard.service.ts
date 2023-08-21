@@ -13,27 +13,27 @@ export class DashboardService extends MainService {
   }
 
   async current() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/initiative/score', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/initiative/score', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
   async details() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/initiative/details', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/initiative/details', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
   async categoriesLevels() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/levels', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/levels', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
   async categoriesCount() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/count', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/count', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
   async category_groups() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/groups/count', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/categories/groups/count', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
   async actionAreas() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/action_areas/count', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/action_areas/count', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
   async status() {
-    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/status', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/dashboard/status', {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
   async riskDashboardData(initiative_id: any) {
-    return firstValueFrom(this.http.get(this.backend_url + `/dashboard/risks/${initiative_id}`, this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + `/dashboard/risks/${initiative_id}`, {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
 }

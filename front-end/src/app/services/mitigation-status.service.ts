@@ -17,18 +17,18 @@ export class MitigationStatusService extends MainService{
   }
 
   async getMitigationStatus() {
-    return firstValueFrom(this.http.get(this.backend_url + '/mitigation-status', this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + '/mitigation-status',{headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
 
   async getMitigationStatusById(id: number) {
-    return firstValueFrom(this.http.get(this.backend_url + `/mitigation-status/${id}`, this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.get(this.backend_url + `/mitigation-status/${id}`, {headers: this.headers,}).pipe(map(d=>d))).catch((e) => false);
   }
 
   async updateMitigationStatus(id: any, data: any) {
-    return firstValueFrom(this.http.put(this.backend_url + `/mitigation-status/${id}`, data ,this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.put(this.backend_url + `/mitigation-status/${id}`, data ,{headers: this.headers,}).pipe(map(d=>d))).catch((e) => false);
   }
 
   async deleteMitigationStatus(id: any) {
-    return firstValueFrom(this.http.delete(this.backend_url + `/mitigation-status/${id}`, this.headers).pipe(map(d=>d))).catch((e) => false);
+    return firstValueFrom(this.http.delete(this.backend_url + `/mitigation-status/${id}`, {headers: this.headers,}).pipe(map(d=>d))).catch((e) => false);
   }
 }

@@ -154,7 +154,7 @@ export class InitiativeDetailsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
-          await this.riskService.deleteRisk(risk.id);
+          await this.riskService.deleteRisk(risk.id,null);
           this.loadInitiative();
           this.toastr.success('Success', `${risk.title} has been deleted`);
         }

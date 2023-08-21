@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Global, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
@@ -8,7 +8,7 @@ import { User } from 'entities/user.entitiy';
 import { EmailsService } from 'src/emails/emails.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
-
+@Global()
 @Injectable()
 export class RiskService {
   constructor(

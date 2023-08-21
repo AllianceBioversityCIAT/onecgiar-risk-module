@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MainService } from './main.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class AnnouncementService extends MainService {
   async addAnnouncement(data: any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + '/announcement', data, this.headers)
+        .post(this.backend_url + '/announcement', data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -22,7 +22,7 @@ export class AnnouncementService extends MainService {
   async getAnnouncement() {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/announcement', this.headers)
+        .get(this.backend_url + '/announcement', {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -30,7 +30,7 @@ export class AnnouncementService extends MainService {
   async getAnnouncementById(id: number) {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/announcement/${id}`, this.headers)
+        .get(this.backend_url + `/announcement/${id}`, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -38,7 +38,7 @@ export class AnnouncementService extends MainService {
   async updateAnnouncement(id: any, data: any) {
     return firstValueFrom(
       this.http
-        .put(this.backend_url + `/announcement/${id}`, data, this.headers)
+        .put(this.backend_url + `/announcement/${id}`, data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -47,21 +47,21 @@ export class AnnouncementService extends MainService {
     const data = { status: status };
     return firstValueFrom(
       this.http
-        .patch(this.backend_url + `/announcement/${id}`, data, this.headers)
+        .patch(this.backend_url + `/announcement/${id}`, data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
   async send(id: any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + `/announcement/${id}/send`, this.headers)
+        .post(this.backend_url + `/announcement/${id}/send`, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
   async sendTest(id: any, data: any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + `/announcement/${id}/send-test`, data, this.headers)
+        .post(this.backend_url + `/announcement/${id}/send-test`, data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }

@@ -43,8 +43,12 @@ import { Request } from 'express';
 import { Risk } from 'entities/risk.entity';
 import { AllExcel, TopSimilar, createRoleReq, createRoleRes, createVersion, deleteRoleRes, getAllCategories, getAllVersions, getInitiative, getInitiativeById, getRoles, reqBodyCreateVersion, updateRoleReq, updateRoleRes } from 'DTO/initiative.dto';
 import { RiskCategory } from 'entities/risk-category.entity';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
+import { RolesGuard } from 'src/auth/roles.guard';
 @ApiTags('Initiative')
 @Controller('initiative')
+@UseGuards(JwtAuthGuard)
 export class InitiativeController {
   constructor(
     private iniService: InitiativeService,
@@ -136,7 +140,6 @@ risk.title = row['title'];
 
     return data;
   }
-  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiCreatedResponse({
     description: '',
@@ -945,15 +948,16 @@ risk.title = row['title'];
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Post(':id/create_version')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin,Role.User)
+  @Post(':initiative_id/create_version')
   @ApiCreatedResponse({
     description: '',
     type: createVersion,
   })
   @ApiBody({type : reqBodyCreateVersion})
   createVersion(
-    @Param('id') id: number,
+    @Param('initiative_id') id: number,
     @Body('top') top: any,
     @Req() req,
   ): Promise<Initiative> {
@@ -1059,7 +1063,8 @@ risk.title = row['title'];
       relations: ['user'],
     });
   }
-
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin,Role.User)
   @Post(':initiative_id/roles')
   @ApiCreatedResponse({
     description: '',

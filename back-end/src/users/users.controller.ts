@@ -28,8 +28,11 @@ import { unlink } from 'fs/promises';
 import { query } from 'express';
 import { ILike } from 'typeorm';
 import { createAndUpdateUsers, exportToExcel, getUsers } from 'DTO/users.dto';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiCreatedResponse({
   description: '',
   type: [User],
@@ -46,6 +49,7 @@ export class UsersController {
       return obj;
     } else return { id: 'ASC' };
   }
+  @Roles(Role.Admin)
   @Get()
   @ApiCreatedResponse({
     description: '',
@@ -80,7 +84,7 @@ export class UsersController {
     }
     }
   }
-
+  @Roles(Role.Admin)
   @Put()
   @ApiBody({ type : createAndUpdateUsers })
   @ApiCreatedResponse({
@@ -94,7 +98,7 @@ export class UsersController {
     Object.assign(user, data);
     return this.usersService.userRepository.save(user, { reload: true });
   }
-
+  @Roles(Role.Admin)
   @Post()
   @ApiBody({ type : createAndUpdateUsers })
   @ApiCreatedResponse({
@@ -110,11 +114,12 @@ export class UsersController {
 
     return user;
   }
-
+  @Roles(Role.Admin)
   @Delete(':id')
   deleteUser(@Param('id') id: number) {
     return this.usersService.userRepository.delete(id);
   }
+  @Roles(Role.Admin)
   @Get('export/all')
   @ApiCreatedResponse({
     description: '',

@@ -8,6 +8,8 @@ import { VariablesModule } from 'src/variables/variables.module';
 import { Variables } from 'entities/variables.entity';
 import { User } from 'entities/user.entitiy';
 import { UsersModule } from 'src/users/users.module';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from 'src/auth/constants';
 
 @Module({
   controllers: [EmailsController],
@@ -16,7 +18,10 @@ import { UsersModule } from 'src/users/users.module';
     VariablesModule,
     UsersModule,
     TypeOrmModule.forFeature([Email,Variables,User]),
-    
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '30d'},
+    })
   ],
   exports: [EmailsService],
 })

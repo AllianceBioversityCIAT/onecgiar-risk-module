@@ -25,8 +25,12 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ILike } from 'typeorm';
 import { RiskService } from './risk.service';
 import { CreateRiskRequestDto, CreateRiskResponseDto, GetRiskDto, MitigationCreateRiskResponseDto, PatchRiskRequestDto, PatchRiskResponseDto, UpdateRiskRequestDto, UpdateRiskResponseDto } from 'DTO/risk.dto';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 @ApiTags('Risk')
 @Controller('risk')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class RiskController {
   constructor(private riskService: RiskService) {}
   sort(query) {
@@ -126,27 +130,23 @@ export class RiskController {
   })
   @ApiBody({ type: CreateRiskRequestDto })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin,Role.User)
   @Post()
   setRisks(@Body() risk: Risk, @Request() req) {
-    console.log(risk);
     return this.riskService.createRisk(risk, req.user);
   }
-  @UseGuards(JwtAuthGuard)
   @ApiCreatedResponse({
     description: '',
     type: UpdateRiskResponseDto,
   })
   @ApiBody({ type: UpdateRiskRequestDto })
-  @Put(':id')
-  setRisk(@Body() risk: Risk, @Param('id') id: number, @Request() req) {
-    console.log(risk);
-    console.log(id);
-    // console.log( req.user);
-
+  @Roles(Role.Admin,Role.User)
+  @Put(':risk_id')
+  setRisk(@Body() risk: Risk, @Param('risk_id') id: number, @Request() req) {
     return this.riskService.updateRisk(id, risk, req.user);
   }
-  @Delete(':risk_id')
+  @Roles(Role.Admin,Role.User)
+  @Delete(':risk_id/init_id/:initiative_id')
   @ApiCreatedResponse({
     description: '',
     type: Risk,

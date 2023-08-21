@@ -16,7 +16,7 @@ export class FAQService extends MainService {
   async createFaq(data: any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + '/Faq', data, this.headers)
+        .post(this.backend_url + '/Faq', data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -24,7 +24,7 @@ export class FAQService extends MainService {
   async getData() {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/Faq', this.headers)
+        .get(this.backend_url + '/Faq', {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -32,7 +32,7 @@ export class FAQService extends MainService {
   async getFaqById(id: number) {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/Faq/${id}`, this.headers)
+        .get(this.backend_url + `/Faq/${id}`, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -40,7 +40,7 @@ export class FAQService extends MainService {
   async editFaq(id: any, data: any) {
     return firstValueFrom(
       this.http
-        .put(this.backend_url + `/Faq/${id}`, data, this.headers)
+        .put(this.backend_url + `/Faq/${id}`, data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }

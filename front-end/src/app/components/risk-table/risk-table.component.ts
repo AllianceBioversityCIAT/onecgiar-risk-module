@@ -228,7 +228,7 @@ export class RiskTableComponent {
       .afterClosed()
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
-          await this.riskService.deleteRisk(risk.id);
+          await this.riskService.deleteRisk(risk.id, this.id);
           this.refresh.emit();
           this.toastr.success('Success', `${risk.title} has been deleted`);
         }
@@ -247,8 +247,8 @@ export class RiskTableComponent {
   canEdit() {
     return (
       this.user_info.role == 'admin' ||
-      this.my_roles.includes(ROLES.LEAD) ||
-      this.my_roles.includes(ROLES.COORDINATOR)
+      this.my_roles?.includes(ROLES.LEAD) ||
+      this.my_roles?.includes(ROLES.COORDINATOR)
     );
   }
   canEditOwner(element: any) {

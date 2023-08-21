@@ -50,9 +50,9 @@ export class RiskService extends MainService {
         .pipe(map((d: any) => d))
     );
   }
-  deleteRisk(riskId: number) {
+  deleteRisk(riskId: number, initiative_id: any = null) {
     return firstValueFrom(
-      this.http.delete(this.backend_url + '/risk/' + riskId, {
+      this.http.delete(this.backend_url + '/risk/' + riskId + '/init_id/' + initiative_id, {
         headers: this.headers,
       })
     );
