@@ -49,7 +49,6 @@ export class UsersController {
       return obj;
     } else return { id: 'ASC' };
   }
-  @Roles(Role.Admin)
   @Get()
   @ApiCreatedResponse({
     description: '',
