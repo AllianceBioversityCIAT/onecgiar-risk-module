@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, map } from 'rxjs';
+import { Observable, catchError, firstValueFrom, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { MainService } from './main.service';
@@ -138,9 +138,9 @@ export class InitiativesService extends MainService {
       .toPromise();
   }
 
-  createNewInitiativeRole(initiativeId: number, role: any) {
+  createNewInitiativeRole(initiativeId: number, role: any): Observable<any>{
     return this.http
-      .post(
+      .post<any>(
         this.backend_url + '/initiative/' + initiativeId + '/roles',
         {
           initiative_id: role.initiative_id,
@@ -150,7 +150,6 @@ export class InitiativesService extends MainService {
         },
         { headers: this.headers }
       )
-      .toPromise();
   }
 
   updateInitiativeRole(initiativeId: number, roleId: number, role: any) {

@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActionArea } from 'entities/action-area';
@@ -140,25 +140,35 @@ export class InitiativeService {
   }
 
   async setRole(initiative_id, role: InitiativeRoles) {
-    let init = await this.iniRepository.findOne({
-      where: { id: initiative_id },
-      relations: ['roles'],
+    let userInInit =  await this.iniRolesRepository.findOne({
+      where: { initiative_id: initiative_id , user_id: role.user_id},
     });
-    if (!init) throw new NotFoundException();
-    const newRole = {
-      initiative_id: initiative_id,
-      user_id: +role?.user_id ? role?.user_id : null,
-      email: role.email.toLowerCase(),
-      role: role.role,
-    };
-    //To the user that was added by the Admin or Leader/Coordinator
-    if (role?.user_id) {
-      const user = await this.userService.userRepository.findOne({
-        where: { id: role?.user_id },
+
+    if(userInInit == null) {
+      let init = await this.iniRepository.findOne({
+        where: { id: initiative_id },
+        relations: ['roles'],
       });
-      if (user) this.emailsService.sendEmailTobyVarabel(user, 10, 11);
+      if (!init) throw new NotFoundException();
+      const newRole = {
+        initiative_id: initiative_id,
+        user_id: +role?.user_id ? role?.user_id : null,
+        email: role.email.toLowerCase(),
+        role: role.role,
+      };
+      //To the user that was added by the Admin or Leader/Coordinator
+      if (role?.user_id) {
+        const user = await this.userService.userRepository.findOne({
+          where: { id: role?.user_id },
+        });
+        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, 11);
+      }
+      return await this.iniRolesRepository.save(newRole, { reload: true });
     }
-    return await this.iniRolesRepository.save(newRole, { reload: true });
+    else {
+      throw new BadRequestException('User already have role in this initiative');
+    }
+
   }
 
   async syncActionAreaFromClarisa() {

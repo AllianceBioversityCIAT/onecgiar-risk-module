@@ -80,7 +80,7 @@ export class TeamMembersComponent {
       });
   }
 
-  openNewTeamMemberDialog() {
+  async openNewTeamMemberDialog() {
     const dialogRef = this.dialog.open(NewTeamMemberComponent, {
       width: '600px',
       data: { role: 'add', member: null },
@@ -92,7 +92,7 @@ export class TeamMembersComponent {
         const userRole = result.formValue.userRole;
         console.log({ email, userRole });
         // handel add memeber API service
-        await this.initiativeService.createNewInitiativeRole(
+        this.initiativeService.createNewInitiativeRole(
           this.initiativeId,
           {
             initiative_id: this.initiativeId,
@@ -100,9 +100,14 @@ export class TeamMembersComponent {
             role: result.formValue.userRole,
             user_id: result.formValue.user_id,
           }
-        );
-        this.toastr.success('Success', `User role has been added`);
-        this.loadInitiativeRoles();
+        ).subscribe(data => {
+          if (data) {
+            this.toastr.success('Success', `User role has been added`);
+            this.loadInitiativeRoles();
+          }
+        }, error => {
+          this.toastr.error(error.error.message);
+        })
       }
     });
   }
