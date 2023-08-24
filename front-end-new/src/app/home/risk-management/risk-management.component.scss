@@ -5,21 +5,12 @@
   background-color: #fafafa;
   padding: 4.5rem 0 5rem 0;
 
-<<<<<<< HEAD
   @media only screen and (max-width: 64em) {
     //change on 1024
 
     padding: 4.5rem 0 3rem 0;
   }
   ////////////////////////////////
-=======
-  // @media only screen and (max-width: 64em) {
-  //   //change on 1024
-
-  //   padding: 4.5rem 0 3rem 0;
-  // }
-  // ////////////////////////////////
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
 }
 
 .section-risk-report-component {
@@ -56,13 +47,8 @@
 
   @media only screen and (max-width: 64em) {
     //change on 1024
-<<<<<<< HEAD
 
     padding: 0 4.2rem;
-=======
-    width: 96%;
-    // padding: 0 4.2rem;
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
   }
   ////////////////////////////////
 }
@@ -89,31 +75,19 @@
   gap: 3rem;
 
   @media only screen and (max-width: 160em) {
-<<<<<<< HEAD
     //change on 1024
-=======
-    //change on 2560
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
     gap: 9rem;
   }
   ////////////////////////////////
 
   @media only screen and (max-width: 90em) {
-<<<<<<< HEAD
     //change on 1024
-=======
-    //change on 1440
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
     gap: 3rem;
   }
   ////////////////////////////////
 
   @media only screen and (max-width: 64em) {
-<<<<<<< HEAD
     //change on 1024
-=======
-    //change on 1440
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
     width: 100%;
     gap: 2rem;
   }
@@ -147,7 +121,6 @@
     position: relative;
 
     @media only screen and (max-width: 160em) {
-<<<<<<< HEAD
       //change on 1024
       padding: 0.7rem 3rem;
     }
@@ -162,27 +135,12 @@
     @media only screen and (max-width: 90em) {
       //change on 1440
       padding: 0.7rem 2.7rem;
-=======
-      //change on 2560
-      width: 165%;
-      padding: 0.7rem 3rem;
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
     }
     ////////////////////////////////
 
     @media only screen and (max-width: 90em) {
       //change on 1440
       width: 112%;
-<<<<<<< HEAD
-=======
-      padding: 0.7rem 2.7rem;
-    }
-    ////////////////////////////////
-
-    @media only screen and (max-width: 64em) {
-      //change on 1024
-      padding: 0.7rem 3rem;
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
     }
     ////////////////////////////////
 
@@ -206,11 +164,7 @@
       transform: translate(-71%, -43%);
 
       @media only screen and (max-width: 160em) {
-<<<<<<< HEAD
         //change on 1024
-=======
-        //change on 2560
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
         left: 35%;
       }
       ////////////////////////////////
@@ -248,11 +202,7 @@
     position: relative;
 
     @media only screen and (max-width: 160em) {
-<<<<<<< HEAD
       //change on 1024
-=======
-      //change on 2560
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
       width: 130%;
     }
     ////////////////////////////////
@@ -283,11 +233,7 @@
       transform: translate(-71%, -43%);
 
       @media only screen and (max-width: 160em) {
-<<<<<<< HEAD
         //change on 1024
-=======
-        //change on 2560
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
         left: 14%;
       }
       ////////////////////////////////
@@ -330,11 +276,7 @@
     position: relative;
 
     @media only screen and (max-width: 160em) {
-<<<<<<< HEAD
       //change on 1024
-=======
-      //change on 2560
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
       width: 138%;
     }
     ////////////////////////////////
@@ -384,11 +326,7 @@
     position: relative;
 
     @media only screen and (max-width: 160em) {
-<<<<<<< HEAD
       //change on 1024
-=======
-      //change on 2560
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
       width: 161%;
     }
     ////////////////////////////////
@@ -436,11 +374,6 @@
   height: 3.2rem;
   padding: 0 3rem 0 0;
   @media only screen and (max-width: 64em) {
-<<<<<<< HEAD
-=======
-    //change on 1024
-
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
     width: 23rem;
     height: 3.2rem;
     padding: 0 1rem 0 0;
@@ -453,11 +386,6 @@
   padding: 0 1.5rem 0 0;
 
   @media only screen and (max-width: 64em) {
-<<<<<<< HEAD
-=======
-    //change on 1024
-
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
     width: 23rem;
     height: 3.2rem;
     padding: 0 1rem 0 0;
@@ -597,10 +525,6 @@
 .risk-management-export-box-icon {
   width: 2.2rem !important;
   height: 3.1rem !important;
-<<<<<<< HEAD
-=======
-  margin: -0.1rem 0.1rem;
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
 }
 
 .risk-management-export-icon {
@@ -894,11 +818,3 @@
     }
   }
 }
-
-<<<<<<< HEAD
-=======
-::ng-deep .cdk-overlay-pane {
-  margin: 1rem -1rem !important;
-  padding: 0 1rem !important;
-}
->>>>>>> 5fb77bd9cdea5a839195c84b4dd87ef0e306802b
