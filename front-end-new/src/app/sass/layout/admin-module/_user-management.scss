@@ -1,0 +1,29 @@
+.form-dialog-content {
+  max-width: 57.8rem;
+  margin: 2rem auto 2rem;
+  background-color: #ffffff;
+
+  // display: grid;
+  // grid-template-columns: repeat(3, 1fr);
+  // grid-template-rows: repeat(1, 1fr);
+  // column-gap: 3rem;
+  // row-gap: 2.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  // &__layout--1 {
+  //   display: flex;
+
+  //   gap: 55%;
+  //   align-items: center;
+  // }
+
+  &__layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+}

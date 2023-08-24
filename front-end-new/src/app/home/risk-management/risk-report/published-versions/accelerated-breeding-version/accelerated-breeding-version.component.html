@@ -1,0 +1,299 @@
+<nav class="risk-nav-main">
+  <ul class="risk-nav-list">
+    <li>
+      <a class="risk-nav-link" routerLink="/home/risk-management"
+        >Initiatives</a
+      >
+    </li>
+    <li>
+      <a routerLink="''" class="risk-nav-link">></a>
+    </li>
+    <li>
+      <a routerLink="/home/risk-management/risk-report" class="risk-nav-link"
+        >&nbsp;Risk report<span class="line">&nbsp;/&nbsp;</span
+        >&nbsp;&nbsp;INIT-01</a
+      >
+    </li>
+    <li>
+      <a routerLink="''" class="risk-nav-link">></a>
+    </li>
+    <li>
+      <a
+        routerLink="/home/risk-management/risk-report/published-versions"
+        class="risk-nav-link"
+        >Published versions</a
+      >
+    </li>
+
+    <li>
+      <a routerLink="''" class="risk-nav-link">></a>
+    </li>
+    <li>
+      <a routerLink="''" class="risk-nav-link">Version - 2</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="published-versions-content">
+  <div class="published-versions-title-box">
+    <h1 class="published-versions-title-box__title">
+      Accelerated Breeding Version - 2
+    </h1>
+  </div>
+
+  <div class="risk-management-export">
+    <div class="risk-management-export-box">
+      <form class="risk-management-export-box">
+        <!-- //Reset Button----- -->
+        <div>
+          <button
+            class="risk-management-btn-export"
+            mat-raised-button
+            (click)="onExportToExcel()"
+          >
+            <mat-icon class="risk-management-export-box-icon">
+              <img
+                src="../../../assets/shared-image/Vectors.svg"
+                class="risk-management-export-icon"
+                alt="~/Frontend/images/search-icon.svg"
+            /></mat-icon>
+
+            Export data
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- step-3 -->
+
+  <div class="table-box">
+    <div class="table-box example-container mat-elevation-z8">
+      <table multiTemplateDataRows mat-table [dataSource]="dataSource" matSort>
+        <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- id Column -->
+        <ng-container matColumnDef="id">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>
+            <div class="mtable">ID</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="mtable">{{ element.id }}</div>
+          </td>
+        </ng-container>
+
+        <!-- title -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span class="h1">Title</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.title }}
+          </td>
+        </ng-container>
+
+        <!-- category Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-3">Category</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="td-3-h">{{ element.category }}</span>
+          </td>
+        </ng-container>
+
+        <!-- CurrentRiskLevel Column -->
+        <ng-container matColumnDef="CurrentRiskLevel">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h3">Current risk level</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="td-h">{{ element.CurrentRiskLevel }}</span>
+          </td>
+        </ng-container>
+
+        <!-- targetRiskLevel Column -->
+        <ng-container matColumnDef="targetRiskLevel">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h4">Target risk level</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.targetRiskLevel }}
+          </td>
+        </ng-container>
+
+        <!-- riskOwner Column -->
+        <ng-container matColumnDef="riskOwner">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h4">Risk owner</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.riskOwner }}
+          </td>
+        </ng-container>
+
+        <!-- createdBy Column -->
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h4">Created by</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.createdBy }}
+          </td>
+        </ng-container>
+
+        <!-- redundant Column -->
+        <ng-container matColumnDef="redundant">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h4">Redundant</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <form>
+              <div>
+                <mat-checkbox></mat-checkbox>
+              </div>
+            </form>
+          </td>
+        </ng-container>
+
+        <!-- Actions Name Column -->
+        <ng-container matColumnDef="expandedDetail" matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h5">Actions</span>
+          </th>
+
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="displayedColumns.length"
+          >
+            <div class="m">
+              <mat-expansion-panel
+                (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false"
+                hideToggle="true"
+                #e
+              >
+                <mat-expansion-panel-header>
+                  <button
+                    (click)="
+                      expandedElement =
+                        expandedElement === element ? null : element
+                    "
+                    style="
+                      border: none;
+                      cursor: pointer;
+                      background-color: #ffffff;
+                      margin-top: -15px;
+                    "
+                  >
+                    <mat-icon
+                      *ngIf="!e.expanded"
+                      class="user-management-table__icon"
+                    >
+                      <img
+                        class="table__icon"
+                        src="../../../../assets/shared-image/Vector-toggel.svg"
+                        alt="~/Frontend/images/Vector-toggel.svg"
+                    /></mat-icon>
+                    <mat-icon
+                      *ngIf="e.expanded"
+                      class="user-management-table__icon"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="10"
+                        viewBox="0 0 16 10"
+                        fill="none"
+                      >
+                        <path
+                          d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
+                          fill="#9E553E"
+                        /></svg
+                    ></mat-icon>
+                  </button>
+                </mat-expansion-panel-header>
+              </mat-expansion-panel>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [attr.colspan]="displayedColumns.length"
+          >
+            <div
+              class="risk-report-detail-box"
+              [@detailExpand]="
+                element == expandedElement ? 'expanded' : 'collapsed'
+              "
+            >
+              <div class="risk-report-detail-content">
+                <div class="risk-report-detail-content__box-1">
+                  <span class="risk-report-detail-content__title"
+                    >Description</span
+                  >
+                  <p class="risk-report-detail-content__text">
+                    Genebanks need to continue to take a proactive role in
+                    ensuring collections are relevant and usable by target
+                    groups. Curation data is useful, but needs to be amplified
+                    through sequencing, creation of value-added genetic
+                    materials and subsets, and appropriate data portals. Failure
+                    to address these issues will result in less demand for
+                    genebank materials.
+                  </p>
+                </div>
+
+                <div class="risk-report-detail-content__box-2">
+                  <span class="risk-report-detail-content__title"
+                    >Current likelihood: 4</span
+                  >
+
+                  <span class="risk-report-detail-content__title"
+                    >Current impact: 3</span
+                  >
+
+                  <span class="risk-report-detail-content__title"
+                    >Target likelihood: 4</span
+                  >
+
+                  <span class="risk-report-detail-content__title"
+                    >Target impact: 3</span
+                  >
+
+                  <span class="risk-report-detail-content__title"
+                    >Due date to reach target level: 8/11/23</span
+                  >
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let element; columns: displayedColumns"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === element"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          class="example-detail-row"
+        ></tr>
+      </table>
+    </div>
+    <p class="risk-report-records">
+      <span class="risk-report-records__text">{{
+        dataSource.data.length
+      }}</span>
+      total
+    </p>
+  </div>
+</div>

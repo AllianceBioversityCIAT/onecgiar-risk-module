@@ -1,0 +1,24 @@
+.tab-box {
+  width: 19.7rem;
+  height: 4rem;
+  border-radius: 1.6rem 0px 0px 0px;
+  border: 0.2px solid #b9b9b9;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: center;
+  border: 0.2px solid #b9b9b91f;
+
+  background-color: #f3f3f3;
+  color: #436280;
+  cursor: url(../../../../assets/shared-image/Vector-cursor.svg), pointer !important;
+
+  padding: 0.9rem;
+
+  &:nth-child(2) {
+    border-radius: 0;
+    border-top-right-radius: 1.6rem !important;
+  }
+}

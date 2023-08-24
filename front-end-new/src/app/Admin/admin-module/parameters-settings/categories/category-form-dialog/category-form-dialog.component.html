@@ -1,0 +1,136 @@
+<div class="form-dialog-header">
+  <div class="form-dialog-header__text-box">
+    <p class="form-dialog-header__text-box__text">{{ categoryData.title }}</p>
+  </div>
+
+  <div class="form-dialog-header__icon-box">
+    <button class="form-dialog-header__icon-box__btn" (click)="onCloseDialog()">
+      <mat-icon class="form-dialog-header__icon-box__icon-size">
+        <img
+          class="form-dialog-header__icon-box__icon-size__icon"
+          src="../../../assets/shared-image/Vector-close.svg"
+          alt="~/Frontend/images/icon _ Vector-close"
+        />
+      </mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="form-dialog-content">
+  <form [formGroup]="categoryFormData" class="form-dialog-content">
+    <!-- //Email filed----- -->
+
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Category name<span class="star">*</span></mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="categoryName" required />
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Description<span class="star">*</span></mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="description" required />
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Category group<span class="star">*</span></mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field--2"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <mat-select formControlName="categoryGroup">
+          <mat-option value="Strategic"> Strategic </mat-option>
+          <mat-option value="Operational"> Operational </mat-option>
+          <mat-option value="Financial"> Financial </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- //Update Button----- -->
+    <div class="form-dialog-conten-button-box-2">
+      <div class="form-dialog-conten__button-box">
+        <button
+          *ngIf="!categoryData.element"
+          class="form-dialog-conten__button-box__btn"
+          type="submit"
+          mat-raised-button
+          (click)="onAddCategory()"
+        >
+          Add
+        </button>
+      </div>
+      <div class="form-dialog-conten__button-box">
+        <button
+          *ngIf="categoryData.element"
+          class="form-dialog-conten__button-box__btn"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          (click)="onUpdateCategory()"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+
+    <!-- <div class="form-dialog-content__layout">
+    <div>
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >First name</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field--2"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input type="text" matInput formControlName="firstName" required />
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Last name</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field--3"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input type="text" matInput formControlName="lastName" required />
+      </mat-form-field>
+    </div> -->
+    <!-- </div> -->
+  </form>
+</div>

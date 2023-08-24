@@ -1,0 +1,113 @@
+.section-dashboard {
+  height: 172.6rem;
+
+  background-color: #fafafa;
+}
+
+.dashboard-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rem;
+}
+
+.dashboard-title-box {
+  width: 67rem;
+  height: 10.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  margin: 8rem 0 0 0;
+  &__title {
+    color: #0f212f;
+    text-align: center;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 4rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+}
+
+.dashboard-main-content {
+  width: 95%;
+  margin: 0 auto;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  margin-bottom: 10rem;
+}
+
+.dashboard-content-container {
+  width: 85%;
+  margin: 5rem auto 13rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  // align-items: start;
+  // position: relative;
+}
+
+.dashboard-img-box-grid-container {
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 35rem);
+  grid-template-rows: repeat(2, 35rem);
+  row-gap: 2rem;
+  column-gap: 2rem;
+  margin-bottom: 5rem;
+}
+
+.dashboard-item-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dashboard-item-box-title {
+  width: 100%;
+  height: 4rem;
+  flex-shrink: 0;
+  border-radius: 0.2rem;
+  border: 1px solid #f3f3f3;
+  background-color: #f3f3f3;
+  display: grid;
+  &__title {
+    align-self: flex-end;
+
+    flex-direction: column;
+
+    flex-shrink: 0;
+
+    color: #436280;
+    text-align: center;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-align: center;
+  }
+}
+
+.dashboard-title-table-box {
+  width: 100%;
+
+  text-decoration: none;
+
+  &__title {
+    color: #1e1e1e;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 2.4rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-bottom: 1px solid #436280;
+
+    padding-bottom: 1px;
+    transition: all 0.3s;
+  }
+}

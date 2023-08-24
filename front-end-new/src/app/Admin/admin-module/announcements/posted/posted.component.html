@@ -1,0 +1,88 @@
+<!-- <div class="user-management__main__text-box--1">
+  <div>
+    <p class="user-management__main__text-box__title--1">All users</p>
+  </div>
+
+  <div>
+    <p class="user-management__main__text-box__title--2">4 total</p>
+  </div>
+</div> -->
+
+<div class="user-management__container">
+  <div class="user-management__search-box-flex">
+    <div class="user-management__search-box">
+      <!-- <form action="" class="search">
+        <input
+          class="search__input"
+          matInput
+          (keyup)="applyFilter($event)"
+          placeholder="Search"
+          #input
+        />
+
+        <button
+          style="border: none; cursor: pointer; background-color: #ffffff12"
+          class="search__button"
+        >
+          <mat-icon class="search__icon">
+            <img
+              class="search__icon"
+              src="../../assets/shared-image/Vector-search.svg"
+              alt="~/Frontend/images/icon _ search-icon"
+          /></mat-icon>
+        </button>
+      </form> -->
+    </div>
+    <div class="user-management__button-box">
+      <button
+        style="width: 230px"
+        class="parameters-settings__button-box__btn"
+        (click)="openDialogCreateAnnouncement('Create new announcement')"
+        mat-raised-button
+        color="primary"
+      >
+        Create new announcement
+      </button>
+    </div>
+  </div>
+
+  <div class="announcement-box" *ngFor="let announcement of announcements">
+    <div class="announcement-box__1">
+      <p class="announcement-box__1--title">
+        {{ announcement.date }}
+        <span class="announcement-box__1--title--1">{{
+          announcement.time
+        }}</span>
+      </p>
+      <mat-icon style="width: 5px; height: 30px" class="color-change">
+        <img
+          class="table__icon"
+          src="../../../../../assets/shared-image/Line 93.svg"
+          alt="~/Frontend/images/icon _ Vector-edit"
+        />
+      </mat-icon>
+    </div>
+    <div class="announcement-box__2">
+      <p class="announcement-box__2--title-2">
+        <span class="announcement-box__2--title-3">{{
+          announcement.subject
+        }}</span>
+        - {{ announcement.message }}
+      </p>
+    </div>
+    <div class="announcement-box__3">
+      <button
+        (click)="deleteAnnouncementById(announcement.id)"
+        style="border: none; cursor: pointer"
+      >
+        <mat-icon class="user-management-table__icon">
+          <img
+            style="width: 16px; height: 17px"
+            class="table__icon"
+            src="../../../../../assets/shared-image/delete.svg"
+            alt="~/Frontend/images/icon _ Vector-delete"
+        /></mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

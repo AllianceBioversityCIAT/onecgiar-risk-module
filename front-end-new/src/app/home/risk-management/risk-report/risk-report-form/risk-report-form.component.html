@@ -1,0 +1,743 @@
+<nav class="risk-nav-main">
+  <ul class="risk-nav-list">
+    <li>
+      <a class="risk-nav-link" routerLink="/home/risk-management"
+        >Initiatives</a
+      >
+    </li>
+    <li>
+      <a routerLink="''" class="risk-nav-link">></a>
+    </li>
+    <li>
+      <a routerLink="/home/risk-management/risk-report" class="risk-nav-link"
+        >&nbsp;Risk report<span class="line">&nbsp;/&nbsp;</span
+        >&nbsp;&nbsp;INIT-01</a
+      >
+    </li>
+    <li>
+      <a routerLink="''" class="risk-nav-link">></a>
+    </li>
+    <li>
+      <a routerLink="''" class="risk-nav-link">Create risk</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="risk-report-form-container">
+  <div class="risk-report-form-header">
+    <h1 class="risk-report-form-header__title">Create risk</h1>
+  </div>
+
+  <div class="risk-report-form-content-container">
+    <form [formGroup]="riskReportFormData" class="risk-report-form">
+      <!-- //Created by filed----- -->
+
+      <div class="risk-report-form-field field-1">
+        <mat-label class="risk-report-form-field__label">Created by</mat-label>
+        <!-- <mat-form-field
+          class="form-dialog-content__field n"
+          floatLabel="always"
+          hideRequiredMarker
+          appearance="outline" 
+        >-->
+        <div class="risk-report-form-field-icon-box">
+          <input
+            class="risk-report-form-field-box__input report-form-field-size"
+            matInput
+            placeholder="Jhon Doe"
+            formControlName="createdBy"
+            required
+          />
+
+          <mat-icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_14774_17883)">
+                <circle cx="10" cy="10" r="9" fill="white" />
+                <path
+                  d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                  fill="#808080"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_14774_17883">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </mat-icon>
+        </div>
+      </div>
+      <!-- </mat-form-field> -->
+
+      <!-- //Risk title filed----- -->
+
+      <div class="risk-report-form-field field-1">
+        <mat-label class="risk-report-form-field__label">Risk title</mat-label>
+        <!-- <mat-form-field
+          class="form-dialog-content__field n"
+          floatLabel="always"
+          hideRequiredMarker
+          appearance="outline" 
+        >-->
+        <div class="risk-report-form-field-icon-box">
+          <input
+            class="risk-report-form-field-box__input cursor-input report-form-field-size"
+            matInput
+            placeholder="Risk title"
+            formControlName="riskTitle"
+            required
+          />
+
+          <mat-icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_14774_17883)">
+                <circle cx="10" cy="10" r="9" fill="white" />
+                <path
+                  d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                  fill="#808080"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_14774_17883">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </mat-icon>
+        </div>
+        <!-- </mat-form-field> -->
+      </div>
+
+      <!-- //Detailed description filed----- -->
+
+      <div class="risk-report-form-field field-1">
+        <mat-label class="risk-report-form-field__label"
+          >Detailed description<span class="risk-report-form-field__label__star"
+            >*</span
+          ></mat-label
+        >
+        <!-- <mat-form-field
+          class="form-dialog-content__field n"
+          floatLabel="always"
+          hideRequiredMarker
+          appearance="outline" 
+        >-->
+        <div class="risk-report-form-field-icon-box">
+          <input
+            class="risk-report-form-field-box__input cursor-input__description report-form-field-size__description"
+            matInput
+            placeholder="Description"
+            formControlName="description"
+            required
+          />
+
+          <!-- <mat-icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_14774_17883)">
+                <circle cx="10" cy="10" r="9" fill="white" />
+                <path
+                  d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                  fill="#808080"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_14774_17883">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </mat-icon> -->
+        </div>
+        <!-- </mat-form-field> -->
+      </div>
+
+      <!-- //Risk category filed----- -->
+
+      <div class="risk-report-form-field field-1 m-b">
+        <mat-label class="risk-report-form-field__label"
+          >Risk category<span class="risk-report-form-field__label__star"
+            >*</span
+          ></mat-label
+        >
+        <!-- <mat-form-field
+          class="form-dialog-content__field n"
+          floatLabel="always"
+          hideRequiredMarker
+          appearance="outline" 
+        >-->
+        <div class="risk-report-form-field-icon-box">
+          <mat-select
+            formControlName="riskCategory"
+            placeholder="Select risk category"
+            required
+            class="risk-report-form-field-select"
+          >
+            <mat-option value="Funding"> Funding </mat-option>
+            <mat-option value="Funding"> Funding </mat-option>
+            <mat-option value="Funding"> Funding </mat-option>
+          </mat-select>
+
+          <mat-icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_14774_17883)">
+                <circle cx="10" cy="10" r="9" fill="white" />
+                <path
+                  d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                  fill="#808080"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_14774_17883">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </mat-icon>
+        </div>
+        <!-- </mat-form-field> -->
+      </div>
+
+      <!-- //Risk owner filed----- -->
+
+      <div class="risk-report-form-field field-1 m-b--2">
+        <mat-label class="risk-report-form-field__label">Risk owner</mat-label>
+        <!-- <mat-form-field
+          class="form-dialog-content__field n"
+          floatLabel="always"
+          hideRequiredMarker
+          appearance="outline" 
+        >-->
+        <div class="risk-report-form-field-icon-box">
+          <input
+            class="risk-report-form-field-box__input cursor-input__riskOwner report-form-field-size"
+            matInput
+            placeholder="Risk achieving impact"
+            formControlName="riskOwner"
+            required
+          />
+
+          <mat-icon>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_14774_17883)">
+                <circle cx="10" cy="10" r="9" fill="white" />
+                <path
+                  d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                  fill="#808080"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_14774_17883">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </mat-icon>
+        </div>
+        <!-- </mat-form-field> -->
+      </div>
+
+      <!-- //grid-box----- -->
+
+      <div class="risk-report-radio-buttons-grid-box">
+        <!-- //grid-item-1----- -->
+        <div>
+          <label class="risk-report-form-field__label"
+            >Current Likelihood<span class="risk-report-form-field__label__star"
+              >*</span
+            ></label
+          >
+          <div class="risk-report-radio-buttons-flex-box">
+            <div class="risk-report-radio-buttons-flex">
+              <mat-radio-group
+                formControlName="currentLikelihood"
+                aria-label="Select an option"
+              >
+                <mat-radio-button value="1">1</mat-radio-button>
+                <mat-radio-button value="2">2</mat-radio-button>
+                <mat-radio-button value="3">3</mat-radio-button>
+                <mat-radio-button value="4">4</mat-radio-button>
+                <mat-radio-button value="5">5</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-icon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <g clip-path="url(#clip0_14774_17883)">
+                  <circle cx="10" cy="10" r="9" fill="white" />
+                  <path
+                    d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                    fill="#808080"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_14774_17883">
+                    <rect width="20" height="20" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </mat-icon>
+          </div>
+        </div>
+
+        <!-- //grid-item-2----- -->
+        <div>
+          <label class="risk-report-form-field__label"
+            >Current Impact<span class="risk-report-form-field__label__star"
+              >*</span
+            ></label
+          >
+          <div class="risk-report-radio-buttons-flex-box">
+            <div class="risk-report-radio-buttons-flex">
+              <mat-radio-group
+                formControlName="currentImpact"
+                aria-label="Select an option"
+              >
+                <mat-radio-button value="1">1</mat-radio-button>
+                <mat-radio-button value="2">2</mat-radio-button>
+                <mat-radio-button value="3">3</mat-radio-button>
+                <mat-radio-button value="4">4</mat-radio-button>
+                <mat-radio-button value="5">5</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-icon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <g clip-path="url(#clip0_14774_17883)">
+                  <circle cx="10" cy="10" r="9" fill="white" />
+                  <path
+                    d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                    fill="#808080"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_14774_17883">
+                    <rect width="20" height="20" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </mat-icon>
+          </div>
+        </div>
+
+        <!-- //grid-item-3----- -->
+        <div class="risk-report-form-field-icon-box--2">
+          <div class="risk-report-grid-item-text-box">
+            <p class="risk-report-grid-item-text">
+              Current Risk level:
+              <span class="risk-report-grid-item-text__sub">10</span>
+            </p>
+          </div>
+
+          <mat-icon class="move-end">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_14774_17883)">
+                <circle cx="10" cy="10" r="9" fill="white" />
+                <path
+                  d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                  fill="#808080"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_14774_17883">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </mat-icon>
+        </div>
+
+        <!-- //grid-item-4----- -->
+        <div>
+          <label class="risk-report-form-field__label"
+            >Target Likelihood<span class="risk-report-form-field__label__star"
+              >*</span
+            ></label
+          >
+          <div class="risk-report-radio-buttons-flex-box">
+            <div class="risk-report-radio-buttons-flex">
+              <mat-radio-group
+                formControlName="targetLikelihood"
+                aria-label="Select an option"
+              >
+                <mat-radio-button value="1">1</mat-radio-button>
+                <mat-radio-button value="2">2</mat-radio-button>
+                <mat-radio-button value="3">3</mat-radio-button>
+                <mat-radio-button value="4">4</mat-radio-button>
+                <mat-radio-button value="5">5</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-icon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <g clip-path="url(#clip0_14774_17883)">
+                  <circle cx="10" cy="10" r="9" fill="white" />
+                  <path
+                    d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                    fill="#808080"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_14774_17883">
+                    <rect width="20" height="20" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </mat-icon>
+          </div>
+        </div>
+
+        <!-- //grid-item-5----- -->
+
+        <div>
+          <label class="risk-report-form-field__label"
+            >TargetImpact<span class="risk-report-form-field__label__star"
+              >*</span
+            ></label
+          >
+          <div class="risk-report-radio-buttons-flex-box">
+            <div class="risk-report-radio-buttons-flex">
+              <mat-radio-group
+                formControlName="targetImpact"
+                aria-label="Select an option"
+              >
+                <mat-radio-button value="1">1</mat-radio-button>
+                <mat-radio-button value="2">2</mat-radio-button>
+                <mat-radio-button value="3">3</mat-radio-button>
+                <mat-radio-button value="4">4</mat-radio-button>
+                <mat-radio-button value="5">5</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+            <mat-icon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <g clip-path="url(#clip0_14774_17883)">
+                  <circle cx="10" cy="10" r="9" fill="white" />
+                  <path
+                    d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                    fill="#808080"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_14774_17883">
+                    <rect width="20" height="20" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </mat-icon>
+          </div>
+        </div>
+
+        <!-- //grid-item-6----- -->
+        <div class="risk-report-form-field-icon-box--2">
+          <div class="risk-report-grid-item-text-box">
+            <p class="risk-report-grid-item-text">
+              Target Risk level:
+              <span class="risk-report-grid-item-text__sub">9</span>
+            </p>
+          </div>
+
+          <mat-icon class="move-end">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_14774_17883)">
+                <circle cx="10" cy="10" r="9" fill="white" />
+                <path
+                  d="M0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10ZM10 1.875C7.84512 1.875 5.77849 2.73102 4.25476 4.25476C2.73102 5.77849 1.875 7.84512 1.875 10C1.875 12.1549 2.73102 14.2215 4.25476 15.7452C5.77849 17.269 7.84512 18.125 10 18.125C12.1549 18.125 14.2215 17.269 15.7452 15.7452C17.269 14.2215 18.125 12.1549 18.125 10C18.125 7.84512 17.269 5.77849 15.7452 4.25476C14.2215 2.73102 12.1549 1.875 10 1.875ZM8.125 9.6875C8.125 9.43886 8.22377 9.2004 8.39959 9.02459C8.5754 8.84877 8.81386 8.75 9.0625 8.75H10.3125C10.5611 8.75 10.7996 8.84877 10.9754 9.02459C11.1512 9.2004 11.25 9.43886 11.25 9.6875V13.125H11.5625C11.8111 13.125 12.0496 13.2238 12.2254 13.3996C12.4012 13.5754 12.5 13.8139 12.5 14.0625C12.5 14.3111 12.4012 14.5496 12.2254 14.7254C12.0496 14.9012 11.8111 15 11.5625 15H9.0625C8.81386 15 8.5754 14.9012 8.39959 14.7254C8.22377 14.5496 8.125 14.3111 8.125 14.0625C8.125 13.8139 8.22377 13.5754 8.39959 13.3996C8.5754 13.2238 8.81386 13.125 9.0625 13.125H9.375V10.625H9.0625C8.81386 10.625 8.5754 10.5262 8.39959 10.3504C8.22377 10.1746 8.125 9.93614 8.125 9.6875ZM10 7.5C9.66848 7.5 9.35054 7.3683 9.11612 7.13388C8.8817 6.89946 8.75 6.58152 8.75 6.25C8.75 5.91848 8.8817 5.60054 9.11612 5.36612C9.35054 5.1317 9.66848 5 10 5C10.3315 5 10.6495 5.1317 10.8839 5.36612C11.1183 5.60054 11.25 5.91848 11.25 6.25C11.25 6.58152 11.1183 6.89946 10.8839 7.13388C10.6495 7.3683 10.3315 7.5 10 7.5Z"
+                  fill="#808080"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_14774_17883">
+                  <rect width="20" height="20" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </mat-icon>
+        </div>
+      </div>
+
+      <!-- //Due date to reach target level*----- -->
+
+      <div class="risk-report-form-field field-1 m-b--3">
+        <mat-label class="risk-report-form-field__label"
+          >Due date to reach target level<span
+            class="risk-report-form-field__label__star"
+            >*</span
+          ></mat-label
+        >
+        <!-- <mat-form-field
+          class="form-dialog-content__field n"
+          floatLabel="always"
+          hideRequiredMarker
+          appearance="outline" 
+        >-->
+        <div class="risk-report-form-field-icon-box">
+          <input
+            class="risk-report-form-field-box__input cursor-input__dueDate report-form-field-size__dueDate"
+            matInput
+            placeholder="Due date"
+            formControlName="dueDate"
+            [matDatepicker]="picker"
+          />
+
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+        <!-- </mat-form-field> -->
+      </div>
+    </form>
+
+    <!-- //Actions /Controls to manage risks*----- -->
+
+    <div class="risk-report-table-actinos-controls-container m-b--3">
+      <div class="risk-report-actions-controls-table-box">
+        <div class="risk-report-actions-controls-table-box__text-box">
+          <p class="risk-report-actions-controls-table-box__text-box__text">
+            Actions /Controls to manage risks
+          </p>
+        </div>
+        <div class="table-box">
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            class="mat-elevation-z8"
+            matSort
+          >
+            <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Actions/Controls description Column -->
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">Actions/Controls description</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.description }}
+              </td>
+            </ng-container>
+
+            <!-- Status of Action Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">Status of Action</span>
+              </th>
+              <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+            </ng-container>
+
+            <!-- Action Name Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h5">Actions</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="m">
+                  <button
+                    style="
+                      border: none;
+                      cursor: pointer;
+                      background-color: #ffffff;
+                    "
+                    (click)="
+                      openDialogEditActionsControls(
+                        'Edit Actions/Controls to manage risk',
+                        element
+                      )
+                    "
+                  >
+                    <mat-icon class="user-management-table__icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="23"
+                        height="22"
+                        viewBox="0 0 23 22"
+                        fill="none"
+                      >
+                        <path
+                          d="M18.1917 8.30937L14.2958 4.63437L15.5792 3.40938C15.9306 3.07396 16.3623 2.90625 16.8744 2.90625C17.3859 2.90625 17.8174 3.07396 18.1687 3.40938L19.4521 4.63437C19.8035 4.96979 19.9868 5.37462 20.0021 5.84887C20.0174 6.32254 19.8493 6.72708 19.4979 7.0625L18.1917 8.30937ZM16.8625 9.6L7.14583 18.875H3.25V15.1562L12.9667 5.88125L16.8625 9.6Z"
+                          fill="#436280"
+                        /></svg
+                    ></mat-icon>
+                  </button>
+
+                  <button
+                    style="
+                      border: none;
+                      cursor: pointer;
+                      background-color: #ffffff;
+                    "
+                    (click)="deleteActionsControlsById(element.id)"
+                  >
+                    <mat-icon class="user-management-table__icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                      >
+                        <path
+                          d="M18.2188 4.4375H15.2656V3.45312C15.2635 2.84462 15.0208 2.26166 14.5905 1.83138C14.1602 1.4011 13.5773 1.15841 12.9688 1.15625H9.03125C8.42275 1.15841 7.83978 1.4011 7.4095 1.83138C6.97922 2.26166 6.73654 2.84462 6.73438 3.45312V4.4375H3.78125C3.52018 4.4375 3.2698 4.54121 3.08519 4.72582C2.90059 4.91042 2.79688 5.1608 2.79688 5.42188C2.79688 5.68295 2.90059 5.93333 3.08519 6.11793C3.2698 6.30254 3.52018 6.40625 3.78125 6.40625H4.10938V17.5625C4.11153 17.997 4.28507 18.413 4.59229 18.7202C4.8995 19.0274 5.31554 19.201 5.75 19.2031H16.25C16.6845 19.201 17.1005 19.0274 17.4077 18.7202C17.7149 18.413 17.8885 17.997 17.8906 17.5625V6.40625H18.2188C18.4798 6.40625 18.7302 6.30254 18.9148 6.11793C19.0994 5.93333 19.2031 5.68295 19.2031 5.42188C19.2031 5.1608 19.0994 4.91042 18.9148 4.72582C18.7302 4.54121 18.4798 4.4375 18.2188 4.4375ZM8.70312 3.45312C8.70312 3.3661 8.73769 3.28264 8.79923 3.22111C8.86077 3.15957 8.94423 3.125 9.03125 3.125H12.9688C13.0558 3.125 13.1392 3.15957 13.2008 3.22111C13.2623 3.28264 13.2969 3.3661 13.2969 3.45312V4.4375H8.70312V3.45312ZM15.9219 17.2344H6.07812V6.40625H15.9219V17.2344ZM10.0156 9.03125V14.2812C10.0156 14.5423 9.91191 14.7927 9.72731 14.9773C9.5427 15.1619 9.29232 15.2656 9.03125 15.2656C8.77018 15.2656 8.5198 15.1619 8.33519 14.9773C8.15059 14.7927 8.04688 14.5423 8.04688 14.2812V9.03125C8.04688 8.77018 8.15059 8.5198 8.33519 8.33519C8.5198 8.15059 8.77018 8.04688 9.03125 8.04688C9.29232 8.04688 9.5427 8.15059 9.72731 8.33519C9.91191 8.5198 10.0156 8.77018 10.0156 9.03125ZM13.9531 9.03125V14.2812C13.9531 14.5423 13.8494 14.7927 13.6648 14.9773C13.4802 15.1619 13.2298 15.2656 12.9688 15.2656C12.7077 15.2656 12.4573 15.1619 12.2727 14.9773C12.0881 14.7927 11.9844 14.5423 11.9844 14.2812V9.03125C11.9844 8.77018 12.0881 8.5198 12.2727 8.33519C12.4573 8.15059 12.7077 8.04688 12.9688 8.04688C13.2298 8.04688 13.4802 8.15059 13.6648 8.33519C13.8494 8.5198 13.9531 8.77018 13.9531 9.03125Z"
+                          fill="#436280"
+                        /></svg
+                    ></mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+            <tr
+              class="table-header"
+              mat-header-row
+              *matHeaderRowDef="displayedColumns"
+            ></tr>
+            <tr
+              class="table-header"
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+            ></tr>
+          </table>
+        </div>
+
+        <!-- Add mitigation-btn -->
+        <div class="risk-report-actions-controls-btn-box">
+          <button
+            class="risk-report-actions-controls-btn-box__btn"
+            (click)="
+              openDialogCreateActionsControlsStatus(
+                'Actions/Controls to manage risk'
+              )
+            "
+            mat-raised-button
+          >
+            Add mitigation
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-report-form-note-box">
+      <svg
+        class="risk-report-form-note-content-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 22 22"
+        fill="none"
+      >
+        <path
+          d="M11 22C17.0751 22 22 17.0751 22 11C22 4.92487 17.0751 0 11 0C4.92487 0 0 4.92487 0 11C0 17.0751 4.92487 22 11 22Z"
+          fill="#2196F3"
+        />
+        <path
+          d="M9.95227 9.95312H12.0475V15.715H9.95227V9.95312Z"
+          fill="white"
+        />
+        <path
+          d="M11.0002 8.38467C11.7234 8.38467 12.3097 7.79838 12.3097 7.07515C12.3097 6.35192 11.7234 5.76562 11.0002 5.76562C10.277 5.76562 9.69067 6.35192 9.69067 7.07515C9.69067 7.79838 10.277 8.38467 11.0002 8.38467Z"
+          fill="white"
+        />
+      </svg>
+      <div class="risk-report-form-note-content-container">
+        <p class="risk-report-form-note-content-text">
+          Instructions before you can save:​
+        </p>
+        <ol class="risk-report-form-note-content-list">
+          <li>
+            Review Risk Theme/Category and change if not correct (optional)
+          </li>
+          <li>​Review Risk Owner and change if not correct (optional)</li>
+          <li>​Update Risk Description (optional)</li>
+          <li>
+            ​Update Risk Targets (default will be same as risk level; and
+            adjustments to be made to target level – mandatory; no action =
+            targets same as risk level)
+          </li>
+          <li>​Add additional Actions to Manage Risk (optional)</li>
+          <li>
+            Review Status of Actions for each risk; default is “Ongoing and
+            ontrack” (optional)​
+          </li>
+        </ol>
+        <p class="risk-report-form-note-content-note">
+          Note: these steps are required even if the Risk is tagged as Complete.
+          ​
+        </p>
+      </div>
+    </div>
+
+    <!--  Save-btn -->
+    <div class="risk-report-form-save-btn-box">
+      <button
+        class="risk-report-form-save-btn-box__btn"
+        (click)="onSave()"
+        mat-raised-button
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>

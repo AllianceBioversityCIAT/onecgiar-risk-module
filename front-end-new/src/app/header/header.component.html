@@ -1,0 +1,318 @@
+<header class="header-risk">
+  <!-- section header -->
+
+  <div
+    [ngClass]="{
+      'header-risk__background-c-primary':
+        router.url === riskUrl.home ||
+        router.url === riskUrl.riskManagement ||
+        router.url === riskUrl.riskReport ||
+        router.url === riskUrl.teamMembers ||
+        router.url === riskUrl.published ||
+        router.url === riskUrl.accelerated ||
+        router.url === riskUrl.about ||
+        router.url === riskUrl.glossary ||
+        router.url === riskUrl.faq ||
+        router.url === riskUrl.dashboard,
+      'header-risk__background-c-secondary':
+        router.url === adminUrl.admin ||
+        router.url === adminUrl.parameterSetttings ||
+        router.url === adminUrl.categories ||
+        router.url === adminUrl.mitigation ||
+        router.url === adminUrl.settings ||
+        router.url === adminUrl.announcements ||
+        router.url === adminUrl.posted ||
+        router.url === adminUrl.drafts ||
+        router.url === adminUrl.userManagement
+    }"
+    class="header-risk__content"
+  >
+    <div class="header-content-box">
+      <div class="header-content-box--1">
+        <img
+          src="../../assets/shared-image/Mask group.svg"
+          class="header-content-box--1__logo"
+          alt="~/Frontend/images/question-circular-button.svg"
+        />
+      </div>
+      <div class="header-content-box--2">
+        <p class="header-content-box--2__title">
+          <span class="header-content-box--2__title--1">CGIAR 360</span> Risk
+          Management
+        </p>
+      </div>
+    </div>
+
+    <nav class="header-user-nav-box">
+      <button
+        [ngClass]="{
+          'user-nav-button__background-c-primary':
+            router.url === riskUrl.home ||
+            router.url === riskUrl.riskManagement ||
+            router.url === riskUrl.riskReport ||
+            router.url === riskUrl.teamMembers ||
+            router.url === riskUrl.published ||
+            router.url === riskUrl.accelerated ||
+            router.url === riskUrl.about ||
+            router.url === riskUrl.glossary ||
+            router.url === riskUrl.faq ||
+            router.url === riskUrl.dashboard,
+          'user-nav-button__background-c-secondary':
+            router.url === adminUrl.admin ||
+            router.url === adminUrl.parameterSetttings ||
+            router.url === adminUrl.categories ||
+            router.url === adminUrl.mitigation ||
+            router.url === adminUrl.settings ||
+            router.url === adminUrl.announcements ||
+            router.url === adminUrl.posted ||
+            router.url === adminUrl.drafts ||
+            router.url === adminUrl.userManagement
+        }"
+        [matMenuTriggerFor]="menu"
+        class="user-nav-button--notific"
+        mat-icon-button
+        (click)="onLogout()"
+      >
+        <mat-icon matBadge="2" matBadgeColor="warn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="29"
+            viewBox="0 0 30 29"
+            fill="none"
+            
+          >
+            <path
+              d="M23.75 14.7375C23.125 14.9 22.5 15 21.875 15C20.0527 14.9967 18.3059 14.2713 17.0173 12.9827C15.7287 11.6941 15.0033 9.94736 15 8.12501C15 6.28751 15.725 4.62501 16.875 3.38751C16.6482 3.10943 16.3621 2.88547 16.0378 2.73194C15.7134 2.5784 15.3589 2.49917 15 2.50001C13.625 2.50001 12.5 3.62501 12.5 5.00001V5.36251C8.7875 6.46251 6.25 9.87501 6.25 13.75V21.25L3.75 23.75V25H26.25V23.75L23.75 21.25V14.7375ZM15 28.75C16.3875 28.75 17.5 27.6375 17.5 26.25H12.5C12.5 26.913 12.7634 27.5489 13.2322 28.0178C13.7011 28.4866 14.337 28.75 15 28.75Z"
+              fill="white"
+            />
+            <circle cx="22" cy="8" r="5" fill="#EB5B47" />
+          </svg>
+        </mat-icon>
+        <!-- Include text description of the icon's meaning for screen-readers -->
+        <span class="cdk-visually-hidden">
+          Example with a home icon with overlaid badge showing the number 15
+        </span>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <div class="notific-section">
+            <div class="notific-box-flex">
+              <div>
+                <p class="notific-date">2023 - 07 - 27</p>
+              </div>
+              <div>
+                <p class="notific-text">
+                  Alice Font created a new risk for the INIT-01, Operational:
+                  Data Impedance
+                </p>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button mat-menu-item>
+          <div class="notific-box-flex">
+            <div>
+              <p class="notific-date">2023 - 07 - 27</p>
+            </div>
+            <div>
+              <p class="notific-text">
+                Alice Font created a new risk for the INIT-01, Operational: Data
+                Impedance
+              </p>
+            </div>
+          </div>
+        </button>
+      </mat-menu>
+      <button
+        [ngClass]="{
+          'user-nav-button__background-c-primary':
+            router.url === riskUrl.home ||
+            router.url === riskUrl.riskManagement ||
+            router.url === riskUrl.riskReport ||
+            router.url === riskUrl.teamMembers ||
+            router.url === riskUrl.published ||
+            router.url === riskUrl.accelerated ||
+            router.url === riskUrl.about ||
+            router.url === riskUrl.glossary ||
+            router.url === riskUrl.faq ||
+            router.url === riskUrl.dashboard,
+          'user-nav-button__background-c-secondary':
+            router.url === adminUrl.admin ||
+            router.url === adminUrl.parameterSetttings ||
+            router.url === adminUrl.categories ||
+            router.url === adminUrl.mitigation ||
+            router.url === adminUrl.settings ||
+            router.url === adminUrl.announcements ||
+            router.url === adminUrl.posted ||
+            router.url === adminUrl.drafts ||
+            router.url === adminUrl.userManagement
+        }"
+        class="user-nav-button"
+        mat-icon-button
+        (click)="onLogout()"
+      >
+        <mat-icon class="user-nav-button__icon">
+          <img
+            class="user-nav-button__icon--1"
+            src="../../assets/shared-image/🦆 icon _User avatar filled_.svg"
+            alt="~/Frontend/images/icon _User avatar"
+        /></mat-icon>
+        <span class="user-nav-button__title--1">John Doe</span>
+      </button>
+
+      <button
+        [ngClass]="{
+          'user-nav-button__background-c-primary':
+            router.url === riskUrl.home ||
+            router.url === riskUrl.riskManagement ||
+            router.url === riskUrl.riskReport ||
+            router.url === riskUrl.teamMembers ||
+            router.url === riskUrl.published ||
+            router.url === riskUrl.accelerated ||
+            router.url === riskUrl.about ||
+            router.url === riskUrl.glossary ||
+            router.url === riskUrl.faq ||
+            router.url === riskUrl.dashboard,
+          'user-nav-button__background-c-secondary':
+            router.url === adminUrl.admin ||
+            router.url === adminUrl.parameterSetttings ||
+            router.url === adminUrl.categories ||
+            router.url === adminUrl.mitigation ||
+            router.url === adminUrl.settings ||
+            router.url === adminUrl.announcements ||
+            router.url === adminUrl.posted ||
+            router.url === adminUrl.drafts ||
+            router.url === adminUrl.userManagement
+        }"
+        class="user-nav-button"
+        mat-icon-button
+        (click)="onUserName()"
+      >
+        <span class="user-nav-button__title--2">Logout</span>
+        <mat-icon class="user-nav-button__icon">
+          <img
+            src="../../assets/shared-image/🦆 icon _logout_.svg"
+            class="user-nav-button__icon--2"
+            alt="~/Frontend/images/icon _logout"
+        /></mat-icon>
+      </button>
+    </nav>
+  </div>
+
+  <!-- section nav -->
+  <nav
+    class="header-risk__main-nav"
+    [ngClass]="{
+      'header-risk__main-nav__background-c-secondary':
+        router.url === adminUrl.admin ||
+        router.url === adminUrl.parameterSetttings ||
+        router.url === adminUrl.categories ||
+        router.url === adminUrl.mitigation ||
+        router.url === adminUrl.settings ||
+        router.url === adminUrl.announcements ||
+        router.url === adminUrl.posted ||
+        router.url === adminUrl.drafts ||
+        router.url === adminUrl.userManagement,
+      'header-risk__main-nav__background-c-primary':
+        router.url === riskUrl.home ||
+        router.url === riskUrl.riskManagement ||
+        router.url === riskUrl.riskReport ||
+        router.url === riskUrl.teamMembers ||
+        router.url === riskUrl.published ||
+        router.url === riskUrl.accelerated ||
+        router.url === riskUrl.about ||
+        router.url === riskUrl.glossary ||
+        router.url === riskUrl.faq ||
+        router.url === riskUrl.dashboard
+    }"
+  >
+    <ul class="main-nav-list">
+      <li>
+        <a
+          routerLink="/home/risk-management"
+          class="main-nav-link"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <span>Home</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="about" class="main-nav-link" routerLinkActive="active">
+          <span>About Risk</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="faq" class="main-nav-link" routerLinkActive="active">
+          <span>FAQ</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="glossary"
+          class="main-nav-link"
+          routerLinkActive="active"
+        >
+          <span>Glossary</span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="dashboard"
+          class="main-nav-link"
+          routerLinkActive="active"
+        >
+          <span>Dashboard</span>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="admin" class="main-nav-link" routerLinkActive="active">
+          <span>Admin module</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<!-- section nav
+<nav class="sidebar">
+  <ul class="side-nav">
+    <li class="side-nav__item side-nav__item--active">
+      <a href="#" class="side-nav__link">
+        <svg class="side-nav__icon">
+          <use xlink:href="img/sprite.svg#icon-home"></use>
+        </svg>
+        <span>Hotel</span>
+      </a>
+    </li>
+    <li class="side-nav__item">
+      <a href="#" class="side-nav__link">
+        <svg class="side-nav__icon">
+          <use xlink:href="img/sprite.svg#icon-aircraft-take-off"></use>
+        </svg>
+        <span>Flight</span>
+      </a>
+    </li>
+    <li class="side-nav__item">
+      <a href="#" class="side-nav__link">
+        <svg class="side-nav__icon">
+          <use xlink:href="img/sprite.svg#icon-key"></use>
+        </svg>
+        <span>Car rental</span>
+      </a>
+    </li>
+    <li class="side-nav__item">
+      <a href="#" class="side-nav__link">
+        <svg class="side-nav__icon">
+          <use xlink:href="img/sprite.svg#icon-map"></use>
+        </svg>
+        <span>Tours</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="legal">&copy; 2017 by trillo. All rights reserved.</div>
+</nav> -->

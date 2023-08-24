@@ -1,0 +1,47 @@
+@import "../abstracts/variables";
+//Create-category-btn
+
+.parameters-settings__button-box__btn {
+  width: 16.6rem;
+  height: 3.2rem;
+
+  border-radius: 0.5rem;
+  background-color: $color-button-primary !important;
+
+  box-shadow: 4px 4px 4px 0px #00000040;
+  cursor: url(../../../assets/shared-image/Vector-cursor.svg), pointer !important;
+}
+
+.send-btn {
+  
+  color: #436280;
+}
+
+// .btn {
+//   &:link,
+//   &:visited {
+//     text-transform: uppercase;
+//     text-decoration: none;
+//     padding: 1.5rem 4rem;
+//     display: inline-block;
+//     border-radius: 10rem;
+//     transition: all 0.2s;
+//     position: relative;
+//     font-size: 1.6rem;
+//   }
+
+//   &--white:link,
+//   &--white:visited {
+//     background-color: $color-white;
+//     color: $color-grey-dark;
+//     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+
+//     &:hover,
+//     &:active {
+//       background-color: darken($color-white, 10%);
+//       box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+//     }
+
+//   }
+
+// }

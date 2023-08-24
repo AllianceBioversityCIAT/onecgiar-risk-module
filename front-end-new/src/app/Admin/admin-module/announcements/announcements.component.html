@@ -1,0 +1,43 @@
+<!-- parameters-settings-content -->
+<div class="user-management__icon-box">
+  <mat-icon class="user-management__icon-box__icon">
+    <img
+      style="filter: invert()"
+      class="user-management__icon-box__icon--1"
+      src="../../../../assets/shared-image/Vector-Announcements.svg"
+      alt="~/Frontend/images/icon _setting-config-black"
+  /></mat-icon>
+  <span class="user-management__icon-box__title">Announcements</span>
+</div>
+
+<div class="user-management__text-box">
+  <p class="user-management__text-box__title t-m-b">Intro text.</p>
+</div>
+
+<nav class="nav-tab-main">
+  <ul class="nav-tab-list">
+    <li
+      class="tab-box"
+      routerLink="/admin/announcements/posted"
+      routerLinkActive="tab-active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <a class="tab-link">
+        <span>Posted</span>
+      </a>
+    </li>
+
+    <li
+      class="tab-box"
+      routerLink="/admin/announcements/drafts"
+      routerLinkActive="tab-active"
+    >
+      <a class="tab-link"><span>Drafts</span></a>
+    </li>
+  </ul>
+</nav>
+
+<div class="user-management__content m-b">
+  <!-- <ng-container #container></ng-container> -->
+  <router-outlet></router-outlet>
+</div>

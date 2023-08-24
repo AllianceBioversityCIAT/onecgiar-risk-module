@@ -1,0 +1,53 @@
+<!-- parameters-settings-content -->
+<div class="user-management__icon-box">
+  <mat-icon class="user-management__icon-box__icon">
+    <img
+      class="user-management__icon-box__icon--1"
+      src="../../assets/shared-image/setting-config-black.svg"
+      alt="~/Frontend/images/icon _setting-config-black"
+  /></mat-icon>
+  <span class="user-management__icon-box__title">Parameters settings</span>
+</div>
+
+<div class="user-management__text-box">
+  <p class="user-management__text-box__title t-m-b">
+    Welcome to the user management panel, here you can manage the users and
+    their roles within the platform.
+  </p>
+</div>
+
+<nav class="nav-tab-main">
+  <ul class="nav-tab-list">
+    <li
+      class="tab-box"
+      routerLink="/admin/parameters-settings/categories"
+      routerLinkActive="tab-active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <a class="tab-link">
+        <span>Categories</span>
+      </a>
+    </li>
+
+    <li
+      class="tab-box"
+      routerLink="/admin/parameters-settings/mitigation-status"
+      routerLinkActive="tab-active"
+    >
+      <a class="tab-link"><span>Mitigation status</span></a>
+    </li>
+
+    <li
+      class="tab-box"
+      routerLink="/admin/parameters-settings/settings"
+      routerLinkActive="tab-active"
+    >
+      <a class="tab-link"><span>Settings</span></a>
+    </li>
+  </ul>
+</nav>
+
+<div class="user-management__content m-b">
+  <router-outlet></router-outlet>
+  <!-- <ng-container #container></ng-container> -->
+</div>

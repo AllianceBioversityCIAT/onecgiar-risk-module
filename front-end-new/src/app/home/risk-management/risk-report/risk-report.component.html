@@ -1,0 +1,536 @@
+<div class="risk-report-container" *ngIf="router.url === riskUrl.home">
+  <div class="risk-report-content">
+    <!-- nav-list -->
+
+    <nav class="risk-nav-main">
+      <ul class="risk-nav-list">
+        <li>
+          <a class="risk-nav-link" routerLink="/home/risk-management"
+            >Initiatives</a
+          >
+        </li>
+        <li>
+          <a routerLink="''" class="risk-nav-link">></a>
+        </li>
+        <li>
+          <a routerLink="''" class="risk-nav-link"
+            >&nbsp;Risk report<span class="line">&nbsp;/&nbsp;</span
+            >&nbsp;&nbsp;INIT-01</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <!-- step-1 -->
+    <div class="risk-report-box">
+      <div class="risk-report-title-box">
+        <h1 class="risk-report-title-box__title">Risk report</h1>
+      </div>
+
+      <div class="risk-report-btn-box">
+        <!-- btn-1 -->
+        <div class="risk-report-button-box">
+          <button
+            class="risk-report-button-box__btn"
+            routerLink="/home/risk-management/risk-report/team-members"
+            mat-raised-button
+          >
+            Team members
+          </button>
+        </div>
+        <!-- btn-2 -->
+        <div class="risk-report-button-box">
+          <button
+            class="risk-report-button-box__btn"
+            routerLink="/book/add-book"
+            mat-raised-button
+          >
+            Submitted versions
+          </button>
+        </div>
+        <!-- btn-3 -->
+        <div class="risk-report-button-box">
+          <button
+            class="risk-report-button-box__btn"
+            (click)="openDialogSubmitRisk('Submit risks')"
+            mat-raised-button
+          >
+            Submit
+          </button>
+        </div>
+        <!-- btn-4 -->
+        <div class="risk-report-button-box">
+          <button
+            class="risk-report-button-box__btn--4"
+            routerLink="/home/risk-management/risk-report/risk-report-form"
+            mat-raised-button
+          >
+            <mat-icon class="create-risk">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="13"
+                height="13"
+                viewBox="0 0 13 13"
+                fill="none"
+              >
+                <path
+                  d="M11.5556 0H1.44444C0.642778 0 0 0.65 0 1.44444V11.5556C0 12.35 0.642778 13 1.44444 13H11.5556C12.35 13 13 12.35 13 11.5556V1.44444C13 0.65 12.35 0 11.5556 0ZM11.5556 11.5556H1.44444V1.44444H11.5556V11.5556ZM5.77778 10.1111H7.22222V7.22222H10.1111V5.77778H7.22222V2.88889H5.77778V5.77778H2.88889V7.22222H5.77778V10.1111Z"
+                  fill="white"
+                />
+              </svg>
+            </mat-icon>
+            Create risk
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- step-2 -->
+    <div class="risk-management-form-field-box">
+      <form
+        [formGroup]="riskManagementForm"
+        class="risk-management-form-field-box"
+      >
+        <!-- //Title----- -->
+        <div class="risk-management-form-field field-2">
+          <mat-label class="risk-management-form-field__label">Title</mat-label>
+
+          <input
+            hideToggle="true"
+            class="risk-management-form-field-box__input-2"
+            matInput
+            placeholder="Search"
+            #input
+          />
+
+          <img
+            src="../../../assets/shared-image/search-icon.svg"
+            class="risk-management-search-icon-2"
+            alt="~/Frontend/images/search-icon.svg"
+          />
+        </div>
+
+        <!-- //Risk category----- -->
+        <div class="risk-management-form-field field-3">
+          <mat-label class="risk-management-form-field__label"
+            >Risk category</mat-label
+          >
+
+          <mat-select
+            class="risk-management-form-field-box__input-3"
+            [placeholder]="'All'"
+            id="select-where"
+            required
+          >
+            <!-- <mat-option class="placeholder" selected disabled [value]="author_id">
+              {{ author_name }}
+            </mat-option> -->
+            <mat-option value="a">a</mat-option>
+            <mat-option value="b">b</mat-option>
+          </mat-select>
+        </div>
+
+        <!-- //Created by----- -->
+        <div class="risk-management-form-field field-4">
+          <mat-label class="risk-management-form-field__label"
+            >Created by</mat-label
+          >
+
+          <mat-select
+            class="risk-management-form-field-box__input-3"
+            [placeholder]="'All'"
+            id="select-where"
+            required
+          >
+            <!-- <mat-option class="placeholder" selected disabled [value]="author_id">
+                {{ author_name }}
+              </mat-option> -->
+            <mat-option value="a">a</mat-option>
+            <mat-option value="b">b</mat-option>
+          </mat-select>
+        </div>
+
+        <!-- //Risk owner----- -->
+        <div class="risk-management-form-field field-4">
+          <mat-label class="risk-management-form-field__label"
+            >Risk owner</mat-label
+          >
+
+          <mat-select
+            class="risk-management-form-field-box__input-3"
+            [placeholder]="'All'"
+            id="select-where"
+            required
+          >
+            <!-- <mat-option class="placeholder" selected disabled [value]="author_id">
+                  {{ author_name }}
+                </mat-option> -->
+            <mat-option value="a">a</mat-option>
+            <mat-option value="b">b</mat-option>
+          </mat-select>
+        </div>
+
+        <!-- //Sort----- -->
+        <div class="risk-management-form-field field-4">
+          <mat-label class="risk-management-form-field__label">Sort</mat-label>
+
+          <mat-select
+            class="risk-management-form-field-box__input-3"
+            [placeholder]="'None'"
+            id="select-where"
+            required
+          >
+            <!-- <mat-option class="placeholder" selected disabled [value]="author_id">
+                  {{ author_name }}
+                </mat-option> -->
+            <mat-option value="a">a</mat-option>
+            <mat-option value="b">b</mat-option>
+          </mat-select>
+        </div>
+
+        <!-- //Reset Button----- -->
+        <div class="risk-management-form-field field-5">
+          <button
+            class="risk-management-btn"
+            mat-raised-button
+            (click)="onReset()"
+          >
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- step-3 -->
+    <div class="risk-management-export">
+      <div class="risk-management-export-box">
+        <form class="risk-management-export-box">
+          <div>
+            <mat-label>Show redundant risk (5)</mat-label>
+            <mat-checkbox></mat-checkbox>
+          </div>
+          <!-- //Reset Button----- -->
+          <div>
+            <button
+              class="risk-management-btn-export"
+              mat-raised-button
+              (click)="onExportToExcel()"
+            >
+              <mat-icon class="risk-management-export-box-icon">
+                <img
+                  src="../../../assets/shared-image/Vectors.svg"
+                  class="risk-management-export-icon"
+                  alt="~/Frontend/images/search-icon.svg"
+              /></mat-icon>
+
+              Export to pdf
+            </button>
+          </div>
+
+          <div>
+            <button
+              class="risk-management-btn-export"
+              mat-raised-button
+              (click)="onExportToExcel()"
+            >
+              <mat-icon class="risk-management-export-box-icon">
+                <img
+                  src="../../../assets/shared-image/Vectors.svg"
+                  class="risk-management-export-icon"
+                  alt="~/Frontend/images/search-icon.svg"
+              /></mat-icon>
+
+              Export to excel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- step-3 -->
+
+    <div class="table-box">
+      <div class="table-box example-container mat-elevation-z8">
+        <table
+          multiTemplateDataRows
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+        >
+          <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- id Column -->
+          <ng-container matColumnDef="id">
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>
+              <div class="mtable">ID</div>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="mtable">{{ element.id }}</div>
+            </td>
+          </ng-container>
+
+          <!-- title -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span class="h1">Title</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.title }}
+            </td>
+          </ng-container>
+
+          <!-- category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="th-3">Category</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="td-3-h">{{ element.category }}</span>
+            </td>
+          </ng-container>
+
+          <!-- CurrentRiskLevel Column -->
+          <ng-container matColumnDef="CurrentRiskLevel">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h3">Current risk level</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="td-h">{{ element.CurrentRiskLevel }}</span>
+            </td>
+          </ng-container>
+
+          <!-- targetRiskLevel Column -->
+          <ng-container matColumnDef="targetRiskLevel">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Target risk level</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.targetRiskLevel }}
+            </td>
+          </ng-container>
+
+          <!-- riskOwner Column -->
+          <ng-container matColumnDef="riskOwner">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Risk owner</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.riskOwner }}
+            </td>
+          </ng-container>
+
+          <!-- createdBy Column -->
+          <ng-container matColumnDef="createdBy">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Created by</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdBy }}
+            </td>
+          </ng-container>
+
+          <!-- redundant Column -->
+          <ng-container matColumnDef="redundant">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Redundant</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <form>
+                <div>
+                  <mat-checkbox></mat-checkbox>
+                </div>
+              </form>
+            </td>
+          </ng-container>
+
+          <!-- Actions Name Column -->
+          <ng-container matColumnDef="expandedDetail" matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h5">Actions</span>
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [attr.colspan]="displayedColumns.length"
+            >
+              <div class="m">
+                <button
+                  style="
+                    border: none;
+                    cursor: pointer;
+                    background-color: #ffffff;
+                  "
+                >
+                  <mat-icon class="user-management-table__icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 22 22"
+                      fill="none"
+                    >
+                      <path
+                        d="M17.6917 8.30937L13.7958 4.63437L15.0792 3.40938C15.4306 3.07396 15.8623 2.90625 16.3744 2.90625C16.8859 2.90625 17.3174 3.07396 17.6687 3.40938L18.9521 4.63437C19.3035 4.96979 19.4868 5.37462 19.5021 5.84887C19.5174 6.32254 19.3493 6.72708 18.9979 7.0625L17.6917 8.30937ZM16.3625 9.6L6.64583 18.875H2.75V15.1562L12.4667 5.88125L16.3625 9.6Z"
+                        fill="#9E553E"
+                      />
+                    </svg>
+                    ></mat-icon
+                  >
+                </button>
+
+                <button
+                  style="
+                    border: none;
+                    cursor: pointer;
+                    background-color: #ffffff;
+                  "
+                >
+                  <mat-icon class="user-management-table__icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="22"
+                      viewBox="0 0 21 22"
+                      fill="none"
+                    >
+                      <path
+                        d="M17.7188 4.4375H14.7656V3.45312C14.7635 2.84462 14.5208 2.26166 14.0905 1.83138C13.6602 1.4011 13.0773 1.15841 12.4688 1.15625H8.53125C7.92275 1.15841 7.33978 1.4011 6.9095 1.83138C6.47922 2.26166 6.23654 2.84462 6.23438 3.45312V4.4375H3.28125C3.02018 4.4375 2.7698 4.54121 2.58519 4.72582C2.40059 4.91042 2.29688 5.1608 2.29688 5.42188C2.29688 5.68295 2.40059 5.93333 2.58519 6.11793C2.7698 6.30254 3.02018 6.40625 3.28125 6.40625H3.60938V17.5625C3.61153 17.997 3.78507 18.413 4.09229 18.7202C4.3995 19.0274 4.81554 19.201 5.25 19.2031H15.75C16.1845 19.201 16.6005 19.0274 16.9077 18.7202C17.2149 18.413 17.3885 17.997 17.3906 17.5625V6.40625H17.7188C17.9798 6.40625 18.2302 6.30254 18.4148 6.11793C18.5994 5.93333 18.7031 5.68295 18.7031 5.42188C18.7031 5.1608 18.5994 4.91042 18.4148 4.72582C18.2302 4.54121 17.9798 4.4375 17.7188 4.4375ZM8.20312 3.45312C8.20312 3.3661 8.23769 3.28264 8.29923 3.22111C8.36077 3.15957 8.44423 3.125 8.53125 3.125H12.4688C12.5558 3.125 12.6392 3.15957 12.7008 3.22111C12.7623 3.28264 12.7969 3.3661 12.7969 3.45312V4.4375H8.20312V3.45312ZM15.4219 17.2344H5.57812V6.40625H15.4219V17.2344ZM9.51562 9.03125V14.2812C9.51562 14.5423 9.41191 14.7927 9.22731 14.9773C9.0427 15.1619 8.79232 15.2656 8.53125 15.2656C8.27018 15.2656 8.0198 15.1619 7.83519 14.9773C7.65059 14.7927 7.54688 14.5423 7.54688 14.2812V9.03125C7.54688 8.77018 7.65059 8.5198 7.83519 8.33519C8.0198 8.15059 8.27018 8.04688 8.53125 8.04688C8.79232 8.04688 9.0427 8.15059 9.22731 8.33519C9.41191 8.5198 9.51562 8.77018 9.51562 9.03125ZM13.4531 9.03125V14.2812C13.4531 14.5423 13.3494 14.7927 13.1648 14.9773C12.9802 15.1619 12.7298 15.2656 12.4688 15.2656C12.2077 15.2656 11.9573 15.1619 11.7727 14.9773C11.5881 14.7927 11.4844 14.5423 11.4844 14.2812V9.03125C11.4844 8.77018 11.5881 8.5198 11.7727 8.33519C11.9573 8.15059 12.2077 8.04688 12.4688 8.04688C12.7298 8.04688 12.9802 8.15059 13.1648 8.33519C13.3494 8.5198 13.4531 8.77018 13.4531 9.03125Z"
+                        fill="#9E553E"
+                      />
+                    </svg>
+                    ></mat-icon
+                  >
+                </button>
+
+                <mat-expansion-panel
+                  (opened)="panelOpenState = true"
+                  (closed)="panelOpenState = false"
+                  hideToggle="true"
+                  #e
+                >
+                  <mat-expansion-panel-header>
+                    <button
+                      (click)="
+                        expandedElement =
+                          expandedElement === element ? null : element
+                      "
+                      style="
+                        border: none;
+                        cursor: pointer;
+                        background-color: #ffffff;
+                        margin-top: -15px;
+                      "
+                    >
+                      <mat-icon
+                        *ngIf="!e.expanded"
+                        class="user-management-table__icon"
+                      >
+                        <img
+                          class="table__icon"
+                          src="../../../../assets/shared-image/Vector-toggel.svg"
+                          alt="~/Frontend/images/Vector-toggel.svg"
+                      /></mat-icon>
+                      <mat-icon
+                        *ngIf="e.expanded"
+                        class="user-management-table__icon"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="10"
+                          viewBox="0 0 16 10"
+                          fill="none"
+                        >
+                          <path
+                            d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
+                            fill="#9E553E"
+                          /></svg
+                      ></mat-icon>
+                    </button>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [attr.colspan]="displayedColumns.length"
+            >
+              <div
+                class="risk-report-detail-box"
+                [@detailExpand]="
+                  element == expandedElement ? 'expanded' : 'collapsed'
+                "
+              >
+                <div class="risk-report-detail-content">
+                  <div class="risk-report-detail-content__box-1">
+                    <span class="risk-report-detail-content__title"
+                      >Description</span
+                    >
+                    <p class="risk-report-detail-content__text">
+                      Genebanks need to continue to take a proactive role in
+                      ensuring collections are relevant and usable by target
+                      groups. Curation data is useful, but needs to be amplified
+                      through sequencing, creation of value-added genetic
+                      materials and subsets, and appropriate data portals.
+                      Failure to address these issues will result in less demand
+                      for genebank materials.
+                    </p>
+                  </div>
+
+                  <div class="risk-report-detail-content__box-2">
+                    <span class="risk-report-detail-content__title"
+                      >Current likelihood: 4</span
+                    >
+
+                    <span class="risk-report-detail-content__title"
+                      >Current impact: 3</span
+                    >
+
+                    <span class="risk-report-detail-content__title"
+                      >Target likelihood: 4</span
+                    >
+
+                    <span class="risk-report-detail-content__title"
+                      >Target impact: 3</span
+                    >
+
+                    <span class="risk-report-detail-content__title"
+                      >Due date to reach target level: 8/11/23</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: displayedColumns"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            class="example-detail-row"
+          ></tr>
+        </table>
+      </div>
+      <p class="risk-report-records">
+        <span class="risk-report-records__text">{{
+          dataSource.data.length
+        }}</span>
+        total
+      </p>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

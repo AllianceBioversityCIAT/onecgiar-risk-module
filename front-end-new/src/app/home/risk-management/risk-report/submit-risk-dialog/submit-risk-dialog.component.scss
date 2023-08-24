@@ -1,0 +1,244 @@
+@import "../../../../sass/pages/admin-module/user-management";
+
+@import "../../../../sass/abstracts/variables";
+
+.form-dialog-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 4.5rem;
+  // border-radius: 0.2rem 0.2rem 0rem 0;
+  background-color: #436280;
+
+  &__text-box {
+    width: 62.4rem;
+    height: 2.4rem;
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 2.4rem;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #ffffff;
+  }
+  &__icon-box {
+    // width: 1.8rem;
+
+    // style="background-color: #2a2e45; border: none; cursor: pointer"
+
+    &__btn {
+      border: none;
+      background-color: #436280;
+      cursor: pointer;
+    }
+  }
+}
+
+.submit-risk-drop-box {
+  width: 59rem;
+  height: 6rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  border: 0.5px solid #808080;
+  background: #d9d9d9;
+}
+
+.example-list {
+  width: 59rem;
+  padding: 20px 10px;
+
+  flex-shrink: 0;
+  border-radius: 1rem;
+  border: 0.5px solid #8080808a;
+  background: #ffffff;
+}
+
+.submit-risk-drop-text-box {
+  padding: 1.5rem 1rem 0 1rem;
+
+  flex-shrink: 0;
+  border-radius: 1rem;
+
+  text-align: center;
+
+  &__text {
+    color: #808080;
+
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+}
+
+.example-box {
+  width: 55rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+  border: 0.5px solid #808080ab;
+  background-color: #ffffff;
+  cursor: move;
+  margin-left: 0.5rem;
+}
+
+.scroll {
+  width: 100%;
+  margin: 0 auto;
+
+  overflow: auto;
+  padding: -12px 0.5rem;
+  height: 13rem;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 0.6rem;
+}
+
+.scroll::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #808080;
+  border-radius: 0.4rem;
+  height: 2rem;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: $color-button-primary;
+  // outline: 1px solid slategrey;
+  border-radius: 4px;
+}
+
+.cdk-drag-preview {
+  border-radius: 0.5rem;
+  border: 0.5px solid #808080;
+  background-color: #efd8c9;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.submit-risk-title-1 {
+  color: #04030f;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  margin: 0 0 0 -1rem;
+}
+
+.submit-risk-text {
+  color: #808080;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 0 0.5rem 1.1rem !important;
+}
+
+.submit-risk-box {
+  display: flex;
+  flex-direction: column;
+  gap: -1rem;
+}
+
+.form-dialog-content {
+  max-width: 60.8rem;
+  margin: 2rem auto 2rem;
+  background-color: #ffffff;
+
+  // display: grid;
+  // grid-template-columns: repeat(3, 1fr);
+  // grid-template-rows: repeat(1, 1fr);
+  // column-gap: 3rem;
+  // row-gap: 2.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+  // &__layout--1 {
+  //   display: flex;
+
+  //   gap: 55%;
+  //   align-items: center;
+  // }
+
+  &__layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+}
+
+.submit-risk-drag-flex-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.submit-risk-drag-text {
+  color: #0f212f;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 171.5%; /* 2.401rem */
+}
+
+.submit-risk-flex-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form-dialog-conten__button-box {
+  text-align: end !important;
+}
+.form-dialog-conten__button-box__btn--send {
+  display: flex;
+  width: 13rem;
+  height: 3.2rem;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 2.1rem;
+  letter-spacing: 0em;
+
+  border-radius: 5px;
+
+  box-shadow: 4px 4px 4px 0px #00000040;
+  cursor: url(../../../../../assets/shared-image/Vector-cursor.svg), pointer !important;
+  color: #ffffff;
+  background-color: #9e553e;
+}
+
+.form-dialog-conten-button-box-2 {
+  text-align: right;
+  margin-top: 2.5rem !important;
+  margin-right: 2rem;
+}
+
+.form-dialog-conten-button-flex {
+  display: -webkit-inline-box;
+  align-items: center;
+  gap: 2rem;
+}

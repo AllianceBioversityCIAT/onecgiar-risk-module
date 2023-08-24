@@ -1,0 +1,77 @@
+<div class="admin-module-box">
+  <nav class="admin-module-box__sidebar">
+    <div class="sidebar__title-box">
+      <p class="sidebar__title-box--title">Admin module</p>
+    </div>
+
+    <ul class="side-nav">
+      <li>
+        <a
+          routerLink="/admin/user-management"
+          routerLinkActive="side-nav__active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="side-nav__item side-nav__link"
+        >
+          <mat-icon class="side-nav-icon-box__icon">
+            <img
+              class="side-nav-icon-box__icon--1"
+              src="../../../assets/shared-image/🦆 icon _Users Cog_.svg"
+              alt="~/Frontend/images/icon _ icon _Users"
+          /></mat-icon>
+          <span class="side-nav-icon-box__title--1">User management </span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="#"
+          routerLinkActive="side-nav__active"
+          class="side-nav__item side-nav__link"
+        >
+          <mat-icon class="side-nav-icon-box__icon">
+            <img
+              class="side-nav-icon-box__icon"
+              src="../../../assets/shared-image/Vector.svg"
+              alt="~/Frontend/images/icon _ Vector"
+          /></mat-icon>
+          <span class="side-nav-icon-box__title">Completeness status</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="parameters-settings"
+          routerLinkActive="side-nav__active"
+          class="side-nav__item side-nav__link"
+        >
+          <mat-icon class="side-nav-icon-box__icon">
+            <img
+              class="side-nav-icon-box__icon"
+              src="../../../assets/shared-image/🦆 icon _setting config_.svg"
+              alt="~/Frontend/images/icon _ setting config"
+          /></mat-icon>
+          <span class="side-nav-icon-box__title">Parameters settings</span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="/admin/announcements"
+          routerLinkActive="side-nav__active"
+          class="side-nav__item side-nav__link"
+        >
+          <mat-icon class="side-nav-icon-box__icon--1">
+            <img
+              class="side-nav-icon-box__icon"
+              src="../../../assets/shared-image/Vector-Announcements.svg"
+              alt="~/Frontend/images/icon _ setting config"
+          /></mat-icon>
+          <span class="side-nav-icon-box__title--2">Announcements</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="admin-module-box__content">
+    <!-- //main-content -->
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<section class="section-faq">
+  <div class="faq-box">
+    <!-- step--1 -->
+    <div class="faq-title-box">
+      <p class="faq-title-box__title">FREQUENTLY ASKED QUESTIONS</p>
+    </div>
+
+    <!-- step--2 -->
+
+    <div class="faq-main-content">
+      <div class="faq-content-container">
+        <div class="faq-text-box">
+          <p class="faq-text-box__text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam
+          </p>
+        </div>
+
+        <mat-accordion *ngFor="let item of faq">
+          <mat-expansion-panel
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
+            hideToggle="true"
+            #e
+          >
+            <mat-expansion-panel-header>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                *ngIf="!e.expanded"
+              >
+                <path
+                  d="M13.2875 2.795C13.2875 1.535 12.26 0.5 10.9925 0.5C9.725 0.5 8.69 1.535 8.6975 2.795V8.6975H2.795C1.535 8.6975 0.5 9.725 0.5 10.9925C0.5 12.2525 1.535 13.2875 2.795 13.2875H8.6975V19.1825C8.6975 20.4425 9.725 21.4775 10.9925 21.4775C12.2525 21.4775 13.2875 20.45 13.2875 19.1825V13.2875H19.1825C20.4425 13.2875 21.4775 12.26 21.4775 10.9925C21.4775 9.7325 20.45 8.6975 19.1825 8.6975H13.2875V2.795Z"
+                  fill="#436280"
+                />
+              </svg>
+
+              <svg
+                *ngIf="e.expanded"
+                width="16"
+                height="5"
+                viewBox="0 0 16 5"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.3259 0.0239997V4.272H0.0618595V0.0239997H15.3259Z"
+                  fill="#436280"
+                />
+              </svg>
+
+              <mat-panel-title>{{ item.question }}</mat-panel-title>
+              <mat-panel-description> </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p class="panel1">
+              {{ item.answer1 }}
+            </p>
+            <span class="panel2">{{ item.answer2 }}</span>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+</section>
