@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ApiMitigationStatusService } from 'src/app/shared-services/admin-services/Parameters-settings-Services/api-mitigation-status.service';
+import { ToastrService } from 'ngx-toastr';
+import { MitigationStatusService } from 'src/app/services/mitigation-status.service';
 @Component({
   selector: 'app-mitigation-status-form-dialog',
   templateUrl: './mitigation-status-form-dialog.component.html',
@@ -9,22 +10,41 @@ import { ApiMitigationStatusService } from 'src/app/shared-services/admin-servic
 })
 export class MitigationStatusFormDialogComponent implements OnInit {
   constructor(
-    private apiMitigationStatus: ApiMitigationStatusService,
+    private fb: FormBuilder,
     private dialogRef: MatDialogRef<MitigationStatusFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public mitigationData: { title: any; element: any }
+    @Inject(MAT_DIALOG_DATA) public mitigationData: any,
+    private toster: ToastrService,
+    private mitigationStatusService: MitigationStatusService,
+
   ) {}
 
-  mitigationFormData = new FormGroup({
-    mitigationName: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    categoryGroup: new FormControl('', [Validators.required]),
+  mitigationForm = this.fb.group({
+    id:this.fb.control(this.mitigationData?.element?.id || null),
+    title:this.fb.control(this.mitigationData?.element?.title || null,Validators.required),
+    description:this.fb.control(this.mitigationData?.element?.description || null, [Validators.required]),
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
-  onAddMitigation() {}
+  async onSubmit() {
+    const id = this.mitigationForm.getRawValue().id;
+    if(this.mitigationData.action == 'Edit mitigation'){
+      if(this.mitigationForm.valid){
+        await this.mitigationStatusService.updateMitigationStatus(id ,this.mitigationForm.value);
+          this.onCloseDialog();
+          this.toster.success('updated successfully');
+      }
+    }
+    else{
+      if(this.mitigationForm.valid){
+        await this.mitigationStatusService.addMitigationStatus(this.mitigationForm.value);
+          this.toster.success('Added successfully');
+          this.onCloseDialog();
+      }
+    }
+  }
 
-  onUpdateMitigation() {}
 
   //Close-Dialog
   onCloseDialog() {

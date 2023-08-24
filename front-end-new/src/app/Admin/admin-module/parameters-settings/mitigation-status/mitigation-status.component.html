@@ -36,13 +36,13 @@
     <div class="user-management__button-box">
       <button
         class="parameters-settings__button-box__btn"
-        (click)="openDialogCreateMitigationStatus('Add new mitigation')"
+        (click)="openFormDialog('', 'Add mitigation')"
         mat-raised-button
         color="primary"
       >
         Create mitigation
       </button>
-      <button
+      <!-- <button
         class="user-management__button-box__btn btn-export-size"
         routerLink="#"
         mat-raised-button
@@ -56,7 +56,7 @@
           />
         </mat-icon>
         <span class="user-management__button-box__title">Export data</span>
-      </button>
+      </button> -->
     </div>
   </div>
 
@@ -66,7 +66,6 @@
         mat-table
         [dataSource]="dataSource"
         class="mat-elevation-z8"
-        matSort
       >
         <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
@@ -83,7 +82,7 @@
 
         <!-- ID Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell *matHeaderCellDef>
             <span class="h1">ID</span>
           </th>
           <td mat-cell *matCellDef="let element">
@@ -92,12 +91,12 @@
         </ng-container>
 
         <!-- Mitigation status Column -->
-        <ng-container matColumnDef="mitigationStatus">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>
             <span class="th-3">Mitigation status</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="td-3-h">{{ element.mitigationStatus }}</span>
+            <span class="td-3-h">{{ element.title }}</span>
           </td>
         </ng-container>
 
@@ -119,9 +118,10 @@
           <td mat-cell *matCellDef="let element">
             <div class="m">
               <button
+              matTooltip="Edit"
                 style="border: none; cursor: pointer; background-color: #ffffff"
                 (click)="
-                  openDialogEditMitigationStatus('Edit mitigation', element)
+                editMitigation(element,'Edit mitigation')
                 "
               >
                 <mat-icon class="user-management-table__icon">
@@ -133,8 +133,9 @@
               </button>
 
               <button
+              matTooltip="Delete"
                 style="border: none; cursor: pointer; background-color: #ffffff"
-                (click)="deleteMitigationById(element.id)"
+                (click)="deleteMitigation(element)"
               >
                 <mat-icon class="user-management-table__icon">
                   <img

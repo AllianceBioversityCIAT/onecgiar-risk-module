@@ -32,7 +32,12 @@
         hideRequiredMarker
         appearance="outline"
       >
-        <input matInput formControlName="categoryName" required />
+        <input matInput formControlName="title" required />
+        <mat-error
+        class="error"
+        *ngIf="categoryFormData?.controls?.title?.errors?.['required']"
+        >Category title is required</mat-error
+      >
       </mat-form-field>
     </div>
 
@@ -49,6 +54,11 @@
         appearance="outline"
       >
         <input matInput formControlName="description" required />
+        <mat-error
+        class="error"
+        *ngIf="categoryFormData.controls?.description?.errors?.['required']"
+        >Description is required</mat-error
+      >
       </mat-form-field>
     </div>
 
@@ -64,11 +74,16 @@
         hideRequiredMarker
         appearance="outline"
       >
-        <mat-select formControlName="categoryGroup">
-          <mat-option value="Strategic"> Strategic </mat-option>
-          <mat-option value="Operational"> Operational </mat-option>
-          <mat-option value="Financial"> Financial </mat-option>
-        </mat-select>
+      <mat-select placeholder="Category group" formControlName="category_group_id">
+        <mat-option *ngFor="let catGroup of categoryGroup" [value]="catGroup.id">
+          {{ catGroup.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+      class="error"
+      *ngIf="categoryFormData.controls?.category_group_id?.errors?.['required']"
+      >category group is required</mat-error
+    >
       </mat-form-field>
     </div>
 
@@ -80,7 +95,7 @@
           class="form-dialog-conten__button-box__btn"
           type="submit"
           mat-raised-button
-          (click)="onAddCategory()"
+          (click)="onSubmit()"
         >
           Add
         </button>
@@ -92,7 +107,7 @@
           type="submit"
           mat-raised-button
           color="primary"
-          (click)="onUpdateCategory()"
+          (click)="onSubmit()"
         >
           Update
         </button>

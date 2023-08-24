@@ -1,6 +1,6 @@
 <div class="form-dialog-header">
   <div class="form-dialog-header__text-box">
-    <p class="form-dialog-header__text-box__text">{{ mitigationData.title }}</p>
+    <p class="form-dialog-header__text-box__text">{{ mitigationData.action }}</p>
   </div>
 
   <div class="form-dialog-header__icon-box">
@@ -17,7 +17,7 @@
 </div>
 
 <div class="form-dialog-content">
-  <form [formGroup]="mitigationFormData" class="form-dialog-content">
+  <form [formGroup]="mitigationForm" class="form-dialog-content">
     <!-- //Email filed----- -->
 
     <div class="form-dialog-content__field--grid-column">
@@ -32,7 +32,12 @@
         hideRequiredMarker
         appearance="outline"
       >
-        <input matInput formControlName="mitigationName" required />
+        <input matInput formControlName="title" required />
+        <mat-error
+        class="error"
+        *ngIf="mitigationForm.controls?.title?.errors?.['required']"
+        >Mitigation name is required</mat-error
+      >
       </mat-form-field>
     </div>
 
@@ -49,6 +54,11 @@
         appearance="outline"
       >
         <input matInput formControlName="description" required />
+        <mat-error
+        class="error"
+        *ngIf="mitigationForm.controls?.description?.errors?.['required']"
+        >Description is required</mat-error
+      >
       </mat-form-field>
     </div>
 
@@ -62,7 +72,7 @@
           class="form-dialog-conten__button-box__btn"
           type="submit"
           mat-raised-button
-          (click)="onAddMitigation()"
+          (click)="onSubmit()"
         >
           Add
         </button>
@@ -74,7 +84,7 @@
           type="submit"
           mat-raised-button
           color="primary"
-          (click)="onUpdateMitigation()"
+          (click)="onSubmit()"
         >
           Update
         </button>

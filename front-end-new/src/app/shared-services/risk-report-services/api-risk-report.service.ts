@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { RiskReport } from 'src/app/shared-model/risk-report-data/risk-report.model';
 
 @Injectable({
@@ -102,5 +104,17 @@ export class ApiRiskReportService {
     ),
   ];
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
+
+  //open dialog delete book
+
+  openDialogDeleteRiskReport(msg: any) {
+    return this.dialog.open(DeleteConfirmDialogComponent, {
+      width: '68rem',
+      disableClose: true,
+      data: {
+        message: msg,
+      },
+    });
+  }
 }

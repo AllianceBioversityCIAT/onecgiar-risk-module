@@ -99,4 +99,14 @@ export class RiskReportComponent {
       },
     });
   }
+
+  deleteRiskReportById(id: any) {
+    this.apiRiskReport
+      .openDialogDeleteRiskReport('Are you sure to delete this record ?')
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+        }
+      });
+  }
 }

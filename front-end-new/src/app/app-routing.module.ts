@@ -79,13 +79,36 @@ const routes: Routes = [
       {
         path: 'risk-management',
         component: RiskManagementComponent,
-        children: [{ path: 'risk-report', component: RiskReportComponent,children:[
-          {path:'risk-report-form',component:RiskReportFormComponent},
-          {path:'published-versions',component:PublishedVersionsComponent,children:[
-            {path:'accelerated-breeding-version',component:AcceleratedBreedingVersionComponent}
-          ]},
-          {path:'team-members',component:TeamMembersComponent}
-        ] }],
+        children: [
+          {
+            path: 'risk-report',
+            component: RiskReportComponent,
+            children: [
+              {
+                path: 'risk-report-form',
+                component: RiskReportFormComponent,
+                children: [
+                  {
+                    path: 'risk-report-form/:id',
+                    component: RiskReportFormComponent,
+                  },
+                ],
+              },
+
+              {
+                path: 'published-versions',
+                component: PublishedVersionsComponent,
+                children: [
+                  {
+                    path: 'accelerated-breeding-version',
+                    component: AcceleratedBreedingVersionComponent,
+                  },
+                ],
+              },
+              { path: 'team-members', component: TeamMembersComponent },
+            ],
+          },
+        ],
       },
     ],
   },

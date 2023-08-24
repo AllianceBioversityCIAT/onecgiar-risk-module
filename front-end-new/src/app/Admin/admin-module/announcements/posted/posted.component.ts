@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { AnnouncementsFormDialogComponent } from '../drafts/announcements-form-dialog/announcements-form-dialog.component';
-import { Announcement } from 'src/app/shared-model/Parameters-settings-Data/announcement.model';
-import { ApiAnnouncementService } from 'src/app/shared-services/admin-services/Announcements-Services/api-announcement.service';
 import { MatDialog } from '@angular/material/dialog';
+import { AnnouncementService } from 'src/app/services/announcement.service';
 
 @Component({
   selector: 'app-posted',
@@ -11,14 +10,19 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class PostedComponent {
   constructor(
-    private apiAnnouncement: ApiAnnouncementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private announcementService: AnnouncementService,
+
   ) {}
 
-  announcements: Announcement[] = [];
+  postedAnnouncements: any;
 
-  ngOnInit() {
-    this.announcements = this.apiAnnouncement.announcementData;
+  ngOnInit(): void {
+    this.getData();
+  }
+  //Drafts
+  async getData() {
+    this.postedAnnouncements = await this.announcementService.getAnnouncementPosted();
   }
 
   openDialogCreateAnnouncement(title: any) {
@@ -31,9 +35,4 @@ export class PostedComponent {
     });
   }
 
-  deleteAnnouncementById(id: any) {
-    this.apiAnnouncement
-      .openDialogDeleteAnnouncement('Are you sure to delete this record ?')
-      .afterClosed();
-  }
 }

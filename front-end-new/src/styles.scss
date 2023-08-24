@@ -8,10 +8,15 @@
 //   margin: 0;
 //   font-family: Roboto, "Helvetica Neue", sans-serif;
 // }
-
+//
 @use "app/sass/base/base";
 
 ::ng-deep .cdk-overlay-pane .x {
   margin: 1rem -1rem !important;
   padding: 0 1rem !important;
 }
+// .cdk-overlay-pane .x {
+//   margin: 1rem -1rem !important;
+//   padding: 0 1rem !important;
+// }
+@import "ngx-toastr/toastr";

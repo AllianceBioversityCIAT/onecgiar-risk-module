@@ -1,1 +1,15 @@
-<p>settings works!</p>
+<mat-card class="result">
+    <mat-card-content>
+      <h2 class="example-h2">Publish</h2>
+  
+      <section class="example-section">
+        <mat-slide-toggle
+            class="example-margin"
+            [checked]="canPublish"
+            (change)="toggle()"
+            >
+          Allow submit system
+        </mat-slide-toggle>
+      </section>
+    </mat-card-content>
+</mat-card>

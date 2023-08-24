@@ -25,6 +25,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatCardModule } from '@angular/material/card';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 const MaterialComponets = [
   MatButtonModule,
@@ -52,6 +56,9 @@ const MaterialComponets = [
   MatAutocompleteModule,
   MatMenuModule,
   MatBadgeModule,
+  MatCardModule,
+  MatSlideToggleModule,
+  MatTooltipModule
 ];
 
 @NgModule({

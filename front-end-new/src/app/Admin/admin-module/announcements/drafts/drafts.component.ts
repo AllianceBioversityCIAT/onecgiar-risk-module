@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ApiAnnouncementService } from 'src/app/shared-services/admin-services/Announcements-Services/api-announcement.service';
 import { AnnouncementsFormDialogComponent } from './announcements-form-dialog/announcements-form-dialog.component';
-import { Announcement } from 'src/app/shared-model/Parameters-settings-Data/announcement.model';
+import { AnnouncementService } from 'src/app/services/announcement.service';
+import { ToastrService } from 'ngx-toastr';
+import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @Component({
   selector: 'app-drafts',
@@ -11,42 +12,106 @@ import { Announcement } from 'src/app/shared-model/Parameters-settings-Data/anno
 })
 export class DraftsComponent implements OnInit {
   constructor(
-    private apiAnnouncement: ApiAnnouncementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private announcementService: AnnouncementService,
+    private toster: ToastrService,
   ) {}
 
-  announcements: Announcement[] = [];
+  draftsAnnouncements: any;
 
-  ngOnInit() {
-    this.announcements = this.apiAnnouncement.announcementData;
+  ngOnInit(): void {
+    this.getData();
+  }
+  //Drafts
+  async getData() {
+    this.draftsAnnouncements = await this.announcementService.getAnnouncementDrafts();
   }
 
-  onSendAnnouncement() {}
 
-  openDialogCreateAnnouncement(title: any) {
+  openDialogCreateAnnouncement(element: any, title: any) {
     this.dialog.open(AnnouncementsFormDialogComponent, {
       width: '68rem',
       height: '45.2rem',
       data: {
         title: title,
-      },
-    });
-  }
-
-  openDialogEditAnnouncement(title: any, element: any) {
-    this.dialog.open(AnnouncementsFormDialogComponent, {
-      width: '68rem',
-      height: '49.2rem',
-      data: {
-        title: title,
         element: element,
       },
+    }).afterClosed().subscribe(async res => {
+      await this.getData();
     });
   }
 
+  openDialogEditAnnouncement(element: any ,title: any) {
+    this.openDialogCreateAnnouncement(element, title);
+  }
+
+
+
+  sendAll(id: number, status: string) {
+    const _popup = this.dialog.open(DeleteConfirmDialogComponent, {
+      width: 'auto',
+      maxHeight: 'auto',
+      data: {
+        id: id,
+        title: 'Send to all users',
+        message:
+          'Are you sure you want to send this Announcement to all users in the system?',
+      },
+    });
+    _popup.afterClosed().subscribe(async (response) => {
+      if (response == true) {
+        await this.announcementService.send(id);
+        await this.getData();
+        this.toster.success('Sent successfully');
+      }
+    });
+  }
+
+
+
+  // sendTest(id: number) {
+  //   const _popup = this.dialog.open(SendEmailFormComponent, {
+  //     width: '300px',
+  //     maxHeight: '200px',
+  //     data: {
+  //       id: id,
+  //     },
+  //   });
+  //   _popup.afterClosed().subscribe(async (response) => {
+  //     if (response) {
+  //       await this.announcementService.sendTest(id, response);
+  //       this.getData();
+  //       this.toster.success('Sent successfully');
+  //     }
+  //   });
+  // }
+
+
+
   deleteAnnouncementById(id: any) {
-    this.apiAnnouncement
-      .openDialogDeleteAnnouncement('Are you sure to delete this record ?')
-      .afterClosed();
+
+    this.dialog
+    .open(DeleteConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: {
+        message : 'Are you sure you want to delete this announcement ?'
+      }
+    }).afterClosed()
+    .subscribe(async (res) => {
+      if(res == true) {
+        const result =  await this.announcementService.deleteAnnouncement(id);
+        if(result) {
+          this.toster.success(
+            'Success deleted'
+          );
+        }
+        else {
+          this.toster.error(
+            'can not deleted'
+          );
+        }
+      }
+      await this.getData();
+    });
   }
 }

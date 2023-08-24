@@ -10,6 +10,7 @@ import { ApiRiskManagementService } from 'src/app/shared-services/risk-managemen
   selector: 'app-risk-management',
   templateUrl: './risk-management.component.html',
   styleUrls: ['./risk-management.component.scss'],
+  
 })
 export class RiskManagementComponent {
   public url1: string = '';

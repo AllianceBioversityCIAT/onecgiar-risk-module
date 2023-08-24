@@ -46,13 +46,13 @@
     </div>
   </div>
 
-  <div class="announcement-box" *ngFor="let announcement of announcements">
+  <div class="announcement-box" *ngFor="let announcement of postedAnnouncements">
     <div class="announcement-box__1">
       <p class="announcement-box__1--title">
-        {{ announcement.date }}
-        <span class="announcement-box__1--title--1">{{
+        {{ announcement.sendDate | date : 'medium' }}
+        <!-- <span class="announcement-box__1--title--1">{{
           announcement.time
-        }}</span>
+        }}</span> -->
       </p>
       <mat-icon style="width: 5px; height: 30px" class="color-change">
         <img
@@ -64,25 +64,11 @@
     </div>
     <div class="announcement-box__2">
       <p class="announcement-box__2--title-2">
-        <span class="announcement-box__2--title-3">{{
-          announcement.subject
-        }}</span>
-        - {{ announcement.message }}
+        <span class="announcement-box__2--title-3">{{announcement.subject}}</span> 
+        - 
+        <span [innerHTML]="announcement.description  | safeHtml"></span> 
+        
       </p>
-    </div>
-    <div class="announcement-box__3">
-      <button
-        (click)="deleteAnnouncementById(announcement.id)"
-        style="border: none; cursor: pointer"
-      >
-        <mat-icon class="user-management-table__icon">
-          <img
-            style="width: 16px; height: 17px"
-            class="table__icon"
-            src="../../../../../assets/shared-image/delete.svg"
-            alt="~/Frontend/images/icon _ Vector-delete"
-        /></mat-icon>
-      </button>
     </div>
   </div>
 </div>

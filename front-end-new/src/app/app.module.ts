@@ -48,6 +48,10 @@ import { TeamMembersComponent } from './home/risk-management/risk-report/team-me
 import { TeamMembersFormDialogComponent } from './home/risk-management/risk-report/team-members/team-members-form-dialog/team-members-form-dialog.component';
 import { ApiTeamMembersService } from './shared-services/team-members-services/api-team-members.service';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { Safe } from './pipes/safe';
+import { ToastrModule } from 'ngx-toastr';
+import { NgxEditorModule } from 'ngx-editor';
+
 
 @NgModule({
   declarations: [
@@ -82,6 +86,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     AcceleratedBreedingVersionComponent,
     TeamMembersComponent,
     TeamMembersFormDialogComponent,
+    Safe
   ],
   imports: [
     BrowserModule,
@@ -93,6 +98,9 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     BrowserAnimationsModule,
     MaterialModule,
     NgxMatSelectSearchModule,
+    ToastrModule.forRoot(),
+    NgxEditorModule,
+
   ],
   providers: [
     ApiUserService,

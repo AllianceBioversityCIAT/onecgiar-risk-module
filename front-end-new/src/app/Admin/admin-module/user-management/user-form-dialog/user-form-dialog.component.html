@@ -20,6 +20,49 @@
   <form [formGroup]="userFormData" class="form-dialog-content">
     <!-- //Email filed----- -->
 
+
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >First name</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="first_name" />
+        <mat-error
+        class="error"
+        *ngIf="userFormData.controls?.first_name?.errors?.['required']"
+        >first_name is required</mat-error
+      >
+      </mat-form-field>
+    </div>
+    
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Last name</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="last_name" />
+        <mat-error
+        class="error"
+        *ngIf="userFormData.controls?.last_name?.errors?.['required']"
+        >Last name is required</mat-error
+      >
+      </mat-form-field>
+    </div>
+
     <div class="form-dialog-content__field--grid-column">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
@@ -32,7 +75,17 @@
         hideRequiredMarker
         appearance="outline"
       >
-        <input matInput formControlName="email" required />
+        <input matInput formControlName="email" />
+        <mat-error
+        class="error"
+        *ngIf="userFormData.controls?.email?.errors?.['required']"
+        >email is required</mat-error
+      >
+      <mat-error
+      class="error"
+      *ngIf="userFormData.controls?.email?.errors?.['email']"
+      >Valid Email is required</mat-error
+    >
       </mat-form-field>
     </div>
 
@@ -83,9 +136,14 @@
         appearance="outline"
       >
         <mat-select formControlName="role">
-          <mat-option value="Admin"> Admin </mat-option>
-          <mat-option value="User"> User </mat-option>
+          <mat-option value="admin"> Admin </mat-option>
+          <mat-option value="user"> User </mat-option>
         </mat-select>
+        <mat-error
+        class="error"
+        *ngIf="userFormData.controls?.role?.errors?.['required']"
+        >Role is required</mat-error
+      >
       </mat-form-field>
     </div>
     <div>
@@ -97,22 +155,21 @@
             class="form-dialog-conten__button-box__btn"
             type="submit"
             mat-raised-button
-            (click)="onAddUser()"
+            (click)="onSubmit()"
           >
             Add
           </button>
-        </div>
-        <div class="form-dialog-conten__button-box">
+
           <button
-            *ngIf="userData.element"
-            class="form-dialog-conten__button-box__btn"
-            type="submit"
-            mat-raised-button
-            color="primary"
-            (click)="onUpdateUser()"
-          >
-            Update
-          </button>
+          *ngIf="userData.element"
+          class="form-dialog-conten__button-box__btn"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          (click)="onSubmit()"
+        >
+          Update
+        </button>
         </div>
       </div>
     </div>

@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ApiCategoryService } from 'src/app/shared-services/admin-services/Parameters-settings-Services/api-category.service';
-import { UserFormDialogComponent } from '../../user-management/user-form-dialog/user-form-dialog.component';
 import { CategoryFormDialogComponent } from './category-form-dialog/category-form-dialog.component';
+import { CategoryService } from 'src/app/services/category.service';
+import { ToastrService } from 'ngx-toastr';
+import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @Component({
   selector: 'app-categories',
@@ -12,47 +11,65 @@ import { CategoryFormDialogComponent } from './category-form-dialog/category-for
   styleUrls: ['./categories.component.scss'],
 })
 export class CategoriesComponent implements OnInit {
-  @ViewChild(MatSort)
-  sort: MatSort = new MatSort();
+
 
   constructor(
-    private apiCategory: ApiCategoryService,
-    private dialog: MatDialog
+    private categoriesService: CategoryService,
+    private dialog: MatDialog,
+    private toastr: ToastrService
   ) {}
 
-  ngOnInit(): void {}
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  dataSource: any = [];
+  async ngOnInit() {
+     await this.init()
+    console.log(this.dataSource);
   }
+
+  async init(){
+    this.dataSource = await this.categoriesService.getCategories()
+  }
+
+
 
   displayedColumns: string[] = [
     'color',
     'id',
-    'category',
-    'categoryGroup',
+    'title',
+    'category_group_name',
     'description',
     'actions',
   ];
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-  }
 
-  dataSource = new MatTableDataSource(this.apiCategory.categoryData);
 
-  openDialogCreateCategory(title: any) {
+
+  openDialogCreateCategory(title: any, element: any) {
     this.dialog.open(CategoryFormDialogComponent, {
       width: '68rem',
       height: '69rem',
       data: {
         title: title,
+        element: element,
       },
-    });
+    }).afterClosed().subscribe(async res => {
+      await this.init();
+  });
   }
 
-  onViewClick() {}
+  async onViewClick(category: any) {
+    const result =  await this.categoriesService.disableCategory(category)
+      if(category.disabled == 1) {
+        this.toastr.success(
+          'Category has been Enabled'
+        );
+      }
+      else {
+        this.toastr.success(
+          'Category has been disabled'
+        );
+      }
+      await this.init()
+  }
 
   openDialogEditCategory(title: any, element: any) {
     this.dialog.open(CategoryFormDialogComponent, {
@@ -62,12 +79,38 @@ export class CategoriesComponent implements OnInit {
         title: title,
         element: element,
       },
-    });
+    }).afterClosed().subscribe(async res => {
+      await this.init();
+  });
   }
 
-  deleteCategoryById(id: any) {
-    this.apiCategory
-      .openDialogDeleteCategory('Are you sure to delete this record ?')
-      .afterClosed();
+
+  async deleteCategoryById(id: any) {
+    this.dialog
+    .open(DeleteConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: {
+        message : 'Are you sure you want to delete this record ?'
+      }
+    }).afterClosed()
+    .subscribe(async (res) => {
+      if(res == true) {
+        const result =  await this.categoriesService.deleteCategory(id);
+        if(result) {
+          this.toastr.success(
+            'Success deleted'
+          );
+        }
+        else {
+          this.toastr.error(
+            'can not deleted'
+          );
+        }
+      }
+      await this.init();
+    });
+  }
+  async export() {
+    await this.categoriesService.exportCategories();
   }
 }

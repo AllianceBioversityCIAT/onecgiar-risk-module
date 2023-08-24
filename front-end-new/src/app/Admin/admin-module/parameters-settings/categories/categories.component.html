@@ -36,7 +36,7 @@
     <div class="user-management__button-box">
       <button
         class="parameters-settings__button-box__btn"
-        (click)="openDialogCreateCategory('Add new category')"
+        (click)="openDialogCreateCategory('Add Category', null)"
         mat-raised-button
         color="primary"
       >
@@ -44,9 +44,9 @@
       </button>
       <button
         class="user-management__button-box__btn btn-export-size"
-        routerLink="#"
         mat-raised-button
         color="primary"
+        (click)="export()"
       >
         <mat-icon class="user-management__button-box__icon">
           <img
@@ -66,7 +66,7 @@
         mat-table
         [dataSource]="dataSource"
         class="mat-elevation-z8"
-        matSort
+        
       >
         <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
@@ -83,7 +83,7 @@
 
         <!-- ID Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell *matHeaderCellDef>
             <span class="h1">ID</span>
           </th>
           <td mat-cell *matCellDef="let element">
@@ -92,22 +92,22 @@
         </ng-container>
 
         <!-- Category Column -->
-        <ng-container matColumnDef="category">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>
             <span class="th-3">Category</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="td-3-h">{{ element.category }}</span>
+            <span class="td-3-h">{{ element.title }}</span>
           </td>
         </ng-container>
 
         <!-- Category group Column -->
-        <ng-container matColumnDef="categoryGroup">
+        <ng-container matColumnDef="category_group_name">
           <th mat-header-cell *matHeaderCellDef>
             <span class="h3">Category group</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="td-h">{{ element.categoryGroup }}</span>
+            <span class="td-h">{{ element.category_group_name }}</span>
           </td>
         </ng-container>
 
@@ -127,6 +127,7 @@
           <td mat-cell *matCellDef="let element">
             <div class="m">
               <button
+                matTooltip="Edit"
                 style="border: none; cursor: pointer; background-color: #ffffff"
                 (click)="openDialogEditCategory('Edit Category', element)"
               >
@@ -140,18 +141,21 @@
 
               <button
                 style="border: none; cursor: pointer; background-color: #ffffff"
-                (click)="onViewClick()"
               >
-                <mat-icon class="user-management-table__icon">
+              <mat-icon matTooltip="Enabled category" *ngIf="element.disabled == 0" (click)="onViewClick(element)">visibility</mat-icon>
+              <mat-icon matTooltip="Disabled category" *ngIf="element.disabled == 1" (click)="onViewClick(element)">visibility_off</mat-icon>
+                <!-- <mat-icon class="user-management-table__icon">
                   <img
                     style="width: 20px; height: 20px"
                     class="table__icon"
                     src="../../../../../assets/shared-image/view-filled.svg"
                     alt="~/Frontend/images/icon _ Vector-edit"
                 /></mat-icon>
+                 -->
               </button>
 
               <button
+              matTooltip="Delete"
                 style="border: none; cursor: pointer; background-color: #ffffff"
                 (click)="deleteCategoryById(element.id)"
               >
