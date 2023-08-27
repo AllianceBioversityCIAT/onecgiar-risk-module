@@ -22,8 +22,9 @@ import {
 } from '@angular/material/autocomplete';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Observable } from 'rxjs';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { GlossaryService } from '../services/glossary.service';
 
 @Component({
   selector: 'app-glossary',
@@ -31,195 +32,92 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./glossary.component.scss'],
 })
 export class GlossaryComponent implements OnInit {
-  [x: string]: any;
-  glossaryData: Glossary[] = [];
+
+
+
   constructor(
-    private apiGlossary: ApiGlossaryService,
-    private changeDetectorRef: ChangeDetectorRef
+    private glossaryService: GlossaryService,
+    // private changeDetectorRef: ChangeDetectorRef
   ) {}
+  filters: any;
+  length: number = 0;
+  pageSize: number = 5;
+  pageIndex: number = 1;
+  data: any;
+  glossary: any;
 
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-  obs!: Observable<any>;
-  dataSource: MatTableDataSource<Glossary> = new MatTableDataSource<Glossary>(
-    this.glossaryData
-  );
-
-  termCtrl = new FormControl('');
-
-  glossary: string[] = [];
-
-  @ViewChild('termInput')
-  termInput!: ElementRef<HTMLInputElement>;
-
-  announcer = inject(LiveAnnouncer);
-
-  ngOnInit() {
-    this.dataSource.data = this.apiGlossary.glossaryData;
-
-    this.changeDetectorRef.detectChanges();
-    this.dataSource.paginator = this.paginator;
-    this.obs = this.dataSource.connect();
+  changeFilter() {
+    this.form.valueChanges.subscribe(async filtersValue => {
+      this.filters = filtersValue;
+      await this.getData(this.filters)
+    });
+  }
+  async ngOnInit(): Promise<void> {
+    this.changeFilter()
+    await this.getData(this.filters);
+    // this.changeDetectorRef.detectChanges();
   }
 
-  ngOnDestroy() {
-    if (this.dataSource) {
-      this.dataSource.disconnect();
-    }
+  async getData(filters: any) {
+    this.pageIndex = 1;
+    this.data = await this.glossaryService.getGlossary(filters,this.pageIndex,this.pageSize);
+    this.glossary = this.data.result;
+    this.length = this.data.count;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    // Add our fruit
-    if (value) {
-      this.glossary.push(value);
-    }
-    // Clear the input value
-    event.chipInput!.clear();
-    this.termCtrl.setValue(null);
-  }
 
-  remove(fruit: string): void {
-    const index = this.glossary.indexOf(fruit);
-    if (index >= 0) {
-      this.glossary.splice(index, 1);
-      this.announcer.announce(`Removed ${fruit}`);
-    }
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.data = await this.glossaryService.getGlossary(this.filters,++this.pageIndex , this.pageSize);
+    this.glossary = this.data.result;
+    this.length = this.data.count;
   }
+  alphabet = [
+    {character: 'All', value : ''},
+    {character: 'A', value : 'a'},
+    {character: 'B', value : 'b'},
+    {character: 'C', value : 'c'},
+    {character: 'D', value : 'd'},
+    {character: 'E', value : 'e'},
+    {character: 'F', value : 'f'},
+    {character: 'G', value : 'g'},
+    {character: 'H', value : 'h'},
+    {character: 'I', value : 'i'},
+    {character: 'J', value : 'j'},
+    {character: 'K', value : 'k'},
+    {character: 'L', value : 'l'},
+    {character: 'M', value : 'm'},
+    {character: 'N', value : 'n'},
+    {character: 'O', value : 'o'},
+    {character: 'P', value : 'p'},
+    {character: 'Q', value : 'q'},
+    {character: 'R', value : 'r'},
+    {character: 'S', value : 's'},
+    {character: 'T', value : 't'},
+    {character: 'U', value : 'u'},
+    {character: 'V', value : 'v'},
+    {character: 'W', value : 'w'},
+    {character: 'X', value : 'x'},
+    {character: 'Y', value : 'y'},
+    {character: 'Z', value : 'z'}
+  ];
 
+
+  form = new FormGroup({
+    search: new FormControl(''),
+    char: new FormControl('')
+ });
+
+
+ setCharValue(char: string) {
+  this.form.controls['char'].setValue(char);
+ }
   activeButton = '';
 
-  character = [
-    {
-      name: 'All',
-      value: '',
-    },
-    {
-      name: 'A',
-      value: 'a',
-    },
-    {
-      name: 'B',
-      value: 'b',
-    },
-    {
-      name: 'C',
-      value: 'c',
-    },
-    {
-      name: 'D',
-      value: 'd',
-    },
-    {
-      name: 'E',
-      value: 'e',
-    },
-    {
-      name: 'F',
-      value: 'f',
-    },
-    {
-      name: 'G',
-      value: 'g',
-    },
-    {
-      name: 'H',
-      value: 'h',
-    },
-    {
-      name: 'I',
-      value: 'i',
-    },
-    {
-      name: 'J',
-      value: 'j',
-    },
-    {
-      name: 'K',
-      value: 'k',
-    },
-    {
-      name: 'L',
-      value: 'l',
-    },
-    {
-      name: 'M',
-      value: 'm',
-    },
-    {
-      name: 'N',
-      value: 'n',
-    },
-    {
-      name: 'O',
-      value: 'o',
-    },
-    {
-      name: 'P',
-      value: 'p',
-    },
-    {
-      name: 'Q',
-      value: 'q',
-    },
-    {
-      name: 'R',
-      value: 'r',
-    },
-    {
-      name: 'S',
-      value: 's',
-    },
-    {
-      name: 'T',
-      value: 't',
-    },
-    {
-      name: 'U',
-      value: 'u',
-    },
-    {
-      name: 'V',
-      value: 'v',
-    },
-    {
-      name: 'W',
-      value: 'w',
-    },
-    {
-      name: 'X',
-      value: 'x',
-    },
-    {
-      name: 'Y',
-      value: 'y',
-    },
-    {
-      name: 'Z',
-      value: 'z',
-    },
-  ];
 
   showPhase(event: any) {
     this.activeButton = event;
   }
-
-  // selected(event: MatAutocompleteSelectedEvent): void {
-  //   this.fruits.push(event.option.viewValue);
-  //   this.fruitInput.nativeElement.value = '';
-  //   this.fruitCtrl.setValue(null);
-  // }
-
-  // private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-
-  //   return this.fruits.filter((fruit) =>
-  //     fruit.toLowerCase().includes(filterValue)
-  //   );
-  // }
 }

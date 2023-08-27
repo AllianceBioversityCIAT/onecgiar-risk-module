@@ -17,7 +17,7 @@
           </p>
         </div>
 
-        <mat-accordion *ngFor="let item of faq">
+        <mat-accordion *ngFor="let item of data">
           <mat-expansion-panel
             (opened)="panelOpenState = true"
             (closed)="panelOpenState = false"
@@ -57,9 +57,9 @@
               <mat-panel-description> </mat-panel-description>
             </mat-expansion-panel-header>
             <p class="panel1">
-              {{ item.answer1 }}
+              {{ item.answer }}
             </p>
-            <span class="panel2">{{ item.answer2 }}</span>
+            <!-- <span class="panel2">{{ item.answer2 }}</span> -->
           </mat-expansion-panel>
         </mat-accordion>
       </div>
