@@ -71,7 +71,7 @@
         [matMenuTriggerFor]="menu"
         class="user-nav-button--notific"
         mat-icon-button
-        (click)="onLogout()"
+        *ngIf="user_info"
       >
         <mat-icon matBadge="2" matBadgeColor="warn">
           <svg
@@ -150,7 +150,7 @@
         }"
         class="user-nav-button"
         mat-icon-button
-        (click)="onLogout()"
+        *ngIf="user_info"
       >
         <mat-icon class="user-nav-button__icon">
           <img
@@ -158,7 +158,7 @@
             src="../../assets/shared-image/🦆 icon _User avatar filled_.svg"
             alt="~/Frontend/images/icon _User avatar"
         /></mat-icon>
-        <span class="user-nav-button__title--1">John Doe</span>
+        <span class="user-nav-button__title--1">{{user_info?.full_name}}</span>
       </button>
 
       <button
@@ -187,7 +187,8 @@
         }"
         class="user-nav-button"
         mat-icon-button
-        (click)="onUserName()"
+        (click)="logout()"
+        *ngIf="user_info"
       >
         <span class="user-nav-button__title--2">Logout</span>
         <mat-icon class="user-nav-button__icon">
@@ -197,6 +198,53 @@
             alt="~/Frontend/images/icon _logout"
         /></mat-icon>
       </button>
+
+
+
+
+
+      <button
+        [ngClass]="{
+          'user-nav-button__background-c-primary':
+            router.url === riskUrl.home ||
+            router.url === riskUrl.riskManagement ||
+            router.url === riskUrl.riskReport ||
+            router.url === riskUrl.teamMembers ||
+            router.url === riskUrl.published ||
+            router.url === riskUrl.accelerated ||
+            router.url === riskUrl.about ||
+            router.url === riskUrl.glossary ||
+            router.url === riskUrl.faq ||
+            router.url === riskUrl.dashboard,
+          'user-nav-button__background-c-secondary':
+            router.url === adminUrl.admin ||
+            router.url === adminUrl.parameterSetttings ||
+            router.url === adminUrl.categories ||
+            router.url === adminUrl.mitigation ||
+            router.url === adminUrl.settings ||
+            router.url === adminUrl.announcements ||
+            router.url === adminUrl.posted ||
+            router.url === adminUrl.drafts ||
+            router.url === adminUrl.userManagement
+        }"
+        class="user-nav-button"
+        mat-icon-button
+        (click)="login()"
+        *ngIf="!user_info"
+      >
+        <span class="user-nav-button__title--2">login</span>
+        <mat-icon class="user-nav-button__icon">
+          <img
+            src="../../assets/shared-image/🦆 icon _logout_.svg"
+            class="user-nav-button__icon--2"
+            alt="~/Frontend/images/icon _logout"
+        /></mat-icon>
+      </button>
+
+
+
+
+
     </nav>
   </div>
 
@@ -230,7 +278,8 @@
     <ul class="main-nav-list">
       <li>
         <a
-          routerLink="/home/risk-management"
+        (click)="accessHome()"
+          [routerLink]="[homeRoute]"
           class="main-nav-link"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -268,7 +317,7 @@
         </a>
       </li>
 
-      <li>
+      <li *ngIf="user_info?.role == 'admin'">
         <a routerLink="admin" class="main-nav-link" routerLinkActive="active">
           <span>Admin module</span>
         </a>

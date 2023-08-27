@@ -12,7 +12,7 @@ import { DataSource, ILike, IsNull } from 'typeorm';
 
 @ApiTags('Dashboard')
 @Controller('Dashboard')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class DashboardController {
   constructor(private dataSource: DataSource,private iniService: InitiativeService,private riskService: RiskService) {}
 

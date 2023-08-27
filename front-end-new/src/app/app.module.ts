@@ -52,6 +52,7 @@ import { Safe } from './pipes/safe';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxEditorModule } from 'ngx-editor';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -87,7 +88,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
     AcceleratedBreedingVersionComponent,
     TeamMembersComponent,
     TeamMembersFormDialogComponent,
-    Safe
+    Safe,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,8 @@
 <div mat-dialog-container>
   <div class="form-dialog-header">
     <div class="form-dialog-header__text-box">
-      <p class="form-dialog-header__text-box__text" *ngIf="data.title != 'Send to all users'">Delete</p>
+      <p class="form-dialog-header__text-box__text" *ngIf="data.title == 'Logout'">Logout</p>
+      <p class="form-dialog-header__text-box__text" *ngIf="data.title != 'Send to all users' || data.title != 'Logout'">Delete</p>
       <p class="form-dialog-header__text-box__text" *ngIf="data.title == 'Send to all users'">{{data.title}}</p>
     </div>
 
