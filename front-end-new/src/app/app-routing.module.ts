@@ -21,6 +21,8 @@ import { RiskReportFormComponent } from './home/risk-management/risk-report/risk
 import { PublishedVersionsComponent } from './home/risk-management/risk-report/published-versions/published-versions.component';
 import { AcceleratedBreedingVersionComponent } from './home/risk-management/risk-report/published-versions/accelerated-breeding-version/accelerated-breeding-version.component';
 import { TeamMembersComponent } from './home/risk-management/risk-report/team-members/team-members.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -28,6 +30,7 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminModuleComponent,
+    canActivate: [AuthGuard, AdminGuard],
     children: [
       {
         path: '',
@@ -70,6 +73,7 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -114,7 +118,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'about',
     pathMatch: 'full',
   },
   { path: 'about', component: AboutRiskComponent },

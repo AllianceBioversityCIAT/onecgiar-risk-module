@@ -54,7 +54,7 @@ export class AnnouncementService extends MainService {
   async send(id: any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + `/announcement/${id}/send`, {headers: this.headers})
+        .post(this.backend_url + `/announcement/${id}/send`, {},{headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }

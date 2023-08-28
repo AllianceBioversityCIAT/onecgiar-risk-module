@@ -68,10 +68,10 @@ export class UsersController {
       const skip=(Number(query.page)-1)*take;
       const [result, total] = await this.usersService.userRepository.findAndCount({
         where: {
-          full_name: query?.full_name ? ILike(`%${query?.full_name}%`) : null,
-          email: query?.email ? ILike(`%${query?.email}%`) : null,
-          id: query?.id ? query?.id : null,
-          role: query?.role ? query?.role : null,
+          // full_name: query?.searchValue ? ILike(`%${query?.searchValue}%`) : null,
+          email: query?.searchValue ? ILike(`%${query?.searchValue}%`) : null,
+          // id: query?.id ? query?.id : null,
+          // role: query?.role ? query?.role : null,
         },
         order: { ...this.sort(query) },
         take: take == null ? null : take,

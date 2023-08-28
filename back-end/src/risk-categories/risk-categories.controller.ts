@@ -79,17 +79,30 @@ export class RiskCategoriesController {
   })
   @ApiBody({ type: disabledCategoryReq})
   async disabledCategory(@Body() data: any) {
-    const category = await this.riskcatRepository.findOne({ where : { id : data.item.id } });
-    if(data.act.action == 'disabledCatigory') {
-      category.disabled = false;
-      await this.riskcatRepository.save(category);
-      return true
-    }
-    else {
+    // (((prototype code)))
+    // const category = await this.riskcatRepository.findOne({ where : { id : data.item.id } });
+    // if(data.act.action == 'disabledCatigory') {
+    //   category.disabled = false;
+    //   await this.riskcatRepository.save(category);
+    //   return true
+    // }
+    // else {
+    //   category.disabled = true;
+    //   await this.riskcatRepository.save(category);
+    //   return true
+    // }
+    const category = await this.riskcatRepository.findOne({ where : { id : data.id } });
+    if(data.disabled == 0) {
       category.disabled = true;
       await this.riskcatRepository.save(category);
       return true
     }
+    else {
+      category.disabled = false;
+      await this.riskcatRepository.save(category);
+      return true
+    }
+
 
   }
   @Roles(Role.Admin)

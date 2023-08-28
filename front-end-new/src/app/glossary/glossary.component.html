@@ -10,7 +10,7 @@
     <div class="glossary-main-content">
       <div class="glossary-content-container">
         <div class="glossary-search-box">
-          <form class="search">
+          <form class="search" [formGroup]="form">
             <button
               style="border: none; background-color: #ffffff12"
               class="search__button"
@@ -31,19 +31,15 @@
               ></mat-icon>
             </button>
             <input
-              #termInput
-              [formControl]="termCtrl"
-              [matChipInputFor]="chipGrid"
-              (matChipInputTokenEnd)="add($event)"
+              formControlName="search"
               class="search__input"
               matInput
-              (keyup)="applyFilter($event)"
               placeholder="Search by term"
               #input
             />
           </form>
 
-          <div class="glossary-text-search-box">
+          <!-- <div class="glossary-text-search-box">
             <p class="glossary-text-search-box__text">Filters:</p>
             <div>
               <mat-chip-grid #chipGrid aria-label="Fruit selection">
@@ -58,20 +54,21 @@
                 </mat-chip-row>
               </mat-chip-grid>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- step--2 -->
       </div>
       <nav class="glossary-nav">
         <ul class="glossary-nav__list">
-          <li *ngFor="let char of character" class="glossary-nav__list--item">
+          <li *ngFor="let char of alphabet" class="glossary-nav__list--item">
             <a
-              (click)="showPhase(char.name)"
-              [class.glossary-link-active]="activeButton === char.name"
+              (click)="showPhase(char.character)"
+              (click)="setCharValue(char.value)"
+              [class.glossary-link-active]="activeButton === char.character"
               class="glossary-link m-t"
             >
-              {{ char.name }}
+              {{ char.character }}
             </a>
           </li>
         </ul>
@@ -81,9 +78,7 @@
       <div class="glossary-matching-records glossary-content-container">
         <p class="glossary-matching-records__text">
           Showing
-          <span class="glossary-matching-records__text--1">{{
-            dataSource.data.length
-          }}</span>
+          <span class="glossary-matching-records__text--1">{{data?.count}}</span>
           matching records
         </p>
       </div>
@@ -92,20 +87,24 @@
       <div class="glossary-show-records-box">
         <div
           class="glossary-show-records glossary-content-container-1"
-          *ngFor="let term of obs | async"
+          *ngFor="let term of glossary"
         >
-          <p class="glossary-show-records__text">{{ term.termName }}</p>
+          <p class="glossary-show-records__text">{{ term.title }}</p>
           <p class="glossary-show-records__text--1">
-            {{ term.termDescription }}
+            {{ term.description }}
           </p>
         </div>
       </div>
 
       <div style="text-align: center" class="glossary-content-container">
         <mat-paginator
-          [pageSizeOptions]="[5, 10, 25, 100]"
-          aria-label="Select page"
-        ></mat-paginator>
+        [length]="length"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex - 1"
+        (page)="pagination($event)"
+        [hidePageSize]="true"
+        aria-label="Select page">
+      </mat-paginator>
       </div>
     </div>
   </div>

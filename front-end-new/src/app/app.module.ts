@@ -51,6 +51,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { Safe } from './pipes/safe';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxEditorModule } from 'ngx-editor';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -86,7 +88,8 @@ import { NgxEditorModule } from 'ngx-editor';
     AcceleratedBreedingVersionComponent,
     TeamMembersComponent,
     TeamMembersFormDialogComponent,
-    Safe
+    Safe,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -100,7 +103,7 @@ import { NgxEditorModule } from 'ngx-editor';
     NgxMatSelectSearchModule,
     ToastrModule.forRoot(),
     NgxEditorModule,
-
+    HighchartsChartModule,
   ],
   providers: [
     ApiUserService,

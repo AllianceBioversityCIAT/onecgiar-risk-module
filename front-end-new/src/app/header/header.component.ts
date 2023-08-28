@@ -1,13 +1,17 @@
 import {
   Component,
-  EventEmitter,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderService } from '../header.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { LoadingService } from '../services/loading.service';
+import jwt_decode from 'jwt-decode';
+import { delay } from 'rxjs';
+import { LoginComponent } from '../login/login.component';
+import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-confirm-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -72,22 +76,74 @@ export class HeaderComponent implements OnInit {
     dashboard: '/dashboard',
   };
 
-  constructor(public router: Router, public headerService: HeaderService) {
+
+
+
+
+
+
+
+  constructor(
+    public dialog: MatDialog,
+    private loadingService: LoadingService,
+    public router: Router
+  ) {
     this.notificationNumberCount = 5;
   }
+
+  user_info: any;
+  loading = true;
   ngOnInit() {
-    this.url1 = this.router.url;
+    const access_token = localStorage.getItem('access_token');
+    if (access_token) {
+      this.user_info = jwt_decode(access_token);
+    }
+    this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
+      this.loading = d;
+    });
+    console.log(this.user_info)
   }
 
-  onUserName() {}
 
-  onLogout() {}
 
-  // onReload() {
-  //   this.router.navigate(['/admin/user-management']);
-  // }
-
-  // createComponent() {
-  //   this.clickEvent.emit(this.componentName.userManagement);
-  // }
+  logout() {
+    this.dialog
+      .open(DeleteConfirmDialogComponent, {
+        maxWidth: '400px',
+        data: {
+         title: 'Logout',
+         message:  'Are you sure you want to logout?',
+        },
+      })
+      .afterClosed()
+      .subscribe((dialogResult) => {
+        if (dialogResult) {
+          localStorage.removeItem('access_token');
+          this.user_info = null;
+          this.router.navigate(['./about']);
+        }
+      });
+  }
+   login() {
+    if (this.user_info) this.logout();
+    else {
+      const dialogRef = this.dialog.open(LoginComponent, {
+          minWidth: '350px',
+        data: { email: '' },
+      }).afterClosed().subscribe((result) => {
+        if(result) {
+        window.location.href = window.location.href;
+        }
+      });
+    }
+  }
+  homeRoute:any = './home/risk-management';
+  accessHome() {
+    if(this.user_info) {
+      this.homeRoute = './home/risk-management';
+    }
+    else {
+      this.login();
+    }
+  }
 }

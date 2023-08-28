@@ -8,7 +8,7 @@ import { Role } from 'src/auth/role.enum';
 
 @ApiTags('FAQ')
 @Controller('faq')
-@UseGuards(JwtAuthGuard, RolesGuard)
+// @UseGuards(JwtAuthGuard, RolesGuard)
 export class FaqController {
     constructor(
         private FaqService: FaqService,
@@ -29,6 +29,7 @@ export class FaqController {
           console.log('ERROR' + error);
         }
       }
+      @UseGuards(JwtAuthGuard, RolesGuard)
       @Roles(Role.Admin)
       @Post('')
       addFaq(@Body() data: any) {
@@ -38,6 +39,7 @@ export class FaqController {
           console.error(error);
         }
       }
+      @UseGuards(JwtAuthGuard, RolesGuard)
       @Roles(Role.Admin)
       @Put(':id')
       updateFaq(@Body() data: any, @Param('id') id: number) {
@@ -47,6 +49,7 @@ export class FaqController {
           console.error(error);
         }
       }
+      @UseGuards(JwtAuthGuard, RolesGuard)
       @Roles(Role.Admin)
       @Delete(':id')
       deleteFaq(@Param('id') id: number) {

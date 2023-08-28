@@ -139,19 +139,24 @@ export class EmailsService {
   }
 
   async createEmailBy(name, email, subject, contnet) {
-    const body = `
-            <p style="font-weight: 200">
-            Dear, ${name}
-            <br>
-            ${contnet}
-            </p>
-            <br>
-            <br>
+    try {
+      const body = `
+      <p style="font-weight: 200">
+      Dear, ${name}
+      <br>
+      ${contnet}
+      </p>
+      <br>
+      <br>
         `;
-    const emailBody = this.emailTemplate(body);
-    const email1 = await this.createEmail(name, subject, email, emailBody);
+      const emailBody = this.emailTemplate(body);
+      const email1 = await this.createEmail(name, subject, email, emailBody);
 
-    return email1;
+      return email1;
+    } catch (error) {
+      console.error(error);
+    }
+
   }
 
   async sendEmailTobyVarabel(user, subject_varabel_id, content_varabel_id) {

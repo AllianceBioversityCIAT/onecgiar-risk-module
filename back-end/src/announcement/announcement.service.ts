@@ -8,9 +8,25 @@ export class AnnouncementService {
     @InjectRepository(Announcement)
     private AnnouncementRepository: Repository<Announcement>,
   ) {}
+  //prototype
   async getAnnouncement() {
     try {
       return await this.AnnouncementRepository.find();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  ////
+  async getAnnouncementDrafts() {
+    try {
+      return await this.AnnouncementRepository.find({where: {status: false}});
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async getAnnouncementPosted() {
+    try {
+      return await this.AnnouncementRepository.find({where: {status: true}});
     } catch (error) {
       console.error(error);
     }
@@ -63,4 +79,14 @@ export class AnnouncementService {
       console.error(error);
     }
   }
+  async deleteAnnouncement(id: any) {
+    try {
+        const Faq = await this.AnnouncementRepository.findOne({
+            where: {id: id}
+        });
+        return await this.AnnouncementRepository.remove(Faq);
+    } catch (error) {
+        console.error(error);
+    }
+}
 }

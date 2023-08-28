@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { UsersService } from 'src/users/users.service';
 import { EmailsService } from 'src/emails/emails.service';
@@ -18,11 +18,31 @@ export class AnnouncementController {
     private userService: UsersService,
     private emailService: EmailsService,
   ) {}
+  //prototype
   @Roles(Role.Admin)
   @Get()
   getAnnouncement() {
     try {
       return this.announcementService.getAnnouncement();
+    } catch (error) {
+      console.log('ERROR' + error);
+    }
+  }
+  //
+  @Roles(Role.Admin)
+  @Get('/drafts')
+  getAnnouncementDrafts() {
+    try {
+      return this.announcementService.getAnnouncementDrafts();
+    } catch (error) {
+      console.log('ERROR' + error);
+    }
+  }
+  @Roles(Role.Admin)
+  @Get('/posted')
+  getAnnouncementPosted() {
+    try {
+      return this.announcementService.getAnnouncementPosted();
     } catch (error) {
       console.log('ERROR' + error);
     }
@@ -114,6 +134,15 @@ export class AnnouncementController {
         announcement.subject + ' ( TEST )',
         announcement.description,
       );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  @Roles(Role.Admin)
+  @Delete(':id')
+  deleteAnnouncement(@Param('id') id: number) {
+    try {
+      return this.announcementService.deleteAnnouncement(id);
     } catch (error) {
       console.error(error);
     }

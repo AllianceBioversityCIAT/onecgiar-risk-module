@@ -8,7 +8,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
 @ApiTags('glossary')
 @Controller('glossary')
-@UseGuards(JwtAuthGuard, RolesGuard)
+// @UseGuards(JwtAuthGuard, RolesGuard)
 export class GlossaryController {
     constructor(
         private glossaryService: GlossaryService
@@ -31,6 +31,7 @@ export class GlossaryController {
           console.log('ERROR' + error);
         }
       }
+      @UseGuards(JwtAuthGuard, RolesGuard)
       @Roles(Role.Admin)
       @Post('')
       addGlossary(@Body() data: any) {
@@ -40,6 +41,7 @@ export class GlossaryController {
           console.error(error);
         }
       }
+      @UseGuards(JwtAuthGuard, RolesGuard)
       @Roles(Role.Admin)
       @Put(':id')
       updateGlossary(@Body() data: any, @Param('id') id: number) {
@@ -49,6 +51,7 @@ export class GlossaryController {
           console.error(error);
         }
       }
+      @UseGuards(JwtAuthGuard, RolesGuard)
       @Roles(Role.Admin)
       @Delete(':id')
       deleteGlossary(@Param('id') id: number) {
