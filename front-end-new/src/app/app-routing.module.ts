@@ -96,7 +96,7 @@ const routes: Routes = [
               },
 
               {
-                path: 'published-versions',
+                path: 'submitted-versions',
                 component: PublishedVersionsComponent,
                 children: [
                   {

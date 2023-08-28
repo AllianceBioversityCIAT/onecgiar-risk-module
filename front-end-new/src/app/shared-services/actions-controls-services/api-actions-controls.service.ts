@@ -20,6 +20,91 @@ export class ApiActionsControlsService {
       'Active collaboration with Market Intelligence to work towards pragmatic',
       'Delayed'
     ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
+    new ActionsControls(
+      2,
+      'Active collaboration with Market Intelligence to work towards pragmatic',
+      'kk'
+    ),
   ];
 
   constructor(private http: HttpClient, private dialog: MatDialog) {}

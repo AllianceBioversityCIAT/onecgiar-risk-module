@@ -1,7 +1,7 @@
 @import "../../../../sass/pages/admin-module/user-management";
 
 .line {
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   padding: 0 0.1rem;
   display: inline-block;
   top: 50%;
@@ -9,10 +9,34 @@
   left: 12%;
   position: absolute;
 
+  @media only screen and (max-width: 100em) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 12%;
+  }
+
   @media only screen and (max-width: 90em) {
     top: 50%;
     transform: translate(-50%, -50%);
-    left: 12.6%;
+    left: 12.7%;
+  }
+
+  @media only screen and (max-width: 84em) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 13.5%;
+  }
+
+  @media only screen and (max-width: 75em) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 13.7%;
+  }
+
+  @media only screen and (max-width: 64em) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 16.2%;
   }
 }
 
@@ -56,7 +80,7 @@
 
 .risk-report-form-container {
   max-width: 95%;
-  height: 200rem;
+  // height: 200rem;
   margin: 0 auto;
   border-radius: 1rem;
   background-color: #ffffff;
@@ -92,6 +116,7 @@
   gap: 3rem;
   width: 95%;
   margin: 4rem auto;
+  padding: 5.6rem 0 4.8rem 0;
 }
 
 .risk-report-form {
@@ -112,6 +137,17 @@
 
   &__star {
     color: #fc7c7c;
+  }
+
+  &--Request {
+    display: inline-block;
+
+    color: #142837;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
   }
 }
 
@@ -319,6 +355,20 @@
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   row-gap: 2rem;
+
+  @media only screen and (max-width: 84em) {
+    column-gap: 5rem;
+  }
+
+  @media only screen and (max-width: 75em) {
+    column-gap: 5rem;
+  }
+
+  @media only screen and (max-width: 64em) {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
 }
 
 .risk-report-radio-buttons-flex-box {
@@ -519,6 +569,42 @@
   height: 35px;
 }
 
+.example-container {
+  height: 44.2rem;
+  max-width: 100%;
+  overflow: auto;
+  padding: 0 0.5rem;
+}
+
+.table-box::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+.table-box::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #d9d9d9;
+  border-radius: 0.4rem;
+  height: 2rem;
+}
+
+.table-box::-webkit-scrollbar-thumb {
+  background-color: $color-button-primary;
+  // outline: 1px solid slategrey;
+  border-radius: 4px;
+}
+
+.table-box {
+  cursor: auto;
+}
+
+.table-box::-webkit-scrollbar-button,
+.table-box::-webkit-scrollbar-track,
+.table-box::-webkit-scrollbar-track-piece,
+.table-box::-webkit-scrollbar-corner,
+.table-box::-webkit-resizer {
+  display: block;
+  height: 3rem;
+}
+
 .table-box {
   max-width: 90rem;
 
@@ -688,6 +774,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin: 3rem 0 0 0;
 
   &__btn {
     width: 9.5rem;

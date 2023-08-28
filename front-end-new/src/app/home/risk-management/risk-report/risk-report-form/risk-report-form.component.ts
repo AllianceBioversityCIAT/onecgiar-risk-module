@@ -40,13 +40,14 @@ export class RiskReportFormComponent {
     currentImpact: new FormControl('', [Validators.required]),
     targetLikelihood: new FormControl('', [Validators.required]),
     targetImpact: new FormControl('', [Validators.required]),
+    requestAssistance: new FormControl('', [Validators.required]),
     dueDate: new FormControl('', [Validators.required]),
   });
 
   openDialogCreateActionsControlsStatus(title: any) {
     this.dialog.open(ActionsControlsFormDialogComponent, {
       width: '68rem',
-      height: '59.2rem',
+      height: '43.2rem',
       data: {
         title: title,
       },
@@ -56,7 +57,7 @@ export class RiskReportFormComponent {
   openDialogEditActionsControls(title: any, element: any) {
     this.dialog.open(ActionsControlsFormDialogComponent, {
       width: '68rem',
-      height: '59.2rem',
+      height: '43.2rem',
       data: {
         title: title,
         element: element,

@@ -4,14 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiPublishedService } from 'src/app/shared-services/published-services/api-published.service';
 
 @Component({
-  selector: 'app-published-versions',
+  selector: 'app-submitted-versions',
   templateUrl: './published-versions.component.html',
   styleUrls: ['./published-versions.component.scss'],
 })
 export class PublishedVersionsComponent {
-
   public url1: string = '';
- ngOnInit() {
+  ngOnInit() {
     this.url1 = this.router.url;
   }
 
@@ -25,7 +24,7 @@ export class PublishedVersionsComponent {
 
   displayedColumns: string[] = [
     'versionId',
-    'versionTitle',
+
     'creationDate',
     'creationBy',
 
@@ -33,7 +32,7 @@ export class PublishedVersionsComponent {
   ];
 
   public riskUrl = {
-    home: '/home/risk-management/risk-report/published-versions',
+    home: '/home/risk-management/risk-report/submitted-versions',
   };
 
   onExportToExcel() {}

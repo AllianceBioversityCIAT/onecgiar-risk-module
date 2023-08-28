@@ -41,8 +41,39 @@
   </div>
 
   <div class="submit-risk-flex-box">
-    <h2 class="submit-risk-title-1">Risks selection</h2>
+    <div lass="submit-risk-flex-x">
+      <div>
+        <h2 class="submit-risk-title-1">Risks selection</h2>
+        <p class="submit-risk-text">
+          Please note that the system will publish Top 5 risks out of current
+          risk level score
+        </p>
+      </div>
 
+      <div>
+        <svg
+          class="risk-report-form-note-content-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+        >
+          <path
+            d="M11 22C17.0751 22 22 17.0751 22 11C22 4.92487 17.0751 0 11 0C4.92487 0 0 4.92487 0 11C0 17.0751 4.92487 22 11 22Z"
+            fill="#2196F3"
+          />
+          <path
+            d="M9.95227 9.95312H12.0475V15.715H9.95227V9.95312Z"
+            fill="white"
+          />
+          <path
+            d="M11.0002 8.38467C11.7234 8.38467 12.3097 7.79838 12.3097 7.07515C12.3097 6.35192 11.7234 5.76562 11.0002 5.76562C10.277 5.76562 9.69067 6.35192 9.69067 7.07515C9.69067 7.79838 10.277 8.38467 11.0002 8.38467Z"
+            fill="white"
+          />
+        </svg>
+      </div>
+    </div>
     <div
       cdkDropList
       #doneList="cdkDropList"
@@ -57,8 +88,9 @@
             <div class="submit-risk-drag-flex-box">
               <p class="submit-risk-drag-text">{{ item }}</p>
 
-              <div>
+              <div class="submit-risk-drag-icon">
                 <svg
+                  
                   xmlns="http://www.w3.org/2000/svg"
                   width="9"
                   height="15"
@@ -83,7 +115,6 @@
         <div class="form-dialog-conten__button-box">
           <button
             class="form-dialog-conten__button-box__btn--send"
-            routerLink="/home/risk-management/risk-report/published-versions"
             type="submit"
             mat-raised-button
             (click)="onPublish()"

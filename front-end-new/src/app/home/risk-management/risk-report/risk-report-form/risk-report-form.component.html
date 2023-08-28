@@ -518,6 +518,18 @@
         </div>
       </div>
 
+      <div>
+        <mat-label class="risk-report-form-field__label--Request"
+          >Request Assistance</mat-label
+        >
+        <mat-checkbox
+          type="checkbox"
+         
+          value="value-1"
+          formControlName="requestAssistance"
+        ></mat-checkbox>
+      </div>
+
       <!-- //Due date to reach target level*----- -->
 
       <div class="risk-report-form-field field-1 m-b--3">
@@ -561,7 +573,8 @@
             Actions /Controls to manage risks
           </p>
         </div>
-        <div class="table-box">
+
+        <div class="table-box example-container">
           <table
             mat-table
             [dataSource]="dataSource"

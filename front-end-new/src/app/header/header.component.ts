@@ -62,10 +62,10 @@ export class HeaderComponent implements OnInit {
     home: '/home/risk-management',
     riskManagement: '/home/risk-management/risk-report',
     riskReport: '/home/risk-management/risk-report/risk-report-form',
-    published: '/home/risk-management/risk-report/published-versions',
+    submitted: '/home/risk-management/risk-report/submitted-versions',
     teamMembers: '/home/risk-management/risk-report/team-members',
     accelerated:
-      '/home/risk-management/risk-report/published-versions/accelerated-breeding-version',
+      '/home/risk-management/risk-report/submitted-versions/accelerated-breeding-version',
     about: '/about',
     glossary: '/glossary',
     faq: '/faq',

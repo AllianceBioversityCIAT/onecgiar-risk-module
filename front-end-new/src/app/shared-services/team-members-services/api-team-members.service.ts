@@ -10,10 +10,70 @@ import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/dele
 })
 export class ApiTeamMembersService {
   memberData: TeamMembers[] = [
-    new TeamMembers('', 19, 'Jhon Doe', 'j.doe@cgiar.org', 'Leader'),
-    new TeamMembers('', 22, 'Alice Font', 'a.font@cgiar.org', 'Coordinator'),
-    new TeamMembers('', 18, 'Steven Lee', 's.lee@cgiar.org', 'Member'),
-    new TeamMembers('', 6, 'Christopher Bang', 'c.bang@cgiar.org', 'Member'),
+    new TeamMembers(
+      '',
+      19,
+      'Jhon Doe',
+      'j.doe@cgiar.org',
+      'Leader',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
+    new TeamMembers(
+      '',
+      22,
+      'Alice Font',
+      'a.font@cgiar.org',
+      'Coordinator',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
+    new TeamMembers(
+      '',
+      18,
+      'Steven Lee',
+      's.lee@cgiar.org',
+      'Member',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
+    new TeamMembers(
+      '',
+      6,
+      'Christopher Bang',
+      'c.bang@cgiar.org',
+      'Member',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
+    new TeamMembers(
+      '',
+      6,
+      'Christopher Bang',
+      'c.bang@cgiar.org',
+      'Member',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
+    new TeamMembers(
+      '',
+      6,
+      'Christopher Bang',
+      'c.bang@cgiar.org',
+      'Member',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
+    new TeamMembers(
+      '',
+      6,
+      'Christopher Bang',
+      'c.bang@cgiar.org',
+      'Member',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
+    new TeamMembers(
+      '',
+      6,
+      'Christopher Bang',
+      'c.bang@cgiar.org',
+      'Member',
+      '10 Jun 2022 | 10:03a.m CEST'
+    ),
   ];
 
   constructor(private http: HttpClient, private dialog: MatDialog) {}

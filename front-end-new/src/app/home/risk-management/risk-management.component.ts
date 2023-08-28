@@ -1,27 +1,36 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatSort } from '@angular/material/sort';
+
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HeaderService } from 'src/app/header.service';
 import { ApiRiskManagementService } from 'src/app/shared-services/risk-management-services/api-risk-management.service';
+import { Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-risk-management',
   templateUrl: './risk-management.component.html',
   styleUrls: ['./risk-management.component.scss'],
-  
 })
 export class RiskManagementComponent {
   public url1: string = '';
-  @ViewChild(MatSort)
-  sort: MatSort = new MatSort();
+
+  private refreshNeeded = new Subject<void>();
+
+  getRefreshNeeded() {
+    return this.refreshNeeded;
+  }
+
+  apiRiskReport = 'http://localhost:4200/home/risk-management/risk-report';
 
   public riskUrl = {
-    home: '/home/risk-management',
+    riskManagement: '/home/risk-management',
   };
 
   constructor(
+    private http: HttpClient,
     private apiRiskManagementService: ApiRiskManagementService,
     public router: Router,
     private route: ActivatedRoute
@@ -31,10 +40,6 @@ export class RiskManagementComponent {
 
   ngOnInit() {
     this.url1 = this.router.url;
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
   }
 
   dataSource = new MatTableDataSource(
@@ -48,13 +53,18 @@ export class RiskManagementComponent {
     'numOfRisks',
     'myRole',
     'status',
+    'helpRequested',
     'action',
   ];
 
-  onClickView() {
-    this.router.navigate(['risk-report'], { relativeTo: this.route });
-  }
-
   onReset() {}
   onExportToExcel() {}
+
+  // onClickView(): Observable<any> {
+  //   return this.http.get(`${this.apiRiskReport}`).pipe(
+  //     tap(() => {
+  //       this.refreshNeeded.next();
+  //     })
+  //   );
+  // }
 }

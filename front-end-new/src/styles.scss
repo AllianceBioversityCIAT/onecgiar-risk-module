@@ -9,7 +9,8 @@
 //   font-family: Roboto, "Helvetica Neue", sans-serif;
 // }
 //
-@use "app/sass/base/base";
+@import "app/sass/base/base";
+@import "app/sass/abstracts/variables";
 
 ::ng-deep .cdk-overlay-pane .x {
   margin: 1rem -1rem !important;
@@ -20,3 +21,39 @@
 //   padding: 0 1rem !important;
 // }
 @import "ngx-toastr/toastr";
+
+.table-box::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+.table-box::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #d9d9d9;
+  border-radius: 0.4rem;
+  height: 2rem;
+}
+
+.table-box::-webkit-scrollbar-thumb {
+  background-color: $color-button-primary;
+  // outline: 1px solid slategrey;
+  border-radius: 4px;
+}
+
+.table-box {
+  cursor: auto;
+}
+
+.table-box::-webkit-scrollbar-button,
+.table-box::-webkit-scrollbar-track,
+.table-box::-webkit-scrollbar-track-piece,
+.table-box::-webkit-scrollbar-corner,
+.table-box::-webkit-resizer {
+  display: block;
+  height: 3rem;
+}
+
+.example-container {
+  height: 44.2rem;
+  max-width: 100%;
+  overflow: auto;
+  padding: 0 0.5rem;
+}

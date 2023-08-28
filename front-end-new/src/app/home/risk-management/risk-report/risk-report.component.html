@@ -42,7 +42,7 @@
         <div class="risk-report-button-box">
           <button
             class="risk-report-button-box__btn"
-            routerLink="/book/add-book"
+            routerLink="/home/risk-management/risk-report/submitted-versions"
             mat-raised-button
           >
             Submitted versions
@@ -58,7 +58,15 @@
             Submit
           </button>
         </div>
+
         <!-- btn-4 -->
+        <div class="risk-report-button-box">
+          <button class="risk-report-button-box__btn" mat-raised-button>
+            Risk dashboard
+          </button>
+        </div>
+
+        <!-- btn-5 -->
         <div class="risk-report-button-box">
           <button
             class="risk-report-button-box__btn--4"
@@ -151,7 +159,7 @@
         </div>
 
         <!-- //Risk owner----- -->
-        <div class="risk-management-form-field field-4">
+        <div class="risk-management-form-field field-5">
           <mat-label class="risk-management-form-field__label"
             >Risk owner</mat-label
           >
@@ -171,7 +179,7 @@
         </div>
 
         <!-- //Sort----- -->
-        <div class="risk-management-form-field field-4">
+        <div class="risk-management-form-field field-5">
           <mat-label class="risk-management-form-field__label">Sort</mat-label>
 
           <mat-select
@@ -189,9 +197,9 @@
         </div>
 
         <!-- //Reset Button----- -->
-        <div class="risk-management-form-field field-5">
+        <div class="risk-management-form-field field-6">
           <button
-            class="risk-management-btn"
+            class="risk-management-reset-btn"
             mat-raised-button
             (click)="onReset()"
           >
@@ -211,13 +219,13 @@
           <!-- //Reset Button----- -->
           <div>
             <button
-              class="risk-management-btn-export"
+              class="risk-management-export-btn"
               mat-raised-button
               (click)="onExportToExcel()"
             >
               <mat-icon class="risk-management-export-box-icon">
                 <svg
-                  class="risk-management-export-box-icon"
+                  class="risk-management-export-box-icon--1"
                   xmlns="http://www.w3.org/2000/svg"
                   width="22"
                   height="21"
@@ -236,7 +244,7 @@
 
           <div>
             <button
-              class="risk-management-btn-export"
+              class="risk-management-export-btn"
               mat-raised-button
               (click)="onExportToExcel()"
             >
@@ -277,7 +285,7 @@
 
           <!-- id Column -->
           <ng-container matColumnDef="id">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef>
+            <th mat-header-cell *matHeaderCellDef>
               <div class="mtable">ID</div>
             </th>
             <td mat-cell *matCellDef="let element">
@@ -287,7 +295,7 @@
 
           <!-- title -->
           <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <th mat-header-cell *matHeaderCellDef>
               <span class="h1">Title</span>
             </th>
             <td mat-cell *matCellDef="let element">
@@ -345,17 +353,13 @@
             </td>
           </ng-container>
 
-          <!-- redundant Column -->
-          <ng-container matColumnDef="redundant">
+          <!-- Due date Column -->
+          <ng-container matColumnDef="dueDate">
             <th mat-header-cell *matHeaderCellDef>
-              <span class="h4">Redundant</span>
+              <span class="h4">Due date</span>
             </th>
             <td mat-cell *matCellDef="let element">
-              <form>
-                <div>
-                  <mat-checkbox></mat-checkbox>
-                </div>
-              </form>
+              {{ element.dueDate }}
             </td>
           </ng-container>
 
@@ -508,9 +512,21 @@
                       >Target impact: 3</span
                     >
 
-                    <span class="risk-report-detail-content__title"
-                      >Due date to reach target level: 8/11/23</span
+                    <div class="flex-box-risk-report-detail">
+                      <span class="risk-report-detail-content__title"
+                        >Redundant:
+                      </span>
+                      <form>
+                        <mat-checkbox></mat-checkbox>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="box">
+                    <span class="risk-report-detail-content__title">
+                      Actions/Controls to manage risks</span
                     >
+                    <div [innerHTML]="html"></div>
                   </div>
                 </div>
               </div>

@@ -27,11 +27,10 @@ export class TeamMembersComponent {
   }
 
   displayedColumns: string[] = [
-    'color',
-    'userId',
     'userName',
     'email',
     'role',
+    'creationDate',
     'action',
   ];
 
@@ -44,7 +43,7 @@ export class TeamMembersComponent {
   openDialogAddMember(title: any) {
     this.dialog.open(TeamMembersFormDialogComponent, {
       width: '68rem',
-      height: '65.4rem',
+      height: '47.2rem',
       data: {
         title: title,
       },
@@ -54,7 +53,7 @@ export class TeamMembersComponent {
   openDialogEditMember(title: any, element: any) {
     this.dialog.open(TeamMembersFormDialogComponent, {
       width: '68rem',
-      height: '65.4rem',
+      height: '47.2rem',
 
       data: {
         title: title,

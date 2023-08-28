@@ -7,5 +7,10 @@
 .form-dialog-content {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 3rem;
+}
+
+.form-dialog-conten-button-box {
+  text-align: right;
+  margin-top: 3rem;
 }

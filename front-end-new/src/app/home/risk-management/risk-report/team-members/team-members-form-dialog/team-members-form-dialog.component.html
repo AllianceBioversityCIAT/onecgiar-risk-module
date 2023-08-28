@@ -23,7 +23,7 @@
     <div class="form-dialog-content__field--grid-column">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
-          >Search By Email</mat-label
+          >Select user</mat-label
         >
       </div>
       <mat-form-field
@@ -52,7 +52,7 @@
     <div class="form-dialog-content__field--grid-column">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
-          >Email</mat-label
+          >Or invite by email</mat-label
         >
       </div>
       <mat-form-field
@@ -61,12 +61,8 @@
         hideRequiredMarker
         appearance="outline"
       >
-        <input
-          matInput
-          formControlName="email"
-          required
-          value="{{ emailCtrl.value?.email }}"
-        />
+        <!-- value="{{ emailCtrl.value?.email }}" -->
+        <input matInput formControlName="email" required />
       </mat-form-field>
     </div>
 

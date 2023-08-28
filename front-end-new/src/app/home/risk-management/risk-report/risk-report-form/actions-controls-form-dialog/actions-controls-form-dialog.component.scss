@@ -39,7 +39,8 @@
 
 .form-dialog-conten-button-box-2 {
   text-align: right;
-  margin-top: 4.5rem !important;
+  margin-top: -4.5rem !important;
+  margin-right: -2rem;
 }
 
 .form-dialog-conten-button-flex {
@@ -94,5 +95,5 @@ textarea {
 .form-dialog-content--actions-controls {
   display: flex;
   flex-direction: column;
-  gap: 10rem;
+  gap: 8rem;
 }

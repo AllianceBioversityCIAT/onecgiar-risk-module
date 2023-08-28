@@ -5,6 +5,7 @@ export class RiskManagement {
   public numOfRisks: number;
   public myRole: string;
   public status: string;
+  public helpRequested: string;
 
   constructor(
     iNITCode: string,
@@ -12,7 +13,8 @@ export class RiskManagement {
     riskCategory: string,
     numOfRisks: number,
     myRole: string,
-    status: string
+    status: string,
+    helpRequested: string
   ) {
     this.iNITCode = iNITCode;
     this.initiativeName = initiativeName;
@@ -20,5 +22,6 @@ export class RiskManagement {
     this.numOfRisks = numOfRisks;
     this.myRole = myRole;
     this.status = status;
+    this.helpRequested = helpRequested;
   }
 }

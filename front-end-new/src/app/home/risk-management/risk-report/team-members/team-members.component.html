@@ -68,7 +68,7 @@
 
     <!-- step-3 -->
 
-    <div class="table-box">
+    <div class="table-box example-container">
       <div class="table-box">
         <table
           mat-table
@@ -79,25 +79,7 @@
           <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
-          <!-- Id Column -->
-          <ng-container matColumnDef="color">
-            <th mat-header-cell *matHeaderCellDef>
-              <div class="mtable"></div>
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="mtable">{{ element.color }}</div>
-            </td>
-          </ng-container>
-
-          <!-- Id Column -->
-          <ng-container matColumnDef="userId">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              <span class="h1">User ID</span>
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element.userId }}</td>
-          </ng-container>
-
-          <!-- Name Column -->
+          <!-- User name Column -->
           <ng-container matColumnDef="userName">
             <th mat-sort-header mat-header-cell *matHeaderCellDef>
               <span class="th-3">User name</span>
@@ -107,7 +89,7 @@
             </td>
           </ng-container>
 
-          <!-- Description Column -->
+          <!-- Email Column -->
           <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef>
               <span class="h3">Email</span>
@@ -117,12 +99,22 @@
             </td>
           </ng-container>
 
-          <!-- Author Name Column -->
+          <!-- Role Column -->
           <ng-container matColumnDef="role">
             <th mat-header-cell *matHeaderCellDef>
               <span class="h4">Role</span>
             </th>
             <td mat-cell *matCellDef="let element">{{ element.role }}</td>
+          </ng-container>
+
+          <!-- Creation Date Column -->
+          <ng-container matColumnDef="creationDate">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Creation Date</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.creationDate }}
+            </td>
           </ng-container>
 
           <!-- Action Name Column -->
@@ -133,11 +125,7 @@
             <td mat-cell *matCellDef="let element">
               <div class="m">
                 <button
-                  style="
-                    border: none;
-                    cursor: pointer;
-                    background-color: #ffffff;
-                  "
+                  class="team-members-icon-table"
                   (click)="openDialogEditMember('Edit Member', element)"
                 >
                   <mat-icon class="user-management-table__icon">
@@ -156,11 +144,7 @@
                 </button>
 
                 <button
-                  style="
-                    border: none;
-                    cursor: pointer;
-                    background-color: #ffffff;
-                  "
+                  class="team-members-icon-table"
                   (click)="deleteMemberById(element.userId)"
                 >
                   <mat-icon class="user-management-table__icon">

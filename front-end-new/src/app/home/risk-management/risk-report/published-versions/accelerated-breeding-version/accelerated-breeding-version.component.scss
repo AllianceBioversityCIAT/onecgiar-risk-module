@@ -1,4 +1,5 @@
 @import "../../../../../sass/abstracts/variables";
+@import "../../../../../sass/components/button";
 
 .risk-nav-main {
   width: 95%;
@@ -45,16 +46,34 @@
   left: 11.6%;
   position: absolute;
 
-  @media only screen and (max-width: 120em) {
+  @media only screen and (max-width: 100em) {
     top: 65%;
     transform: translate(-50%, -40%);
-    left: 9.8%;
+    left: 12.3%;
   }
 
   @media only screen and (max-width: 90em) {
-    top: 65%;
-    transform: translate(-50%, -40%);
+    top: 60%;
+    transform: translate(-50%, -30%);
     left: 13.2%;
+  }
+
+  @media only screen and (max-width: 84em) {
+    top: 60%;
+    transform: translate(-50%, -30%);
+    left: 13.9%;
+  }
+
+  @media only screen and (max-width: 75em) {
+    top: 60%;
+    transform: translate(-50%, -30%);
+    left: 14.2%;
+  }
+
+  @media only screen and (max-width: 64em) {
+    top: 60%;
+    transform: translate(-50%, -30%);
+    left: 16.5%;
   }
 }
 
@@ -101,29 +120,12 @@
   gap: 2rem;
 }
 
-.risk-management-btn-export {
-  width: 14.8rem;
-  height: 3.2rem;
-
-  color: #ffffff !important;
-  text-align: center;
-  font-family: "Poppins", sans-serif !important;
-  font-size: 1.3rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  border-radius: 1rem;
-  background-color: #436280 !important;
-  box-shadow: 0px 4px 4px 0px #00000040;
-  display: flex;
-  align-items: center;
-  padding: 0 0 0 0.5rem;
-}
-
 .risk-management-export-box-icon {
-  margin: 1rem 0 0 0;
   width: 2.2rem !important;
-  height: 2.1rem !important;
+  height: 3.1rem !important;
+
+  position: relative;
+  top: -1%;
 }
 
 //table-style
@@ -152,50 +154,31 @@
   }
 }
 
-// .mtable {
-//   width: 1.5rem;
-//   height: 1.5rem;
-//   margin-left: 0.3rem;
-//   border-radius: 2px;
-//   background-color: #d9d9d9;
-
-//   @media only screen and (max-width: 160em) {
-//     margin-left: 0.5rem;
-//   }
-// }
-
-// .mtable {
-//   width: 6.6rem;
-//   flex-shrink: 0;
-// }
-
-.h1 {
-  margin-left: 13.8rem;
-
-  text-align: center;
-  @media only screen and (max-width: 41.5em) {
-    margin-left: 1px;
-  }
-}
-
-// .th-3 {
-//   margin-left: 0.8rem;
-
-//   text-align: center;
-//   @media only screen and (max-width: 41.5em) {
-//     margin-left: 1px;
-//   }
-// }
-
 .m {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-left: 2rem;
+  gap: 1rem;
 }
 
 .table-header {
   height: 35px;
+}
+
+.risk-report-icon-table {
+  border: none;
+  cursor: pointer;
+  background-color: #ffffff;
+
+  &-1 {
+    border: none;
+    cursor: pointer;
+    background-color: #ffffff;
+    margin-top: -1.5rem;
+  }
+
+  &--1 {
+    margin: 0 -1rem 0 0;
+  }
 }
 
 .table-box {
@@ -435,9 +418,13 @@ tr.example-detail-row {
   overflow: hidden;
   display: flex;
 
-  height: 13.4rem;
   flex-shrink: 0;
   background-color: #fcfcfc;
+}
+
+.flex-box-risk-report-detail {
+  display: flex;
+  align-items: center;
 }
 
 .risk-report-detail-content {
@@ -559,12 +546,8 @@ tr.example-detail-row {
 }
 
 :host {
-  ::ng-deep .mat-expansion-panel-header {
-    height: 1rem !important;
-    /* border-radius: 1.5rem !important; */
-    /* border: 1px solid #d9d9d9 !important; */
-    /* background: #ffffff !important; */
-    /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.2509803922) !important; */
-    margin-top: 1rem !important;
+  ::ng-deep .mat-expansion-panel:not([class*="mat-elevation-z"]) {
+    box-shadow: none !important;
+    margin: -9px -3rem 0 0 !important;
   }
 }

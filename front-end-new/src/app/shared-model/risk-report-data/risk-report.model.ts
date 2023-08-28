@@ -6,7 +6,7 @@ export class RiskReport {
   public targetRiskLevel: number;
   public riskOwner: string;
   public createdBy: string;
-  public redundant: string;
+  public dueDate: string;
 
   constructor(
     id: number,
@@ -16,7 +16,7 @@ export class RiskReport {
     targetRiskLevel: number,
     riskOwner: string,
     createdBy: string,
-    redundant: string
+    dueDate: string
   ) {
     this.id = id;
     this.title = title;
@@ -25,6 +25,6 @@ export class RiskReport {
     this.targetRiskLevel = targetRiskLevel;
     this.riskOwner = riskOwner;
     this.createdBy = createdBy;
-    this.redundant = redundant;
+    this.dueDate = dueDate;
   }
 }
