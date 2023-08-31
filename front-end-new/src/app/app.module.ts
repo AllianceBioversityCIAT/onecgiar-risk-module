@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { HeaderComponent } from './header/header.component';
 import { UserManagementComponent } from './Admin/admin-module/user-management/user-management.component';
@@ -32,7 +32,6 @@ import { GlossaryComponent } from './glossary/glossary.component';
 import { ApiGlossaryService } from './shared-services/glossary-services/api-glossary.service';
 import { FaqComponent } from './faq/faq.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { HomeComponent } from './home/home.component';
 import { RiskManagementComponent } from './home/risk-management/risk-management.component';
 import { ApiRiskManagementService } from './shared-services/risk-management-services/api-risk-management.service';
 import { RiskReportComponent } from './home/risk-management/risk-report/risk-report.component';
@@ -61,6 +60,13 @@ import { GlossaryFormDialogComponent } from './Admin/admin-module/glossary-admin
 import { FaqAdminComponent } from './Admin/admin-module/faq-admin/faq-admin.component';
 import { FaqFormDialogComponent } from './Admin/admin-module/faq-admin/faq-form-dialog/faq-form-dialog.component';
 import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotfoundcomponent.component';
+import { SearchInitComponent } from './home/risk-management/search-init/search-init.component';
+import { RiskManagementTableComponent } from './home/risk-management/risk-management-table/risk-management-table.component';
+import { RiskReportTableComponent } from './home/risk-management/risk-report/risk-report-table/risk-report-table.component';
+import { AppSocket } from './services/socket.service';
+import { HttpRequestInterceptor } from './services/http-request-interceptor';
+import { SearchRiskComponent } from './home/risk-management/risk-report/search-risk/search-risk.component';
+import { SatPopoverModule } from '@ncstate/sat-popover';
 
 @NgModule({
   declarations: [
@@ -85,7 +91,6 @@ import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotf
     GlossaryComponent,
     FaqComponent,
     DashboardComponent,
-    HomeComponent,
     RiskManagementComponent,
     RiskReportComponent,
     RiskReportFormComponent,
@@ -103,6 +108,10 @@ import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotf
     FaqAdminComponent,
     FaqFormDialogComponent,
     PagenotfoundcomponentComponent,
+    SearchInitComponent,
+    RiskManagementTableComponent,
+    RiskReportTableComponent,
+    SearchRiskComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,6 +126,7 @@ import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotf
     ToastrModule.forRoot(),
     NgxEditorModule,
     HighchartsChartModule,
+    SatPopoverModule,
   ],
   providers: [
     ApiUserService,
@@ -130,6 +140,12 @@ import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotf
     ApiPublishedService,
     ApiTeamMembersService,
     HeaderService,
+    AppSocket,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpRequestInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

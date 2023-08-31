@@ -68,7 +68,7 @@
       <p class="announcement-box__2--title-2">
         <span class="announcement-box__2--title-3">{{announcement.subject}}</span> 
         - 
-        <span [innerHTML]="announcement.description  | safeHtml"></span> 
+        <span [innerHTML]="announcement.description  | safeHtml : 'safeHtml for announcement'"></span> 
         
       </p>
     </div>

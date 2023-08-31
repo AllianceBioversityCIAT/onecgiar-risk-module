@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
   // riskUrl for animation navlist of header when cilick all list nav than admin-module will be change background-color when click on any navlist than without admin-module
 
   public riskUrl = {
-    home: '/home/risk-management',
+    home: '/home',
     riskManagement: '/home/risk-management/risk-report',
     riskReport: '/home/risk-management/risk-report/risk-report-form',
     submitted: '/home/risk-management/risk-report/submitted-versions',
@@ -133,10 +133,10 @@ export class HeaderComponent implements OnInit {
         });
     }
   }
-  homeRoute: any = './home/risk-management';
+  homeRoute: any = './home';
   accessHome() {
     if (this.user_info) {
-      this.homeRoute = './home/risk-management';
+      this.homeRoute = './home';
     } else {
       this.login();
     }

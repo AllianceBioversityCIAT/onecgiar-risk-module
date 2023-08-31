@@ -78,7 +78,11 @@
             announcement.subject
           }}</span>
           -
-          <span [innerHTML]="announcement.description | safeHtml"></span>
+          <span
+            [innerHTML]="
+              announcement.description | safeHtml : 'safeHtml for announcement'
+            "
+          ></span>
         </p>
       </div>
       <div class="announcement-box__3">

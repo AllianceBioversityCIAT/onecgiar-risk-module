@@ -1,7 +1,7 @@
 <div class="form-dialog-header">
   <div class="form-dialog-header__text-box">
     <p class="form-dialog-header__text-box__text">
-      {{ actionsControlsData.title }}
+      Actions /Controls to manage risks
     </p>
   </div>
 
@@ -20,8 +20,9 @@
 
 <div class="form-dialog-content">
   <form
-    [formGroup]="actionsControlsFormData"
+    [formGroup]="proposedForm"
     class="form-dialog-content--actions-controls"
+    (ngSubmit)="submit()"
   >
     <!-- //Actions/Controls description* filed----- -->
 
@@ -38,14 +39,20 @@
         appearance="outline"
       >
         <textarea
+        rows="4"
           placeholder="Description"
           matInput
           formControlName="description"
-          required
           style="height: 10.8rem; resize: none"
           cdkAutosizeMinRows="2"
           cdkAutosizeMaxRows="10"
         ></textarea>
+        <mat-error class="error" *ngIf="proposedForm.controls['description'].errors?.['required']">Action description is required</mat-error>
+        <mat-error
+        class="error"
+        *ngIf="proposedForm.controls?.description?.errors?.maxword"
+        >Max words you can use is {{proposedForm.controls?.description?.errors?.maxword?.max}} you used {{proposedForm.controls?.description?.errors?.maxword.actual}}</mat-error
+      >
       </mat-form-field>
     </div>
 
@@ -61,19 +68,20 @@
         hideRequiredMarker
         appearance="outline"
       >
-        <mat-select formControlName="status">
-          <mat-option value="Ongoing and ontrack">
-            Ongoing and ontrack
+        <mat-select formControlName="mitigation_status_id">
+          <mat-option *ngFor="let action of Actions" [value]="action.id">
+            {{action.title}}
+              <mat-icon  matTooltip="{{action.description}}" [matTooltipPosition]="'left'" matSuffix>help_outline</mat-icon>
           </mat-option>
-          <mat-option value="Completed"> Completed </mat-option>
         </mat-select>
+        <mat-error class="error" *ngIf="proposedForm.controls['mitigation_status_id'].errors?.['required']">Action status is required</mat-error>
       </mat-form-field>
     </div>
 
     <!-- //Update Button----- -->
     <div class="form-dialog-conten-button-box-2">
       <div class="form-dialog-conten-button-flex">
-        <div class="form-dialog-conten__button-box">
+        <!-- <div class="form-dialog-conten__button-box">
           <button
             *ngIf="!actionsControlsData.element"
             class="form-dialog-conten__button-box__btn--send"
@@ -83,17 +91,15 @@
           >
             Add mitigation
           </button>
-        </div>
+        </div> -->
         <div class="form-dialog-conten__button-box">
           <button
-            *ngIf="actionsControlsData.element"
             class="form-dialog-conten__button-box__btn--send"
             type="submit"
             mat-raised-button
-            (click)="onUpdateMitigation()"
             style="width: 8rem; height: 3.2rem"
           >
-            Update
+            Save
           </button>
         </div>
       </div>

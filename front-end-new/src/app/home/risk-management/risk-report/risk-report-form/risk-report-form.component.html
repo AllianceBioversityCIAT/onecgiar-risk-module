@@ -11,25 +11,29 @@
     <li>
       <a routerLink="/home/risk-management/risk-report" class="risk-nav-link"
         >&nbsp;Risk report<span class="line">&nbsp;/&nbsp;</span
-        >&nbsp;&nbsp;INIT-01</a
+        >&nbsp;&nbsp;{{officalCode}}</a
       >
     </li>
     <li>
       <a routerLink="''" class="risk-nav-link">></a>
     </li>
     <li>
-      <a routerLink="''" class="risk-nav-link">Create risk</a>
+      <a routerLink="''" class="risk-nav-link" *ngIf="!riskId">Create risk</a>
+      <a routerLink="''" class="risk-nav-link" *ngIf="riskId">Edit risk</a>
+
     </li>
   </ul>
 </nav>
 
 <div class="risk-report-form-container">
   <div class="risk-report-form-header">
-    <h1 class="risk-report-form-header__title">Create risk</h1>
+    <h1 class="risk-report-form-header__title" *ngIf="!riskId">Create risk</h1>
+    <h1 class="risk-report-form-header__title" *ngIf="riskId">Edit risk</h1>
+
   </div>
 
-  <div class="risk-report-form-content-container">
-    <form [formGroup]="riskReportFormData" class="risk-report-form">
+  <div class="risk-report-form-content-container" *ngIf="newRiskForm">
+    <form [formGroup]="newRiskForm" class="risk-report-form">
       <!-- //Created by filed----- -->
 
       <div class="risk-report-form-field field-1">
@@ -42,11 +46,11 @@
         >-->
         <div class="risk-report-form-field-icon-box">
           <input
+           [disabled]="true"
+           [value]="checkIfRiskExist?.created_by?.full_name || user_info?.full_name"
             class="risk-report-form-field-box__input report-form-field-size"
             matInput
-            placeholder="Jhon Doe"
-            formControlName="createdBy"
-            required
+            placeholder="Created by"
           />
 
           <mat-icon>
@@ -90,10 +94,8 @@
             class="risk-report-form-field-box__input cursor-input report-form-field-size"
             matInput
             placeholder="Risk title"
-            formControlName="riskTitle"
-            required
+            formControlName="title"
           />
-
           <mat-icon>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -117,6 +119,18 @@
             </svg>
           </mat-icon>
         </div>
+        <mat-error
+        class="error"
+        *ngIf="newRiskForm.controls['title'].errors?.['required'] && (newRiskForm.controls['title'].dirty || newRiskForm.controls['title'].touched)"
+        >Risk Title is required</mat-error
+         >
+        <mat-error
+          class="error"
+          *ngIf="newRiskForm.controls?.title?.errors?.maxword"
+          >Max words you can use is
+          {{ newRiskForm.controls?.title?.errors?.maxword?.max }} you used
+          {{ newRiskForm.controls?.title?.errors?.maxword.actual }}</mat-error
+        >
         <!-- </mat-form-field> -->
       </div>
 
@@ -138,11 +152,10 @@
           <input
             class="risk-report-form-field-box__input cursor-input__description report-form-field-size__description"
             matInput
-            placeholder="Description"
+            rows="4"
+            placeholder="Detailed Description"
             formControlName="description"
-            required
-          />
-
+          >
           <!-- <mat-icon>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -166,6 +179,20 @@
             </svg>
           </mat-icon> -->
         </div>
+        <mat-error
+        class="error"
+        *ngIf="newRiskForm.controls['description'].errors?.['required'] && (newRiskForm.controls['description'].touched || newRiskForm.controls['description'].dirty)"
+        >Detailed Description is required</mat-error
+      >
+      <mat-error
+        class="error"
+        *ngIf="newRiskForm.controls?.description?.errors?.maxword"
+        >Max words you can use is
+        {{ newRiskForm.controls?.description?.errors?.maxword?.max }} you used
+        {{
+          newRiskForm.controls?.description?.errors?.maxword.actual
+        }}</mat-error
+      >
         <!-- </mat-form-field> -->
       </div>
 
@@ -185,14 +212,18 @@
         >-->
         <div class="risk-report-form-field-icon-box">
           <mat-select
-            formControlName="riskCategory"
+            formControlName="category_id"
             placeholder="Select risk category"
-            required
             class="risk-report-form-field-select"
           >
-            <mat-option value="Funding"> Funding </mat-option>
-            <mat-option value="Funding"> Funding </mat-option>
-            <mat-option value="Funding"> Funding </mat-option>
+            <ng-container *ngFor="let riskCat of riskCategories">
+              <mat-option
+              *ngIf="riskCat.disabled == 0"
+                [value]="riskCat.id"
+              >
+                {{ riskCat.title }}
+              </mat-option>
+            </ng-container>
           </mat-select>
 
           <mat-icon>
@@ -232,13 +263,17 @@
           appearance="outline" 
         >-->
         <div class="risk-report-form-field-icon-box">
-          <input
-            class="risk-report-form-field-box__input cursor-input__riskOwner report-form-field-size"
-            matInput
-            placeholder="Risk achieving impact"
-            formControlName="riskOwner"
-            required
-          />
+          <mat-select
+            formControlName="risk_owner_id"
+            placeholder="Risk Owner"
+            class="risk-report-form-field-select"
+          >
+              <mat-option *ngFor="let riskrole of riskUsers"
+                [value]="riskrole.id"
+              >
+              {{ riskrole?.user?.full_name ||  riskrole.email }}
+              </mat-option>
+          </mat-select>
 
           <mat-icon>
             <svg
@@ -263,6 +298,11 @@
             </svg>
           </mat-icon>
         </div>
+        <mat-error
+        class="error"
+        *ngIf="newRiskForm.controls?.risk_owner_id.errors?.['required'] && (newRiskForm.controls?.risk_owner_id.dirty || newRiskForm.controls?.risk_owner_id.touched)"
+        >Risk Owner is required</mat-error
+      >
         <!-- </mat-form-field> -->
       </div>
 
@@ -279,8 +319,9 @@
           <div class="risk-report-radio-buttons-flex-box">
             <div class="risk-report-radio-buttons-flex">
               <mat-radio-group
-                formControlName="currentLikelihood"
+                formControlName="current_likelihood"
                 aria-label="Select an option"
+                (change)="checkedReqAssistance()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
@@ -288,8 +329,13 @@
                 <mat-radio-button value="4">4</mat-radio-button>
                 <mat-radio-button value="5">5</mat-radio-button>
               </mat-radio-group>
+              <mat-error
+              class="error errorMessage"
+              *ngIf="newRiskForm.controls['current_likelihood'].errors?.['required']"
+              >Current Likelihood is required</mat-error
+            >
             </div>
-            <mat-icon>
+            <mat-icon matTooltip="Click to more info" [satPopoverAnchor]="popoverCurrentlikelihood" (click)="popoverCurrentlikelihood.toggle()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -311,6 +357,19 @@
                 </defs>
               </svg>
             </mat-icon>
+            <sat-popover #popoverCurrentlikelihood hasBackdrop>
+              <div class="popover">
+                  <div class="head">
+                    <h3>Current likelihood</h3>
+                    <mat-icon class="icon" (click)="popoverCurrentlikelihood.close()">close</mat-icon>
+                  </div>
+                  <p>the likelihood of the risk materializing within a given time horizon that could result into the impact level assigned, taking into account any existing controls and actions in place and working</p>
+                  <button class="primaryButton"  routerLink="User-Guide">
+                    Check user guide
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                  </button>
+              </div>
+            </sat-popover>
           </div>
         </div>
 
@@ -324,8 +383,9 @@
           <div class="risk-report-radio-buttons-flex-box">
             <div class="risk-report-radio-buttons-flex">
               <mat-radio-group
-                formControlName="currentImpact"
+                formControlName="current_impact"
                 aria-label="Select an option"
+                (change)="checkedReqAssistance()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
@@ -333,8 +393,13 @@
                 <mat-radio-button value="4">4</mat-radio-button>
                 <mat-radio-button value="5">5</mat-radio-button>
               </mat-radio-group>
+              <mat-error
+              class="error errorMessage"
+              *ngIf="newRiskForm.controls['current_impact'].errors?.['required']"
+              >Current Impact is required</mat-error
+            >
             </div>
-            <mat-icon>
+            <mat-icon matTooltip="Click to more info" [satPopoverAnchor]="popoverCurrentImpact" (click)="popoverCurrentImpact.toggle()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -356,6 +421,19 @@
                 </defs>
               </svg>
             </mat-icon>
+            <sat-popover #popoverCurrentImpact hasBackdrop>
+              <div class="popover">
+                  <div class="head">
+                    <h3>Current Impact</h3>
+                    <mat-icon class="icon" (click)="popoverCurrentImpact.close()">close</mat-icon>
+                  </div>
+                  <p> the expected impact on objectives if the risk materialises, taking into account any existing controls and actions in place and working</p>
+                  <button class="primaryButton" routerLink="User-Guide" >
+                    Check user guide
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                  </button>
+              </div>
+            </sat-popover>
           </div>
         </div>
 
@@ -364,7 +442,12 @@
           <div class="risk-report-grid-item-text-box">
             <p class="risk-report-grid-item-text">
               Current Risk level:
-              <span class="risk-report-grid-item-text__sub">10</span>
+              <span class="risk-report-grid-item-text__sub">
+                {{
+                  newRiskForm.value.current_likelihood *
+                    newRiskForm.value.current_impact
+                }}
+              </span>
             </p>
           </div>
 
@@ -402,8 +485,9 @@
           <div class="risk-report-radio-buttons-flex-box">
             <div class="risk-report-radio-buttons-flex">
               <mat-radio-group
-                formControlName="targetLikelihood"
+                formControlName="target_likelihood"
                 aria-label="Select an option"
+                (change)="disapledCheckBox()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
@@ -411,8 +495,13 @@
                 <mat-radio-button value="4">4</mat-radio-button>
                 <mat-radio-button value="5">5</mat-radio-button>
               </mat-radio-group>
+              <mat-error
+              class="error errorMessage"
+              *ngIf="newRiskForm.controls['target_likelihood'].errors?.['required']"
+              >Target Likelihood is required</mat-error
+            >
             </div>
-            <mat-icon>
+            <mat-icon matTooltip="Click to more info" [satPopoverAnchor]="popoverTargetLikelihood" (click)="popoverTargetLikelihood.toggle()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -434,6 +523,19 @@
                 </defs>
               </svg>
             </mat-icon>
+            <sat-popover #popoverTargetLikelihood hasBackdrop>
+              <div class="popover">
+                  <div class="head">
+                    <h3>Target Likelihood</h3>
+                    <mat-icon  class="icon" (click)="popoverTargetLikelihood.close()">close</mat-icon>
+                  </div>
+                  <p>the targeted likelihood of the risk occurring within a given time horizon that could result into the targeted impact level assigned. Target likelihood could be achieved by putting in place additional controls and actions to manage the risk likelihood</p>
+                  <button class="primaryButton" routerLink="User-Guide">
+                    Check user guide
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                  </button>
+              </div>
+            </sat-popover>
           </div>
         </div>
 
@@ -441,15 +543,16 @@
 
         <div>
           <label class="risk-report-form-field__label"
-            >TargetImpact<span class="risk-report-form-field__label__star"
+            >Target Impact<span class="risk-report-form-field__label__star"
               >*</span
             ></label
           >
           <div class="risk-report-radio-buttons-flex-box">
             <div class="risk-report-radio-buttons-flex">
               <mat-radio-group
-                formControlName="targetImpact"
+                formControlName="target_impact"
                 aria-label="Select an option"
+                (change)="disapledCheckBox()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
@@ -457,9 +560,14 @@
                 <mat-radio-button value="4">4</mat-radio-button>
                 <mat-radio-button value="5">5</mat-radio-button>
               </mat-radio-group>
+              <mat-error
+              class="error errorMessage"
+              *ngIf="newRiskForm.controls['target_impact'].errors?.['required']"
+              >Target Impact is required</mat-error
+            >
             </div>
 
-            <mat-icon>
+            <mat-icon matTooltip="Click to more info" [satPopoverAnchor]="popoverTargetImpact" (click)="popoverTargetImpact.toggle()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -481,6 +589,19 @@
                 </defs>
               </svg>
             </mat-icon>
+            <sat-popover #popoverTargetImpact hasBackdrop>
+              <div class="popover">
+                  <div class="head">
+                    <h3>Target Impact</h3>
+                    <mat-icon class="icon" (click)="popoverTargetImpact.close()">close</mat-icon>
+                  </div>
+                  <p>the targeted expected impact on objectives if the risk materialises. Target impact could be achieved by putting in place additional controls and actions to manage risk impact</p>
+                  <button class="primaryButton" routerLink="User-Guide">
+                    Check user guide
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                  </button>
+              </div>
+            </sat-popover>
           </div>
         </div>
 
@@ -489,7 +610,12 @@
           <div class="risk-report-grid-item-text-box">
             <p class="risk-report-grid-item-text">
               Target Risk level:
-              <span class="risk-report-grid-item-text__sub">9</span>
+              <span class="risk-report-grid-item-text__sub">
+                {{
+                  newRiskForm.value.target_impact *
+                    newRiskForm.value.target_likelihood
+                }}
+              </span>
             </p>
           </div>
 
@@ -519,14 +645,15 @@
       </div>
 
       <div>
+        <mat-icon class="icon" matTooltip="If you cannot define the targets, they will retain the current likelihood and current impact risk levels and you will be contacted by the Risk Team to review the targets.">help_outline</mat-icon>
         <mat-label class="risk-report-form-field__label--Request"
           >Request Assistance</mat-label
         >
         <mat-checkbox
           type="checkbox"
-         
-          value="value-1"
-          formControlName="requestAssistance"
+          labelPosition="before"
+          formControlName="request_assistance"
+          (ngModelChange)="checkedReqAssistance()"
         ></mat-checkbox>
       </div>
 
@@ -550,7 +677,7 @@
             class="risk-report-form-field-box__input cursor-input__dueDate report-form-field-size__dueDate"
             matInput
             placeholder="Due date"
-            formControlName="dueDate"
+            formControlName="due_date"
             [matDatepicker]="picker"
           />
 
@@ -560,6 +687,10 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </div>
+        <mat-error *ngIf="newRiskForm.controls['due_date'].errors?.['required'] && this.newRiskForm.controls['due_date'].value == null && (newRiskForm.controls['due_date'].dirty || newRiskForm.controls['due_date'].touched)">Due date is required</mat-error>
+
+        <mat-error *ngIf="newRiskForm.controls['due_date'].errors?.['invalid'] && this.newRiskForm.controls['due_date'].value != null">Invalid date format</mat-error>
+
         <!-- </mat-form-field> -->
       </div>
     </form>
@@ -577,7 +708,7 @@
         <div class="table-box example-container">
           <table
             mat-table
-            [dataSource]="dataSource"
+            [dataSource]="proposed"
             class="mat-elevation-z8"
             matSort
           >
@@ -585,7 +716,7 @@
               The actual rendered columns are set as a property on the row definition" -->
 
             <!-- Actions/Controls description Column -->
-            <ng-container matColumnDef="description">
+            <ng-container matColumnDef="Mitigation Description">
               <th mat-header-cell *matHeaderCellDef>
                 <span class="h4">Actions/Controls description</span>
               </th>
@@ -595,32 +726,28 @@
             </ng-container>
 
             <!-- Status of Action Column -->
-            <ng-container matColumnDef="status">
+            <ng-container matColumnDef="Status of Action">
               <th mat-header-cell *matHeaderCellDef>
                 <span class="h4">Status of Action</span>
               </th>
-              <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+              <td mat-cell *matCellDef="let element">{{ element?.status?.title || getStatusByID(element?.mitigation_status_id) }}</td>
             </ng-container>
 
             <!-- Action Name Column -->
-            <ng-container matColumnDef="action">
+            <ng-container matColumnDef="Actions">
               <th mat-header-cell *matHeaderCellDef>
                 <span class="h5">Actions</span>
               </th>
               <td mat-cell *matCellDef="let element">
                 <div class="m">
                   <button
+                    matTooltip="Edit"
                     style="
                       border: none;
                       cursor: pointer;
                       background-color: #ffffff;
                     "
-                    (click)="
-                      openDialogEditActionsControls(
-                        'Edit Actions/Controls to manage risk',
-                        element
-                      )
-                    "
+                    (click)="editProposed(element)"
                   >
                     <mat-icon class="user-management-table__icon">
                       <svg
@@ -638,12 +765,13 @@
                   </button>
 
                   <button
+                    matTooltip="Delete"
                     style="
                       border: none;
                       cursor: pointer;
                       background-color: #ffffff;
                     "
-                    (click)="deleteActionsControlsById(element.id)"
+                    (click)="removeProposed(element)"
                   >
                     <mat-icon class="user-management-table__icon">
                       <svg
@@ -673,17 +801,14 @@
               *matRowDef="let row; columns: displayedColumns"
             ></tr>
           </table>
+          <p class="errorMessage">{{ errorMessage }}</p>
         </div>
 
         <!-- Add mitigation-btn -->
         <div class="risk-report-actions-controls-btn-box">
           <button
             class="risk-report-actions-controls-btn-box__btn"
-            (click)="
-              openDialogCreateActionsControlsStatus(
-                'Actions/Controls to manage risk'
-              )
-            "
+            (click)="openNewProposedDialog()"
             mat-raised-button
           >
             Add mitigation
@@ -746,7 +871,7 @@
     <div class="risk-report-form-save-btn-box">
       <button
         class="risk-report-form-save-btn-box__btn"
-        (click)="onSave()"
+        (click)="submit()"
         mat-raised-button
       >
         Save
