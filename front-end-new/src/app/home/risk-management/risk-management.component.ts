@@ -1,13 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-
 import { MatTableDataSource } from '@angular/material/table';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HeaderService } from 'src/app/header.service';
-import { ApiRiskManagementService } from 'src/app/shared-services/risk-management-services/api-risk-management.service';
-import { Observable, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { Router, NavigationEnd } from '@angular/router';
+import { InitiativesService } from 'src/app/services/initiatives.service';
+import { UserService } from 'src/app/services/user.service';
+import jwt_decode from 'jwt-decode';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-risk-management',
@@ -15,56 +12,109 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./risk-management.component.scss'],
 })
 export class RiskManagementComponent {
-  public url1: string = '';
+  // public url1: string = '';
 
-  private refreshNeeded = new Subject<void>();
+  // public riskUrl = {
+  //   riskManagement: '/home/risk-management',
+  // };
 
-  getRefreshNeeded() {
-    return this.refreshNeeded;
-  }
+  // navigationSubscription;
+  // constructor(
+  //   public router: Router,
+  //   public initiativeService: InitiativesService,
+  //   private userService: UserService
+  // ) {
+  //   this.navigationSubscription = this.router.events.subscribe((e: any) => {
+  //     // If it is a NavigationEnd event re-initalise the component
+  //     if (e instanceof NavigationEnd) {
+  //       this.getInitiatives();
+  //     }
+  //   });
+  // }
+  // length = 100;
 
-  apiRiskReport = 'http://localhost:4200/home/risk-management/risk-report';
+  // userRole: any;
+  // displayedColumns: string[] = [
+  //   'INIT-ID',
+  //   'Initiative Name',
+  //   'Risk Category',
+  //   'Number of risks',
+  //   'My Role',
+  //   'status',
+  //   'Actions',
+  // ];
+  // dataSource = new MatTableDataSource<any>([]);
+  // @ViewChild(MatPaginator) paginator: any;
 
-  public riskUrl = {
-    riskManagement: '/home/risk-management',
-  };
 
-  constructor(
-    private http: HttpClient,
-    private apiRiskManagementService: ApiRiskManagementService,
-    public router: Router,
-    private route: ActivatedRoute
-  ) {}
+  // ngAfterViewInit() {
+  //   this.dataSource.paginator = this.paginator;
+  //   this.getInitiatives();
+  // }
+  // filter(filters:any){
+  //   this.getInitiatives(filters)
+  // }
+  // async getInitiatives(filters = null) {
+  //   if(filters)
+  //   var Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
+  //   else
+  //   var Initiatives: any = await this.initiativeService.getInitiatives();
 
-  riskManagementForm = new FormGroup({});
+  //   this.dataSource = new MatTableDataSource<any>(Initiatives);
+  //   this.length = Initiatives.length;
 
-  ngOnInit() {
-    this.url1 = this.router.url;
-  }
+  //   // this.pageSize =  this.dataSource.meta.itemsPerPage;
+  //   // this.totalItems =  this.dataSource.meta.totalItems;
+  // }
+  // ngOnDestroy() {
+  //   if (this.navigationSubscription) {
+  //     this.navigationSubscription.unsubscribe();
+  //   }
+  // }
+  // listOfCategories: any[] = [];
+  // filterCategories(categories: any) {
+  //   this.listOfCategories = [];
+  //   for(let item of categories)
+  //   {
+  //     this.listOfCategories.push(item?.category?.title)
+  //   }
+  //   const result =  this.listOfCategories.filter((item, index) => this.listOfCategories.indexOf(item) === index).join(', ');
+  //   return result;
+  // }
 
-  dataSource = new MatTableDataSource(
-    this.apiRiskManagementService.riskManagementData
-  );
+  // filterRoles(roles: any) {
+  //   const user_info = this.userService.getLogedInUser();
+  //   var list = '';
 
-  displayedColumns: string[] = [
-    'iNITCode',
-    'initiativeName',
-    'riskCategory',
-    'numOfRisks',
-    'myRole',
-    'status',
-    'helpRequested',
-    'action',
-  ];
-
-  onReset() {}
-  onExportToExcel() {}
-
-  // onClickView(): Observable<any> {
-  //   return this.http.get(`${this.apiRiskReport}`).pipe(
-  //     tap(() => {
-  //       this.refreshNeeded.next();
-  //     })
-  //   );
+  //   list = roles
+  //     .filter((d: any) => d.user_id == user_info.id)
+  //     .map((d: any) => d.role)
+  //     .join(', ');
+  //   if (list == '') list = 'Guest';
+  //   return list;
+  // }
+  // filterReqAssistance(risk: any) {
+  //   let column = '-';
+  //   for(let item of risk) {
+  //     if(item.request_assistance == true) {
+  //       column = 'Yes';
+  //       break;
+  //     }
+  //     else {
+  //       column = 'No'
+  //     }
+  //   }
+  //   return column;
+  // }
+  // async ngOnInit() {
+  //   const access_token = localStorage.getItem('access_token');
+  //   if (access_token) {
+  //     this.userRole = jwt_decode(access_token);
+  //   }
+  //   if(this.userRole.role == 'admin') {
+  //     this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "Help requested");
+  //   }
+  //   this.getInitiatives();
+  //   // this.url1 = this.router.url;
   // }
 }

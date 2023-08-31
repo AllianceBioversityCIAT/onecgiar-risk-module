@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MitigationStatusService } from 'src/app/services/mitigation-status.service';
+import { WordCountValidators } from 'src/app/validators/word-count.validator';
 
 
 @Component({
@@ -10,24 +12,57 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class ActionsControlsFormDialogComponent {
   constructor(
-    
+    public fb: FormBuilder,
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<ActionsControlsFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public actionsControlsData: { title: any; element: any }
+    private mitigationService: MitigationStatusService,
+    @Inject(MAT_DIALOG_DATA) public data: any = {}
   ) {}
 
-  actionsControlsFormData = new FormGroup({
-    description: new FormControl('', [Validators.required]),
-    status: new FormControl('', [Validators.required]),
-  });
+  Actions: any;
 
-  ngOnInit(): void {}
+  proposedForm: any;
+  populateProposedForm() {
+    this.proposedForm = this.fb.group({
+      description: [this.data?.proposed?.description, [Validators.required, WordCountValidators.max(150)]],
+      mitigation_status_id: [this.data?.proposed?.mitigation_status_id, Validators.required],
+    });
+  }
 
-  onAddMitigation() {}
 
-  
+  submit() {
+    this.proposedForm.markAllAsTouched();
+    this.proposedForm.updateValueAndValidity();
+    if (this.proposedForm.valid) {
+      if (this.data.role == 'add') {
+        this.dialogRef.close({
+          role: this.data.role,
+          formValue: this.proposedForm.value,
+        });
+      } else {
+        this.dialogRef.close({
+          role: this.data.role,
+          formValue: this.proposedForm.value,
+          index: this.data.index,
+        });
+      }
+    }
+  }
 
-  onUpdateMitigation() {}
+
+
+
+
+
+
+
+  ngOnInit() {
+    this.populateProposedForm();
+    this.getMitigationAction();
+  }
+  async getMitigationAction(){
+    this.Actions = await this.mitigationService.getMitigationStatus()
+  }
 
   //Close-Dialog
   onCloseDialog() {

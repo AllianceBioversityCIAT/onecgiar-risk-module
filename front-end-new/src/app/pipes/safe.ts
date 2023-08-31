@@ -5,8 +5,16 @@ import { DomSanitizer } from "@angular/platform-browser";
 export class Safe {
   constructor(private sanitizer:DomSanitizer){}
 
-  transform(style:any) {
-    return style.replace(/<.*?>/g, '');
+  transform(style:any, title: string) {
+
+    if(title == 'safeHtml for mitigation') {
+      return this.sanitizer.bypassSecurityTrustHtml(style);
+
+    }
+    else {
+      return style.replace(/<.*?>/g, '');
+    }
+
 
     // return this.sanitizer.bypassSecurityTrustHtml(style);
     //return this.sanitizer.bypassSecurityTrustStyle(style);

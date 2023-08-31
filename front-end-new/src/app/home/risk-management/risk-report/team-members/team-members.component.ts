@@ -5,6 +5,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiTeamMembersService } from 'src/app/shared-services/team-members-services/api-team-members.service';
 import { MatSort } from '@angular/material/sort';
 
+export enum ROLES {
+  LEAD = 'Leader',
+  MEMBER = 'Team Member',
+  COORDINATOR = 'Coordinator',
+}
+
 @Component({
   selector: 'app-team-members',
   templateUrl: './team-members.component.html',

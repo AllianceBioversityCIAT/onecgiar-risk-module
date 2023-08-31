@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './material/material.module';
 import { HeaderComponent } from './header/header.component';
 import { UserManagementComponent } from './Admin/admin-module/user-management/user-management.component';
@@ -32,7 +32,6 @@ import { GlossaryComponent } from './glossary/glossary.component';
 import { ApiGlossaryService } from './shared-services/glossary-services/api-glossary.service';
 import { FaqComponent } from './faq/faq.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { HomeComponent } from './home/home.component';
 import { RiskManagementComponent } from './home/risk-management/risk-management.component';
 import { ApiRiskManagementService } from './shared-services/risk-management-services/api-risk-management.service';
 import { RiskReportComponent } from './home/risk-management/risk-report/risk-report.component';
@@ -53,6 +52,13 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxEditorModule } from 'ngx-editor';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { LoginComponent } from './login/login.component';
+import { SearchInitComponent } from './home/risk-management/search-init/search-init.component';
+import { RiskManagementTableComponent } from './home/risk-management/risk-management-table/risk-management-table.component';
+import { RiskReportTableComponent } from './home/risk-management/risk-report/risk-report-table/risk-report-table.component';
+import { AppSocket } from './services/socket.service';
+import { HttpRequestInterceptor } from './services/http-request-interceptor';
+import { SearchRiskComponent } from './home/risk-management/risk-report/search-risk/search-risk.component';
+import { SatPopoverModule } from '@ncstate/sat-popover';
 
 
 @NgModule({
@@ -78,7 +84,6 @@ import { LoginComponent } from './login/login.component';
     GlossaryComponent,
     FaqComponent,
     DashboardComponent,
-    HomeComponent,
     RiskManagementComponent,
     RiskReportComponent,
     RiskReportFormComponent,
@@ -89,7 +94,11 @@ import { LoginComponent } from './login/login.component';
     TeamMembersComponent,
     TeamMembersFormDialogComponent,
     Safe,
-    LoginComponent
+    LoginComponent,
+    SearchInitComponent,
+    RiskManagementTableComponent,
+    RiskReportTableComponent,
+    SearchRiskComponent
   ],
   imports: [
     BrowserModule,
@@ -104,6 +113,7 @@ import { LoginComponent } from './login/login.component';
     ToastrModule.forRoot(),
     NgxEditorModule,
     HighchartsChartModule,
+    SatPopoverModule
   ],
   providers: [
     ApiUserService,
@@ -116,6 +126,8 @@ import { LoginComponent } from './login/login.component';
     ApiActionsControlsService,
     ApiPublishedService,
     ApiTeamMembersService,
+    AppSocket,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
 })

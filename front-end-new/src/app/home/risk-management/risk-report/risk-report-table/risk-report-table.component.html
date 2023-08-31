@@ -1,0 +1,608 @@
+
+  
+      
+      <!-- step-3 -->
+  
+      <div class="table-box" *ngIf="connection">
+        <div class="table-box example-container mat-elevation-z8">
+          <table
+            multiTemplateDataRows
+            mat-table
+            [dataSource]="dataSource"
+            
+          >
+            <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+  
+            <!-- id Column -->
+            <ng-container matColumnDef="ID">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="mtable">ID</div>
+              </th>
+              <td mat-cell *matCellDef="let element" [ngClass]="{'flagged': element.flag == true && this.user_info.role == 'admin'}">
+                <div class="mtable">{{ showingVersion == true ? element.original_risk_id || element.id  : element.id }}</div>
+              </td>
+            </ng-container>
+  
+            <!-- title -->
+            <ng-container matColumnDef="Risk Title">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h1">Title</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element["title"] }}
+              </td>
+            </ng-container>
+  
+            <!-- category Column -->
+            <ng-container matColumnDef="Risk Category">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="th-3">Category</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="td-3-h">{{element?.category?.title }}</span>
+              </td>
+            </ng-container>
+  
+            <!-- CurrentRiskLevel Column -->
+            <ng-container matColumnDef="Current Risk Level">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h3">Current risk level</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="td-h">{{ element.current_likelihood * element.current_impact }}</span>
+              </td>
+            </ng-container>
+  
+            <!-- targetRiskLevel Column -->
+            <ng-container matColumnDef="Target Risk Level">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">Target risk level</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.target_likelihood * element.target_impact }}
+              </td>
+            </ng-container>
+  
+            <!-- riskOwner Column -->
+            <ng-container matColumnDef="Risk Owner">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">Risk owner</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.risk_owner?.user?.full_name || element.risk_owner?.email }}
+              </td>
+            </ng-container>
+  
+            <!-- createdBy Column -->
+            <ng-container matColumnDef="created_by">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">Created by</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.created_by?.full_name }}
+              </td>
+            </ng-container>
+  
+            <!-- Due date Column -->
+            <ng-container matColumnDef="due date">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">Due date</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.due_date |  date : 'dd/MM/yyyy'}}
+              </td>
+            </ng-container>
+  
+            <!-- Actions Name Column -->
+            <ng-container *ngIf="canEdit()" matColumnDef="expandedDetail" matColumnDef="Actions" >
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h5">Actions</span>
+              </th>
+  
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [attr.colspan]="displayedColumns.length"
+              >
+                <div class="m">
+                  <button
+                    class="risk-report-icon-table"
+                    routerLink='edit-risk/{{ element["id"] }}'
+                  >
+                    <mat-icon class="user-management-table__icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                      >
+                        <path
+                          d="M17.6917 8.30937L13.7958 4.63437L15.0792 3.40938C15.4306 3.07396 15.8623 2.90625 16.3744 2.90625C16.8859 2.90625 17.3174 3.07396 17.6687 3.40938L18.9521 4.63437C19.3035 4.96979 19.4868 5.37462 19.5021 5.84887C19.5174 6.32254 19.3493 6.72708 18.9979 7.0625L17.6917 8.30937ZM16.3625 9.6L6.64583 18.875H2.75V15.1562L12.4667 5.88125L16.3625 9.6Z"
+                          fill="#9E553E"
+                        />
+                      </svg>
+                      ></mat-icon
+                    >
+                  </button>
+  
+                  <button
+                    class="risk-report-icon-table"
+                    (click)="deleteRisk(element)"
+                  >
+                    <mat-icon class="user-management-table__icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="21"
+                        height="22"
+                        viewBox="0 0 21 22"
+                        fill="none"
+                      >
+                        <path
+                          d="M17.7188 4.4375H14.7656V3.45312C14.7635 2.84462 14.5208 2.26166 14.0905 1.83138C13.6602 1.4011 13.0773 1.15841 12.4688 1.15625H8.53125C7.92275 1.15841 7.33978 1.4011 6.9095 1.83138C6.47922 2.26166 6.23654 2.84462 6.23438 3.45312V4.4375H3.28125C3.02018 4.4375 2.7698 4.54121 2.58519 4.72582C2.40059 4.91042 2.29688 5.1608 2.29688 5.42188C2.29688 5.68295 2.40059 5.93333 2.58519 6.11793C2.7698 6.30254 3.02018 6.40625 3.28125 6.40625H3.60938V17.5625C3.61153 17.997 3.78507 18.413 4.09229 18.7202C4.3995 19.0274 4.81554 19.201 5.25 19.2031H15.75C16.1845 19.201 16.6005 19.0274 16.9077 18.7202C17.2149 18.413 17.3885 17.997 17.3906 17.5625V6.40625H17.7188C17.9798 6.40625 18.2302 6.30254 18.4148 6.11793C18.5994 5.93333 18.7031 5.68295 18.7031 5.42188C18.7031 5.1608 18.5994 4.91042 18.4148 4.72582C18.2302 4.54121 17.9798 4.4375 17.7188 4.4375ZM8.20312 3.45312C8.20312 3.3661 8.23769 3.28264 8.29923 3.22111C8.36077 3.15957 8.44423 3.125 8.53125 3.125H12.4688C12.5558 3.125 12.6392 3.15957 12.7008 3.22111C12.7623 3.28264 12.7969 3.3661 12.7969 3.45312V4.4375H8.20312V3.45312ZM15.4219 17.2344H5.57812V6.40625H15.4219V17.2344ZM9.51562 9.03125V14.2812C9.51562 14.5423 9.41191 14.7927 9.22731 14.9773C9.0427 15.1619 8.79232 15.2656 8.53125 15.2656C8.27018 15.2656 8.0198 15.1619 7.83519 14.9773C7.65059 14.7927 7.54688 14.5423 7.54688 14.2812V9.03125C7.54688 8.77018 7.65059 8.5198 7.83519 8.33519C8.0198 8.15059 8.27018 8.04688 8.53125 8.04688C8.79232 8.04688 9.0427 8.15059 9.22731 8.33519C9.41191 8.5198 9.51562 8.77018 9.51562 9.03125ZM13.4531 9.03125V14.2812C13.4531 14.5423 13.3494 14.7927 13.1648 14.9773C12.9802 15.1619 12.7298 15.2656 12.4688 15.2656C12.2077 15.2656 11.9573 15.1619 11.7727 14.9773C11.5881 14.7927 11.4844 14.5423 11.4844 14.2812V9.03125C11.4844 8.77018 11.5881 8.5198 11.7727 8.33519C11.9573 8.15059 12.2077 8.04688 12.4688 8.04688C12.7298 8.04688 12.9802 8.15059 13.1648 8.33519C13.3494 8.5198 13.4531 8.77018 13.4531 9.03125Z"
+                          fill="#9E553E"
+                        />
+                      </svg>
+                      ></mat-icon
+                    >
+                  </button>
+  
+                  <mat-expansion-panel
+                    (opened)="panelOpenState = true"
+                    (closed)="panelOpenState = false"
+                    hideToggle="true"
+                    #e
+                  >
+                    <mat-expansion-panel-header>
+                      <button
+                        (click)="
+                          expandedElement =
+                            expandedElement === element ? null : element
+                        "
+                        class="risk-report-icon-table-1"
+                      >
+                        <mat-icon
+                          *ngIf="!e.expanded"
+                          class="user-management-table__icon"
+                        >
+                          <img
+                            class="table__icon"
+                            src="../../../../assets/shared-image/Vector-toggel.svg"
+                            alt="~/Frontend/images/Vector-toggel.svg"
+                        /></mat-icon>
+                        <mat-icon
+                          *ngIf="e.expanded"
+                          class="user-management-table__icon"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="10"
+                            viewBox="0 0 16 10"
+                            fill="none"
+                          >
+                            <path
+                              d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
+                              fill="#9E553E"
+                            /></svg
+                        ></mat-icon>
+                      </button>
+                    </mat-expansion-panel-header>
+                  </mat-expansion-panel>
+                </div>
+              </td>
+            </ng-container>
+
+
+
+
+            <ng-container  matColumnDef="OwnerActions" stickyEnd>
+              <th
+                class="big bold center spacing"
+                mat-header-cell
+                *matHeaderCellDef
+                style="min-width: 130px"
+              >
+                Actions
+              </th>
+              <td class="center" mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                <div class="m">
+                    <button
+                      matTooltip="Update"
+                      class="risk-report-icon-table"
+                      routerLink='edit-risk/{{ element["id"] }}'
+                      *ngIf="canEditOwner(element)"
+                    >
+                      <mat-icon class="user-management-table__icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                      >
+                        <path
+                          d="M17.6917 8.30937L13.7958 4.63437L15.0792 3.40938C15.4306 3.07396 15.8623 2.90625 16.3744 2.90625C16.8859 2.90625 17.3174 3.07396 17.6687 3.40938L18.9521 4.63437C19.3035 4.96979 19.4868 5.37462 19.5021 5.84887C19.5174 6.32254 19.3493 6.72708 18.9979 7.0625L17.6917 8.30937ZM16.3625 9.6L6.64583 18.875H2.75V15.1562L12.4667 5.88125L16.3625 9.6Z"
+                          fill="#9E553E"
+                        />
+                      </svg>
+                      ></mat-icon
+                    >
+                    </button>
+                    <mat-expansion-panel
+                    (opened)="panelOpenState = true"
+                    (closed)="panelOpenState = false"
+                    hideToggle="true"
+                    #e
+                    >
+                    <mat-expansion-panel-header>
+                      <button
+                        (click)="
+                          expandedElement =
+                            expandedElement === element ? null : element
+                        "
+                        class="risk-report-icon-table-1"
+                      >
+                        <mat-icon
+                          *ngIf="!e.expanded"
+                          class="user-management-table__icon"
+                        >
+                          <img
+                            class="table__icon"
+                            src="../../../../assets/shared-image/Vector-toggel.svg"
+                            alt="~/Frontend/images/Vector-toggel.svg"
+                        /></mat-icon>
+                        <mat-icon
+                          *ngIf="e.expanded"
+                          class="user-management-table__icon"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="10"
+                            viewBox="0 0 16 10"
+                            fill="none"
+                          >
+                            <path
+                              d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
+                              fill="#9E553E"
+                            /></svg
+                        ></mat-icon>
+                      </button>
+                    </mat-expansion-panel-header>
+                  </mat-expansion-panel>
+                </div>
+              </td>
+            </ng-container>
+
+
+
+
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail">
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [attr.colspan]="displayedColumns.length"
+              >
+                <div
+                  class="risk-report-detail-box"
+                  [@detailExpand]="
+                    element == expandedElement ? 'expanded' : 'collapsed'
+                  "
+                >
+                  <div class="risk-report-detail-content">
+                    <div class="risk-report-detail-content__box-1">
+                      <span class="risk-report-detail-content__title"
+                        >Description</span
+                      >
+                      <p class="risk-report-detail-content__text">
+                        {{element.description}}
+                      </p>
+                    </div>
+  
+                    <div class="risk-report-detail-content__box-2">
+                      <span class="risk-report-detail-content__title"
+                        >Current likelihood: {{ element.current_likelihood }}</span
+                      >
+  
+                      <span class="risk-report-detail-content__title"
+                        >Current impact: {{ element.current_impact }}</span
+                      >
+  
+                      <span class="risk-report-detail-content__title"
+                        >Target likelihood: {{ element.target_likelihood }}</span
+                      >
+  
+                      <span class="risk-report-detail-content__title"
+                        >Target impact: {{ element.target_impact }}</span
+                      >
+  
+                      <div class="flex-box-risk-report-detail">
+                        <span class="risk-report-detail-content__title"
+                          >Redundant:
+                        </span>
+
+                        <mat-checkbox
+                        *ngIf="!toPdf"
+                        [disabled]="(!canEdit() || showingVersion)"
+                        matTooltip="You can check/uncheck this as redundant"
+                        [(ngModel)]="element.redundant"
+                        [checked]="element.redundant"
+                        (change)="checkValue(element.id, element.redundant)"
+                        class="example-margin"
+                      ></mat-checkbox>
+                      </div>
+                    </div>
+  
+                    <div class="box">
+                      <span class="risk-report-detail-content__title">
+                        Actions/Controls to manage risks</span
+                      >
+                      <div [innerHTML]="generateTable(element) | safeHtml: 'safeHtml for mitigation'"></div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let element; columns: displayedColumns"
+              class="example-element-row"
+              [class.example-expanded-row]="expandedElement === element"
+            ></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: ['expandedDetail']"
+              class="example-detail-row"
+            ></tr>
+          </table>
+        </div>
+        <p class="risk-report-records">
+          <span class="risk-report-records__text">{{
+            dataSource.data.length
+          }}</span>
+          total
+        </p>
+      </div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-container *ngIf="toPdf">
+  <div class="table-box pdf" *ngIf="connection">
+    <div #pdfcontent id="pdfcontent" class="table-box example-container mat-elevation-z8">
+      <table mat-table [dataSource]="dataSourceForPdf">
+            <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- id Column -->
+            <ng-container matColumnDef="ID">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+              >
+                <div class="mtable">ID</div>
+              </th>
+              <td mat-cell *matCellDef="let element" [ngClass]="{'flagged': element.flag == true && this.user_info.role == 'admin'}">
+                <div class="mtable">{{ showingVersion == true ? element.original_risk_id || element.id  : element.id }}</div>
+              </td>
+            </ng-container>
+
+            <!-- title -->
+            <ng-container matColumnDef="Risk Title">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h1">Title</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element["title"] }}
+              </td>
+            </ng-container>
+
+            <!-- category Column -->
+            <ng-container matColumnDef="Risk Category">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="th-3">Category</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="td-3-h">{{element?.category?.title }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Risk Description">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="th-3">Category</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="td-3-h">{{element.description }}</span>
+              </td>
+            </ng-container>
+
+            <!-- CurrentRiskLevel Column -->
+            <ng-container matColumnDef="Current Likelihood">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h3">Current Likelihood</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="td-h">{{ element.current_likelihood }}</span>
+              </td>
+            </ng-container>
+
+            <!-- targetRiskLevel Column -->
+            <ng-container matColumnDef="Current Impact">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Current Impact</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.current_impact  }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Current Risk Level">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Current Risk Level</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{  element.current_likelihood * element.current_impact }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Target Likelihood">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Target Likelihood</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.target_likelihood  }}
+              </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="Target Impact">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Target Impact</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.target_impact  }}
+              </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="Target Risk Level">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Target Risk Level</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.target_likelihood * element.target_impact}}
+              </td>
+            </ng-container>
+
+
+            <!-- Due date Column -->
+            <ng-container matColumnDef="due date">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Due date to reach target level</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.due_date |  date : 'dd/MM/yyyy'}}
+              </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="Mitigation Action">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Actions /Controls to manage risks</span>
+              </th>
+              <td mat-cell *matCellDef="let element"
+              [innerHTML]="generateTable(element) | safeHtml: 'safeHtml for mitigation'"
+              >
+              </td>
+            </ng-container>
+
+
+            <!-- riskOwner Column -->
+            <ng-container matColumnDef="Risk Owner">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Risk owner</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.risk_owner?.user?.full_name || element.risk_owner?.email }}
+              </td>
+            </ng-container>
+
+            <!-- createdBy Column -->
+            <ng-container matColumnDef="created_by">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Created by</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.created_by?.full_name }}
+              </td>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="Flag to SDG">
+              <th mat-header-cell *matHeaderCellDef
+              style="width:55rem;padding:8px;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;"
+
+              >
+                <span class="h4">Flagged</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{toPdf? element.flag ? 'Yes': '':''}}
+              </td>
+            </ng-container>
+
+
+
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsPdf"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumnsPdf;">
+            </tr>
+      </table>
+    </div>
+  </div>
+</ng-container>
