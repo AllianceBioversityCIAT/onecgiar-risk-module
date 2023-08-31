@@ -1,0 +1,12 @@
+@import "../../../sass/layout/admin-module/user-management";
+@import "../../../sass/pages/admin-module/user-management";
+@import "../../../sass/pages/admin-module/parameters-settings";
+@import "../../../sass/pages/admin-module/mitigation-status";
+@import "../../../sass/components/table-mitigation";
+@import "../../../sass/components/button";
+
+.user-management__container-1 {
+  width: 100%;
+  padding: 7rem 3rem 0 3rem;
+  margin: 0 auto;
+}

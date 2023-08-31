@@ -103,6 +103,7 @@
     padding: 6.2rem 0;
     height: 24rem;
     background-color: #fafafa;
+    margin: -3rem 0 0 0;
   }
 }
 
@@ -162,19 +163,20 @@
 }
 
 .our-founding-Polygon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 705%);
+  text-align: center;
+  // position: absolute;
+  // top: 50%;
+  // left: 50%;
+  // transform: translate(-50%, 705%);
 
-  @media only screen and (max-width: 160em) {
-    top: 26%;
-    transform: translate(-50%, 300%);
-  }
+  // @media only screen and (max-width: 160em) {
+  //   top: 26%;
+  //   transform: translate(-50%, 300%);
+  // }
 
-  @media only screen and (max-width: 90em) {
-    transform: translate(-50%, 1350%);
-  }
+  // @media only screen and (max-width: 90em) {
+  //   transform: translate(-50%, 1350%);
+  // }
 }
 
 .about-risk__variety-tools {
@@ -210,7 +212,8 @@
 
 .variety-tools__content {
   padding: 2rem 3rem 2rem 3rem;
-  max-width: 181rem;
+  width: 95%;
+  margin: 0 auto;
   height: 50rem;
   border-radius: 3rem;
   background: #a3bad2;
@@ -222,9 +225,48 @@
   align-items: center;
 
   // @media only screen and (max-width: 160em) {
-  //   padding: 2rem 1rem 2rem 6rem;
+  //   //change on 2560
+
+  //   padding: 2rem 3rem 2rem 3rem;
   // }
+
+  // @media only screen and (max-width: 100em) {
+  //   //change on 1600
+
+  //   padding: 2rem 3rem 2rem 3rem;
+  // }
+
+  @media only screen and (max-width: 90em) {
+    //change on 1440
+
+    width: 100%;
+  }
+
+  // @media only screen and (max-width: 84em) {
+  //   //change on 1344
+
+  //   padding: 2rem 3rem 2rem 3rem;
+  // }
+
+  // @media only screen and (max-width: 82em) {
+  //   //change on 1312
+
+  //   padding: 2rem 3rem 2rem 3rem;
+  // }
+
+  // @media only screen and (max-width: 75em) {
+  //   //change on 1200
+  //   padding: 2rem 3rem 2rem 3rem;
+  // }
+
+  // @media only screen and (max-width: 64em) {
+  //   //change on 1024
+  //   padding: 2rem 3rem 2rem 3rem;
 }
+
+// @media only screen and (max-width: 160em) {
+//   padding: 2rem 1rem 2rem 6rem;
+// }
 
 .variety-tools-el {
   max-width: 100%;

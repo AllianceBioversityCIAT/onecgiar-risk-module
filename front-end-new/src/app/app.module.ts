@@ -14,12 +14,12 @@ import { ApiUserService } from './shared-services/admin-services/User-Management
 import { DeleteConfirmDialogComponent } from './delete-confirm-dialog/delete-confirm-dialog.component';
 import { ParametersSettingsComponent } from './Admin/admin-module/parameters-settings/parameters-settings.component';
 import { AdminModuleComponent } from './Admin/admin-module/admin-module.component';
-import { CategoriesComponent } from './Admin/admin-module/parameters-settings/categories/categories.component';
-import { MitigationStatusComponent } from './Admin/admin-module/parameters-settings/mitigation-status/mitigation-status.component';
+
+import { MitigationStatusComponent } from './Admin/admin-module/mitigation-status/mitigation-status.component';
 import { SettingsComponent } from './Admin/admin-module/parameters-settings/settings/settings.component';
 import { ApiCategoryService } from './shared-services/admin-services/Parameters-settings-Services/api-category.service';
-import { CategoryFormDialogComponent } from './Admin/admin-module/parameters-settings/categories/category-form-dialog/category-form-dialog.component';
-import { MitigationStatusFormDialogComponent } from './Admin/admin-module/parameters-settings/mitigation-status/mitigation-status-form-dialog/mitigation-status-form-dialog.component';
+
+import { MitigationStatusFormDialogComponent } from './Admin/admin-module/mitigation-status/mitigation-status-form-dialog/mitigation-status-form-dialog.component';
 import { AnnouncementsComponent } from './Admin/admin-module/announcements/announcements.component';
 import { PostedComponent } from './Admin/admin-module/announcements/posted/posted.component';
 import { DraftsComponent } from './Admin/admin-module/announcements/drafts/drafts.component';
@@ -53,7 +53,14 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxEditorModule } from 'ngx-editor';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { LoginComponent } from './login/login.component';
-
+import { HeaderService } from './header.service';
+import { CategoryComponent } from './Admin/admin-module/category/category.component';
+import { CategoryFormDialogComponent } from './Admin/admin-module/category/category-form-dialog/category-form-dialog.component';
+import { GlossaryAdminComponent } from './Admin/admin-module/glossary-admin/glossary-admin.component';
+import { GlossaryFormDialogComponent } from './Admin/admin-module/glossary-admin/glossary-form-dialog/glossary-form-dialog.component';
+import { FaqAdminComponent } from './Admin/admin-module/faq-admin/faq-admin.component';
+import { FaqFormDialogComponent } from './Admin/admin-module/faq-admin/faq-form-dialog/faq-form-dialog.component';
+import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotfoundcomponent.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +71,7 @@ import { LoginComponent } from './login/login.component';
     DeleteConfirmDialogComponent,
     ParametersSettingsComponent,
     AdminModuleComponent,
-    CategoriesComponent,
+
     MitigationStatusComponent,
     SettingsComponent,
     CategoryFormDialogComponent,
@@ -89,7 +96,13 @@ import { LoginComponent } from './login/login.component';
     TeamMembersComponent,
     TeamMembersFormDialogComponent,
     Safe,
-    LoginComponent
+    LoginComponent,
+    CategoryComponent,
+    GlossaryAdminComponent,
+    GlossaryFormDialogComponent,
+    FaqAdminComponent,
+    FaqFormDialogComponent,
+    PagenotfoundcomponentComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,6 +129,7 @@ import { LoginComponent } from './login/login.component';
     ApiActionsControlsService,
     ApiPublishedService,
     ApiTeamMembersService,
+    HeaderService,
   ],
   bootstrap: [AppComponent],
 })

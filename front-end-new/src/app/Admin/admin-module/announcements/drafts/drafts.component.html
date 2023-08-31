@@ -37,7 +37,7 @@
       <button
         style="width: 230px"
         class="parameters-settings__button-box__btn"
-        (click)="openDialogCreateAnnouncement('','Create new announcement')"
+        (click)="openDialogCreateAnnouncement('', 'Create new announcement')"
         mat-raised-button
         color="primary"
       >
@@ -46,68 +46,86 @@
     </div>
   </div>
 
-  <div class="announcement-box" *ngFor="let announcement of draftsAnnouncements">
-    <div class="announcement-box__1">
-      <p class="announcement-box__1--title" *ngIf="announcement.updatedAt != null">
-        Last edit {{ announcement.updatedAt | date : 'shortDate' }}
-      </p>
-      <p class="announcement-box__1--title" *ngIf="announcement.updatedAt == null">
-        Creation date {{ announcement.createdAt | date : 'shortDate' }}
-      </p>
-      <mat-icon style="width: 5px; height: 30px" class="color-change">
-        <img
-          class="table__icon"
-          src="../../../../../assets/shared-image/Line 93.svg"
-          alt="~/Frontend/images/icon _ Vector-edit"
-        />
-      </mat-icon>
-    </div>
-    <div class="announcement-box__2">
-      <p class="announcement-box__2--title-2" >
-        <span class="announcement-box__2--title-3">{{announcement.subject}}</span> 
-        - 
-        <span [innerHTML]="announcement.description  | safeHtml"></span> 
-        
-      </p>
-    </div>
-    <div class="announcement-box__3">
-      <button
-      matTooltip="Edit"
-        (click)="openDialogEditAnnouncement(announcement,'Edit announcement')"
-        style="border: none; cursor: pointer"
-      >
-        <mat-icon class="user-management-table__icon color-change">
+  <div class="posted-scroll-box mat-elevation-z8">
+    <div
+      class="announcement-box"
+      *ngFor="let announcement of draftsAnnouncements"
+    >
+      <div class="announcement-box__1">
+        <p
+          class="announcement-box__1--title"
+          *ngIf="announcement.updatedAt != null"
+        >
+          Last edit {{ announcement.updatedAt | date : "shortDate" }}
+        </p>
+        <p
+          class="announcement-box__1--title"
+          *ngIf="announcement.updatedAt == null"
+        >
+          Creation date {{ announcement.createdAt | date : "shortDate" }}
+        </p>
+        <mat-icon style="width: 5px; height: 30px" class="color-change">
           <img
-            style="width: 16px; height: 17px"
             class="table__icon"
-            src="../../../../../assets/shared-image/Vector-edit.svg"
+            src="../../../../../assets/shared-image/Line 93.svg"
             alt="~/Frontend/images/icon _ Vector-edit"
-        /></mat-icon>
-      </button>
+          />
+        </mat-icon>
+      </div>
+      <div class="announcement-box__2">
+        <p class="announcement-box__2--title-2">
+          <span class="announcement-box__2--title-3">{{
+            announcement.subject
+          }}</span>
+          -
+          <span [innerHTML]="announcement.description | safeHtml"></span>
+        </p>
+      </div>
+      <div class="announcement-box__3">
+        <button
+          matTooltip="Edit"
+          (click)="
+            openDialogEditAnnouncement(announcement, 'Edit announcement')
+          "
+          style="border: none; cursor: pointer"
+        >
+          <mat-icon class="user-management-table__icon color-change">
+            <img
+              style="width: 16px; height: 17px"
+              class="table__icon"
+              src="../../../../../assets/shared-image/Vector-edit.svg"
+              alt="~/Frontend/images/icon _ Vector-edit"
+          /></mat-icon>
+        </button>
 
-      <button matTooltip="Send all" (click)="sendAll(announcement.id, announcement.status)" style="border: none; cursor: pointer">
-        <mat-icon class="user-management-table__icon">
-          <img
-            style="width: 16px; height: 17px"
-            class="table__icon"
-            src="../../../../../assets/shared-image/Vector-sent.svg"
-            alt="~/Frontend/images/icon _ Vector-sent"
-        /></mat-icon>
-      </button>
+        <button
+          matTooltip="Send all"
+          (click)="sendAll(announcement.id, announcement.status)"
+          style="border: none; cursor: pointer"
+        >
+          <mat-icon class="user-management-table__icon">
+            <img
+              style="width: 16px; height: 17px"
+              class="table__icon"
+              src="../../../../../assets/shared-image/Vector-sent.svg"
+              alt="~/Frontend/images/icon _ Vector-sent"
+          /></mat-icon>
+        </button>
 
-      <button
-      matTooltip="Delete"
-        (click)="deleteAnnouncementById(announcement.id)"
-        style="border: none; cursor: pointer"
-      >
-        <mat-icon class="user-management-table__icon">
-          <img
-            style="width: 16px; height: 17px"
-            class="table__icon"
-            src="../../../../../assets/shared-image/delete.svg"
-            alt="~/Frontend/images/icon _ Vector-delete"
-        /></mat-icon>
-      </button>
+        <button
+          matTooltip="Delete"
+          (click)="deleteAnnouncementById(announcement.id)"
+          style="border: none; cursor: pointer"
+        >
+          <mat-icon class="user-management-table__icon">
+            <img
+              style="width: 16px; height: 17px"
+              class="table__icon"
+              src="../../../../../assets/shared-image/delete.svg"
+              alt="~/Frontend/images/icon _ Vector-delete"
+          /></mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>

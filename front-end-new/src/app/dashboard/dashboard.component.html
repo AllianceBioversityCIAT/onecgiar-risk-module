@@ -15,16 +15,17 @@
           <!-- item-1 -->
           <div class="dashboard-item-box">
             <div class="dashboard-item-box-title">
-              <p class="dashboard-item-box-title__title">Current Risk profile</p>
+              <p class="dashboard-item-box-title__title">
+                Current Risk profile
+              </p>
             </div>
 
-
-              <highcharts-chart
+            <highcharts-chart
               *ngIf="risk_profile_current_chartOptions"
               [Highcharts]="Highcharts"
               [options]="risk_profile_current_chartOptions"
-              >
-              </highcharts-chart>
+            >
+            </highcharts-chart>
           </div>
 
           <!-- item-2 -->
@@ -32,12 +33,12 @@
             <div class="dashboard-item-box-title">
               <p class="dashboard-item-box-title__title">Target Risk profile</p>
             </div>
-              <highcharts-chart
+            <highcharts-chart
               *ngIf="risk_profile_target_chartOptions"
               [Highcharts]="Highcharts"
               [options]="risk_profile_target_chartOptions"
-              >
-              </highcharts-chart>
+            >
+            </highcharts-chart>
           </div>
 
           <!-- item-3 -->
@@ -45,12 +46,12 @@
             <div class="dashboard-item-box-title">
               <p class="dashboard-item-box-title__title">Status of action</p>
             </div>
-              <highcharts-chart
+            <highcharts-chart
               *ngIf="status_of_action_chartOptions"
               [Highcharts]="Highcharts"
               [options]="status_of_action_chartOptions"
-              >
-              </highcharts-chart>
+            >
+            </highcharts-chart>
           </div>
 
           <!-- item-4 -->
@@ -59,12 +60,12 @@
               <p class="dashboard-item-box-title__title">Risk Categories</p>
             </div>
 
-              <highcharts-chart
+            <highcharts-chart
               *ngIf="categories_count_chartOptions"
               [Highcharts]="Highcharts"
               [options]="categories_count_chartOptions"
-              >
-              </highcharts-chart>
+            >
+            </highcharts-chart>
           </div>
 
           <!-- item-5 -->
@@ -73,12 +74,12 @@
               <p class="dashboard-item-box-title__title">Categories groups</p>
             </div>
 
-              <highcharts-chart
+            <highcharts-chart
               *ngIf="category_group_chartOptions"
               [Highcharts]="Highcharts"
               [options]="category_group_chartOptions"
-              >
-              </highcharts-chart>
+            >
+            </highcharts-chart>
           </div>
 
           <!-- item-6 -->
@@ -87,12 +88,12 @@
               <p class="dashboard-item-box-title__title">Action Areas</p>
             </div>
 
-              <highcharts-chart
+            <highcharts-chart
               *ngIf="action_areas_chartOptions"
               [Highcharts]="Highcharts"
               [options]="action_areas_chartOptions"
-              >
-              </highcharts-chart>
+            >
+            </highcharts-chart>
           </div>
         </div>
 
@@ -101,7 +102,7 @@
         </div>
 
         <!-- Risk details-table -->
-        <div class="tableContainer dashboard one">
+        <div class="table-box mat-elevation-z8">
           <mat-card>
             <!-- <mat-card-title style="text-align: center;">Initiative by risk score</mat-card-title> -->
             <mat-card-content>
@@ -116,7 +117,11 @@
                 </tr>
                 <ng-container *ngFor="let initiative of details">
                   <tr *ngFor="let risk of initiative.risks; let i = index">
-                    <td *ngIf="i == 0" [attr.rowspan]="initiative.risks.length" style="min-width: 60px;">
+                    <td
+                      *ngIf="i == 0"
+                      [attr.rowspan]="initiative.risks.length"
+                      style="min-width: 60px"
+                    >
                       {{ initiative.official_code }}
                     </td>
                     <td *ngIf="i == 0" [attr.rowspan]="initiative.risks.length">
@@ -125,7 +130,9 @@
                     <td>{{ risk.category.title }}</td>
                     <td>{{ risk.title }}</td>
                     <td>{{ risk.description }}</td>
-                    <td class="level" [attr.style]="color(risk.current_level)">{{ risk.current_level }}</td>
+                    <td class="level" [attr.style]="color(risk.current_level)">
+                      {{ risk.current_level }}
+                    </td>
                   </tr>
                 </ng-container>
               </table>

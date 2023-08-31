@@ -1,10 +1,5 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HeaderService } from '../header.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { LoadingService } from '../services/loading.service';
@@ -12,6 +7,7 @@ import jwt_decode from 'jwt-decode';
 import { delay } from 'rxjs';
 import { LoginComponent } from '../login/login.component';
 import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-confirm-dialog.component';
+import { HeaderService } from '../header.service';
 
 @Component({
   selector: 'app-header',
@@ -52,12 +48,15 @@ export class HeaderComponent implements OnInit {
     admin: '/admin',
     userManagement: '/admin/user-management',
     parameterSetttings: '/admin/parameters-settings',
-    categories: '/admin/parameters-settings/categories',
-    mitigation: '/admin/parameters-settings/mitigation-status',
+    categories: '/admin/category',
+    mitigation: '/admin/mitigation-status',
     settings: '/admin/parameters-settings/settings',
     announcements: '/admin/announcements',
     posted: '/admin/announcements/posted',
     drafts: '/admin/announcements/drafts',
+    glossary: '/admin/glossary',
+    faq: '/admin/faq',
+    pageNotFounds: '/404',
   };
 
   // riskUrl for animation navlist of header when cilick all list nav than admin-module will be change background-color when click on any navlist than without admin-module
@@ -74,19 +73,16 @@ export class HeaderComponent implements OnInit {
     glossary: '/glossary',
     faq: '/faq',
     dashboard: '/dashboard',
+    pageNotFound: '/404',
   };
 
-
-
-
-
-
-
+  k: any;
 
   constructor(
     public dialog: MatDialog,
     private loadingService: LoadingService,
-    public router: Router
+    public router: Router,
+    public headerService: HeaderService
   ) {
     this.notificationNumberCount = 5;
   }
@@ -101,18 +97,15 @@ export class HeaderComponent implements OnInit {
     this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
       this.loading = d;
     });
-    console.log(this.user_info)
+    console.log(this.user_info);
   }
-
-
 
   logout() {
     this.dialog
       .open(DeleteConfirmDialogComponent, {
-        maxWidth: '400px',
         data: {
-         title: 'Logout',
-         message:  'Are you sure you want to logout?',
+          title: 'Logout',
+          message: 'Are you sure you want to logout?',
         },
       })
       .afterClosed()
@@ -124,25 +117,27 @@ export class HeaderComponent implements OnInit {
         }
       });
   }
-   login() {
+  login() {
     if (this.user_info) this.logout();
     else {
-      const dialogRef = this.dialog.open(LoginComponent, {
+      const dialogRef = this.dialog
+        .open(LoginComponent, {
           minWidth: '350px',
-        data: { email: '' },
-      }).afterClosed().subscribe((result) => {
-        if(result) {
-        window.location.href = window.location.href;
-        }
-      });
+          data: { email: '' },
+        })
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            window.location.href = window.location.href;
+          }
+        });
     }
   }
-  homeRoute:any = './home/risk-management';
+  homeRoute: any = './home/risk-management';
   accessHome() {
-    if(this.user_info) {
+    if (this.user_info) {
       this.homeRoute = './home/risk-management';
-    }
-    else {
+    } else {
       this.login();
     }
   }

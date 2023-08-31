@@ -14,7 +14,7 @@ export class DraftsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private announcementService: AnnouncementService,
-    private toster: ToastrService,
+    private toster: ToastrService
   ) {}
 
   draftsAnnouncements: any;
@@ -24,28 +24,29 @@ export class DraftsComponent implements OnInit {
   }
   //Drafts
   async getData() {
-    this.draftsAnnouncements = await this.announcementService.getAnnouncementDrafts();
+    this.draftsAnnouncements =
+      await this.announcementService.getAnnouncementDrafts();
   }
-
 
   openDialogCreateAnnouncement(element: any, title: any) {
-    this.dialog.open(AnnouncementsFormDialogComponent, {
-      width: '68rem',
-      height: '45.2rem',
-      data: {
-        title: title,
-        element: element,
-      },
-    }).afterClosed().subscribe(async res => {
-      await this.getData();
-    });
+    this.dialog
+      .open(AnnouncementsFormDialogComponent, {
+        width: '68rem',
+        height: '58.2rem',
+        data: {
+          title: title,
+          element: element,
+        },
+      })
+      .afterClosed()
+      .subscribe(async (res) => {
+        await this.getData();
+      });
   }
 
-  openDialogEditAnnouncement(element: any ,title: any) {
+  openDialogEditAnnouncement(element: any, title: any) {
     this.openDialogCreateAnnouncement(element, title);
   }
-
-
 
   sendAll(id: number, status: string) {
     const _popup = this.dialog.open(DeleteConfirmDialogComponent, {
@@ -67,8 +68,6 @@ export class DraftsComponent implements OnInit {
     });
   }
 
-
-
   // sendTest(id: number) {
   //   const _popup = this.dialog.open(SendEmailFormComponent, {
   //     width: '300px',
@@ -86,32 +85,24 @@ export class DraftsComponent implements OnInit {
   //   });
   // }
 
-
-
   deleteAnnouncementById(id: any) {
-
     this.dialog
-    .open(DeleteConfirmDialogComponent, {
-      maxWidth: '400px',
-      data: {
-        message : 'Are you sure you want to delete this announcement ?'
-      }
-    }).afterClosed()
-    .subscribe(async (res) => {
-      if(res == true) {
-        const result =  await this.announcementService.deleteAnnouncement(id);
-        if(result) {
-          this.toster.success(
-            'Success deleted'
-          );
+      .open(DeleteConfirmDialogComponent, {
+        data: {
+          message: 'Are you sure you want to delete this record ?',
+        },
+      })
+      .afterClosed()
+      .subscribe(async (res) => {
+        if (res == true) {
+          const result = await this.announcementService.deleteAnnouncement(id);
+          if (result) {
+            this.toster.success('Success deleted');
+          } else {
+            this.toster.error('can not deleted');
+          }
         }
-        else {
-          this.toster.error(
-            'can not deleted'
-          );
-        }
-      }
-      await this.getData();
-    });
+        await this.getData();
+      });
   }
 }

@@ -4,8 +4,8 @@ import { UserManagementComponent } from './Admin/admin-module/user-management/us
 import { UserFormDialogComponent } from './Admin/admin-module/user-management/user-form-dialog/user-form-dialog.component';
 import { ParametersSettingsComponent } from './Admin/admin-module/parameters-settings/parameters-settings.component';
 import { AdminModuleComponent } from './Admin/admin-module/admin-module.component';
-import { CategoriesComponent } from './Admin/admin-module/parameters-settings/categories/categories.component';
-import { MitigationStatusComponent } from './Admin/admin-module/parameters-settings/mitigation-status/mitigation-status.component';
+
+import { MitigationStatusComponent } from './Admin/admin-module/mitigation-status/mitigation-status.component';
 import { SettingsComponent } from './Admin/admin-module/parameters-settings/settings/settings.component';
 import { AnnouncementsComponent } from './Admin/admin-module/announcements/announcements.component';
 import { PostedComponent } from './Admin/admin-module/announcements/posted/posted.component';
@@ -23,6 +23,10 @@ import { AcceleratedBreedingVersionComponent } from './home/risk-management/risk
 import { TeamMembersComponent } from './home/risk-management/risk-report/team-members/team-members.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { CategoryComponent } from './Admin/admin-module/category/category.component';
+import { GlossaryAdminComponent } from './Admin/admin-module/glossary-admin/glossary-admin.component';
+import { FaqAdminComponent } from './Admin/admin-module/faq-admin/faq-admin.component';
+import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotfoundcomponent.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -47,11 +51,10 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'categories',
+            redirectTo: 'settings',
             pathMatch: 'full',
           },
-          { path: 'categories', component: CategoriesComponent },
-          { path: 'mitigation-status', component: MitigationStatusComponent },
+
           { path: 'settings', component: SettingsComponent },
         ],
       },
@@ -68,8 +71,13 @@ const routes: Routes = [
           { path: 'drafts', component: DraftsComponent },
         ],
       },
+      { path: 'category', component: CategoryComponent },
+      { path: 'mitigation-status', component: MitigationStatusComponent },
+      { path: 'glossary', component: GlossaryAdminComponent },
+      { path: 'faq', component: FaqAdminComponent },
     ],
   },
+
   {
     path: 'home',
     component: HomeComponent,
@@ -134,6 +142,9 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
   },
+
+  { path: '404', component: PagenotfoundcomponentComponent },
+  { path: '**', redirectTo: '/404' },
 ];
 
 @NgModule({

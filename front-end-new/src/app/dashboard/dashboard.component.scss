@@ -1,6 +1,6 @@
-.section-dashboard {
-  height: 172.6rem;
+@import "../sass/components/table-dashboard";
 
+.section-dashboard {
   background-color: #fafafa;
 }
 
@@ -44,7 +44,7 @@
   margin: 5rem auto 13rem auto;
   display: flex;
   flex-direction: column;
-  gap: 6rem;
+  // gap: 6rem;
   // align-items: start;
   // position: relative;
 }
@@ -111,10 +111,28 @@
     transition: all 0.3s;
   }
 }
-highcharts-chart{
+highcharts-chart {
   width: 100% !important;
   height: 100% !important;
 }
-::ng-deep text.highcharts-title{
+::ng-deep text.highcharts-title {
   display: none !important;
+}
+
+.mat-mdc-card-content > :last-child:not(.mat-mdc-card-footer) {
+  margin-bottom: 0;
+  width: -webkit-fill-available;
+}
+
+.mat-mdc-card-content:last-child {
+  padding-bottom: 0;
+}
+
+.mat-mdc-card-content:first-child {
+  padding-top: 0;
+}
+
+.mat-mdc-card-content {
+  display: block;
+  padding: 0;
 }

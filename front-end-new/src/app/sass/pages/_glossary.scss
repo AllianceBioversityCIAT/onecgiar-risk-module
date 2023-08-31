@@ -55,9 +55,8 @@
 
 .search {
   flex: 0 0 40%;
-  position: relative;
-  display: flex;
 
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 54.8rem;
@@ -66,18 +65,14 @@
   &__input {
     font-family: inherit;
     font-size: inherit;
-    color: #0f212f;
+    color: inherit;
     // background-color: var(--color-Grey-light-2);
-    border-radius: 3.9rem;
-    border: 1px solid #b9b9b9;
-    background-color: #ffffff;
-
-    padding: 0.7rem 3.7rem;
-
-    width: 112%;
+    border: 1px solid #808080;
+    padding: 0.7rem 2rem;
+    border-radius: 100px;
+    width: 90%;
     transition: all 0.2s;
-    margin-right: -6.25rem;
-    position: relative;
+    margin-right: -3.25rem;
 
     &:focus {
       outline: none;
@@ -86,16 +81,13 @@
     }
 
     &::-webkit-input-placeholder {
-      color: #0f212f;
-
       font-family: "Poppins", sans-serif;
-      font-size: 1.2rem;
-      font-style: normal;
+      font-size: 1.4rem;
       font-weight: 300;
-      line-height: normal;
-      position: absolute;
-      top: 30%;
-      left: 8%;
+      line-height: 2.1rem;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #808080;
     }
   }
 
@@ -104,32 +96,6 @@
 
   &__button {
     border: none;
-    // // position: absolute;
-    // top: 50%;
-    // left: 50%;
-    // z-index: 1;
-    // transform: translate(-1115%, -40%);
-    position: absolute;
-    top: 3%;
-    right: 43.7rem;
-    z-index: 1;
-
-    @media only screen and (max-width: 160em) {
-      top: 2%;
-      right: 78.9rem;
-    }
-
-    // @media only screen and (max-width: 125.8125em) {
-    //   right: 70.9rem;
-    // }
-
-    @media only screen and (max-width: 120em) {
-      right: 57.2rem;
-    }
-
-    @media only screen and (max-width: 90em) {
-      right: 40.3rem;
-    }
 
     // &:focus {
     //   outline: none;
@@ -146,6 +112,7 @@
     width: 2rem;
   }
 }
+// user-form-dialog
 
 .glossary-search-box {
   display: flex;

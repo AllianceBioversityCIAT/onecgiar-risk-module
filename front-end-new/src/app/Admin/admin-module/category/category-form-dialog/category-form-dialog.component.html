@@ -1,6 +1,6 @@
 <div class="form-dialog-header">
   <div class="form-dialog-header__text-box">
-    <p class="form-dialog-header__text-box__text">{{ mitigationData.action }}</p>
+    <p class="form-dialog-header__text-box__text">{{ categoryData.title }}</p>
   </div>
 
   <div class="form-dialog-header__icon-box">
@@ -17,13 +17,13 @@
 </div>
 
 <div class="form-dialog-content">
-  <form [formGroup]="mitigationForm" class="form-dialog-content">
+  <form [formGroup]="categoryFormData" class="form-dialog-content">
     <!-- //Email filed----- -->
 
     <div class="form-dialog-content__field--grid-column">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
-          >Mitigation name<span class="star">*</span></mat-label
+          >Category name<span class="star">*</span></mat-label
         >
       </div>
       <mat-form-field
@@ -35,8 +35,8 @@
         <input matInput formControlName="title" required />
         <mat-error
         class="error"
-        *ngIf="mitigationForm.controls?.title?.errors?.['required']"
-        >Mitigation name is required</mat-error
+        *ngIf="categoryFormData?.controls?.title?.errors?.['required']"
+        >Category title is required</mat-error
       >
       </mat-form-field>
     </div>
@@ -56,19 +56,42 @@
         <input matInput formControlName="description" required />
         <mat-error
         class="error"
-        *ngIf="mitigationForm.controls?.description?.errors?.['required']"
+        *ngIf="categoryFormData.controls?.description?.errors?.['required']"
         >Description is required</mat-error
       >
       </mat-form-field>
     </div>
 
-  
+    <div>
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Category group<span class="star">*</span></mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field--2"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+      <mat-select placeholder="Category group" formControlName="category_group_id">
+        <mat-option *ngFor="let catGroup of categoryGroup" [value]="catGroup.id">
+          {{ catGroup.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+      class="error"
+      *ngIf="categoryFormData.controls?.category_group_id?.errors?.['required']"
+      >category group is required</mat-error
+    >
+      </mat-form-field>
+    </div>
 
     <!-- //Update Button----- -->
     <div class="form-dialog-conten-button-box-2">
       <div class="form-dialog-conten__button-box">
         <button
-          *ngIf="!mitigationData.element"
+          *ngIf="!categoryData.element"
           class="form-dialog-conten__button-box__btn"
           type="submit"
           mat-raised-button
@@ -79,7 +102,7 @@
       </div>
       <div class="form-dialog-conten__button-box">
         <button
-          *ngIf="mitigationData.element"
+          *ngIf="categoryData.element"
           class="form-dialog-conten__button-box__btn"
           type="submit"
           mat-raised-button
@@ -91,38 +114,6 @@
       </div>
     </div>
 
-    <!-- <div class="form-dialog-content__layout">
-    <div>
-      <div class="form-dialog-content__title-box">
-        <mat-label class="form-dialog-content__title-box__title"
-          >First name</mat-label
-        >
-      </div>
-      <mat-form-field
-        class="form-dialog-content__field--2"
-        floatLabel="always"
-        hideRequiredMarker
-        appearance="outline"
-      >
-        <input type="text" matInput formControlName="firstName" required />
-      </mat-form-field>
-    </div>
-
-    <div>
-      <div class="form-dialog-content__title-box">
-        <mat-label class="form-dialog-content__title-box__title"
-          >Last name</mat-label
-        >
-      </div>
-      <mat-form-field
-        class="form-dialog-content__field--3"
-        floatLabel="always"
-        hideRequiredMarker
-        appearance="outline"
-      >
-        <input type="text" matInput formControlName="lastName" required />
-      </mat-form-field>
-    </div> -->
-    <!-- </div> -->
+    
   </form>
 </div>

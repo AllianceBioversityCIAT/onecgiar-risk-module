@@ -95,8 +95,9 @@
 
 .user-nav-button {
   display: flex;
+  justify-content: center;
   align-items: center;
-  width: 17.6rem;
+  width: 20.6rem;
   height: 4.6rem;
   border-radius: 4px;
   gap: 1.5rem;
@@ -138,13 +139,18 @@
   }
 
   &__title--1 {
+    color: #ffffff;
+
     padding: 0.5rem;
     font-size: 1.6rem;
     font-weight: 400;
     line-height: 2.4rem;
     letter-spacing: 0em;
     text-align: center;
-    color: #ffffff;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    overflow: hidden;
+    max-width: 107px;
   }
 
   &__title--2 {

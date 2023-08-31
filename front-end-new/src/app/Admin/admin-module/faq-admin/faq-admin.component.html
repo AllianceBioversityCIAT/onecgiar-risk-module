@@ -1,0 +1,166 @@
+<!-- user-management-content -->
+
+<div class="user-management__icon-box">
+  <mat-icon class="user-management__icon-box__icon">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="40"
+      height="30"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor"
+        d="M18 15H6l-4 4V3a1 1 0 0 1 1-1h15a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1m5-6v14l-4-4H8a1 1 0 0 1-1-1v-1h14V8h1a1 1 0 0 1 1 1M8.19 4c-.87 0-1.57.2-2.11.59c-.52.41-.78.98-.77 1.77l.01.03h1.93c.01-.3.1-.53.28-.69a1 1 0 0 1 .66-.23c.31 0 .57.1.75.28c.18.19.26.45.26.75c0 .32-.07.59-.23.82c-.14.23-.35.43-.61.59c-.51.34-.86.64-1.05.91C7.11 9.08 7 9.5 7 10h2c0-.31.04-.56.13-.74c.09-.18.26-.36.51-.52c.45-.24.82-.53 1.11-.93c.29-.4.44-.81.44-1.31c0-.76-.27-1.37-.81-1.82C9.85 4.23 9.12 4 8.19 4M7 11v2h2v-2H7m6 2h2v-2h-2v2m0-9v6h2V4h-2Z"
+        fill="black"
+      /></svg
+  ></mat-icon>
+  <span class="user-management__icon-box__title">FAQ</span>
+</div>
+
+<div class="user-management__text-box--1">
+  <p class="user-management__text-box__title">
+    Welcome to the user management panel, here you can manage the users and
+    their roles within the platform.
+  </p>
+</div>
+
+<div class="user-management__content--1">
+  <div class="user-management__container-1">
+    <div class="user-management__search-box-flex">
+      <div class="user-management__search-box">
+        <!-- <form action="" class="search">
+        <input
+          class="search__input"
+          matInput
+          (keyup)="applyFilter($event)"
+          placeholder="Search"
+          #input
+        />
+
+        <button
+          style="border: none; cursor: pointer; background-color: #ffffff12"
+          class="search__button"
+        >
+          <mat-icon class="search__icon">
+            <img
+              class="search__icon"
+              src="../../assets/shared-image/Vector-search.svg"
+              alt="~/Frontend/images/icon _ search-icon"
+          /></mat-icon>
+        </button>
+      </form> -->
+      </div>
+      <div class="user-management__button-box">
+        <button
+          class="parameters-settings__button-box__btn"
+          (click)="openDialogCreateFaq('Add FAQ')"
+          mat-raised-button
+          color="primary"
+        >
+          Create Faq
+        </button>
+        <!-- <button
+        class="user-management__button-box__btn btn-export-size"
+        routerLink="#"
+        mat-raised-button
+        color="primary"
+      >
+        <mat-icon class="user-management__button-box__icon">
+          <img
+            class="user-management__button-box__icon--1"
+            src="../../assets/shared-image/Vectors.svg"
+            alt="~/Frontend/images/icon _ icon _Users"
+          />
+        </mat-icon>
+        <span class="user-management__button-box__title">Export data</span>
+      </button> -->
+      </div>
+    </div>
+
+    
+
+    <div class="table-box example-container">
+      <table mat-table [dataSource]="dataSource">
+        <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h1">ID</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.id }}
+          </td>
+        </ng-container>
+
+        <!-- Question Column -->
+        <ng-container matColumnDef="question">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-3">Question</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="td-3-h">{{ element.question }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Answer Column -->
+        <ng-container matColumnDef="answer">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h3">Answer</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="td-h">{{ element.answer }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Action Name Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h5">Actions</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="m">
+              <button
+                matTooltip="Edit"
+                style="border: none; cursor: pointer; background-color: #ffffff"
+                (click)="openDialogEditFaq('Edit Faq', element)"
+              >
+                <mat-icon class="user-management-table__icon">
+                  <img
+                    class="table__icon"
+                    src="../../assets/shared-image/Vector-edit.svg"
+                    alt="~/Frontend/images/icon _ Vector-edit"
+                /></mat-icon>
+              </button>
+
+              <button
+                matTooltip="Delete"
+                style="border: none; cursor: pointer; background-color: #ffffff"
+                (click)="deleteFaq(element.id)"
+              >
+                <mat-icon class="user-management-table__icon">
+                  <img
+                    class="table__icon"
+                    src="../../assets/shared-image/Vector-delete.svg"
+                    alt="~/Frontend/images/icon _ Vector-delete"
+                /></mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr
+          class="table-header"
+          mat-header-row
+          *matHeaderRowDef="displayedColumns"
+        ></tr>
+        <tr
+          class="table-header"
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+        ></tr>
+      </table>
+    </div>
+  </div>
+</div>

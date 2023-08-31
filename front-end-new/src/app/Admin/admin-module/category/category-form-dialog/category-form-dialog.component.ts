@@ -23,18 +23,27 @@ export class CategoryFormDialogComponent implements OnInit {
   categoryGroup: any;
   categoryFormData = new FormGroup({
     id: new FormControl(this.categoryData?.element?.id || null),
-    title: new FormControl(this.categoryData?.element?.title || null, [Validators.required]),
-    description: new FormControl(this.categoryData?.element?.description || null, [Validators.required]),
-    category_group_id: new FormControl(this.categoryData?.element?.category_group_id || null, [Validators.required]),
+    title: new FormControl(this.categoryData?.element?.title || null, [
+      Validators.required,
+    ]),
+    description: new FormControl(
+      this.categoryData?.element?.description || null,
+      [Validators.required]
+    ),
+    category_group_id: new FormControl(
+      this.categoryData?.element?.category_group_id || null,
+      [Validators.required]
+    ),
   });
 
   async ngOnInit(): Promise<void> {
-    this.categoryGroup = await this.categoriesGroupServices.getCategoriesGroup();
+    this.categoryGroup =
+      await this.categoriesGroupServices.getCategoriesGroup();
   }
 
   async onSubmit() {
     //Add
-    if(this.categoryData.element == null) {
+    if (this.categoryData.element == null) {
       if (this.categoryFormData.valid) {
         await this.categoriesService.addCategory(this.categoryFormData.value);
         this.onCloseDialog();
@@ -44,7 +53,9 @@ export class CategoryFormDialogComponent implements OnInit {
     //edit
     else {
       if (this.categoryFormData.valid) {
-        await this.categoriesService.updateCategory(this.categoryFormData.value)
+        await this.categoriesService.updateCategory(
+          this.categoryFormData.value
+        );
         this.onCloseDialog();
         this.toastr.success('Updated successfully');
       }

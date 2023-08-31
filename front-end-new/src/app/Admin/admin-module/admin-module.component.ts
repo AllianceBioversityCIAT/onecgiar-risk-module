@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-admin-module',
@@ -16,7 +17,13 @@ export class AdminModuleComponent implements OnInit {
     announcements: 'announcements',
   };
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private headerService: HeaderService
+  ) {
+    this.headerService.background = 'gray';
+  }
 
   ngOnInit(): void {}
 }

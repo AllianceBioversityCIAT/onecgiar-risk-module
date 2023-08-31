@@ -4,3 +4,43 @@
 @import "../../../../sass/pages/admin-module/mitigation-status";
 @import "../../../../sass/components/button";
 @import "../../../../sass/pages/admin-module/posted";
+
+.posted-scroll-box {
+  height: 35.2rem;
+  max-width: 100%;
+  overflow: auto;
+  padding: 1rem 3.5rem 2.6rem 3.5rem;
+  margin: 2rem 0 0 0;
+  // border: 1px solid #b9b9b9b5;
+  // border-radius: 0.5rem;
+  background-color: #f3f3f349;
+}
+
+.posted-scroll-box::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+.posted-scroll-box::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #d9d9d9;
+  border-radius: 0.4rem;
+  height: 2rem;
+}
+
+.posted-scroll-box::-webkit-scrollbar-thumb {
+  background-color: $color-button-primary;
+  // outline: 1px solid slategrey;
+  border-radius: 4px;
+}
+
+.posted-scroll-box {
+  cursor: auto;
+}
+
+.posted-scroll-box::-webkit-scrollbar-button,
+.posted-scroll-box::-webkit-scrollbar-track,
+.posted-scroll-box::-webkit-scrollbar-track-piece,
+.posted-scroll-box::-webkit-scrollbar-corner,
+.posted-scroll-box::-webkit-resizer {
+  display: block;
+  height: 3rem;
+}

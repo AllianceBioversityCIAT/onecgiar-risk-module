@@ -13,7 +13,9 @@
         router.url === riskUrl.about ||
         router.url === riskUrl.glossary ||
         router.url === riskUrl.faq ||
-        router.url === riskUrl.dashboard,
+        router.url === riskUrl.dashboard ||
+        router.url === riskUrl.pageNotFound,
+
       'header-risk__background-c-secondary':
         router.url === adminUrl.admin ||
         router.url === adminUrl.parameterSetttings ||
@@ -23,7 +25,10 @@
         router.url === adminUrl.announcements ||
         router.url === adminUrl.posted ||
         router.url === adminUrl.drafts ||
-        router.url === adminUrl.userManagement
+        router.url === adminUrl.userManagement ||
+        router.url === adminUrl.glossary ||
+        router.url === adminUrl.faq ||
+        router.url === adminUrl.pageNotFounds
     }"
     class="header-risk__content"
   >
@@ -56,7 +61,8 @@
             router.url === riskUrl.about ||
             router.url === riskUrl.glossary ||
             router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard,
+            router.url === riskUrl.dashboard ||
+            router.url === riskUrl.pageNotFound,
           'user-nav-button__background-c-secondary':
             router.url === adminUrl.admin ||
             router.url === adminUrl.parameterSetttings ||
@@ -66,7 +72,10 @@
             router.url === adminUrl.announcements ||
             router.url === adminUrl.posted ||
             router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement
+            router.url === adminUrl.userManagement ||
+            router.url === adminUrl.glossary ||
+            router.url === adminUrl.faq ||
+            router.url === adminUrl.pageNotFounds
         }"
         [matMenuTriggerFor]="menu"
         class="user-nav-button--notific"
@@ -135,7 +144,8 @@
             router.url === riskUrl.about ||
             router.url === riskUrl.glossary ||
             router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard,
+            router.url === riskUrl.dashboard ||
+            router.url === riskUrl.pageNotFound,
           'user-nav-button__background-c-secondary':
             router.url === adminUrl.admin ||
             router.url === adminUrl.parameterSetttings ||
@@ -145,7 +155,10 @@
             router.url === adminUrl.announcements ||
             router.url === adminUrl.posted ||
             router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement
+            router.url === adminUrl.userManagement ||
+            router.url === adminUrl.glossary ||
+            router.url === adminUrl.faq ||
+            router.url === adminUrl.pageNotFounds
         }"
         class="user-nav-button"
         mat-icon-button
@@ -157,7 +170,9 @@
             src="../../assets/shared-image/🦆 icon _User avatar filled_.svg"
             alt="~/Frontend/images/icon _User avatar"
         /></mat-icon>
-        <span class="user-nav-button__title--1">{{user_info?.full_name}}</span>
+        <span class="user-nav-button__title--1">{{
+          user_info?.full_name
+        }}</span>
       </button>
 
       <button
@@ -172,7 +187,8 @@
             router.url === riskUrl.about ||
             router.url === riskUrl.glossary ||
             router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard,
+            router.url === riskUrl.dashboard ||
+            router.url === riskUrl.pageNotFound,
           'user-nav-button__background-c-secondary':
             router.url === adminUrl.admin ||
             router.url === adminUrl.parameterSetttings ||
@@ -182,7 +198,10 @@
             router.url === adminUrl.announcements ||
             router.url === adminUrl.posted ||
             router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement
+            router.url === adminUrl.userManagement ||
+            router.url === adminUrl.glossary ||
+            router.url === adminUrl.faq ||
+            router.url === adminUrl.pageNotFounds
         }"
         class="user-nav-button"
         mat-icon-button
@@ -198,10 +217,6 @@
         /></mat-icon>
       </button>
 
-
-
-
-
       <button
         [ngClass]="{
           'user-nav-button__background-c-primary':
@@ -209,12 +224,13 @@
             router.url === riskUrl.riskManagement ||
             router.url === riskUrl.riskReport ||
             router.url === riskUrl.teamMembers ||
-            router.url === riskUrl.published ||
+            router.url === riskUrl.submitted ||
             router.url === riskUrl.accelerated ||
             router.url === riskUrl.about ||
             router.url === riskUrl.glossary ||
             router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard,
+            router.url === riskUrl.dashboard ||
+            router.url === riskUrl.pageNotFound,
           'user-nav-button__background-c-secondary':
             router.url === adminUrl.admin ||
             router.url === adminUrl.parameterSetttings ||
@@ -224,7 +240,10 @@
             router.url === adminUrl.announcements ||
             router.url === adminUrl.posted ||
             router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement
+            router.url === adminUrl.userManagement ||
+            router.url === adminUrl.glossary ||
+            router.url === adminUrl.faq ||
+            router.url === adminUrl.pageNotFounds
         }"
         class="user-nav-button"
         mat-icon-button
@@ -239,11 +258,6 @@
             alt="~/Frontend/images/icon _logout"
         /></mat-icon>
       </button>
-
-
-
-
-
     </nav>
   </div>
 
@@ -260,7 +274,10 @@
         router.url === adminUrl.announcements ||
         router.url === adminUrl.posted ||
         router.url === adminUrl.drafts ||
-        router.url === adminUrl.userManagement,
+        router.url === adminUrl.userManagement ||
+        router.url === adminUrl.glossary ||
+        router.url === adminUrl.faq ||
+        router.url === adminUrl.pageNotFounds,
       'header-risk__main-nav__background-c-primary':
         router.url === riskUrl.home ||
         router.url === riskUrl.riskManagement ||
@@ -271,13 +288,14 @@
         router.url === riskUrl.about ||
         router.url === riskUrl.glossary ||
         router.url === riskUrl.faq ||
-        router.url === riskUrl.dashboard
+        router.url === riskUrl.dashboard ||
+        router.url === riskUrl.pageNotFound
     }"
   >
     <ul class="main-nav-list">
       <li>
         <a
-        (click)="accessHome()"
+          (click)="accessHome()"
           [routerLink]="[homeRoute]"
           class="main-nav-link"
           routerLinkActive="active"

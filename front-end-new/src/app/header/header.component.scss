@@ -81,10 +81,6 @@
   line-height: 114.5%;
 }
 
-::ng-deep .mat-mdc-menu-content {
-  padding: 0 !important;
-}
-
 // :host{
 //   ::ng-deep .mdc-menu-surface--open {
 //     display: flex;
@@ -97,3 +93,10 @@
 //   margin-top: 40px;
 //   background-color: #0f212f;
 // }
+
+:host {
+  ::ng-deep .mdc-menu-surface--open {
+    margin: 1rem 0 0 0 !important;
+    padding: 0 1rem !important;
+  }
+}

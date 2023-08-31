@@ -1,11 +1,11 @@
 export class Glossary {
-  public glossaryId: number;
-  public termName: string;
-  public termDescription: string;
+  public id: number;
+  public title: string;
+  public description: string;
 
-  constructor(glossaryId: number, termName: string, termDescription: string) {
-    this.glossaryId = glossaryId;
-    this.termName = termName;
-    this.termDescription = termDescription;
+  constructor(id: number, title: string, description: string) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
   }
 }

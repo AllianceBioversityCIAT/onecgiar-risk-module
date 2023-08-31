@@ -51,12 +51,12 @@
   box-shadow: 0 0.4rem 0.4rem 0 #00000040;
 
   &--1 {
-    height: 63.2rem;
+    height: 100%;
     margin: 0 0 0 0;
     border-radius: 1rem 1rem 1rem 1rem;
     background-color: #ffffff;
     position: relative;
-    padding: 3rem;
+    padding: 2rem 2rem 15rem 2rem;
     box-shadow: 0 0.4rem 0.4rem 0 #00000040;
   }
 }
@@ -88,7 +88,7 @@
 
 .user-management__container {
   width: 100%;
-  padding: 0 3rem 0 3rem;
+  // padding: 0 3rem 0 3rem;
   margin: 0 auto;
 }
 
@@ -205,7 +205,6 @@
     width: 2rem;
   }
 }
-
 // user-form-dialog
 
 .form-dialog-header {
@@ -333,7 +332,7 @@
 
 .form-dialog-conten-button-box {
   text-align: right;
-  margin-top: 16rem;
+  margin-top: 2rem;
 }
 
 :host {

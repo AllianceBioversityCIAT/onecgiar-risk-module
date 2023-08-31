@@ -1,0 +1,30 @@
+@import "../../../sass/layout/admin-module/user-management";
+@import "../../../sass/pages/admin-module/user-management";
+@import "../../../sass/pages/admin-module/parameters-settings";
+@import "../../../sass/pages/admin-module/categories";
+@import "../../../sass/components/table-categories";
+@import "../../../sass/components/button";
+
+.risk-management-export-box-icon {
+  width: 2.2rem !important;
+  height: 3.1rem !important;
+
+  // margin: -0.1rem 0.1rem;
+  position: relative;
+  top: -38%;
+  left: -12%;
+
+  &--1 {
+    width: 2.2rem !important;
+    height: 3.1rem !important;
+    position: relative;
+    top: -1%;
+    left: -5%;
+  }
+}
+
+.user-management__container-1 {
+  width: 100%;
+  padding: 7rem 3rem 0 3rem;
+  margin: 0 auto;
+}

@@ -1,5 +1,4 @@
 export class User {
-  public color: string;
   public userId: number;
   public userName: string;
   public email: string;
@@ -12,7 +11,6 @@ export class User {
     email: string,
     role: string
   ) {
-    this.color = color;
     this.userId = userId;
     this.userName = userName;
     this.email = email;

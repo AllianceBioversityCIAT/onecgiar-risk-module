@@ -1,9 +1,24 @@
-<div mat-dialog-container>
-  <div class="form-dialog-header">
+<div mat-dialog-container class="delete-box">
+  <!-- <div class="form-dialog-header delete-header">
     <div class="form-dialog-header__text-box">
-      <p class="form-dialog-header__text-box__text" *ngIf="data.title == 'Logout'">Logout</p>
-      <p class="form-dialog-header__text-box__text" *ngIf="data.title != 'Send to all users' || data.title != 'Logout'">Delete</p>
-      <p class="form-dialog-header__text-box__text" *ngIf="data.title == 'Send to all users'">{{data.title}}</p>
+      <p
+        class="form-dialog-header__text-box__text"
+        *ngIf="data.title == 'Logout'"
+      >
+        Logout
+      </p>
+      <p
+        class="form-dialog-header__text-box__text"
+        *ngIf="data.title != 'Send to all users' || data.title != 'Logout'"
+      >
+        Delete
+      </p>
+      <p
+        class="form-dialog-header__text-box__text"
+        *ngIf="data.title == 'Send to all users'"
+      >
+        {{ data.title }}
+      </p>
     </div>
 
     <div class="form-dialog-header__icon-box">
@@ -17,12 +32,58 @@
         </mat-icon>
       </button>
     </div>
+  </div> -->
+
+  <div class="delete-content-box">
+    <div class="el-1"></div>
+    <div class="el-2">
+      <div class="el-2-box">
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="83"
+            height="83"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="#0f212f"
+              d="M12 4c-4.419 0-8 3.582-8 8s3.581 8 8 8s8-3.582 8-8s-3.581-8-8-8zm3.707 10.293a.999.999 0 1 1-1.414 1.414L12 13.414l-2.293 2.293a.997.997 0 0 1-1.414 0a.999.999 0 0 1 0-1.414L10.586 12L8.293 9.707a.999.999 0 1 1 1.414-1.414L12 10.586l2.293-2.293a.999.999 0 1 1 1.414 1.414L13.414 12l2.293 2.293z"
+            />
+          </svg>
+        </div>
+        <div class="delete-text-box">
+          <p class="delete-text-box__text">
+            <mat-dialog-content class="delete-text-box__text">
+              {{ data.message }}
+            </mat-dialog-content>
+          </p>
+        </div>
+        <div>
+          <mat-dialog-actions>
+            <button
+              class="delete-dialog-button-box__btn"
+              mat-raised-button
+              [mat-dialog-close]="true"
+              cdkFocusInitial
+            >
+              Yes
+            </button>
+
+            <button
+              class="delete-dialog-button-box__btn--no"
+              mat-raised-button
+              [mat-dialog-close]="false"
+            >
+              No
+            </button>
+          </mat-dialog-actions>
+        </div>
+      </div>
+    </div>
+    <div class="el-3"></div>
   </div>
 
-  <mat-dialog-content class="subheading">
-    {{ data.message }}
-  </mat-dialog-content>
-  <mat-dialog-actions>
+  <!-- <mat-dialog-actions>
     <button
       class="delete-dialog-button-box__btn"
       mat-raised-button
@@ -39,5 +100,6 @@
     >
       No
     </button>
-  </mat-dialog-actions>
+  </mat-dialog-actions> 
+ -->
 </div>

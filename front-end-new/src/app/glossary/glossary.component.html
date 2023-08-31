@@ -11,25 +11,6 @@
       <div class="glossary-content-container">
         <div class="glossary-search-box">
           <form class="search" [formGroup]="form">
-            <button
-              style="border: none; background-color: #ffffff12"
-              class="search__button"
-            >
-              <mat-icon class="search__icon">
-                <svg
-                  class="search__icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="16"
-                  viewBox="0 0 18 16"
-                  fill="none"
-                >
-                  <path
-                    d="M16.7862 13.9677L12.2956 9.8653C12.0818 9.66995 11.761 9.57227 11.4403 9.57227C12.2956 8.59551 12.8302 7.22804 12.8302 5.86057C12.8302 2.63726 9.9434 0 6.41509 0C2.88679 0 0 2.63726 0 5.86057C0 9.08389 2.88679 11.7211 6.41509 11.7211C7.91195 11.7211 9.40881 11.2328 10.478 10.3537C10.478 10.6467 10.478 10.9397 10.7987 11.1351L15.2893 15.2375C15.5031 15.4328 15.8239 15.5305 16.0377 15.5305C16.2516 15.5305 16.5723 15.4328 16.7862 15.2375C17.2138 14.9445 17.2138 14.3584 16.7862 13.9677ZM6.41509 10.256C3.74214 10.256 1.60377 8.30248 1.60377 5.86057C1.60377 3.41867 3.74214 1.46514 6.41509 1.46514C9.08805 1.46514 11.2264 3.41867 11.2264 5.86057C11.2264 8.30248 9.08805 10.256 6.41509 10.256Z"
-                    fill="#0F212F"
-                  /></svg
-              ></mat-icon>
-            </button>
             <input
               formControlName="search"
               class="search__input"
@@ -37,6 +18,17 @@
               placeholder="Search by term"
               #input
             />
+            <button
+              style="border: none; background-color: #ffffff12"
+              class="search__button"
+            >
+              <mat-icon class="search__icon">
+                <img
+                  class="search__icon"
+                  src="../../assets/shared-image/Vector-search.svg"
+                  alt="~/Frontend/images/icon _ search-icon"
+              /></mat-icon>
+            </button>
           </form>
 
           <!-- <div class="glossary-text-search-box">
@@ -78,7 +70,9 @@
       <div class="glossary-matching-records glossary-content-container">
         <p class="glossary-matching-records__text">
           Showing
-          <span class="glossary-matching-records__text--1">{{data?.count}}</span>
+          <span class="glossary-matching-records__text--1">{{
+            data?.count
+          }}</span>
           matching records
         </p>
       </div>
@@ -98,13 +92,14 @@
 
       <div style="text-align: center" class="glossary-content-container">
         <mat-paginator
-        [length]="length"
-        [pageSize]="pageSize"
-        [pageIndex]="pageIndex - 1"
-        (page)="pagination($event)"
-        [hidePageSize]="true"
-        aria-label="Select page">
-      </mat-paginator>
+          [length]="length"
+          [pageSize]="pageSize"
+          [pageIndex]="pageIndex - 1"
+          (page)="pagination($event)"
+          [hidePageSize]="true"
+          aria-label="Select page"
+        >
+        </mat-paginator>
       </div>
     </div>
   </div>

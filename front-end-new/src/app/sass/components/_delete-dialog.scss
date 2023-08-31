@@ -1,5 +1,6 @@
 .mat-mdc-dialog-actions {
-  justify-content: end;
+  justify-content: center;
+  gap: 3rem;
 }
 
 .subheading {
@@ -17,8 +18,8 @@
 
 .delete-dialog-button-box {
   &__btn--no {
-    width: 8rem;
-    height: 3.2rem;
+    width: 11.9631rem;
+    height: 3.0107rem;
 
     font-family: "Poppins", sans-serif !important;
 
@@ -30,14 +31,14 @@
 
     color: #fafafa !important;
     border-radius: 5px;
-    background-color: #436280 !important;
+    background-color: #0f212f !important;
     box-shadow: 4px 4px 4px 0px #00000040;
     cursor: url(../../../assets/shared-image/Vector-cursor.svg), pointer !important;
   }
 
   &__btn {
-    width: 8rem;
-    height: 3.2rem;
+    width: 11.9631rem;
+    height: 3.0107rem;
 
     font-size: 1.4rem;
     font-weight: 500;
@@ -51,4 +52,13 @@
     box-shadow: 4px 4px 4px 0px #00000040;
     cursor: url(../../../assets/shared-image/Vector-cursor.svg), pointer !important;
   }
+}
+
+.form-dialog-header[_ngcontent-mqw-c18] {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 4.5rem;
+  background-color: #0f212f;
+  padding: 0 0.5rem;
 }

@@ -11,8 +11,7 @@ import { AnnouncementService } from 'src/app/services/announcement.service';
 export class PostedComponent {
   constructor(
     private dialog: MatDialog,
-    private announcementService: AnnouncementService,
-
+    private announcementService: AnnouncementService
   ) {}
 
   postedAnnouncements: any;
@@ -22,17 +21,17 @@ export class PostedComponent {
   }
   //Drafts
   async getData() {
-    this.postedAnnouncements = await this.announcementService.getAnnouncementPosted();
+    this.postedAnnouncements =
+      await this.announcementService.getAnnouncementPosted();
   }
 
   openDialogCreateAnnouncement(title: any) {
     this.dialog.open(AnnouncementsFormDialogComponent, {
       width: '68rem',
-      height: '45.2rem',
+      height: '58.2rem',
       data: {
         title: title,
       },
     });
   }
-
 }

@@ -3,9 +3,9 @@
   // max-width: 151.2rem;
   // height: 98.6rem;
   display: flex;
-
+  background-color: #fafafa;
+  min-height: calc(100vh - 210px);
   &__sidebar {
-    height: 93.8rem;
     // flex: 0 0 25.6rem;
     width: 18%;
     background-color: $color-side-bar;
@@ -17,8 +17,15 @@
 
   &__content {
     /* 1140px */
-    width: 88%;
-    padding: 0 4.5rem;
+
+    width: 81%;
+    height: 100%;
+    padding: 0 2.5rem;
+    margin-bottom: 9.6rem;
+
+    @media only screen and (max-width: 84em) {
+      width: 80%;
+    }
 
     // @media only screen and (max-width: 160em) {
     //   max-width: 95%;
@@ -28,8 +35,6 @@
     // @media only screen and (max-width: 64em) {
     //   padding: 0 3.2rem;
     // }
-
-    background-color: #fafafa;
   }
 }
 

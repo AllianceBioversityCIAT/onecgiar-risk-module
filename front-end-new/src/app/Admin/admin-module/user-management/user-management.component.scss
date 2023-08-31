@@ -1,3 +1,126 @@
 @import "../../../sass/layout/admin-module/admin-module";
 @import "../../../sass/pages/admin-module/user-management";
-@import "../../../sass/components/table";
+@import "../../../sass/components/table-user-management";
+
+.risk-management-form-field-box {
+  // max-width: 128.6rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+
+  height: 3.2rem;
+
+  &__input-4 {
+    font-family: inherit;
+    font-size: inherit;
+    color: #0f212f;
+
+    border-radius: 1rem;
+    border: 0.5px solid #808080;
+    background-color: #ffffff;
+
+    padding: 0.4rem 1rem;
+
+    width: 112%;
+    transition: all 0.2s;
+
+    position: relative;
+
+    &:focus {
+      outline: none;
+      // width: 100%;
+      border: 1px solid #b9b9b9;
+    }
+
+    &::-webkit-input-placeholder {
+      font-family: "Poppins", sans-serif;
+      color: #808080;
+
+      font-size: 1.2rem;
+      font-style: normal;
+      font-weight: 300;
+      line-height: normal;
+      position: absolute;
+      top: 50%;
+      left: 15%;
+      transform: translate(-71%, -43%);
+    }
+  }
+}
+
+.field-4 {
+  width: 10rem;
+  height: 3.2rem;
+}
+
+.risk-management-form-field {
+  // width: 13rem;
+  // height: 3.2rem;
+
+  position: relative;
+  &__label {
+    display: inline-block;
+    color: #808080;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0 2rem 1rem 0;
+  }
+}
+
+.reset-m-btn {
+  margin: 6rem 0 0 0;
+}
+
+.risk-management-reset-btn {
+  width: 9.1rem;
+  height: 3.2rem;
+
+  color: #ffffff !important;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  border-radius: 1rem;
+  background-color: #0f212f !important;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+::ng-deep .cdk-overlay-pane {
+  margin: 1rem -1rem !important;
+  padding: 0 0.5rem !important;
+}
+
+.risk-management-export-box-icon {
+  width: 2.2rem !important;
+  height: 3.1rem !important;
+
+  // margin: -0.1rem 0.1rem;
+  position: relative;
+  top: -2%;
+  left: 2%;
+
+  &--1 {
+    width: 2.2rem !important;
+    height: 3.1rem !important;
+    position: relative;
+    top: -1%;
+    left: -5%;
+  }
+}
+
+.user-management-paginator-box {
+  display: flex;
+  justify-content: end;
+}
+
+::ng-deep .cdk-overlay-pane {
+  margin: 0.5rem 0rem !important;
+  padding: 0 0.5rem !important;
+}
