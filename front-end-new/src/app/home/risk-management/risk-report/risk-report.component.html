@@ -62,15 +62,17 @@
                 </button>
               </div>
               <!-- btn-3 -->
-              <!-- <div class="risk-report-button-box">
+              <div class="risk-report-button-box">
                 <button
+                [disabled]="!canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || this.isTrue || dontNeedHelp == false"
                   class="risk-report-button-box__btn"
-                  (click)="openDialogSubmitRisk('Submit risks')"
+                  (click)="publish(initiative.id)"
+                  [ngClass]="{ disabled: !canPublish() || this.NumberOfRisks <= 0 || publishStatus.value == '0' || (AllRisk?.redundentRisk?.length != 0 && AllRisk?.risks?.length == 0) || this.isTrue || dontNeedHelp == false}"
                   mat-raised-button
                 >
                   Submit
                 </button>
-              </div> -->
+              </div>
       
               <!-- btn-4 -->
               <div class="risk-report-button-box">
@@ -82,6 +84,8 @@
               <!-- btn-5 -->
               <div class="risk-report-button-box">
                 <button
+                [disabled]="!canEdit()"
+                [ngClass]="{ disabled: !canEdit() }"
                   class="risk-report-button-box__btn--4"
                   routerLink="./create-risk"
                   mat-raised-button

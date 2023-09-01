@@ -25,100 +25,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { DeleteConfirmDialogComponent } from "src/app/delete-confirm-dialog/delete-confirm-dialog.component";
-
-
-
-// @Component({
-//   selector: 'publish-dialog',
-//   templateUrl: 'publish-dialog.html',
-//   styleUrls: ['./publish-dialog.scss'],
-// })
-// export class PublishDialog implements OnInit {
-//   constructor(
-//     public dialogRef: MatDialogRef<PublishDialog>,
-//     @Inject(MAT_DIALOG_DATA) public data: any,
-//     private initiativeService: InitiativesService
-//   ) {}
-//   tops: any = null;
-//   error: any[] = [];
-
-//   async ngOnInit() {
-//     this.tops = await this.initiativeService.getTopRisks(
-//       this.data.initiative_id
-//     );
-//     this.top = this.tops.top as [];
-//     this.similar = this.tops.similar as [];
-//   }
-//   onNoClick(): void {
-//     this.dialogRef.close(false);
-//   }
-//   async publish() {
-//     this.error = [];
-//     // case 1
-//     if(this.tops.top.length + this.tops.similar.length <= 5) {
-//         this.dialogRef.close(this.data);
-//     }
-//     //case 2
-//     if(this.tops.top.length + this.tops.similar.length > 5) {
-
-//       if(this.tops.top.length < 5) {
-//         this.error.push("please make sure that you have selected the top 5 risks");
-//       }
-
-//       if(this.tops.top.length == 5) {
-//         let current_level_for_top = this.tops.top.map((d: { current_level: any; }) => d.current_level);
-//         let current_level_for_similar = this.tops.similar.map((d: { current_level: any; }) => d.current_level);
-  
-//         let similarHaveLevelMoreTop: any[] = [];
-  
-//         current_level_for_top.map((current_top: any) => {
-//           current_level_for_similar.map((current_similar: any) => {
-//             if(current_top < current_similar) {
-//               similarHaveLevelMoreTop.push(current_similar);
-//             }
-//           })
-//         })
-  
-//         if(similarHaveLevelMoreTop.length == 0 && this.error.length == 0){
-//           this.dialogRef.close(this.data);
-//         }
-//         else if(similarHaveLevelMoreTop.length != 0){
-//           this.error.push("please make sure that you have selected the top 5 risks");
-//         }
-//       }
-//     }
-//   }
-//   toparray = [];
-
-//   similararray = [];
-
-//   top: any[] = [];
-
-//   similar: any[] = [];
-//   evenPredicate(item: any): any {
-//     return this.data?.length < 5;
-//   }
-
-//   drop(event: CdkDragDrop<string[]>) {
-//     if (event.previousContainer === event.container) {
-//       moveItemInArray(
-//         event.container.data,
-//         event.previousIndex,
-//         event.currentIndex
-//       );
-//     } else {
-//       transferArrayItem(
-//         event.previousContainer.data,
-//         event.container.data,
-//         event.previousIndex,
-//         event.currentIndex
-//       );
-//     }
-
-//     this.data.top = this.top;
-//   }
-// }
-
+import { SubmitRiskDialogComponent } from "./submit-risk-dialog/submit-risk-dialog.component";
 
 
 @Component({
@@ -127,12 +34,7 @@ import { DeleteConfirmDialogComponent } from "src/app/delete-confirm-dialog/dele
   styleUrls: ['./risk-report.component.scss']
 })
 export class RiskReportComponent implements OnInit, OnDestroy {
-  // expandedElement!: RiskReport | null;
-  // public url1: string = '';
 
-  // public riskUrl = {
-  //   home: '/home/risk-management/risk-report',
-  // };
 
   constructor(
     public router: Router,
@@ -200,26 +102,26 @@ export class RiskReportComponent implements OnInit, OnDestroy {
   refresh(data: any = null) {
     this.loadInitiative();
   }
-  // async publish(id: number) {
-  //   this.dialog
-  //     .open(PublishDialog, {
-  //       maxHeight: '800px',
-  //       maxWidth: '700px',
-  //       data: { initiative_id: this.id, top: [] },
-  //     })
-  //     .afterClosed()
-  //     .subscribe(async (dialogResult) => {
-  //       if (dialogResult) {
-  //         await this.initiativeService.Publish(id, dialogResult);
+  async publish(id: number) {
+    this.dialog
+      .open(SubmitRiskDialogComponent, {
+        maxHeight: '800px',
+        maxWidth: '700px',
+        data: { initiative_id: this.id, top: [] },
+      })
+      .afterClosed()
+      .subscribe(async (dialogResult) => {
+        if (dialogResult) {
+          await this.initiativeService.Publish(id, dialogResult);
 
-  //         this.toastr.success(
-  //           'Success',
-  //           `Risks for ${this.initiative.name} has been published successfully`
-  //         );
-  //         this.loadInitiative();
-  //       }
-  //     });
-  // }
+          this.toastr.success(
+            'Success',
+            `Risks for ${this.initiative.name} has been published successfully`
+          );
+          this.loadInitiative();
+        }
+      });
+  }
   async checkValue(id: number, value: any) {
     await this.riskService.updateRedundant(id, value);
   }

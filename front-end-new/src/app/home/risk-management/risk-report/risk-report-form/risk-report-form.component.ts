@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiActionsControlsService } from 'src/app/shared-services/actions-controls-services/api-actions-controls.service';
 import { ActionsControlsFormDialogComponent } from './actions-controls-form-dialog/actions-controls-form-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { RiskService } from 'src/app/services/risk.service';
 import { InitiativesService } from 'src/app/services/initiatives.service';
@@ -16,6 +16,7 @@ import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/dele
 import { ToastrService } from 'ngx-toastr';
 import { RiskReportComponent } from '../risk-report.component';
 import { AppSocket } from 'src/app/services/socket.service';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-risk-report-form',
   templateUrl: './risk-report-form.component.html',
@@ -307,6 +308,13 @@ export class RiskReportFormComponent implements OnInit{
           this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
         }
       }
+    }
+    
+    //dont allow team member to create risk
+    let url: any = '';
+    url = this.router.url.split('/').at(-1);
+    if(this.my_roles?.includes(ROLES.MEMBER) && url == 'create-risk') {
+      this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
 
 

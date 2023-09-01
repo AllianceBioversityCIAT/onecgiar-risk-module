@@ -26,7 +26,7 @@ export class LoginComponent {
     if (result) {
       this.error = null;
       localStorage.setItem('access_token', result.access_token);
-        this.router.navigate(['./home/risk-management']);
+        this.router.navigate(['./home']);
         this.dialogRef.close(result);
     } else this.error = 'Please enter a valid email address';
   }
