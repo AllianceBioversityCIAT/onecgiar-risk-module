@@ -29,6 +29,7 @@ import { FaqAdminComponent } from './Admin/admin-module/faq-admin/faq-admin.comp
 import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotfoundcomponent.component';
 import { RiskManagementTableComponent } from './home/risk-management/risk-management-table/risk-management-table.component';
 import { RiskReportTableComponent } from './home/risk-management/risk-report/risk-report-table/risk-report-table.component';
+import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -112,15 +113,16 @@ const routes: Routes = [
                 path: 'team-members',
                 component: TeamMembersComponent,
               },
-              // {
-              //   path: 'submitted-versions',
-              //   component: PublishedVersionsComponent,
-              //   children: [
-              //     {
-
-              //     }
-              //   ]
-              // },
+              {
+                path: 'versions',
+                component: PublishedVersionsComponent,
+                children: [
+                  {
+                    path: '',
+                    component: VersionsTableComponent
+                  }
+                ]
+              },
               // {
               //   path: 'risk-dashboard',
               //   component:

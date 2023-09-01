@@ -67,6 +67,7 @@ import { AppSocket } from './services/socket.service';
 import { HttpRequestInterceptor } from './services/http-request-interceptor';
 import { SearchRiskComponent } from './home/risk-management/risk-report/search-risk/search-risk.component';
 import { SatPopoverModule } from '@ncstate/sat-popover';
+import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { SatPopoverModule } from '@ncstate/sat-popover';
     RiskManagementTableComponent,
     RiskReportTableComponent,
     SearchRiskComponent,
+    VersionsTableComponent,
   ],
   imports: [
     BrowserModule,
