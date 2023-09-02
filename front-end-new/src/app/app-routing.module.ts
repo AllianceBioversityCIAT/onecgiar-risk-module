@@ -120,7 +120,11 @@ const routes: Routes = [
                   {
                     path: '',
                     component: VersionsTableComponent
-                  }
+                  },
+                  {
+                    path: ':versionId',
+                    component: AcceleratedBreedingVersionComponent
+                  },
                 ]
               },
               // {

@@ -1394,3 +1394,22 @@ tr.example-detail-row {
   position: relative;
   bottom: -1000px;
 }
+
+.topRows {
+  position: relative;
+  counter-increment: line;
+
+}
+
+.topRows:after {
+  content: counter(line);
+  height: 22px;
+  width: 16px;
+  left: 0;
+  top: 0px;
+  border-radius: 0px 0px 20px 0;
+  position: absolute;
+  color: white;
+  padding-left: 3px;
+  background-color: #9fe715;
+}
