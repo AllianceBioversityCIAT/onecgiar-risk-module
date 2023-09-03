@@ -313,7 +313,7 @@ export class RiskReportFormComponent implements OnInit{
     //dont allow team member to create risk
     let url: any = '';
     url = this.router.url.split('/').at(-1);
-    if(this.my_roles?.includes(ROLES.MEMBER) && url == 'create-risk') {
+    if(this.my_roles?.includes(ROLES.MEMBER) && url == 'create-risk' && this.user_info.role != 'admin') {
       this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
 
