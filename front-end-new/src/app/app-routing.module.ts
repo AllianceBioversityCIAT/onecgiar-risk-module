@@ -30,6 +30,7 @@ import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotf
 import { RiskManagementTableComponent } from './home/risk-management/risk-management-table/risk-management-table.component';
 import { RiskReportTableComponent } from './home/risk-management/risk-report/risk-report-table/risk-report-table.component';
 import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
+import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -123,71 +124,16 @@ const routes: Routes = [
                   },
                 ]
               },
-              // {
-              //   path: 'risk-dashboard',
-              //   component:
-              // }
+              {
+                path: 'risk-dashboard',
+                component: RiskDashboardComponent
+              }
             ],
           },
         ],
       },
-      // {
-
-      //   children: [
-      //     {
-      //       path: 'risk-report-form',
-      //       component: RiskReportFormComponent,
-      //     }
-      //   ],
-      // }
     ],
   },
-  // {
-  //   path: 'home',
-  //   component: HomeComponent,
-  //   canActivate: [AuthGuard],
-  //   children: [
-  //     {
-  //       path: '',
-  //       redirectTo: 'risk-management',
-  //       pathMatch: 'full',
-  //     },
-  //     {
-  //       path: 'risk-management',
-  //       component: RiskManagementComponent,
-  //       children: [
-  //         {
-  //           path: 'risk-report',
-  //           component: RiskReportComponent,
-  //           children: [
-  //             {
-  //               path: 'risk-report-form',
-  //               component: RiskReportFormComponent,
-  //               children: [
-  //                 {
-  //                   path: 'risk-report-form/:id',
-  //                   component: RiskReportFormComponent,
-  //                 },
-  //               ],
-  //             },
-
-  //             {
-  //               path: 'submitted-versions',
-  //               component: PublishedVersionsComponent,
-  //               children: [
-  //                 {
-  //                   path: 'accelerated-breeding-version',
-  //                   component: AcceleratedBreedingVersionComponent,
-  //                 },
-  //               ],
-  //             },
-  //             { path: 'team-members', component: TeamMembersComponent },
-  //           ],
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
   {
     path: '',
     redirectTo: 'about',

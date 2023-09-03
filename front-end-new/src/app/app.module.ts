@@ -69,6 +69,7 @@ import { SearchRiskComponent } from './home/risk-management/risk-report/search-r
 import { SatPopoverModule } from '@ncstate/sat-popover';
 import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     RiskReportTableComponent,
     SearchRiskComponent,
     VersionsTableComponent,
+    RiskDashboardComponent,
   ],
   imports: [
     BrowserModule,
