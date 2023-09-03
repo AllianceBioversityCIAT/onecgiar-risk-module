@@ -192,17 +192,8 @@
         ></tr>
       </table>
       <div class="glossary-content-container user-management-paginator-box">
-        <!-- <mat-paginator
-          [length]="length"
-          [pageSize]="pageSize"
-          [pageIndex]="pageIndex - 1"
-          (page)="pagination($event)"
-          [hidePageSize]="true"
-          aria-label="Select page"
-        >
-        </mat-paginator> -->
         <mat-paginator
-          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 25, 100]"
           [length]="length"
           [pageIndex]="pageIndex - 1"
           (page)="pagination($event)"
