@@ -1,7 +1,7 @@
 <div class="form-dialog-header">
   <div class="form-dialog-header__text-box">
     <p class="form-dialog-header__text-box__text">
-      {{ faqData.title }}
+      {{ data?.action == "Edit" ? "Edit" : "New" }} FAQ
     </p>
   </div>
 
@@ -19,138 +19,70 @@
 </div>
 
 <div class="form-dialog-content">
-  <form [formGroup]="faqForm" class="form-dialog-content">
+  <form *ngIf="Form" [formGroup]="Form" class="form-dialog-content">
     <!-- //Question filed----- -->
 
-    <div>
+    <div class="form-dialog-content__field--grid-column">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
           >Question<span class="star">*</span></mat-label
         >
       </div>
-      <div class="NgxEditor__Wrapper">
-        <ngx-editor-menu [toolbar]="toolbar" [editor]="editorQuestion">
-        </ngx-editor-menu>
-        <ngx-editor
-          [editor]="editorQuestion"
-          [ngModel]="html"
-          [disabled]="false"
-          [placeholder]="'Type here...'"
-          formControlName="question"
-        ></ngx-editor>
-      </div>
-      <div
-        class="alert"
-        style="color: red"
-        *ngIf="
-          faqForm.controls.question.errors && faqForm.controls.question.touched
-        "
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
       >
-        <p>This is required max 1500</p>
-      </div>
+        <textarea matInput formControlName="question"  placeholder="Question"></textarea>
+        <mat-error
+        class="error"
+        *ngIf="Form.controls?.question?.errors?.['required']"
+        >Question is required</mat-error
+      >
+      </mat-form-field>
     </div>
 
-    <div>
+
+    <div class="form-dialog-content__field--grid-column">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
           >Answer<span class="star">*</span></mat-label
         >
       </div>
-      <div class="NgxEditor__Wrapper">
-        <ngx-editor-menu [toolbar]="toolbar" [editor]="editorAnswer">
-        </ngx-editor-menu>
-        <ngx-editor
-          [editor]="editorAnswer"
-          [ngModel]="html"
-          [disabled]="false"
-          [placeholder]="'Type here...'"
-          formControlName="answer"
-        ></ngx-editor>
-      </div>
-      <div
-        class="alert"
-        style="color: red"
-        *ngIf="
-          faqForm.controls.answer.errors && faqForm.controls.answer.touched
-        "
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
       >
-        <p>This is required max 1500</p>
-      </div>
+        <textarea matInput formControlName="answer"  placeholder="Answer"></textarea>
+        <mat-error
+        class="error"
+        *ngIf="Form.controls?.answer?.errors?.['required']"
+        >Answer is required</mat-error
+        >
+      </mat-form-field>
     </div>
+
 
     <!-- //Update Button----- -->
     <div class="form-dialog-conten-button-box-2">
       <div class="form-dialog-conten-button-flex">
-        <!-- <div class="form-dialog-conten__button-box">
-          <button
-            *ngIf="!announcementData.element"
-            class="form-dialog-conten__button-box__btn--send"
-            type="submit"
-            mat-raised-button
-            (click)="onSendAnnouncement()"
-          >
-            Send
-          </button>
-        </div> -->
 
         <div class="form-dialog-conten-button-box">
           <div class="form-dialog-conten__button-box">
             <button
-              *ngIf="!faqData.element"
               class="form-dialog-conten__button-box__btn"
               type="submit"
               mat-raised-button
-              (click)="onAddFaq()"
+              (click)="onSubmit()"
             >
-              Add
+            Save
             </button>
           </div>
         </div>
-
-        <button
-          *ngIf="faqData.element"
-          class="form-dialog-conten__button-box__btn"
-          type="submit"
-          mat-raised-button
-          (click)="onUpdateFaq()"
-        >
-          Update
-        </button>
       </div>
     </div>
-
-    <!-- <div class="form-dialog-content__layout">
-    <div>
-      <div class="form-dialog-content__title-box">
-        <mat-label class="form-dialog-content__title-box__title"
-          >First name</mat-label
-        >
-      </div>
-      <mat-form-field
-        class="form-dialog-content__field--2"
-        floatLabel="always"
-        hideRequiredMarker
-        appearance="outline"
-      >
-        <input type="text" matInput formControlName="firstName" required />
-      </mat-form-field>
-    </div>
-
-    <div>
-      <div class="form-dialog-content__title-box">
-        <mat-label class="form-dialog-content__title-box__title"
-          >Last name</mat-label
-        >
-      </div>
-      <mat-form-field
-        class="form-dialog-content__field--3"
-        floatLabel="always"
-        hideRequiredMarker
-        appearance="outline"
-      >
-        <input type="text" matInput formControlName="lastName" required />
-      </mat-form-field>
-    </div> -->
-    <!-- </div> -->
   </form>
 </div>
