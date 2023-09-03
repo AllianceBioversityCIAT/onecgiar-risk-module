@@ -68,6 +68,7 @@ import { HttpRequestInterceptor } from './services/http-request-interceptor';
 import { SearchRiskComponent } from './home/risk-management/risk-report/search-risk/search-risk.component';
 import { SatPopoverModule } from '@ncstate/sat-popover';
 import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -129,6 +130,7 @@ import { VersionsTableComponent } from './home/risk-management/risk-report/publi
     NgxEditorModule,
     HighchartsChartModule,
     SatPopoverModule,
+    NgSelectModule
   ],
   providers: [
     ApiUserService,

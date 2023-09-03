@@ -13,4 +13,8 @@
 .form-dialog-conten-button-box {
   text-align: right;
   margin-top: 3rem;
+ 
+  .error {
+    float: left !important;
+  }
 }

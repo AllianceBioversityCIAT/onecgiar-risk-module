@@ -12,7 +12,7 @@
       <li>
         <a routerLink="/home/risk-management/risk-report" class="risk-nav-link"
           >&nbsp;Risk report<span class="line">&nbsp;/&nbsp;</span
-          >&nbsp;&nbsp;INIT-01</a
+          >&nbsp;&nbsp;{{officalCode}}</a
         >
       </li>
       <li>
@@ -32,7 +32,7 @@
     <!-- step-2 -->
 
     <div class="user-management__search-box-flex">
-      <div class="user-management__search-box">
+      <!-- <div class="user-management__search-box">
         <form action="" class="search">
           <input
             class="search__input"
@@ -54,11 +54,12 @@
             /></mat-icon>
           </button>
         </form>
-      </div>
+      </div> -->
       <div class="user-management__button-box">
         <button
+          *ngIf="canEdit()"
           class="user-management__button-box__btn btn-primary-size"
-          (click)="openDialogAddMember('Add new Member')"
+          (click)="openNewTeamMemberDialog()"
           mat-raised-button
         >
           Add new member
@@ -74,33 +75,41 @@
           mat-table
           [dataSource]="dataSource"
           class="mat-elevation-z8"
-          matSort
         >
           <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
           <!-- User name Column -->
-          <ng-container matColumnDef="userName">
+          <ng-container matColumnDef="User Name">
             <th mat-sort-header mat-header-cell *matHeaderCellDef>
               <span class="th-3">User name</span>
             </th>
             <td mat-cell *matCellDef="let element">
-              <span class="td-3-h">{{ element.userName }}</span>
+              <span class="td-3-h">{{element['User Name']}}</span>
             </td>
           </ng-container>
 
           <!-- Email Column -->
-          <ng-container matColumnDef="email">
+          <ng-container matColumnDef="Email">
             <th mat-header-cell *matHeaderCellDef>
               <span class="h3">Email</span>
             </th>
             <td mat-cell *matCellDef="let element">
-              <span class="td-h">{{ element.email }}</span>
+              <span class="td-h">{{element?.user?.email || element.email}} </span>
             </td>
           </ng-container>
 
+
+          <ng-container matColumnDef="User">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4"> User name </span>
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element?.user?.full_name}} </td>
+          </ng-container>
+
+
           <!-- Role Column -->
-          <ng-container matColumnDef="role">
+          <ng-container matColumnDef="Role">
             <th mat-header-cell *matHeaderCellDef>
               <span class="h4">Role</span>
             </th>
@@ -108,25 +117,35 @@
           </ng-container>
 
           <!-- Creation Date Column -->
-          <ng-container matColumnDef="creationDate">
+          <ng-container matColumnDef="Creation Date">
             <th mat-header-cell *matHeaderCellDef>
               <span class="h4">Creation Date</span>
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.creationDate }}
+              {{element.createdAt | date:'MMMM d, y'}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Status">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Status</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.user_id ? 'Active' :'Invited'   }} 
             </td>
           </ng-container>
 
           <!-- Action Name Column -->
-          <ng-container matColumnDef="action">
+          <ng-container matColumnDef="Actions">
             <th mat-header-cell *matHeaderCellDef>
               <span class="h5">Action</span>
             </th>
             <td mat-cell *matCellDef="let element">
               <div class="m">
                 <button
+                matTooltip="Update"
                   class="team-members-icon-table"
-                  (click)="openDialogEditMember('Edit Member', element)"
+                  (click)="openEditTeamMemberDialog(element.id, element)"
                 >
                   <mat-icon class="user-management-table__icon">
                     <svg
@@ -144,8 +163,9 @@
                 </button>
 
                 <button
+                matTooltip="Delete"
                   class="team-members-icon-table"
-                  (click)="deleteMemberById(element.userId)"
+                  (click)="deleteMember(element.id)"
                 >
                   <mat-icon class="user-management-table__icon">
                     <svg

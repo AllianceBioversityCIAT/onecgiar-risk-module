@@ -6,142 +6,140 @@ import {
   OnInit,
   AfterViewInit,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { ReplaySubject, Subject, take, takeUntil } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/shared-model/User-Management-Data/user.model';
 import { TeamMembers } from 'src/app/shared-model/team-members-data/team-members.model';
 import { ApiUserService } from 'src/app/shared-services/admin-services/User-Management-Services/api-user.service';
 import { ApiTeamMembersService } from 'src/app/shared-services/team-members-services/api-team-members.service';
-
+export enum ROLES {
+  LEAD = 'Leader',
+  MEMBER = 'Team Member',
+  COORDINATOR = 'Coordinator',
+}
 @Component({
   selector: 'app-team-members-form-dialog',
   templateUrl: './team-members-form-dialog.component.html',
   styleUrls: ['./team-members-form-dialog.component.scss'],
 })
 export class TeamMembersFormDialogComponent implements OnInit {
-  @ViewChild('singleSelect', { static: true })
-  singleSelect!: MatSelect;
-
   constructor(
-    private apiTeamMembersService: ApiTeamMembersService,
+    public fb: FormBuilder,
     private dialogRef: MatDialogRef<TeamMembersFormDialogComponent>,
-    private apiUser: ApiUserService,
-    @Inject(MAT_DIALOG_DATA) public memberData: { title: any; element: any }
+    @Inject(MAT_DIALOG_DATA) public data: any = {},
+    private usersService: UserService
   ) {}
+  ages: any[] = [
+    { value: '<18', label: 'Under 18' },
+    { value: '18', label: '18' },
+    { value: '>18', label: 'More than 18' },
+  ];
 
  
-  membersData: TeamMembers[] = [];
+  confirmation: any = '';
+  users: any = [];
+  showConfirm(content: any) {
+    console.log(content);
+  }
+  Roles: any[] = [
+    { value: ROLES.LEAD, viewValue: ROLES.LEAD },
+    { value: ROLES.MEMBER, viewValue: ROLES.MEMBER },
+    { value: ROLES.COORDINATOR, viewValue: ROLES.COORDINATOR },
+  ];
 
-  memberFormData = new FormGroup({
-    email: new FormControl('', [Validators.required]),
-    role: new FormControl('', [Validators.required]),
-  });
 
-  onAddMember() {}
+  private atLeastOneValidator = () => {
+    return (controlGroup: any) => {
+      let controls = controlGroup.controls;
+      if (controls) {
+        // console.log(controls);
+        if (controls.email.value == '' && (controls.user_id.value == '' || controls.user_id.value == null)) {
+          return {
+            atLeastOneRequired: {
+              text: 'At least one should be selected',
+            },
+          };
+        }
+      }
+      return null;
+    };
+  };
 
-  onUpdateMember() {}
 
-  //Close-Dialog
+  memberForm: any;
+  populateMemberForm() {
+    this.memberForm = this.fb.group({
+      email: [
+        this.data.role == 'add' ? '' : this.data.member.email,
+        [Validators.email],
+      ],
+      userRole: [
+        this.data.role == 'add' ? '' : this.data.member.role,
+        Validators.required,
+      ],
+      user_id: [this.data.role == 'add' ? '' : this.data.member.user_id],
+    });
+    this.memberForm.setValidators(this.atLeastOneValidator());
+  }
+
+
+  showerror:boolean=false
+  submit() {
+    this.memberForm.markAllAsTouched();
+    this.memberForm.updateValueAndValidity();
+    if (this.memberForm.valid) {
+      this.showerror =  false;
+      this.dialogRef.close({
+        role: this.data.role,
+        formValue: this.memberForm.value,
+      });
+    }else{
+      this.showerror =  true;
+    }
+  }
+  
+  bindValue: any = {
+    full_name: 'full_name',
+    email: 'email'
+  }
+
+
+
+  haveSameChar!: boolean;
+  searchValue: string = '';
+  async search(event: any) {
+    this.searchValue = event.term;
+    const filters = {
+      full_name: this.searchValue,
+      email: this.searchValue,
+      search: 'teamMember'
+    }
+    this.users = await this.usersService.getUsersForTeamMember(filters);
+    let i = this.searchValue.length;
+
+    for(let user of this.users){
+      if(this.searchValue == user.full_name.substring(0, i)) {
+        this.haveSameChar = true;
+      }
+      else if(this.searchValue == user.email.substring(0, i)){
+        this.haveSameChar = false;
+      }
+    }
+  }
+
+
+  async ngOnInit() {
+    // this.users = await this.usersService.getUsers();
+    // console.log(this.users);
+    this.populateMemberForm();
+  }
+
+    //Close-Dialog
   onCloseDialog() {
     this.dialogRef.close();
   }
 
-  //search by email
-
-  title = 'app-material3';
-
-  protected userData: User[] = [];
-
-  public emailCtrl: FormControl = new FormControl();
-  public emailFilterCtrl: FormControl = new FormControl();
-  public filteredEmail: ReplaySubject<any> = new ReplaySubject();
-
-  protected _onDestroy = new Subject();
-
-  /**
-   * Write code on Method
-   *
-   * method logical code
-   */
-
-  /**
-   * Write code on Method
-   *
-   * method logical code
-   */
-  ngAfterViewInit() {
-    this.setInitialValue();
-  }
-
-  /**
-   * Write code on Method
-   *
-   * method logical code
-   */
-  // ngOnDestroy() {
-  //   this._onDestroy.next();
-  //   this._onDestroy.complete();
-  // }
-
-  ngOnInit(): void {
-    this.membersData = this.apiTeamMembersService.memberData;
-    
-    this.userData = this.apiUser.userData;
-
-    this.emailCtrl.setValue(this.userData);
-    this.filteredEmail.next(this.userData.slice());
-
-    this.emailFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filterBanks();
-      });
-  }
-
-  /**
-   * Write code on Method
-   *
-   * method logical code
-   */
-
-  ngOnDestroy() {
-    this._onDestroy.next('');
-    this._onDestroy.complete();
-  }
-
-  protected setInitialValue() {
-    this.filteredEmail
-      .pipe(take(1), takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.singleSelect.compareWith = (a: any, b: any) =>
-          a && b && a.userId === b.userId;
-      });
-  }
-
-  /**
-   * Write code on Method
-   *
-   * method logical code
-   */
-  protected filterBanks() {
-    if (!this.userData) {
-      return;
-    }
-
-    let search = this.emailFilterCtrl.value;
-    if (!search) {
-      this.filteredEmail.next(this.userData.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-
-    this.filteredEmail.next(
-      this.userData.filter(
-        (searchByEmail) => searchByEmail.email.toLowerCase().indexOf(search) > -1
-      )
-    );
-  }
 }

@@ -97,10 +97,6 @@ const routes: Routes = [
             path: ':id/:initiativeId',
             component: RiskReportComponent,
             children: [
-              // {
-              //   path: '',
-              //   component: RiskReportTableComponent,
-              // },
               {
                 path: 'create-risk',
                 component: RiskReportFormComponent,
