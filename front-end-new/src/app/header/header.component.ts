@@ -38,45 +38,9 @@ export class HeaderComponent implements OnInit {
     announcements: 'announcements',
   };
 
-  // @Output() clickEvent = new EventEmitter<{ userManagement: string }>();
+ 
 
-  // public adminUrl = '/admin';
-
-  // adminUrl for animation navlist of header when click admin-module the background-color of navlist will be change when click
-
-  public adminUrl = {
-    admin: '/admin',
-    userManagement: '/admin/user-management',
-    parameterSetttings: '/admin/parameters-settings',
-    categories: '/admin/category',
-    mitigation: '/admin/mitigation-status',
-    settings: '/admin/parameters-settings/settings',
-    announcements: '/admin/announcements',
-    posted: '/admin/announcements/posted',
-    drafts: '/admin/announcements/drafts',
-    glossary: '/admin/glossary',
-    faq: '/admin/faq',
-    pageNotFounds: '/404',
-  };
-
-  // riskUrl for animation navlist of header when cilick all list nav than admin-module will be change background-color when click on any navlist than without admin-module
-
-  public riskUrl = {
-    home: '/home',
-    riskManagement: '/home/risk-management/risk-report',
-    riskReport: '/home/risk-management/risk-report/risk-report-form',
-    submitted: '/home/risk-management/risk-report/submitted-versions',
-    teamMembers: '/home/risk-management/risk-report/team-members',
-    accelerated:
-      '/home/risk-management/risk-report/submitted-versions/accelerated-breeding-version',
-    about: '/about',
-    glossary: '/glossary',
-    faq: '/faq',
-    dashboard: '/dashboard',
-    pageNotFound: '/404',
-  };
-
-  k: any;
+  
 
   constructor(
     public dialog: MatDialog,
@@ -85,6 +49,7 @@ export class HeaderComponent implements OnInit {
     public headerService: HeaderService
   ) {
     this.notificationNumberCount = 5;
+    this.headerService.background = '#0f212f';
   }
 
   user_info: any;
@@ -134,6 +99,7 @@ export class HeaderComponent implements OnInit {
     }
   }
   homeRoute: any = './home';
+
   accessHome() {
     if (this.user_info) {
       this.homeRoute = './home';

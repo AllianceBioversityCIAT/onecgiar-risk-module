@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,7 +17,13 @@ import { ApiActionsControlsService } from 'src/app/shared-services/actions-contr
 import { ApiRiskReportService } from 'src/app/shared-services/risk-report-services/api-risk-report.service';
 import { SubmitRiskDialogComponent } from '../submit-risk-dialog/submit-risk-dialog.component';
 import { RiskReport } from 'src/app/shared-model/risk-report-data/risk-report.model';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { RiskReportComponent } from '../risk-report.component';
 import { LoadingService } from 'src/app/services/loading.service';
 import { AppSocket } from 'src/app/services/socket.service';
@@ -26,8 +40,11 @@ import { ROLES } from '../team-members/team-members.component';
   styleUrls: ['./risk-report-table.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
+      state(
+        'collapsed',
+        style({ height: '0px', minHeight: '0', visibility: 'hidden' })
+      ),
+      state('expanded', style({ height: '*', visibility: 'visible' })),
       transition(
         'expanded <=> collapsed',
         animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
@@ -36,13 +53,14 @@ import { ROLES } from '../team-members/team-members.component';
   ],
 })
 export class RiskReportTableComponent {
-  expandedElement!: RiskReport | null;
+  expandedElement: any;
+
+  // expandedElement!: RiskReport | null;
   public url1: string = '';
 
   public riskUrl = {
     home: '/home/risk-management/risk-report',
   };
-
 
   constructor(
     public router: Router,
@@ -56,15 +74,11 @@ export class RiskReportTableComponent {
     private loading: LoadingService,
     private cd: ChangeDetectorRef,
     private RiskReportComponent: RiskReportComponent
-
   ) {}
-
-
 
   @Input() dataSource: any;
   @Input() dataSourceForPdf: any;
   @Input() AllRisk: any;
-  
 
   @Output() refresh: EventEmitter<any> = new EventEmitter<any>();
 
@@ -74,10 +88,6 @@ export class RiskReportTableComponent {
   @Input() showReduntent: boolean = true;
 
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
-
-
-
-
 
   toPdf: boolean = false;
 
@@ -99,8 +109,7 @@ export class RiskReportTableComponent {
         'Risk Owner',
         'created_by',
       ];
-    }
-    else {
+    } else {
       this.displayedColumnsPdf = [
         'ID',
         'Risk Title',
@@ -141,8 +150,6 @@ export class RiskReportTableComponent {
     }, 500);
   }
 
-
-
   displayedColumns: string[] = [
     'ID',
     'Risk Title',
@@ -161,7 +168,7 @@ export class RiskReportTableComponent {
   initiativeId: any;
   riskUsers: any;
   my_roles: any;
-  locked: any={};
+  locked: any = {};
   connection = true;
 
   async ngOnInit() {
@@ -198,12 +205,13 @@ export class RiskReportTableComponent {
       console.log('OwnerActions', this.my_risks);
     }, 1000);
 
-    if(this.showReduntent == false && this.displayedColumns.includes('Redundant')) {
+    if (
+      this.showReduntent == false &&
+      this.displayedColumns.includes('Redundant')
+    ) {
       this.displayedColumns.pop();
     }
   }
-
-
 
   unlock(risk_id: any) {
     console.log('unlock');
@@ -229,7 +237,9 @@ export class RiskReportTableComponent {
           title: 'Delete',
           message: `Are you sure you want to delete risk ${risk.title} ?`,
         },
-      }).afterClosed().subscribe(async (dialogResult) => {
+      })
+      .afterClosed()
+      .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.riskService.deleteRisk(risk.id, this.id);
           this.refresh.emit();
@@ -237,8 +247,6 @@ export class RiskReportTableComponent {
         }
       });
   }
-
-
 
   canPublish() {
     console.log(
@@ -261,7 +269,6 @@ export class RiskReportTableComponent {
     return this.my_risks.filter((d: any) => d.id == element.id).length > 0;
   }
 
-
   html: any;
 
   panelOpenState = false;
@@ -270,15 +277,15 @@ export class RiskReportTableComponent {
     const mitigationsList: any[] = [];
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(
-      `<tr>
+        `<tr>
       <td style=" width: 55rem;padding: 1rem; border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center;font-family: Inter, sans-serif !important;font-size: 1.2rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation.description}</td>
       <td style=" width: 20rem;padding: 1rem;border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center;font-family: Inter, sans-serif !important;font-size: 1.2rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation?.status?.title}</td></tr>`
       );
     });
     let html = `
    <div class="table-box">
-   <div class="table-box example-container">
-                <table class="mat-elevation-z8 table-box example-container" style=" width: 100%; overflow: auto; margin-top: 1rem; margin-bottom: 4rem;">
+   <div class="table-box ">
+                <table class="mat-elevation-z8 table-box " style=" width: 100%; overflow: auto; margin-top: 1rem; margin-bottom: 4rem;">
                   <tr>
                     <th  style="width:55rem;padding:1rem; font-family: Inter;sans-serif !important;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;">Actions/Controls description</th>
                     <th style=" width: 20rem; padding: 1rem; font-family: Inter;sans-serif !important;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;">Status</th>
@@ -290,9 +297,4 @@ export class RiskReportTableComponent {
     if (mitigationsList.length > 0) return html;
     else return '';
   }
-
-
-
-
-
 }

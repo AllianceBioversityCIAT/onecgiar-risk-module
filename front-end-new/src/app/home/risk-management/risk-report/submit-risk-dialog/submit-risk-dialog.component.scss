@@ -9,6 +9,7 @@
   height: 4.5rem;
   // border-radius: 0.2rem 0.2rem 0rem 0;
   background-color: #436280;
+  padding: 0 0.5rem;
 
   &__text-box {
     width: 62.4rem;
@@ -252,14 +253,21 @@
 }
 
 .submit-risk-flex-x {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.2rem;
 }
 
-.risk-report-form-note-content-icon {
-  position: absolute;
-  top: 35%;
-  left: 93%;
-  transform: translate(39%, -50%);
+// .risk-report-form-note-content-icon {
+//   position: absolute;
+//   top: 35%;
+//   left: 93%;
+//   transform: translate(39%, -50%);
+// }
+
+.note-p-t-l {
+  // text-align: right;
 }
 
 .submit-risk-drag-icon {
@@ -274,7 +282,6 @@
   color: #ffffff;
   text-align: left;
 }
-.error{
+.error {
   color: red;
 }
-

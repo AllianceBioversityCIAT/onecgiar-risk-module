@@ -2,34 +2,7 @@
   <!-- section header -->
 
   <div
-    [ngClass]="{
-      'header-risk__background-c-primary':
-        router.url === riskUrl.home ||
-        router.url === riskUrl.riskManagement ||
-        router.url === riskUrl.riskReport ||
-        router.url === riskUrl.teamMembers ||
-        router.url === riskUrl.submitted ||
-        router.url === riskUrl.accelerated ||
-        router.url === riskUrl.about ||
-        router.url === riskUrl.glossary ||
-        router.url === riskUrl.faq ||
-        router.url === riskUrl.dashboard ||
-        router.url === riskUrl.pageNotFound,
-
-      'header-risk__background-c-secondary':
-        router.url === adminUrl.admin ||
-        router.url === adminUrl.parameterSetttings ||
-        router.url === adminUrl.categories ||
-        router.url === adminUrl.mitigation ||
-        router.url === adminUrl.settings ||
-        router.url === adminUrl.announcements ||
-        router.url === adminUrl.posted ||
-        router.url === adminUrl.drafts ||
-        router.url === adminUrl.userManagement ||
-        router.url === adminUrl.glossary ||
-        router.url === adminUrl.faq ||
-        router.url === adminUrl.pageNotFounds
-    }"
+    [style.background]="headerService.background"
     class="header-risk__content"
   >
     <div class="header-content-box">
@@ -50,33 +23,7 @@
 
     <nav class="header-user-nav-box">
       <button
-        [ngClass]="{
-          'user-nav-button__background-c-primary':
-            router.url === riskUrl.home ||
-            router.url === riskUrl.riskManagement ||
-            router.url === riskUrl.riskReport ||
-            router.url === riskUrl.teamMembers ||
-            router.url === riskUrl.submitted ||
-            router.url === riskUrl.accelerated ||
-            router.url === riskUrl.about ||
-            router.url === riskUrl.glossary ||
-            router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard ||
-            router.url === riskUrl.pageNotFound,
-          'user-nav-button__background-c-secondary':
-            router.url === adminUrl.admin ||
-            router.url === adminUrl.parameterSetttings ||
-            router.url === adminUrl.categories ||
-            router.url === adminUrl.mitigation ||
-            router.url === adminUrl.settings ||
-            router.url === adminUrl.announcements ||
-            router.url === adminUrl.posted ||
-            router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement ||
-            router.url === adminUrl.glossary ||
-            router.url === adminUrl.faq ||
-            router.url === adminUrl.pageNotFounds
-        }"
+        [style.background]="headerService.backgroundUserNavButton"
         [matMenuTriggerFor]="menu"
         class="user-nav-button--notific"
         mat-icon-button
@@ -133,33 +80,7 @@
         </button>
       </mat-menu>
       <button
-        [ngClass]="{
-          'user-nav-button__background-c-primary':
-            router.url === riskUrl.home ||
-            router.url === riskUrl.riskManagement ||
-            router.url === riskUrl.riskReport ||
-            router.url === riskUrl.teamMembers ||
-            router.url === riskUrl.submitted ||
-            router.url === riskUrl.accelerated ||
-            router.url === riskUrl.about ||
-            router.url === riskUrl.glossary ||
-            router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard ||
-            router.url === riskUrl.pageNotFound,
-          'user-nav-button__background-c-secondary':
-            router.url === adminUrl.admin ||
-            router.url === adminUrl.parameterSetttings ||
-            router.url === adminUrl.categories ||
-            router.url === adminUrl.mitigation ||
-            router.url === adminUrl.settings ||
-            router.url === adminUrl.announcements ||
-            router.url === adminUrl.posted ||
-            router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement ||
-            router.url === adminUrl.glossary ||
-            router.url === adminUrl.faq ||
-            router.url === adminUrl.pageNotFounds
-        }"
+      [style.background]="headerService.backgroundUserNavButton"
         class="user-nav-button"
         mat-icon-button
         *ngIf="user_info"
@@ -176,33 +97,7 @@
       </button>
 
       <button
-        [ngClass]="{
-          'user-nav-button__background-c-primary':
-            router.url === riskUrl.home ||
-            router.url === riskUrl.riskManagement ||
-            router.url === riskUrl.riskReport ||
-            router.url === riskUrl.teamMembers ||
-            router.url === riskUrl.submitted ||
-            router.url === riskUrl.accelerated ||
-            router.url === riskUrl.about ||
-            router.url === riskUrl.glossary ||
-            router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard ||
-            router.url === riskUrl.pageNotFound,
-          'user-nav-button__background-c-secondary':
-            router.url === adminUrl.admin ||
-            router.url === adminUrl.parameterSetttings ||
-            router.url === adminUrl.categories ||
-            router.url === adminUrl.mitigation ||
-            router.url === adminUrl.settings ||
-            router.url === adminUrl.announcements ||
-            router.url === adminUrl.posted ||
-            router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement ||
-            router.url === adminUrl.glossary ||
-            router.url === adminUrl.faq ||
-            router.url === adminUrl.pageNotFounds
-        }"
+      [style.background]="headerService.backgroundUserNavButton"
         class="user-nav-button"
         mat-icon-button
         (click)="logout()"
@@ -218,33 +113,7 @@
       </button>
 
       <button
-        [ngClass]="{
-          'user-nav-button__background-c-primary':
-            router.url === riskUrl.home ||
-            router.url === riskUrl.riskManagement ||
-            router.url === riskUrl.riskReport ||
-            router.url === riskUrl.teamMembers ||
-            router.url === riskUrl.submitted ||
-            router.url === riskUrl.accelerated ||
-            router.url === riskUrl.about ||
-            router.url === riskUrl.glossary ||
-            router.url === riskUrl.faq ||
-            router.url === riskUrl.dashboard ||
-            router.url === riskUrl.pageNotFound,
-          'user-nav-button__background-c-secondary':
-            router.url === adminUrl.admin ||
-            router.url === adminUrl.parameterSetttings ||
-            router.url === adminUrl.categories ||
-            router.url === adminUrl.mitigation ||
-            router.url === adminUrl.settings ||
-            router.url === adminUrl.announcements ||
-            router.url === adminUrl.posted ||
-            router.url === adminUrl.drafts ||
-            router.url === adminUrl.userManagement ||
-            router.url === adminUrl.glossary ||
-            router.url === adminUrl.faq ||
-            router.url === adminUrl.pageNotFounds
-        }"
+      [style.background]="headerService.backgroundUserNavButton"
         class="user-nav-button"
         mat-icon-button
         (click)="login()"
@@ -264,33 +133,7 @@
   <!-- section nav -->
   <nav
     class="header-risk__main-nav"
-    [ngClass]="{
-      'header-risk__main-nav__background-c-secondary':
-        router.url === adminUrl.admin ||
-        router.url === adminUrl.parameterSetttings ||
-        router.url === adminUrl.categories ||
-        router.url === adminUrl.mitigation ||
-        router.url === adminUrl.settings ||
-        router.url === adminUrl.announcements ||
-        router.url === adminUrl.posted ||
-        router.url === adminUrl.drafts ||
-        router.url === adminUrl.userManagement ||
-        router.url === adminUrl.glossary ||
-        router.url === adminUrl.faq ||
-        router.url === adminUrl.pageNotFounds,
-      'header-risk__main-nav__background-c-primary':
-        router.url === riskUrl.home ||
-        router.url === riskUrl.riskManagement ||
-        router.url === riskUrl.riskReport ||
-        router.url === riskUrl.teamMembers ||
-        router.url === riskUrl.submitted ||
-        router.url === riskUrl.accelerated ||
-        router.url === riskUrl.about ||
-        router.url === riskUrl.glossary ||
-        router.url === riskUrl.faq ||
-        router.url === riskUrl.dashboard ||
-        router.url === riskUrl.pageNotFound
-    }"
+    [style.background]="headerService.backgroundNavMain"
   >
     <ul class="main-nav-list">
       <li>

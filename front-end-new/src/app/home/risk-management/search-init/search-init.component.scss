@@ -553,8 +553,9 @@
 .risk-management-export-box-icon {
   width: 2.2rem !important;
   height: 3.1rem !important;
-
-  margin: -0.1rem 0.1rem;
+  position: relative;
+  top: -1%;
+  left: 2%;
 }
 
 // .risk-management-export-icon {

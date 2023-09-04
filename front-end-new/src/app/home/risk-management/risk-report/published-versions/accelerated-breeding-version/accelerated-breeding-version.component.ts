@@ -20,7 +20,7 @@ import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-accelerated-breeding-version',
   templateUrl: './accelerated-breeding-version.component.html',
-  styleUrls: ['./accelerated-breeding-version.component.scss']
+  styleUrls: ['./accelerated-breeding-version.component.scss'],
 })
 export class AcceleratedBreedingVersionComponent {
   constructor(
@@ -40,16 +40,29 @@ export class AcceleratedBreedingVersionComponent {
   path: any = '';
   id: any;
   initiative: any;
+
+  paarentRoute: any;
+
   async ngOnInit() {
     this.path = window.location.pathname;
     const params: any = this.activatedRoute.snapshot.params;
+
     this.id = params.versionId;
-    this.initiative = await this.initiativesService.getInitiativeForVersion(this.id);
+    this.initiative = await this.initiativesService.getInitiativeForVersion(
+      this.id
+    );
     this.dataSource.data = this.initiative.risks;
+
+    const params2 = this.activatedRoute.parent?.parent?.snapshot.params;
+    console.log(params2);
+    this.paarentRoute = params2;
   }
 
   async export() {
-    await this.initiativesService.getExportByinititave(this.id,  this.initiative.official_code, true);
+    await this.initiativesService.getExportByinititave(
+      this.id,
+      this.initiative.official_code,
+      true
+    );
   }
-
 }

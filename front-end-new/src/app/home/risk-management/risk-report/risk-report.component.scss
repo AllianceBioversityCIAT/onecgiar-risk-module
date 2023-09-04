@@ -7,6 +7,7 @@
   // flex-shrink: 0;
   background-color: #fafafa;
   padding: 9.6rem 0;
+  min-height: calc(100vh - 210px);
 }
 
 .risk-report-container {
@@ -1223,60 +1224,10 @@ tr.example-detail-row {
 // }
 
 .line {
-  font-size: 2.7rem;
-  padding: 0 0.1rem;
-  display: inline-block;
-  top: 39%;
-  left: 12.2%;
-  position: absolute;
-
-  @media only screen and (max-width: 160em) {
-    //change on 2560
-
-    top: 39%;
-    left: 9.8%;
-  }
-
-  @media only screen and (max-width: 100em) {
-    //change on 1600
-
-    top: 39%;
-    left: 12.4%;
-  }
-
-  @media only screen and (max-width: 90em) {
-    //change on 1440
-
-    top: 39%;
-    left: 13.3%;
-  }
-
-  @media only screen and (max-width: 84em) {
-    //change on 1344
-
-    top: 39%;
-    left: 13.7%;
-  }
-
-  @media only screen and (max-width: 82em) {
-    //change on 1312
-
-    top: 39%;
-    left: 14%;
-  }
-
-  @media only screen and (max-width: 75em) {
-    //change on 1200
-    top: 39%;
-    left: 13.6%;
-  }
-
-  @media only screen and (max-width: 64em) {
-    //change on 1024
-
-    top: 39%;
-    left: 15.9%;
-  }
+  height: 11px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
 }
 
 .risk-nav-main {

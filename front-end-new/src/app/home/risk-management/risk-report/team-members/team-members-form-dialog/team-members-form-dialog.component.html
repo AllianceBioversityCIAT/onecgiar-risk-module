@@ -1,6 +1,8 @@
 <div class="form-dialog-header">
   <div class="form-dialog-header__text-box">
-    <p class="form-dialog-header__text-box__text">{{ data.role == "add" ? "Add New" : "Update" }} Team Member</p>
+    <p class="form-dialog-header__text-box__text">
+      {{ data.role == "add" ? "Add New" : "Update" }} Team Member
+    </p>
   </div>
 
   <div class="form-dialog-header__icon-box">
@@ -26,48 +28,58 @@
           >Select user</mat-label
         >
       </div>
-        <ng-select
+      <ng-select
         appearance="outline"
         #agesSelect
         [items]="users"
         bindValue="id"
         labelForId="id"
-        [bindLabel]="haveSameChar == true ? bindValue.full_name : bindValue.email"
+        [bindLabel]="
+          haveSameChar == true ? bindValue.full_name : bindValue.email
+        "
         formControlName="user_id"
         (search)="search($event)"
       >
-      <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
-        <span >{{ item.full_name }}</span> <span>({{item.email}})</span>
-      </ng-template>
+        <ng-template
+          ng-option-tmp
+          let-item="item"
+          let-search="searchTerm"
+          let-index="index"
+        >
+          <span>{{ item.full_name }}</span> <span>({{ item.email }})</span>
+        </ng-template>
       </ng-select>
     </div>
 
     <!-- //Email filed----- -->
-<ng-container *ngIf="memberForm.controls['user_id']?.value == '' || memberForm.controls['user_id']?.value == null">
-  <div class="form-dialog-content__field--grid-column">
-    <div class="form-dialog-content__title-box">
-      <mat-label class="form-dialog-content__title-box__title"
-        >Or invite by email</mat-label
-      >
-    </div>
-    <mat-form-field
-      class="form-dialog-content__field"
-      floatLabel="always"
-      hideRequiredMarker
-      appearance="outline"
+    <ng-container
+      *ngIf="
+        memberForm.controls['user_id']?.value == '' ||
+        memberForm.controls['user_id']?.value == null
+      "
     >
-      <!-- value="{{ emailCtrl.value?.email }}" -->
-      <input matInput formControlName="email" placeholder="Email" />
-      <mat-error
-      class="error"
-      *ngIf="memberForm.controls['email'].errors?.['email']"
-      >Wrong Email format</mat-error
-    >
-    </mat-form-field>
-  </div>
-</ng-container>
-
-
+      <div class="form-dialog-content__field--grid-column">
+        <div class="form-dialog-content__title-box">
+          <mat-label class="form-dialog-content__title-box__title"
+            >Or invite by email</mat-label
+          >
+        </div>
+        <mat-form-field
+          class="form-dialog-content__field"
+          floatLabel="always"
+          hideRequiredMarker
+          appearance="outline"
+        >
+          <!-- value="{{ emailCtrl.value?.email }}" -->
+          <input matInput formControlName="email" placeholder="Email" />
+          <mat-error
+            class="error"
+            *ngIf="memberForm.controls['email'].errors?.['email']"
+            >Wrong Email format</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </ng-container>
 
     <div class="form-dialog-conten-box-2">
       <div class="form-dialog-content__title-box">
@@ -87,10 +99,10 @@
           </mat-option>
         </mat-select>
         <mat-error
-        class="error"
-        *ngIf="memberForm.controls['userRole'].errors?.['required']"
-        >User Role is required</mat-error
-      >
+          class="error"
+          *ngIf="memberForm.controls['userRole'].errors?.['required']"
+          >User Role is required</mat-error
+        >
       </mat-form-field>
     </div>
     <div>
@@ -98,9 +110,9 @@
       <div class="form-dialog-conten-button-box">
         <div class="form-dialog-conten__button-box">
           <mat-error
-          class="error"
-          *ngIf="memberForm?.errors?.['atLeastOneRequired'] && showerror"
-          >Email or User must be not empty</mat-error
+            class="error"
+            *ngIf="memberForm?.errors?.['atLeastOneRequired'] && showerror"
+            >Email or User must be not empty</mat-error
           >
           <button
             class="form-dialog-conten__button-box__btn"

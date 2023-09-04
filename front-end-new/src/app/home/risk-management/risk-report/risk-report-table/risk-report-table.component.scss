@@ -1019,7 +1019,7 @@
 }
 
 .example-container {
-  height: 44.2rem;
+  // height: 44.2rem;
   max-width: 100%;
   overflow: auto;
   padding: 0 0.5rem;
@@ -1386,9 +1386,8 @@ tr.example-detail-row {
   }
 }
 .flagged {
-  background-color: #DEB194 !important;
+  background-color: #deb194 !important;
 }
-
 
 .pdf {
   position: relative;
@@ -1398,7 +1397,6 @@ tr.example-detail-row {
 .topRows {
   position: relative;
   counter-increment: line;
-
 }
 
 .topRows:after {

@@ -5,6 +5,7 @@ import { InitiativesService } from 'src/app/services/initiatives.service';
 import { UserService } from 'src/app/services/user.service';
 import jwt_decode from 'jwt-decode';
 import { MatPaginator } from '@angular/material/paginator';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-risk-management',
@@ -12,6 +13,12 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./risk-management.component.scss'],
 })
 export class RiskManagementComponent {
+  constructor(private headerService: HeaderService) {
+    this.headerService.background = '#0f212f';
+    this.headerService.backgroundNavMain = '#436280';
+    this.headerService.backgroundUserNavButton = '#436280';
+  }
+
   // public url1: string = '';
 
   // public riskUrl = {
@@ -45,7 +52,6 @@ export class RiskManagementComponent {
   // ];
   // dataSource = new MatTableDataSource<any>([]);
   // @ViewChild(MatPaginator) paginator: any;
-
 
   // ngAfterViewInit() {
   //   this.dataSource.paginator = this.paginator;

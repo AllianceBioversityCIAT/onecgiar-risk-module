@@ -25,6 +25,7 @@ import { Observable } from 'rxjs';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { GlossaryService } from '../services/glossary.service';
+import { HeaderService } from '../header.service';
 
 @Component({
   selector: 'app-glossary',
@@ -32,13 +33,14 @@ import { GlossaryService } from '../services/glossary.service';
   styleUrls: ['./glossary.component.scss'],
 })
 export class GlossaryComponent implements OnInit {
-
-
-
   constructor(
     private glossaryService: GlossaryService,
-    // private changeDetectorRef: ChangeDetectorRef
-  ) {}
+    private headerService: HeaderService // private changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.headerService.background = '#0f212f';
+    this.headerService.backgroundNavMain = '#436280';
+    this.headerService.backgroundUserNavButton = '#436280';
+  }
   filters: any;
   length: number = 0;
   pageSize: number = 5;
@@ -47,75 +49,78 @@ export class GlossaryComponent implements OnInit {
   glossary: any;
 
   changeFilter() {
-    this.form.valueChanges.subscribe(async filtersValue => {
+    this.form.valueChanges.subscribe(async (filtersValue) => {
       this.filters = filtersValue;
-      await this.getData(this.filters)
+      await this.getData(this.filters);
     });
   }
   async ngOnInit(): Promise<void> {
-    this.changeFilter()
+    this.changeFilter();
     await this.getData(this.filters);
     // this.changeDetectorRef.detectChanges();
   }
 
   async getData(filters: any) {
     this.pageIndex = 1;
-    this.data = await this.glossaryService.getGlossary(filters,this.pageIndex,this.pageSize);
+    this.data = await this.glossaryService.getGlossary(
+      filters,
+      this.pageIndex,
+      this.pageSize
+    );
     this.glossary = this.data.result;
     this.length = this.data.count;
   }
-
-
 
   async pagination(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.data = await this.glossaryService.getGlossary(this.filters,++this.pageIndex , this.pageSize);
+    this.data = await this.glossaryService.getGlossary(
+      this.filters,
+      ++this.pageIndex,
+      this.pageSize
+    );
     this.glossary = this.data.result;
     this.length = this.data.count;
   }
   alphabet = [
-    {character: 'All', value : ''},
-    {character: 'A', value : 'a'},
-    {character: 'B', value : 'b'},
-    {character: 'C', value : 'c'},
-    {character: 'D', value : 'd'},
-    {character: 'E', value : 'e'},
-    {character: 'F', value : 'f'},
-    {character: 'G', value : 'g'},
-    {character: 'H', value : 'h'},
-    {character: 'I', value : 'i'},
-    {character: 'J', value : 'j'},
-    {character: 'K', value : 'k'},
-    {character: 'L', value : 'l'},
-    {character: 'M', value : 'm'},
-    {character: 'N', value : 'n'},
-    {character: 'O', value : 'o'},
-    {character: 'P', value : 'p'},
-    {character: 'Q', value : 'q'},
-    {character: 'R', value : 'r'},
-    {character: 'S', value : 's'},
-    {character: 'T', value : 't'},
-    {character: 'U', value : 'u'},
-    {character: 'V', value : 'v'},
-    {character: 'W', value : 'w'},
-    {character: 'X', value : 'x'},
-    {character: 'Y', value : 'y'},
-    {character: 'Z', value : 'z'}
+    { character: 'All', value: '' },
+    { character: 'A', value: 'a' },
+    { character: 'B', value: 'b' },
+    { character: 'C', value: 'c' },
+    { character: 'D', value: 'd' },
+    { character: 'E', value: 'e' },
+    { character: 'F', value: 'f' },
+    { character: 'G', value: 'g' },
+    { character: 'H', value: 'h' },
+    { character: 'I', value: 'i' },
+    { character: 'J', value: 'j' },
+    { character: 'K', value: 'k' },
+    { character: 'L', value: 'l' },
+    { character: 'M', value: 'm' },
+    { character: 'N', value: 'n' },
+    { character: 'O', value: 'o' },
+    { character: 'P', value: 'p' },
+    { character: 'Q', value: 'q' },
+    { character: 'R', value: 'r' },
+    { character: 'S', value: 's' },
+    { character: 'T', value: 't' },
+    { character: 'U', value: 'u' },
+    { character: 'V', value: 'v' },
+    { character: 'W', value: 'w' },
+    { character: 'X', value: 'x' },
+    { character: 'Y', value: 'y' },
+    { character: 'Z', value: 'z' },
   ];
-
 
   form = new FormGroup({
     search: new FormControl(''),
-    char: new FormControl('')
- });
+    char: new FormControl(''),
+  });
 
-
- setCharValue(char: string) {
-  this.form.controls['char'].setValue(char);
- }
+  setCharValue(char: string) {
+    this.form.controls['char'].setValue(char);
+  }
   activeButton = '';
-
 
   showPhase(event: any) {
     this.activeButton = event;

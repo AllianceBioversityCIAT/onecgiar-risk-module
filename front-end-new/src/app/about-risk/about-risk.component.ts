@@ -8,6 +8,9 @@ import { HeaderService } from '../header.service';
 })
 export class AboutRiskComponent {
   constructor(private headerService: HeaderService) {
-    this.headerService.background = 'orange';
+    this.headerService.background = '#0f212f';
+    this.headerService.backgroundNavMain = '#436280';
+    this.headerService.backgroundUserNavButton='#436280'
+    
   }
 }

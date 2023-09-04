@@ -3,7 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
 import * as Highcharts from 'highcharts';
 import { DashboardService } from '../services/dashboard.service';
-declare var require: any
+import { HeaderService } from '../header.service';
+declare var require: any;
 require('highcharts/highcharts-more.js')(Highcharts);
 
 @Component({
@@ -12,15 +13,19 @@ require('highcharts/highcharts-more.js')(Highcharts);
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-
-
   public riskUrl = {
     home: '/home/risk-management',
   };
 
-  constructor(private apiRiskDetailsService: ApiRiskDetailsService,private dashboardService: DashboardService) {}
-
-
+  constructor(
+    private apiRiskDetailsService: ApiRiskDetailsService,
+    private dashboardService: DashboardService,
+    private headerService: HeaderService
+  ) {
+    this.headerService.background = '#0f212f';
+    this.headerService.backgroundNavMain = '#436280';
+    this.headerService.backgroundUserNavButton='#436280'
+  }
 
   data: any = null;
   status: any = null;
@@ -44,7 +49,7 @@ export class DashboardComponent {
     this.groups = await this.dashboardService.category_groups();
     this.action_areas = await this.dashboardService.actionAreas();
 
-    console.log(this.groups,this.action_areas)
+    console.log(this.groups, this.action_areas);
     this.status = await this.dashboardService.status();
     this.risk_profile_target_chartOptions = this.riskProfile(
       this.data,
@@ -239,10 +244,9 @@ export class DashboardComponent {
         {
           name: 'Usage',
           colorByPoint: true,
-          data: this.action_areas
-            .map((d: any) => {
-              return { name: d.name, y: +d.total_count };
-            }),
+          data: this.action_areas.map((d: any) => {
+            return { name: d.name, y: +d.total_count };
+          }),
         },
       ],
     };
@@ -282,10 +286,9 @@ export class DashboardComponent {
         {
           name: 'Usage',
           colorByPoint: true,
-          data: this.groups
-            .map((d: any) => {
-              return { name: d.name, y: +d.total_count };
-            }),
+          data: this.groups.map((d: any) => {
+            return { name: d.name, y: +d.total_count };
+          }),
         },
       ],
     };

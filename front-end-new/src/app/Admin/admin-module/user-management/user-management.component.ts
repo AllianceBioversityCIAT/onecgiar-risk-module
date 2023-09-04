@@ -25,7 +25,9 @@ export class UserManagementComponent implements OnInit {
     private headerService: HeaderService,
     private toastr: ToastrService
   ) {
-    this.headerService.background = 'pink';
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
   }
 
   dataSource: any = [];

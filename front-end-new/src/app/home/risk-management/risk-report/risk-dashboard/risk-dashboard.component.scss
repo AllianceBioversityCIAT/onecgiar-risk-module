@@ -1,13 +1,58 @@
 .globalContainer {
-    padding: 2em !important;
+  padding: 2em !important;
 }
 .charts {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 5% 5% 0 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5% 5% 0 5%;
 }
 
-highcharts-chart{
-    width: 48% !important;
+highcharts-chart {
+  width: 48% !important;
+}
+
+.line {
+  height: 11px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+}
+
+.risk-nav-main {
+  max-width: 140.6rem;
+  position: relative;
+  margin: 3rem 4.5rem;
+
+  @media only screen and (max-width: 90em) {
+    margin: -8rem 4.5rem 6rem 4.5rem;
+  }
+}
+
+.risk-nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: -10rem;
+}
+
+.risk-nav-link:link,
+.risk-nav-link:visited {
+  display: inline-block;
+  text-decoration: none;
+
+  transition: all 0.3s;
+
+  color: #436280;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.risk-nav-link:hover,
+.risk-nav-link:active {
+  color: #39536d;
 }

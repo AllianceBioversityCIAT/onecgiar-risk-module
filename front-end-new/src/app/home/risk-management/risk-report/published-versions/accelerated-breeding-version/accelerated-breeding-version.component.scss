@@ -39,46 +39,14 @@
 }
 
 .line {
-  font-size: 2.5rem;
-  padding: 0 0.1rem;
-  display: inline-block;
-  top: 39%;
-  left: 11.6%;
-  position: absolute;
-
-  @media only screen and (max-width: 100em) {
-    top: 65%;
-    transform: translate(-50%, -40%);
-    left: 12.3%;
-  }
-
-  @media only screen and (max-width: 90em) {
-    top: 60%;
-    transform: translate(-50%, -30%);
-    left: 13.2%;
-  }
-
-  @media only screen and (max-width: 84em) {
-    top: 60%;
-    transform: translate(-50%, -30%);
-    left: 13.9%;
-  }
-
-  @media only screen and (max-width: 75em) {
-    top: 60%;
-    transform: translate(-50%, -30%);
-    left: 14.2%;
-  }
-
-  @media only screen and (max-width: 64em) {
-    top: 60%;
-    transform: translate(-50%, -30%);
-    left: 16.5%;
-  }
+  height: 11px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
 }
 
 .published-versions-container {
-  max-width: 95%;
+  max-width: 88%;
   margin: 0 auto;
 
   flex-shrink: 0;
@@ -225,6 +193,7 @@
 
   td:nth-child(2) {
     width: 33.9rem;
+
     height: 13rem;
     padding: 1rem;
 

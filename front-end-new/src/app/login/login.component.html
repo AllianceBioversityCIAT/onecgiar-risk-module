@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Login</h1>
+<!-- <h1 mat-dialog-title>Login</h1>
 <div mat-dialog-content>
   <p>Please enter your email</p>
   <mat-form-field style="width:100%">
@@ -12,4 +12,121 @@
 <div mat-dialog-actions style="padding-left: 24px;">
   <button mat-button (click)="onNoClick()">Cancel</button>
   <button mat-button (click)="login()">Login</button>
+</div>
+ -->
+
+<div mat-dialog-container class="delete-box">
+  <!-- <div class="form-dialog-header delete-header">
+    <div class="form-dialog-header__text-box">
+      <p
+        class="form-dialog-header__text-box__text"
+        *ngIf="data.title == 'Logout'"
+      >
+        Logout
+      </p>
+      <p
+        class="form-dialog-header__text-box__text"
+        *ngIf="data.title != 'Send to all users' || data.title != 'Logout'"
+      >
+        Delete
+      </p>
+      <p
+        class="form-dialog-header__text-box__text"
+        *ngIf="data.title == 'Send to all users'"
+      >
+        {{ data.title }}
+      </p>
+      <p class="form-dialog-header__text-box__text" *ngIf="data.title == 'Logout'">Logout</p>
+      <p class="form-dialog-header__text-box__text" *ngIf="data.title != 'Send to all users' && data.title != 'Logout'">Delete</p>
+      <p class="form-dialog-header__text-box__text" *ngIf="data.title == 'Send to all users'">{{data.title}}</p>
+    </div>
+
+    <div class="form-dialog-header__icon-box">
+      <button class="form-dialog-header__icon-box__btn" (click)="closeDialog()">
+        <mat-icon class="form-dialog-header__icon-box__icon-size">
+          <img
+            class="form-dialog-header__icon-box__icon-size__icon"
+            src="../../../assets/shared-image/Vector-close.svg"
+            alt="~/Frontend/images/icon _ Vector-close"
+          />
+        </mat-icon>
+      </button>
+    </div>
+  </div> -->
+
+  <div class="delete-content-box">
+    <div class="el-1"></div>
+    <div class="el-2">
+      <div class="el-2-box">
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="83"
+            height="83"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="#0f212f"
+              d="M5 21q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h7v2H5v14h7v2H5Zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5l-5 5Z"
+            />
+          </svg>
+        </div>
+        <div class="delete-text-box">
+          <p class="delete-text-box__text">
+            <mat-dialog-content class="delete-text-box__text">
+              <p>Please enter your email</p>
+              <mat-form-field style="width: 100%">
+                <mat-label>Email</mat-label>
+                <input matInput [(ngModel)]="data.email" />
+              </mat-form-field>
+              <mat-error *ngIf="error" class="error"> {{ error }}</mat-error>
+            </mat-dialog-content>
+          </p>
+        </div>
+        <div>
+          <mat-dialog-actions>
+            <button
+              (click)="login()"
+              class="delete-dialog-button-box__btn--no"
+              mat-raised-button
+              [mat-dialog-close]="true"
+              cdkFocusInitial
+            >
+              Login
+            </button>
+
+            <button
+              (click)="onNoClick()"
+              class="delete-dialog-button-box__btn"
+              mat-raised-button
+              [mat-dialog-close]="false"
+            >
+              Cancel
+            </button>
+          </mat-dialog-actions>
+        </div>
+      </div>
+    </div>
+    <div class="el-3"></div>
+  </div>
+
+  <!-- <mat-dialog-actions>
+    <button
+      class="delete-dialog-button-box__btn"
+      mat-raised-button
+      [mat-dialog-close]="true"
+      cdkFocusInitial
+    >
+      Yes
+    </button>
+
+    <button
+      class="delete-dialog-button-box__btn--no"
+      mat-raised-button
+      [mat-dialog-close]="false"
+    >
+      No
+    </button>
+  </mat-dialog-actions> 
+ -->
 </div>
