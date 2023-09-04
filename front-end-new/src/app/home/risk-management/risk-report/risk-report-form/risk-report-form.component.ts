@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,7 +22,7 @@ import { filter } from 'rxjs';
   templateUrl: './risk-report-form.component.html',
   styleUrls: ['./risk-report-form.component.scss'],
 })
-export class RiskReportFormComponent implements OnInit{
+export class RiskReportFormComponent implements OnInit,OnDestroy{
   @ViewChild(MatSort)
   sort: MatSort = new MatSort();
 
@@ -324,6 +324,14 @@ export class RiskReportFormComponent implements OnInit{
     if (this.initiativeId){
       this.riskUsers = await this.riskService.getRiskUsers(this.initiativeId);
     }
+  }
+
+  unlock(risk_id: any) {
+    this.socket.emit('risk-unlock', risk_id);
+  }
+  ngOnDestroy(): void {
+    this.unlock(this.riskId);
+    // this.socket.disconnect();
   }
 
 }

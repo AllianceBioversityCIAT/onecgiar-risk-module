@@ -105,8 +105,10 @@
                 *matCellDef="let element"
                 [attr.colspan]="displayedColumns.length"
               >
+              <ng-container *ngIf="locked && !locked[element.id]" >
                 <div class="m">
                   <button
+                  matTooltip="Update"
                     class="risk-report-icon-table"
                     routerLink='edit-risk/{{ element["id"] }}'
                   >
@@ -128,6 +130,7 @@
                   </button>
   
                   <button
+                  matTooltip="Delete"
                     class="risk-report-icon-table"
                     (click)="deleteRisk(element)"
                   >
@@ -191,6 +194,10 @@
                     </mat-expansion-panel-header>
                   </mat-expansion-panel>
                 </div>
+              </ng-container>
+              <ng-container  *ngIf="locked[element.id]">
+                <ngx-avatars size="35" [matTooltip]="locked[element.id]?.user?.full_name +' is editing'" [name]="locked[element.id]?.user?.full_name"></ngx-avatars>
+              </ng-container>
               </td>
             </ng-container>
 

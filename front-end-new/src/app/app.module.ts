@@ -72,7 +72,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
 import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 import { EmailBodyComponent } from './Admin/admin-module/emails/email-body/email-body.component';
-
+import { AvatarModule, AvatarSource } from 'ngx-avatars';
+const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
   declarations: [
     AppComponent,
@@ -136,7 +137,10 @@ import { EmailBodyComponent } from './Admin/admin-module/emails/email-body/email
     NgxEditorModule,
     HighchartsChartModule,
     SatPopoverModule,
-    NgSelectModule
+    NgSelectModule,
+    AvatarModule.forRoot({
+      sourcePriorityOrder: avatarSourcesOrder
+    }),
   ],
   providers: [
     ApiUserService,
