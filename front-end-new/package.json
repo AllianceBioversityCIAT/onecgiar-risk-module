@@ -28,6 +28,7 @@
     "highcharts": "^11.1.0",
     "highcharts-angular": "^3.1.2",
     "ngx-socket-io": "^4.4.0",
+    "ngx-avatars": "1.5",
     "jspdf": "^2.5.1",
     "@ncstate/sat-popover": "^10.0.0",
     "@ng-select/ng-select": "^10.0.4",

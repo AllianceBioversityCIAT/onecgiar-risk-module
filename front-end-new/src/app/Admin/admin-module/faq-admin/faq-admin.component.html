@@ -28,32 +28,11 @@
   <div class="user-management__container-1">
     <div class="user-management__search-box-flex">
       <div class="user-management__search-box">
-        <!-- <form action="" class="search">
-        <input
-          class="search__input"
-          matInput
-          (keyup)="applyFilter($event)"
-          placeholder="Search"
-          #input
-        />
-
-        <button
-          style="border: none; cursor: pointer; background-color: #ffffff12"
-          class="search__button"
-        >
-          <mat-icon class="search__icon">
-            <img
-              class="search__icon"
-              src="../../assets/shared-image/Vector-search.svg"
-              alt="~/Frontend/images/icon _ search-icon"
-          /></mat-icon>
-        </button>
-      </form> -->
       </div>
       <div class="user-management__button-box">
         <button
           class="parameters-settings__button-box__btn"
-          (click)="openDialogCreateFaq('Add FAQ')"
+          (click)="openFormDialog('', 'Add')"
           mat-raised-button
           color="primary"
         >
@@ -80,7 +59,7 @@
     
 
     <div class="table-box example-container">
-      <table mat-table [dataSource]="dataSource">
+      <table mat-table [dataSource]="data">
         <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
@@ -124,7 +103,7 @@
               <button
                 matTooltip="Edit"
                 style="border: none; cursor: pointer; background-color: #ffffff"
-                (click)="openDialogEditFaq('Edit Faq', element)"
+                (click)="editFAQ(element.id, 'Edit')"
               >
                 <mat-icon class="user-management-table__icon">
                   <img
@@ -137,7 +116,7 @@
               <button
                 matTooltip="Delete"
                 style="border: none; cursor: pointer; background-color: #ffffff"
-                (click)="deleteFaq(element.id)"
+                (click)="deleteFAQ(element)"
               >
                 <mat-icon class="user-management-table__icon">
                   <img
