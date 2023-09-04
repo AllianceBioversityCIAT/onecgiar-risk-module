@@ -250,48 +250,49 @@
               >
             </button>
 
-            <mat-expansion-panel
-              (opened)="panelOpenState = true"
-              (closed)="panelOpenState = false"
-              hideToggle="true"
-              #e
-            >
-              <mat-expansion-panel-header>
-                <button
-                  (click)="
-                    expandedElement =
-                      expandedElement === element ? null : element
-                  "
-                  class="risk-report-icon-table-1"
-                >
-                  <mat-icon
-                    *ngIf="!e.expanded"
-                    class="user-management-table__icon"
-                  >
-                    <img
-                      class="table__icon"
-                      src="../../../../assets/shared-image/Vector-toggel.svg"
-                      alt="~/Frontend/images/Vector-toggel.svg"
-                  /></mat-icon>
-                  <mat-icon
-                    *ngIf="e.expanded"
-                    class="user-management-table__icon"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="10"
-                      viewBox="0 0 16 10"
-                      fill="none"
-                    >
-                      <path
-                        d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
-                        fill="#9E553E"
-                      /></svg
-                  ></mat-icon>
-                </button>
-              </mat-expansion-panel-header>
-            </mat-expansion-panel>
+            <button
+            *ngIf="expandedElement != element"
+            [class.expanded]="expandedElement == element"
+            (click)="expandedElement = element"
+            class="risk-report-icon-table-1"
+          >
+            <mat-icon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="10"
+                viewBox="0 0 16 10"
+                fill="none"
+              >
+                <path
+                  d="M1.88 0L8 6.18084L14.12 0L16 1.90283L8 10L0 1.90283L1.88 0Z"
+                  fill="#9E553E"
+                />
+              </svg>
+            </mat-icon>
+          </button>
+          <button
+            *ngIf="expandedElement == element"
+            [class.expanded]="expandedElement == undefined"
+            (click)="expandedElement = undefined"
+            class="risk-report-icon-table-1"
+          >
+            <mat-icon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="10"
+                viewBox="0 0 16 10"
+                fill="none"
+              >
+                <path
+                  d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
+                  fill="#9E553E"
+                />
+              </svg>
+            </mat-icon>
+          </button>
+
           </div>
         </td>
       </ng-container>
