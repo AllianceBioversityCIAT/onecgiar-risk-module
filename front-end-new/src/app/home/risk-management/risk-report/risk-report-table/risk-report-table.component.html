@@ -333,7 +333,7 @@
                         </span>
 
                         <mat-checkbox
-                        *ngIf="!toPdf"
+                        *ngIf="!toPdf && showingVersion == false"
                         [disabled]="(!canEdit() || showingVersion)"
                         matTooltip="You can check/uncheck this as redundant"
                         [(ngModel)]="element.redundant"
