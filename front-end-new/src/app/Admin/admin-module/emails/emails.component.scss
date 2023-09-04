@@ -1,0 +1,116 @@
+@import "../../../sass/layout/admin-module/admin-module";
+@import "../../../sass/pages/admin-module/user-management";
+// @import "../../../sass/components/table-user-management";
+
+td {
+    border: 1px solid #b9b9b9b5;
+    text-align: left;
+    color: #04030f;
+    font-family: "Inter", sans-serif !important;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 114.5%; /* 1.374rem */
+  }
+
+  th {
+    color: #ffffff;
+    text-align: center;
+    font-family: "Inter", sans-serif !important;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 130%; /* 1.56rem */
+    background-color: #0f212f !important;
+  }
+
+
+
+.m {
+    display: flex;
+    justify-content: center;
+    .user-management-table-icon {
+        border: none;
+        cursor: pointer;
+        background-color: #ffffff;
+        text-align: center;
+      }
+}
+
+.form-container {
+    padding: 24px 0;
+    .search {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        height: fit-content;
+        .sec-1 {
+            width: 65%;
+            position: relative;
+            .search__button {
+                position: absolute;
+                .search__icon{
+                    width: 2rem;
+                }
+            }
+        }
+        .sec-2 {
+            height: 56px;
+            width: 18%;
+            top: -17px;
+            position: relative;
+
+            .risk-management-form-field {
+                position: relative;
+                .risk-management-form-field__label {
+                    display: inline-block;
+                    color: #808080;
+                    font-family: "Poppins", sans-serif;
+                    font-size: 1.4rem;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    margin: 0 2rem 1rem 0;
+                }
+                .risk-management-form-field-box__input-3{
+                    font-family: inherit;
+                    font-size: inherit;
+                    color: #0f212f;
+                    border-radius: 1rem;
+                    border: 0.5px solid #808080;
+                    background-color: #ffffff;
+                    padding: 0.4rem 1rem;
+                    width: 100%;
+                    transition: all 0.2s;
+                    position: relative;
+                }
+            }
+        }
+    }
+}
+.user-management__icon-box{
+    padding: 8px;
+    margin: 4rem 0 0 0;
+}
+
+.pending {
+    padding: 4px;
+    background-color: #eccf96;
+    border-radius: 5px;
+    color: white;
+}
+
+.approved{
+    padding: 4px;
+    background-color: #8fe0a3;
+    border-radius: 5px;
+    color: white;
+}
+.email-icon {
+    font-size: 35px;
+    width: 35px;
+    height: 36px;
+    color: black;
+}

@@ -70,6 +70,8 @@ import { SatPopoverModule } from '@ncstate/sat-popover';
 import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
+import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
+import { EmailBodyComponent } from './Admin/admin-module/emails/email-body/email-body.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +119,8 @@ import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-
     SearchRiskComponent,
     VersionsTableComponent,
     RiskDashboardComponent,
+    EmailsComponent,
+    EmailBodyComponent,
   ],
   imports: [
     BrowserModule,

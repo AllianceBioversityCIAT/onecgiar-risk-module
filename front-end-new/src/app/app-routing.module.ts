@@ -31,6 +31,7 @@ import { RiskManagementTableComponent } from './home/risk-management/risk-manage
 import { RiskReportTableComponent } from './home/risk-management/risk-report/risk-report-table/risk-report-table.component';
 import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
 import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
+import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -79,6 +80,7 @@ const routes: Routes = [
       { path: 'mitigation-status', component: MitigationStatusComponent },
       { path: 'glossary', component: GlossaryAdminComponent },
       { path: 'faq', component: FaqAdminComponent },
+      { path: 'emails', component: EmailsComponent },
     ],
   },
 
