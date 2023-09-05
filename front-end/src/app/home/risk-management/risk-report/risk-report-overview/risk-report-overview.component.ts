@@ -209,9 +209,9 @@ export class RiskReportOverviewComponent implements OnInit, OnDestroy {
   }
   canPublish() {
     return (
-      this.user_info.role == 'admin' ||
-      this.my_roles.includes(ROLES.LEAD) ||
-      this.my_roles.includes(ROLES.COORDINATOR)
+      this.user_info?.role == 'admin' ||
+      this.my_roles?.includes(ROLES.LEAD) ||
+      this.my_roles?.includes(ROLES.COORDINATOR)
     );
   }
   filters: any;
@@ -221,9 +221,9 @@ export class RiskReportOverviewComponent implements OnInit, OnDestroy {
   }
   canEdit() {
     return (
-      this.user_info.role == 'admin' ||
-      this.my_roles.includes(ROLES.LEAD) ||
-      this.my_roles.includes(ROLES.COORDINATOR)
+      this.user_info?.role == 'admin' ||
+      this.my_roles?.includes(ROLES.LEAD) ||
+      this.my_roles?.includes(ROLES.COORDINATOR)
     );
   }
 

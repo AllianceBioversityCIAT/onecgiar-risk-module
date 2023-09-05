@@ -337,6 +337,11 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
             ]);
           }
         }
+        else if (this.my_risks.length == 0) {
+          this.router.navigate([
+            `/home/${this.initiativeId}/${this.officalCode}`,
+          ]);
+        }
       } else {
         this.router.navigate([
           `/home/${this.initiativeId}/${this.officalCode}`,
@@ -347,11 +352,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     //dont allow team member to create risk
     let url: any = '';
     url = this.router.url.split('/').at(-1);
-    if (
-      this.my_roles?.includes(ROLES.MEMBER) &&
-      url == 'create-risk' &&
-      this.user_info.role != 'admin'
-    ) {
+    if ((this.my_roles?.includes(ROLES.MEMBER) || this.my_risks.length == 0) && url == 'create-risk' && this.user_info.role != 'admin') {
       this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
 
