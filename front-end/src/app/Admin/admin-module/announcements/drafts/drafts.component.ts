@@ -4,6 +4,7 @@ import { AnnouncementsFormDialogComponent } from './announcements-form-dialog/an
 import { AnnouncementService } from 'src/app/services/announcement.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-drafts',
@@ -14,8 +15,13 @@ export class DraftsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private announcementService: AnnouncementService,
-    private toster: ToastrService
-  ) {}
+    private toster: ToastrService,
+    private headerService: HeaderService
+  ) {
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
+  }
 
   draftsAnnouncements: any;
 

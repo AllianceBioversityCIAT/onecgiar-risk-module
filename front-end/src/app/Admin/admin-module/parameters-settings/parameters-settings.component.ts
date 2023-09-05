@@ -14,7 +14,11 @@ export class ParametersSettingsComponent implements OnInit {
   sort: MatSort = new MatSort();
 
   j: any;
-  constructor(private headerService: HeaderService) {}
+  constructor(private headerService: HeaderService) {
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
+  }
 
   ngOnInit(): void {}
 }

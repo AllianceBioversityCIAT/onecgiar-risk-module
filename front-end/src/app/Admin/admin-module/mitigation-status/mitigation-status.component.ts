@@ -4,6 +4,7 @@ import { MitigationStatusFormDialogComponent } from './mitigation-status-form-di
 import { ToastrService } from 'ngx-toastr';
 import { MitigationStatusService } from 'src/app/services/mitigation-status.service';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-mitigation-status',
@@ -17,8 +18,13 @@ export class MitigationStatusComponent implements OnInit {
   constructor(
     private toster: ToastrService,
     private mitigationService: MitigationStatusService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private headerService: HeaderService
+  ) {
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
+  }
 
   ngOnInit(): void {
     this.getData();

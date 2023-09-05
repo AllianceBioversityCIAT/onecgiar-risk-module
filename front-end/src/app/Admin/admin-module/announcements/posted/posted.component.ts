@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AnnouncementsFormDialogComponent } from '../drafts/announcements-form-dialog/announcements-form-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AnnouncementService } from 'src/app/services/announcement.service';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-posted',
@@ -11,8 +12,13 @@ import { AnnouncementService } from 'src/app/services/announcement.service';
 export class PostedComponent {
   constructor(
     private dialog: MatDialog,
-    private announcementService: AnnouncementService
-  ) {}
+    private announcementService: AnnouncementService,
+    private headerService: HeaderService
+  ) {
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
+  }
 
   postedAnnouncements: any;
 

@@ -4,6 +4,7 @@ import { CategoryFormDialogComponent } from './category-form-dialog/category-for
 import { CategoryService } from 'src/app/services/category.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-category',
@@ -14,8 +15,13 @@ export class CategoryComponent implements OnInit {
   constructor(
     private categoriesService: CategoryService,
     private dialog: MatDialog,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private headerService: HeaderService
+  ) {
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
+  }
 
   dataSource: any = [];
   async ngOnInit() {
