@@ -52,7 +52,9 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
   riskId !:number;
   initiative: any = null;
   initiativeId:any;
+  //for teamMember
   my_risks:any;
+  leader_corleader_risks:any;
   officalCode: any;
   checkIfRiskExist:any;
 
@@ -271,8 +273,8 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
   
   
     this.initiative = await this.initiativeService.getInitiative(this.initiativeId);
+    this.leader_corleader_risks = this.initiative?.risks;
     this.checkIfRiskExist = await this.riskService.getRisk(this.riskId);
-    console.log(this.checkIfRiskExist)
     this.my_risks = this.initiative.risks
       .filter(
         (d: any) =>
@@ -293,11 +295,18 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
   
   
     //check if user have permission on this risk to update it
-    if(this.riskId){
-      if(this.user_info.role == 'admin' || this.my_roles?.includes(ROLES.LEAD) || this.my_roles?.includes(ROLES.COORDINATOR)) {
+    if(this.riskId && this.checkIfRiskExist.length > 0){
+      if(this.user_info.role == 'admin') {
         if(this.checkIfRiskExist.length > 0){
         }
         else{
+          this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+        }
+      }
+      else if(this.my_roles?.includes(ROLES.LEAD) || this.my_roles?.includes(ROLES.COORDINATOR)){
+        if(this.leader_corleader_risks.filter((e:any) => e.id === this.riskId).length > 0) {
+        }
+        else {
           this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
         }
       }
@@ -308,6 +317,9 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
           this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
         }
       }
+    }
+    else {
+      this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
     
     //dont allow team member to create risk
