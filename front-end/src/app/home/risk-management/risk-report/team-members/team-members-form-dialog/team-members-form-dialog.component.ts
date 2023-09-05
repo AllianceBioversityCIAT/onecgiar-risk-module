@@ -1,20 +1,11 @@
 import {
   Component,
   Inject,
-  ViewChild,
-  OnDestroy,
   OnInit,
-  AfterViewInit,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelect } from '@angular/material/select';
-import { ReplaySubject, Subject, take, takeUntil } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/shared-model/User-Management-Data/user.model';
-import { TeamMembers } from 'src/app/shared-model/team-members-data/team-members.model';
-import { ApiUserService } from 'src/app/shared-services/admin-services/User-Management-Services/api-user.service';
-import { ApiTeamMembersService } from 'src/app/shared-services/team-members-services/api-team-members.service';
 export enum ROLES {
   LEAD = 'Leader',
   MEMBER = 'Team Member',
@@ -80,7 +71,7 @@ export class TeamMembersFormDialogComponent implements OnInit {
         this.data.role == 'add' ? '' : this.data.member.role,
         Validators.required,
       ],
-      user_id: [this.data.role == 'add' ? '' : this.data.member.user_id],
+      user_id: [this.data.role == 'add' ? '' : this.data.member.user],
     });
     this.memberForm.setValidators(this.atLeastOneValidator());
   }
@@ -106,7 +97,9 @@ export class TeamMembersFormDialogComponent implements OnInit {
     email: 'email'
   }
 
-
+  compareWith(v1:any, v2:any){
+    return v1?.user_id === v2?.user_id;
+  }
 
   haveSameChar!: boolean;
   searchValue: string = '';
@@ -133,7 +126,6 @@ export class TeamMembersFormDialogComponent implements OnInit {
 
   async ngOnInit() {
     // this.users = await this.usersService.getUsers();
-    // console.log(this.users);
     this.populateMemberForm();
   }
 

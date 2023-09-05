@@ -33,6 +33,7 @@
         #agesSelect
         [items]="users"
         bindValue="id"
+        [compareWith]="compareWith"
         labelForId="id"
         [bindLabel]="
           haveSameChar == true ? bindValue.full_name : bindValue.email
