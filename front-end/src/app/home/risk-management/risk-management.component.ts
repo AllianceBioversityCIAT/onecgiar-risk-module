@@ -1,22 +1,26 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router, NavigationEnd } from '@angular/router';
-import { InitiativesService } from 'src/app/services/initiatives.service';
-import { UserService } from 'src/app/services/user.service';
-import jwt_decode from 'jwt-decode';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, OnInit } from '@angular/core';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-risk-management',
   templateUrl: './risk-management.component.html',
   styleUrls: ['./risk-management.component.scss'],
 })
-export class RiskManagementComponent {
-  constructor(private headerService: HeaderService) {
+export class RiskManagementComponent implements OnInit {
+  constructor(
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
+  ) {
     this.headerService.background = '#0f212f';
     this.headerService.backgroundNavMain = '#436280';
     this.headerService.backgroundUserNavButton = '#436280';
+  }
+
+  ngOnInit() {
+    this.title.setTitle('Risk management');
+    this.meta.updateTag({ name: 'description', content: 'Risk management' });
   }
 
   // public url1: string = '';

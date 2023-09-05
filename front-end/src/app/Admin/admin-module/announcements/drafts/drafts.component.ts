@@ -5,6 +5,7 @@ import { AnnouncementService } from 'src/app/services/announcement.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-drafts',
@@ -16,7 +17,9 @@ export class DraftsComponent implements OnInit {
     private dialog: MatDialog,
     private announcementService: AnnouncementService,
     private toster: ToastrService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -27,6 +30,11 @@ export class DraftsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
+    this.title.setTitle('Announcements |Drafts');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Announcements |Drafts',
+    });
   }
   //Drafts
   async getData() {

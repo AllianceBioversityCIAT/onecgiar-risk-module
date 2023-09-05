@@ -5,6 +5,8 @@ import { GlossaryService } from 'src/app/services/glossary.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-glossary-admin',
   templateUrl: './glossary-admin.component.html',
@@ -15,7 +17,9 @@ export class GlossaryAdminComponent implements OnInit {
     private dialog: MatDialog,
     private toster: ToastrService,
     private GlossaryService: GlossaryService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -28,6 +32,11 @@ export class GlossaryAdminComponent implements OnInit {
 
   async ngOnInit() {
     await this.getData();
+    this.title.setTitle('Glossary');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Glossary',
+    });
   }
   async getData() {
     this.data = await this.GlossaryService.getGlossary();

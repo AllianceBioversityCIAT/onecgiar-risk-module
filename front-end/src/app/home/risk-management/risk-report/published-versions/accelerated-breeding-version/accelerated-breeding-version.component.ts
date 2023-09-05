@@ -1,21 +1,10 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActionsControls } from 'src/app/shared-model/actions-controls-data/actions-controls.model';
-import { RiskReport } from 'src/app/shared-model/risk-report-data/risk-report.model';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ApiRiskReportService } from 'src/app/shared-services/risk-report-services/api-risk-report.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiActionsControlsService } from 'src/app/shared-services/actions-controls-services/api-actions-controls.service';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { Meta, Title } from '@angular/platform-browser';
+import { TitlePageService } from 'src/app/title-page.service';
 
 @Component({
   selector: 'app-accelerated-breeding-version',
@@ -26,11 +15,21 @@ export class AcceleratedBreedingVersionComponent {
   constructor(
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private initiativesService: InitiativesService
-  ) {}
+    private initiativesService: InitiativesService,
+    private title: Title,
+    private meta: Meta,
+    private t: TitlePageService
+  ) {
+    this.title.setTitle('Accelerated breeding versio');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Accelerated breeding versio',
+    });
+  }
 
   dataSource = new MatTableDataSource<any>([]);
   showReduntent: boolean = false;
+  titlePage: any;
   @ViewChild(MatPaginator) paginator: any;
 
   ngAfterViewInit() {
@@ -56,6 +55,8 @@ export class AcceleratedBreedingVersionComponent {
     const params2 = this.activatedRoute.parent?.parent?.snapshot.params;
     console.log(params2);
     this.paarentRoute = params2;
+
+    this.titlePage = this.t.a;
   }
 
   async export() {

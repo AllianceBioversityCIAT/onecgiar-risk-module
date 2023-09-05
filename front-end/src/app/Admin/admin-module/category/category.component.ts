@@ -5,6 +5,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-category',
@@ -16,7 +17,9 @@ export class CategoryComponent implements OnInit {
     private categoriesService: CategoryService,
     private dialog: MatDialog,
     private toastr: ToastrService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -27,6 +30,11 @@ export class CategoryComponent implements OnInit {
   async ngOnInit() {
     await this.init();
     console.log(this.dataSource);
+    this.title.setTitle('Categories');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Categories',
+    });
   }
 
   async init() {

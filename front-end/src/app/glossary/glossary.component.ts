@@ -26,6 +26,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { GlossaryService } from '../services/glossary.service';
 import { HeaderService } from '../header.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-glossary',
@@ -35,7 +36,9 @@ import { HeaderService } from '../header.service';
 export class GlossaryComponent implements OnInit {
   constructor(
     private glossaryService: GlossaryService,
-    private headerService: HeaderService // private changeDetectorRef: ChangeDetectorRef
+    private headerService: HeaderService, // private changeDetectorRef: ChangeDetectorRef
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#0f212f';
     this.headerService.backgroundNavMain = '#436280';
@@ -58,6 +61,8 @@ export class GlossaryComponent implements OnInit {
     this.changeFilter();
     await this.getData(this.filters);
     // this.changeDetectorRef.detectChanges();
+    this.title.setTitle('Glossary');
+    this.meta.updateTag({ name: 'description', content: 'Glossary' });
   }
 
   async getData(filters: any) {

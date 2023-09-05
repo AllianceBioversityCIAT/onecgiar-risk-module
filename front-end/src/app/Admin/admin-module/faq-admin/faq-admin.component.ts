@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { FAQService } from 'src/app/services/faq.service';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-faq-admin',
   templateUrl: './faq-admin.component.html',
@@ -15,7 +17,9 @@ export class FaqAdminComponent {
     private dialog: MatDialog,
     private toster: ToastrService,
     private FaqService: FAQService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -28,6 +32,11 @@ export class FaqAdminComponent {
 
   async ngOnInit() {
     await this.getData();
+    this.title.setTitle('Faq');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Faq',
+    });
   }
 
   async getData() {

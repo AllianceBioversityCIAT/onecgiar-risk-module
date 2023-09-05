@@ -73,6 +73,7 @@ import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-
 import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 import { EmailBodyComponent } from './Admin/admin-module/emails/email-body/email-body.component';
 import { AvatarModule, AvatarSource } from 'ngx-avatars';
+import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
   declarations: [
@@ -122,6 +123,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     RiskDashboardComponent,
     EmailsComponent,
     EmailBodyComponent,
+    RiskReportOverviewComponent,
   ],
   imports: [
     BrowserModule,

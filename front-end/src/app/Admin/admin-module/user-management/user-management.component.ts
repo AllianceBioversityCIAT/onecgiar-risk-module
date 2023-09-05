@@ -7,6 +7,7 @@ import { UserService } from 'src/app/services/user.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-management',
@@ -23,7 +24,9 @@ export class UserManagementComponent implements OnInit {
     private users: UserService,
     private dialog: MatDialog,
     private headerService: HeaderService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -40,6 +43,9 @@ export class UserManagementComponent implements OnInit {
   async ngOnInit() {
     await this.init();
     await this.applysort();
+
+    this.title.setTitle('User management');
+    this.meta.updateTag({ name: 'description', content: 'User management' });
   }
   async init() {
     this.data = await this.users.getUsers(

@@ -5,13 +5,14 @@ import { InitiativesService } from 'src/app/services/initiatives.service';
 import { UserService } from 'src/app/services/user.service';
 import jwt_decode from 'jwt-decode';
 import { MatPaginator } from '@angular/material/paginator';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-risk-management-table',
   templateUrl: './risk-management-table.component.html',
-  styleUrls: ['./risk-management-table.component.scss']
+  styleUrls: ['./risk-management-table.component.scss'],
 })
-export class RiskManagementTableComponent  {
+export class RiskManagementTableComponent {
   public url1: string = '';
 
   public riskUrl = {
@@ -22,13 +23,20 @@ export class RiskManagementTableComponent  {
   constructor(
     public router: Router,
     public initiativeService: InitiativesService,
-    private userService: UserService
+    private userService: UserService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
       if (e instanceof NavigationEnd) {
         this.getInitiatives();
       }
+    });
+    this.title.setTitle('Risk management');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Risk management',
     });
   }
   length = 100;
@@ -46,19 +54,18 @@ export class RiskManagementTableComponent  {
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: any;
 
-
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.getInitiatives();
   }
-  filter(filters:any){
-    this.getInitiatives(filters)
+  filter(filters: any) {
+    this.getInitiatives(filters);
   }
   async getInitiatives(filters = null) {
-    if(filters)
-    var Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
-    else
-    var Initiatives: any = await this.initiativeService.getInitiatives();
+    if (filters)
+      var Initiatives: any =
+        await this.initiativeService.getInitiativesWithFilters(filters);
+    else var Initiatives: any = await this.initiativeService.getInitiatives();
 
     this.dataSource = new MatTableDataSource<any>(Initiatives);
     this.length = Initiatives.length;
@@ -74,11 +81,12 @@ export class RiskManagementTableComponent  {
   listOfCategories: any[] = [];
   filterCategories(categories: any) {
     this.listOfCategories = [];
-    for(let item of categories)
-    {
-      this.listOfCategories.push(item?.category?.title)
+    for (let item of categories) {
+      this.listOfCategories.push(item?.category?.title);
     }
-    const result =  this.listOfCategories.filter((item, index) => this.listOfCategories.indexOf(item) === index).join(', ');
+    const result = this.listOfCategories
+      .filter((item, index) => this.listOfCategories.indexOf(item) === index)
+      .join(', ');
     return result;
   }
 
@@ -95,13 +103,12 @@ export class RiskManagementTableComponent  {
   }
   filterReqAssistance(risk: any) {
     let column = '-';
-    for(let item of risk) {
-      if(item.request_assistance == true) {
+    for (let item of risk) {
+      if (item.request_assistance == true) {
         column = 'Yes';
         break;
-      }
-      else {
-        column = 'No'
+      } else {
+        column = 'No';
       }
     }
     return column;
@@ -111,8 +118,12 @@ export class RiskManagementTableComponent  {
     if (access_token) {
       this.userRole = jwt_decode(access_token);
     }
-    if(this.userRole.role == 'admin') {
-      this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "Help requested");
+    if (this.userRole.role == 'admin') {
+      this.displayedColumns.splice(
+        this.displayedColumns.length - 1,
+        0,
+        'Help requested'
+      );
     }
     this.getInitiatives();
     // this.url1 = this.router.url;

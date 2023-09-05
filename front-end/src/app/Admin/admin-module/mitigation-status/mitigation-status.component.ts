@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MitigationStatusService } from 'src/app/services/mitigation-status.service';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-mitigation-status',
@@ -19,7 +20,9 @@ export class MitigationStatusComponent implements OnInit {
     private toster: ToastrService,
     private mitigationService: MitigationStatusService,
     private dialog: MatDialog,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -28,6 +31,11 @@ export class MitigationStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
+    this.title.setTitle('Mitigation status');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Mitigation status',
+    });
   }
 
   async getData() {

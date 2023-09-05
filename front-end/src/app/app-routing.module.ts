@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserManagementComponent } from './Admin/admin-module/user-management/user-management.component';
-import { UserFormDialogComponent } from './Admin/admin-module/user-management/user-form-dialog/user-form-dialog.component';
 import { ParametersSettingsComponent } from './Admin/admin-module/parameters-settings/parameters-settings.component';
 import { AdminModuleComponent } from './Admin/admin-module/admin-module.component';
 
@@ -28,10 +27,10 @@ import { GlossaryAdminComponent } from './Admin/admin-module/glossary-admin/glos
 import { FaqAdminComponent } from './Admin/admin-module/faq-admin/faq-admin.component';
 import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotfoundcomponent.component';
 import { RiskManagementTableComponent } from './home/risk-management/risk-management-table/risk-management-table.component';
-import { RiskReportTableComponent } from './home/risk-management/risk-report/risk-report-table/risk-report-table.component';
 import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
 import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
 import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
+import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -101,6 +100,10 @@ const routes: Routes = [
             component: RiskReportComponent,
             children: [
               {
+                path: '',
+                component: RiskReportOverviewComponent,
+              },
+              {
                 path: 'create-risk',
                 component: RiskReportFormComponent,
               },
@@ -118,18 +121,22 @@ const routes: Routes = [
                 children: [
                   {
                     path: '',
-                    component: VersionsTableComponent
+                    component: VersionsTableComponent,
                   },
                   {
                     path: ':versionId',
-                    component: AcceleratedBreedingVersionComponent
+                    component: AcceleratedBreedingVersionComponent,
+                    data: {
+                      title: 'AcceleratedBreedingVersionComponent',
+                      description: 'AcceleratedBreedingVersionComponent',
+                    },
                   },
-                ]
+                ],
               },
               {
                 path: 'risk-dashboard',
-                component: RiskDashboardComponent
-              }
+                component: RiskDashboardComponent,
+              },
             ],
           },
         ],

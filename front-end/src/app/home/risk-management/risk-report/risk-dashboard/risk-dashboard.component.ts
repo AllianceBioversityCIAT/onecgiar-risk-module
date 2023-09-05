@@ -5,6 +5,8 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 import { ROLES } from '../team-members/team-members.component';
+import { Meta, Title } from '@angular/platform-browser';
+
 declare var require: any;
 require('highcharts/highcharts-more.js')(Highcharts);
 
@@ -35,7 +37,9 @@ export class RiskDashboardComponent {
     private activatedRoute: ActivatedRoute,
     private initiativeService: InitiativesService,
     private riskService: RiskService,
-    private router: Router
+    private router: Router,
+    private title: Title,
+    private meta: Meta
   ) {}
 
   data: any = null;
@@ -64,6 +68,11 @@ export class RiskDashboardComponent {
     if (this.my_roles?.includes(ROLES.MEMBER) && url == 'risk-dashboard') {
       this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
+    this.title.setTitle('Risk dashboard');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Risk dashboard',
+    });
   }
 
   Highcharts: typeof Highcharts = Highcharts;

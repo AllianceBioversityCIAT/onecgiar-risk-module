@@ -5,11 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,28 +14,22 @@ import { ToastrService } from 'ngx-toastr';
 //   ConfirmComponent,
 //   ConfirmDialogModel,
 // } from 'src/app/components/confirm/confirm.component';
-import { ROLES } from './team-members/team-members.component';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 import { AppSocket } from 'src/app/services/socket.service';
 import { UserService } from 'src/app/services/user.service';
 import { VariableService } from 'src/app/services/variable.service';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
-import { SubmitRiskDialogComponent } from './submit-risk-dialog/submit-risk-dialog.component';
 import { Meta, Title } from '@angular/platform-browser';
+import { SubmitRiskDialogComponent } from '../submit-risk-dialog/submit-risk-dialog.component';
+import { ROLES } from '../team-members/team-members.component';
 
 @Component({
-  selector: 'app-risk-report',
-  templateUrl: './risk-report.component.html',
-  styleUrls: ['./risk-report.component.scss'],
+  selector: 'app-risk-report-overview',
+  templateUrl: './risk-report-overview.component.html',
+  styleUrls: ['./risk-report-overview.component.scss'],
 })
-export class RiskReportComponent implements OnInit, OnDestroy {
+export class RiskReportOverviewComponent implements OnInit, OnDestroy {
   constructor(
     public router: Router,
     public dialog: MatDialog,

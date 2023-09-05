@@ -8,6 +8,8 @@ import { FilterService } from 'src/app/filter.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmailBodyComponent } from './email-body/email-body.component';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-emails',
   templateUrl: './emails.component.html',
@@ -44,7 +46,9 @@ export class EmailsComponent {
     private emails: EmailsService,
     public dialog: MatDialog,
     private filterservice: FilterService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -114,5 +118,10 @@ export class EmailsComponent {
     await this.getEmailLogs(1, 10);
     this.ngAfterViewInit();
     this.populateFormData();
+    this.title.setTitle('Emails');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Emails',
+    });
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FAQService } from '../services/faq.service';
 import { HeaderService } from '../header.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-faq',
@@ -12,7 +13,9 @@ export class FaqComponent implements OnInit {
 
   constructor(
     private FaqService: FAQService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#0f212f';
     this.headerService.backgroundNavMain = '#436280';
@@ -21,6 +24,8 @@ export class FaqComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getData();
+    this.title.setTitle('Faq');
+    this.meta.updateTag({ name: 'description', content: 'Faq' });
   }
   data: any;
   async getData() {

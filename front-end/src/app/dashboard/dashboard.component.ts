@@ -4,6 +4,7 @@ import { ApiRiskDetailsService } from '../shared-services/risk-details-services/
 import * as Highcharts from 'highcharts';
 import { DashboardService } from '../services/dashboard.service';
 import { HeaderService } from '../header.service';
+import { Meta, Title } from '@angular/platform-browser';
 declare var require: any;
 require('highcharts/highcharts-more.js')(Highcharts);
 
@@ -20,11 +21,13 @@ export class DashboardComponent {
   constructor(
     private apiRiskDetailsService: ApiRiskDetailsService,
     private dashboardService: DashboardService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#0f212f';
     this.headerService.backgroundNavMain = '#436280';
-    this.headerService.backgroundUserNavButton='#436280'
+    this.headerService.backgroundUserNavButton = '#436280';
   }
 
   data: any = null;
@@ -292,6 +295,9 @@ export class DashboardComponent {
         },
       ],
     };
+
+    this.title.setTitle('Risk dashboard');
+    this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
   }
   Highcharts: typeof Highcharts = Highcharts;
 

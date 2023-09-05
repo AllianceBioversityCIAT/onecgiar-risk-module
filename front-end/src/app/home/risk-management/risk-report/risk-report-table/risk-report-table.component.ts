@@ -7,16 +7,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActionsControls } from 'src/app/shared-model/actions-controls-data/actions-controls.model';
-import { ApiActionsControlsService } from 'src/app/shared-services/actions-controls-services/api-actions-controls.service';
-import { ApiRiskReportService } from 'src/app/shared-services/risk-report-services/api-risk-report.service';
-import { SubmitRiskDialogComponent } from '../submit-risk-dialog/submit-risk-dialog.component';
-import { RiskReport } from 'src/app/shared-model/risk-report-data/risk-report.model';
 import {
   animate,
   state,
@@ -34,6 +26,8 @@ import { InitiativesService } from 'src/app/services/initiatives.service';
 import { jsPDF } from 'jspdf';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { ROLES } from '../team-members/team-members.component';
+import { Meta, Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-risk-report-table',
   templateUrl: './risk-report-table.component.html',
@@ -73,7 +67,8 @@ export class RiskReportTableComponent {
     private socket: AppSocket,
     private loading: LoadingService,
     private cd: ChangeDetectorRef,
-    private RiskReportComponent: RiskReportComponent
+    private RiskReportComponent: RiskReportComponent,
+
   ) {}
 
   @Input() dataSource: any;
@@ -86,6 +81,7 @@ export class RiskReportTableComponent {
   @Input() my_risks: any;
   @Input() showingVersion: boolean = false;
   @Input() showReduntent: boolean = true;
+  @Input() titlePage: any;
 
   @ViewChild('pdfcontent') pdfcontent: ElementRef = new ElementRef('');
 

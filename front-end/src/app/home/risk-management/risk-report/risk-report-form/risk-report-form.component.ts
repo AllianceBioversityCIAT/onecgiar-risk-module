@@ -1,5 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiActionsControlsService } from 'src/app/shared-services/actions-controls-services/api-actions-controls.service';
@@ -16,13 +22,16 @@ import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/dele
 import { ToastrService } from 'ngx-toastr';
 import { RiskReportComponent } from '../risk-report.component';
 import { AppSocket } from 'src/app/services/socket.service';
+import { Meta, Title } from '@angular/platform-browser';
+
 import { filter } from 'rxjs';
+
 @Component({
   selector: 'app-risk-report-form',
   templateUrl: './risk-report-form.component.html',
   styleUrls: ['./risk-report-form.component.scss'],
 })
-export class RiskReportFormComponent implements OnInit,OnDestroy{
+export class RiskReportFormComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort)
   sort: MatSort = new MatSort();
 
@@ -35,9 +44,10 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
     public fb: FormBuilder,
     private mitigationService: MitigationStatusService,
     private toastr: ToastrService,
-    public RiskReportcomponent:RiskReportComponent,
+    public RiskReportcomponent: RiskReportComponent,
     private socket: AppSocket,
-
+    private title: Title,
+    private meta: Meta
   ) {}
 
   riskApi: any = null;
@@ -45,30 +55,31 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
   errorMessage: any = '';
   riskCategories: any;
   riskUsers: any;
-  risksForUser:any;
+  risksForUser: any;
   my_roles: any;
   newRiskForm: any;
   user_info: any;
-  riskId !:number;
+  riskId!: number;
   initiative: any = null;
-  initiativeId:any;
+  initiativeId: any;
   //for teamMember
-  my_risks:any;
-  leader_corleader_risks:any;
+  my_risks: any;
+  leader_corleader_risks: any;
   officalCode: any;
-  checkIfRiskExist:any;
-
-
-
+  checkIfRiskExist: any;
 
   populateNewRiskForm() {
-
-    if (this.riskId)
-      this.socket.emit('risk-lock', this.riskId);
+    if (this.riskId) this.socket.emit('risk-lock', this.riskId);
     this.newRiskForm = this.fb.group({
       risk_raiser: [this.user_info.email],
-      risk_owner_id: [this?.checkIfRiskExist[0]?.risk_owner?.id, Validators.required],
-      category_id: [this?.checkIfRiskExist[0]?.category.id, Validators.required],
+      risk_owner_id: [
+        this?.checkIfRiskExist[0]?.risk_owner?.id,
+        Validators.required,
+      ],
+      category_id: [
+        this?.checkIfRiskExist[0]?.category.id,
+        Validators.required,
+      ],
       title: [
         this?.checkIfRiskExist[0]?.title,
         [Validators.required, WordCountValidators.max(50)],
@@ -97,7 +108,14 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
         Boolean(this?.checkIfRiskExist[0]?.request_assistance),
         Validators.required,
       ],
-      due_date: [ this?.checkIfRiskExist[0]?.due_date, [(c: AbstractControl) => (new Date(c.value).getTime() < Date.now() ? { invalid: true } : null), Validators.required]]
+      due_date: [
+        this?.checkIfRiskExist[0]?.due_date,
+        [
+          (c: AbstractControl) =>
+            new Date(c.value).getTime() < Date.now() ? { invalid: true } : null,
+          Validators.required,
+        ],
+      ],
     });
 
     if (this?.checkIfRiskExist[0]?.mitigations) {
@@ -107,15 +125,14 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
     }
   }
 
-  actions:any
-  async getMitigationActions(){
-   this.actions = await this.mitigationService.getMitigationStatus()
+  actions: any;
+  async getMitigationActions() {
+    this.actions = await this.mitigationService.getMitigationStatus();
   }
 
-  getStatusByID(id:number){
-    return  this.actions.filter((d:any)=>d.id == id)[0].title
+  getStatusByID(id: number) {
+    return this.actions.filter((d: any) => d.id == id)[0].title;
   }
-
 
   async submit() {
     this.newRiskForm.markAllAsTouched();
@@ -139,12 +156,12 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
           );
           // to refresh table
           this.RiskReportcomponent.loadInitiative();
-          setTimeout(()=>{
-            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+          setTimeout(() => {
+            this.router.navigate([
+              `/home/${this.initiativeId}/${this.officalCode}`,
+            ]);
           }, 2000);
-
         }
-
       } else {
         result = await this.riskService.createNewRisk({
           initiative_id: this.initiativeId,
@@ -156,45 +173,45 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
             'Success',
             `${this.newRiskForm.value.title} has been created`
           );
-           // to refresh table
+          // to refresh table
           this.RiskReportcomponent.loadInitiative();
-          setTimeout(()=>{
-            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+          setTimeout(() => {
+            this.router.navigate([
+              `/home/${this.initiativeId}/${this.officalCode}`,
+            ]);
           }, 2000);
-          
         }
-
       }
     }
   }
 
-
   checkedReqAssistance() {
-    if(this.newRiskForm.controls['request_assistance'].value == true) {
-      let current_likelihood = this.newRiskForm.controls['current_likelihood'].value;
+    if (this.newRiskForm.controls['request_assistance'].value == true) {
+      let current_likelihood =
+        this.newRiskForm.controls['current_likelihood'].value;
       let current_impact = this.newRiskForm.controls['current_impact'].value;
-  
+
       this.newRiskForm.controls.target_likelihood.setValue(current_likelihood);
       this.newRiskForm.controls.target_impact.setValue(current_impact);
       this.newRiskForm.get('due_date').clearValidators();
       this.newRiskForm.get('due_date').updateValueAndValidity();
-
-    }
-    else {
+    } else {
       let date: any;
       date = this.newRiskForm.get('due_date');
-      date.setValidators([(c: AbstractControl) => (new Date(c.value).getTime() < Date.now() ? { invalid: true } : null), Validators.required]);
+      date.setValidators([
+        (c: AbstractControl) =>
+          new Date(c.value).getTime() < Date.now() ? { invalid: true } : null,
+        Validators.required,
+      ]);
       date.updateValueAndValidity();
     }
   }
 
   disapledCheckBox() {
-    if(this.newRiskForm.controls['request_assistance'].value == true) {
-      this.newRiskForm.controls.request_assistance.setValue(false)
+    if (this.newRiskForm.controls['request_assistance'].value == true) {
+      this.newRiskForm.controls.request_assistance.setValue(false);
     }
   }
-
-
 
   arr: any[] = [];
   async openNewProposedDialog() {
@@ -218,8 +235,8 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
         maxWidth: '400px',
         data: {
           tiile: 'Delete',
-          message : 'Are you sure you want to delete this action ?'
-        }
+          message: 'Are you sure you want to delete this action ?',
+        },
       })
       .afterClosed()
       .subscribe(async (dialogResult) => {
@@ -247,8 +264,6 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
     });
   }
 
-
-
   displayedColumns: string[] = [
     'Mitigation Description',
     'Status of Action',
@@ -256,25 +271,25 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
   ];
   proposed = new MatTableDataSource<any>([]);
 
-
-
   async ngOnInit(): Promise<void> {
-
     const childParams: any = this.activatedRoute?.snapshot.params;
     this.riskId = +childParams.riskId;
-  
+
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       this.user_info = jwt_decode(access_token);
     }
-  
-    const parentParams: any = this.activatedRoute.parent?.params.subscribe(val => {
-      this.initiativeId = +val['id'];
-      this.officalCode = val['initiativeId'];
-    });
-  
-  
-    this.initiative = await this.initiativeService.getInitiative(this.initiativeId);
+
+    const parentParams: any = this.activatedRoute.parent?.params.subscribe(
+      (val) => {
+        this.initiativeId = +val['id'];
+        this.officalCode = val['initiativeId'];
+      }
+    );
+
+    this.initiative = await this.initiativeService.getInitiative(
+      this.initiativeId
+    );
     this.leader_corleader_risks = this.initiative?.risks;
     this.checkIfRiskExist = await this.riskService.getRisk(this.riskId);
     this.my_risks = this.initiative.risks
@@ -283,64 +298,75 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
           d?.risk_owner && d?.risk_owner?.user?.id == this.user_info.id
       )
       .map((d: any) => d);
-  
-  
-  
-  
-      this.risksForUser = await this.riskService.getRiskUsers(this.initiativeId);
-      this.my_roles = this.risksForUser
-        .filter((d: any) => d?.user?.id == this?.user_info?.id)
-        .map((d: any) => d.role);
-  
-  
-  
-  
-  
+
+    this.risksForUser = await this.riskService.getRiskUsers(this.initiativeId);
+    this.my_roles = this.risksForUser
+      .filter((d: any) => d?.user?.id == this?.user_info?.id)
+      .map((d: any) => d.role);
+
     //check if user have permission on this risk to update it
-    if(this.riskId){
-      if(this.checkIfRiskExist.length > 0){
-        if(this.user_info.role == 'admin') {
-          if(this.checkIfRiskExist.length > 0){
+    if (this.riskId) {
+      if (this.checkIfRiskExist.length > 0) {
+        if (this.user_info.role == 'admin') {
+          if (this.checkIfRiskExist.length > 0) {
+          } else {
+            this.router.navigate([
+              `/home/${this.initiativeId}/${this.officalCode}`,
+            ]);
           }
-          else{
-            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+        } else if (
+          this.my_roles?.includes(ROLES.LEAD) ||
+          this.my_roles?.includes(ROLES.COORDINATOR)
+        ) {
+          if (
+            this.leader_corleader_risks.filter((e: any) => e.id === this.riskId)
+              .length > 0
+          ) {
+          } else {
+            this.router.navigate([
+              `/home/${this.initiativeId}/${this.officalCode}`,
+            ]);
+          }
+        } else if (this.my_roles?.includes(ROLES.MEMBER)) {
+          if (
+            this.my_risks.filter((e: any) => e.id === this.riskId).length > 0
+          ) {
+          } else {
+            this.router.navigate([
+              `/home/${this.initiativeId}/${this.officalCode}`,
+            ]);
           }
         }
-        else if(this.my_roles?.includes(ROLES.LEAD) || this.my_roles?.includes(ROLES.COORDINATOR)){
-          if(this.leader_corleader_risks.filter((e:any) => e.id === this.riskId).length > 0) {
-          }
-          else {
-            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
-          }
-        }
-        else if(this.my_roles?.includes(ROLES.MEMBER)){
-          if(this.my_risks.filter((e:any) => e.id === this.riskId).length > 0) {
-          }
-          else {
-            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
-          }
-        }
-      }
-      else {
-        this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+      } else {
+        this.router.navigate([
+          `/home/${this.initiativeId}/${this.officalCode}`,
+        ]);
       }
     }
- 
-    
+
     //dont allow team member to create risk
     let url: any = '';
     url = this.router.url.split('/').at(-1);
-    if(this.my_roles?.includes(ROLES.MEMBER) && url == 'create-risk' && this.user_info.role != 'admin') {
+    if (
+      this.my_roles?.includes(ROLES.MEMBER) &&
+      url == 'create-risk' &&
+      this.user_info.role != 'admin'
+    ) {
       this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
-
 
     this.populateNewRiskForm();
     this.getMitigationActions();
     this.riskCategories = await this.riskService.getRiskCategories();
-    if (this.initiativeId){
+    if (this.initiativeId) {
       this.riskUsers = await this.riskService.getRiskUsers(this.initiativeId);
     }
+
+    this.title.setTitle('Create risk');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Create risk',
+    });
   }
 
   unlock(risk_id: any) {
@@ -350,5 +376,4 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
     this.unlock(this.riskId);
     // this.socket.disconnect();
   }
-
 }

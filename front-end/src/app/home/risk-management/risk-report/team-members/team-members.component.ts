@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
+import { Meta, Title } from '@angular/platform-browser';
+
 export enum ROLES {
   LEAD = 'Leader',
   MEMBER = 'Team Member',
@@ -21,7 +23,6 @@ export enum ROLES {
   styleUrls: ['./team-members.component.scss'],
 })
 export class TeamMembersComponent {
-
   initiativeId: any;
   constructor(
     public router: Router,
@@ -30,7 +31,9 @@ export class TeamMembersComponent {
     private initiativeService: InitiativesService,
     private riskService: RiskService,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private title: Title,
+    private meta: Meta
   ) {}
   user_info: any;
   my_roles: any;
@@ -50,6 +53,12 @@ export class TeamMembersComponent {
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
     if (this.canEdit()) this.displayedColumns.push('Actions');
+
+    this.title.setTitle('Team members');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Team members',
+    });
   }
   async init() {}
   canEdit() {
@@ -60,13 +69,13 @@ export class TeamMembersComponent {
     );
   }
 
-
   async deleteMember(roleId: number) {
-    this.dialog.open(DeleteConfirmDialogComponent, {
+    this.dialog
+      .open(DeleteConfirmDialogComponent, {
         data: {
           title: 'Delete',
-          message: 'Are you sure you want to delete user role ?'
-        }
+          message: 'Are you sure you want to delete user role ?',
+        },
       })
       .afterClosed()
       .subscribe(async (dialogResult) => {
@@ -94,22 +103,24 @@ export class TeamMembersComponent {
         const userRole = result.formValue.userRole;
         console.log({ email, userRole });
         // handel add memeber API service
-        this.initiativeService.createNewInitiativeRole(
-          this.initiativeId,
-          {
+        this.initiativeService
+          .createNewInitiativeRole(this.initiativeId, {
             initiative_id: this.initiativeId,
             email: result.formValue.email,
             role: result.formValue.userRole,
             user_id: result.formValue.user_id,
-          }
-        ).subscribe(data => {
-          if (data) {
-            this.toastr.success('Success', `User role has been added`);
-            this.loadInitiativeRoles();
-          }
-        }, error => {
-          this.toastr.error(error.error.message);
-        })
+          })
+          .subscribe(
+            (data) => {
+              if (data) {
+                this.toastr.success('Success', `User role has been added`);
+                this.loadInitiativeRoles();
+              }
+            },
+            (error) => {
+              this.toastr.error(error.error.message);
+            }
+          );
       }
     });
   }
@@ -140,7 +151,6 @@ export class TeamMembersComponent {
       }
     });
   }
- 
 
   displayedColumns: string[] = [
     /*'User Name',*/ 'Email',
@@ -163,5 +173,4 @@ export class TeamMembersComponent {
     );
     this.dataSource = new MatTableDataSource<any>(data);
   }
-
 }
