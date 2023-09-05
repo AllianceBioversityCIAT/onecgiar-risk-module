@@ -124,27 +124,26 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
     if (this.newRiskForm.valid) {
       this.errorMessage = '';
       if (this.riskId) {
-        console.log(this.newRiskForm.value)
-        // result = await this.riskService.updateRisk(this.riskId, {
-        //   id: Number(this.riskId),
-        //   initiative_id:
-        //     +this.initiativeId | this?.checkIfRiskExist[0]?.initiative_id,
-        //   mitigations: this.proposed.data,
-        //   ...this.newRiskForm.value,
-        // });
-        // console.log(result);
-        // if (result) {
-        //   this.toastr.success(
-        //     'Success',
-        //     `${this.newRiskForm.value.title} has been updated`
-        //   );
-        //   // to refresh table
-        //   this.RiskReportcomponent.loadInitiative();
-        //   setTimeout(()=>{
-        //     this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
-        //   }, 2000);
+        result = await this.riskService.updateRisk(this.riskId, {
+          id: Number(this.riskId),
+          initiative_id:
+            +this.initiativeId | this?.checkIfRiskExist[0]?.initiative_id,
+          mitigations: this.proposed.data,
+          ...this.newRiskForm.value,
+        });
+        console.log(result);
+        if (result) {
+          this.toastr.success(
+            'Success',
+            `${this.newRiskForm.value.title} has been updated`
+          );
+          // to refresh table
+          this.RiskReportcomponent.loadInitiative();
+          setTimeout(()=>{
+            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+          }, 2000);
 
-        // }
+        }
 
       } else {
         result = await this.riskService.createNewRisk({
