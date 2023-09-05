@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
+import { ROLES } from '../risk-report/team-members/team-members.component';
 
 @Component({
   selector: 'app-search-init',
@@ -19,7 +20,7 @@ export class SearchInitComponent {
 
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
 
-  // roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
+  roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
     { name: 'Initiative ID (ASC)', value: 'id,ASC' },
