@@ -295,32 +295,35 @@ export class RiskReportFormComponent implements OnInit,OnDestroy{
   
   
     //check if user have permission on this risk to update it
-    if(this.riskId && this.checkIfRiskExist.length > 0){
-      if(this.user_info.role == 'admin') {
-        if(this.checkIfRiskExist.length > 0){
+    if(this.riskId){
+      if(this.checkIfRiskExist.length > 0){
+        if(this.user_info.role == 'admin') {
+          if(this.checkIfRiskExist.length > 0){
+          }
+          else{
+            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+          }
         }
-        else{
-          this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+        else if(this.my_roles?.includes(ROLES.LEAD) || this.my_roles?.includes(ROLES.COORDINATOR)){
+          if(this.leader_corleader_risks.filter((e:any) => e.id === this.riskId).length > 0) {
+          }
+          else {
+            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+          }
+        }
+        else if(this.my_roles?.includes(ROLES.MEMBER)){
+          if(this.my_risks.filter((e:any) => e.id === this.riskId).length > 0) {
+          }
+          else {
+            this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+          }
         }
       }
-      else if(this.my_roles?.includes(ROLES.LEAD) || this.my_roles?.includes(ROLES.COORDINATOR)){
-        if(this.leader_corleader_risks.filter((e:any) => e.id === this.riskId).length > 0) {
-        }
-        else {
-          this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
-        }
-      }
-      else if(this.my_roles?.includes(ROLES.MEMBER)){
-        if(this.my_risks.filter((e:any) => e.id === this.riskId).length > 0) {
-        }
-        else {
-          this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
-        }
+      else {
+        this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
       }
     }
-    else {
-      this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
-    }
+ 
     
     //dont allow team member to create risk
     let url: any = '';
