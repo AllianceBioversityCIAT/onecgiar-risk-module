@@ -113,7 +113,7 @@ export class RiskDashboardComponent {
         startOnTick: false,
         endOnTick: false,
         title: {
-          text: type + ' liklyhood',
+          text: type + ' Likelihood',
         },
         labels: {
           format: '{value}',
@@ -135,7 +135,7 @@ export class RiskDashboardComponent {
           ' impact:</th><td>{point.x}</td></tr>' +
           '<tr><th>' +
           type +
-          ' liklyhood:</th><td>{point.y}</td></tr>',
+          ' Likelihood:</th><td>{point.y}</td></tr>',
         footerFormat: '</table>',
         followPointer: true,
       },
