@@ -183,6 +183,7 @@ export class RiskReportTableComponent {
       this.SavePDF();
     });
     this.user_info = this.userService.getLogedInUser();
+    console.log(this.user_info)
     // my_roles
 
     const params: any = this.activatedRoute?.snapshot.params;

@@ -29,7 +29,7 @@ import { ROLES } from '../team-members/team-members.component';
   templateUrl: './risk-report-overview.component.html',
   styleUrls: ['./risk-report-overview.component.scss'],
 })
-export class RiskReportOverviewComponent implements OnInit, OnDestroy {
+export class RiskReportOverviewComponent implements OnInit {
   constructor(
     public router: Router,
     public dialog: MatDialog,
@@ -163,11 +163,6 @@ export class RiskReportOverviewComponent implements OnInit, OnDestroy {
     this.dontNeedHelp = this.AllRisk.risks.every(
       (obj: any) => obj.request_assistance == false
     );
-    // this.reload = false;
-    // setTimeout(async () => {
-    //   await this.loadInitiative();
-    //   this.reload = true;
-    // }, 500);
   }
   dontNeedHelp!: boolean;
   isTrue: boolean = false;
@@ -204,9 +199,9 @@ export class RiskReportOverviewComponent implements OnInit, OnDestroy {
     this.socket.connect();
   }
 
-  ngOnDestroy(): void {
-    this.socket.disconnect();
-  }
+  // ngOnDestroy(): void {
+  //   this.socket.disconnect();
+  // }
   canPublish() {
     return (
       this.user_info?.role == 'admin' ||
