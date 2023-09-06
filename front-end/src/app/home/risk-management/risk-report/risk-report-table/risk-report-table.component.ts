@@ -133,8 +133,8 @@ export class RiskReportTableComponent {
         orientation: 'landscape',
         unit: 'px',
         format: [
-          this.pdfcontent.nativeElement.scrollWidth + 300,
-          this.pdfcontent.nativeElement.scrollHeight + 3,
+          this.pdfcontent.nativeElement.scrollWidth -63,
+          this.pdfcontent.nativeElement.scrollHeight + 10,
         ],
       });
       doc.html(content.innerHTML, {
