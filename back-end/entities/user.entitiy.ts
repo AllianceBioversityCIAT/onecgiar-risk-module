@@ -18,7 +18,7 @@ export class User {
   email: string;
 
   @ApiProperty()
-  @Column()
+  @Column({default:'user'})
   role: 'user' | 'admin';
 
 
