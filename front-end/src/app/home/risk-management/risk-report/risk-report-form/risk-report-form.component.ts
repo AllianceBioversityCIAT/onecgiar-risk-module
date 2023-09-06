@@ -352,7 +352,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     //dont allow team member to create risk
     let url: any = '';
     url = this.router.url.split('/').at(-1);
-    if ((this.my_roles?.includes(ROLES.MEMBER) || this.my_risks.length == 0) && url == 'create-risk' && this.user_info.role != 'admin') {
+    if ((this.my_roles?.includes(ROLES.MEMBER) || this.my_risks.length == 0) && url == 'create-risk' && this.user_info.role != 'admin' && !this.my_roles?.includes(ROLES.LEAD) && !this.my_roles?.includes(ROLES.COORDINATOR)) {
       this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
 
