@@ -336,7 +336,7 @@ export class DashboardComponent {
         startOnTick: false,
         endOnTick: false,
         title: {
-          text: type + ' liklyhood',
+          text: type + ' likelihood',
         },
         labels: {
           format: '{value}',
@@ -357,7 +357,7 @@ export class DashboardComponent {
           ' impact:</th><td>{point.x}</td></tr>' +
           '<tr><th>' +
           type +
-          ' liklyhood:</th><td>{point.y}</td></tr>',
+          ' likelihood:</th><td>{point.y}</td></tr>',
         footerFormat: '</table>',
         followPointer: true,
       },
