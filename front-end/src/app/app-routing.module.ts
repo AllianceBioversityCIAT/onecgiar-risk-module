@@ -31,6 +31,7 @@ import { VersionsTableComponent } from './home/risk-management/risk-report/publi
 import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
 import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
+import { AuthComponent } from './auth/auth.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -148,6 +149,7 @@ const routes: Routes = [
     redirectTo: 'about',
     pathMatch: 'full',
   },
+  { path: 'auth', component: AuthComponent },
   { path: 'about', component: AboutRiskComponent },
   {
     path: 'glossary',

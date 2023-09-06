@@ -8,3 +8,7 @@ DATABASE_PASSWORD=root
 DATABASE_NAME=risk
 SENDGRID_API_KEY=SG.XXXXXXX
 CAN_SEND_EMAILS=0
+Cognito_API=https://aws.com/api
+Gognito_client_id=sadasf
+Gognito_client_secret=i7sdasdasdasdasdq0fisasdasdac
+Gognito_client_redirect_uri=https://localhost:4200/auth

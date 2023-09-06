@@ -24,17 +24,20 @@ class UserLogin {
   @ApiProperty()
   password: string;
 }
-
+class AuthCode {
+  @ApiProperty()
+  code: string;
+}
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   @ApiBasicAuth()
-  @UseGuards(AuthGuard('local'))
-  @Post('login')
-  async login(@Request() req, @Body() userLogin: UserLogin) {
-    return this.authService.login(req.user);
+  @UseGuards(AuthGuard('AWS'))
+  @Post('aws')
+  awsAuth(@Request() req, @Body() authCode: AuthCode) {
+    return req.user;
   }
 
   @ApiBearerAuth()

@@ -3,11 +3,10 @@ import { Router } from '@angular/router';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { LoadingService } from '../services/loading.service';
-import jwt_decode from 'jwt-decode';
 import { delay } from 'rxjs';
-import { LoginComponent } from '../login/login.component';
 import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from '../header.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -38,15 +37,12 @@ export class HeaderComponent implements OnInit {
     announcements: 'announcements',
   };
 
- 
-
-  
-
   constructor(
     public dialog: MatDialog,
     private loadingService: LoadingService,
     public router: Router,
-    public headerService: HeaderService
+    public headerService: HeaderService,
+    private authService: AuthService
   ) {
     this.notificationNumberCount = 5;
     this.headerService.background = '#0f212f';
@@ -55,10 +51,9 @@ export class HeaderComponent implements OnInit {
   user_info: any;
   loading = true;
   ngOnInit() {
-    const access_token = localStorage.getItem('access_token');
-    if (access_token) {
-      this.user_info = jwt_decode(access_token);
-    }
+    this.router.events.subscribe(e=>{
+      this.user_info = this.authService.getLogedInUser();
+    })
     this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
       this.loading = d;
     });
@@ -85,17 +80,7 @@ export class HeaderComponent implements OnInit {
   login() {
     if (this.user_info) this.logout();
     else {
-      const dialogRef = this.dialog
-        .open(LoginComponent, {
-          minWidth: '350px',
-          data: { email: '' },
-        })
-        .afterClosed()
-        .subscribe((result) => {
-          if (result) {
-            window.location.href = window.location.href;
-          }
-        });
+      this.authService.goToLogin();
     }
   }
   homeRoute: any = './home';

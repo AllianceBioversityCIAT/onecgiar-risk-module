@@ -8,9 +8,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { RolesGuard } from './roles.guard';
+import { AwsStrategy } from './aws.strategy';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     UsersModule,
     PassportModule,
     JwtModule.register({
@@ -18,7 +21,7 @@ import { RolesGuard } from './roles.guard';
       signOptions: { expiresIn: '30d'},
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, RolesGuard],
+  providers: [AuthService, LocalStrategy,AwsStrategy, JwtStrategy, RolesGuard],
   controllers: [AuthController],
   exports: [RolesGuard]
 })

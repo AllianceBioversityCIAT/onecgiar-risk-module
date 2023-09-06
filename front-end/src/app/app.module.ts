@@ -74,6 +74,7 @@ import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 import { EmailBodyComponent } from './Admin/admin-module/emails/email-body/email-body.component';
 import { AvatarModule, AvatarSource } from 'ngx-avatars';
 import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
+import { AuthComponent } from './auth/auth.component';
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
   declarations: [
@@ -124,6 +125,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     EmailsComponent,
     EmailBodyComponent,
     RiskReportOverviewComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
