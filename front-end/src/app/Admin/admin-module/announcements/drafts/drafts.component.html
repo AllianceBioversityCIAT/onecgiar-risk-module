@@ -103,18 +103,32 @@
         </button>
 
         <button
-          matTooltip="Send all"
-          (click)="sendAll(announcement.id, announcement.status)"
+          matTooltip="Send test"
+          (click)="sendTest(announcement.id)"
           style="border: none; cursor: pointer"
         >
-          <mat-icon class="user-management-table__icon">
-            <img
-              style="width: 16px; height: 17px"
-              class="table__icon"
-              src="../../../../../assets/shared-image/Vector-sent.svg"
-              alt="~/Frontend/images/icon _ Vector-sent"
-          /></mat-icon>
+          <mat-icon>
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="17" viewBox="0 0 21 17" fill="none">
+              <path d="M18.75 0H3C1.75912 0 0.75 1.00912 0.75 2.25V7.875H3V4.5L10.2 9.9C10.3948 10.0459 10.6316 10.1247 10.875 10.1247C11.1184 10.1247 11.3552 10.0459 11.55 9.9L18.75 4.5V14.625H9.75V16.875H18.75C19.9909 16.875 21 15.8659 21 14.625V2.25C21 1.00912 19.9909 0 18.75 0ZM10.875 7.59375L3.74925 2.25H18.0007L10.875 7.59375Z" fill="#436280"/>
+            </svg>
+          </mat-icon>
         </button>
+
+
+        <button
+        matTooltip="Send all"
+        (click)="sendAll(announcement.id, announcement.status)"
+        style="border: none; cursor: pointer"
+      >
+        <mat-icon class="user-management-table__icon">
+          <img
+            style="width: 16px; height: 17px"
+            class="table__icon"
+            src="../../../../../assets/shared-image/Vector-sent.svg"
+            alt="~/Frontend/images/icon _ Vector-sent"
+        /></mat-icon>
+      </button>
+
 
         <button
           matTooltip="Delete"

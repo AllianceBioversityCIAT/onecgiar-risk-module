@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { SendTestComponent } from '../send-test/send-test.component';
 
 @Component({
   selector: 'app-drafts',
@@ -82,22 +83,22 @@ export class DraftsComponent implements OnInit {
     });
   }
 
-  // sendTest(id: number) {
-  //   const _popup = this.dialog.open(SendEmailFormComponent, {
-  //     width: '300px',
-  //     maxHeight: '200px',
-  //     data: {
-  //       id: id,
-  //     },
-  //   });
-  //   _popup.afterClosed().subscribe(async (response) => {
-  //     if (response) {
-  //       await this.announcementService.sendTest(id, response);
-  //       this.getData();
-  //       this.toster.success('Sent successfully');
-  //     }
-  //   });
-  // }
+  sendTest(id: number) {
+    const _popup = this.dialog.open(SendTestComponent, {
+      width: '300px',
+      maxHeight: '200px',
+      data: {
+        id: id,
+      },
+    });
+    _popup.afterClosed().subscribe(async (response) => {
+      if (response) {
+        await this.announcementService.sendTest(id, response);
+        this.getData();
+        this.toster.success('Sent successfully');
+      }
+    });
+  }
 
   deleteAnnouncementById(id: any) {
     this.dialog

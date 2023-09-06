@@ -1,0 +1,25 @@
+<form [formGroup]="sendEmailForm"  enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="input"  appearance="fill">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email">
+        <mat-error
+        class="error"
+        *ngIf="sendEmailForm.controls?.email?.errors?.['required']"
+        >Email is required</mat-error
+      >
+      <mat-error
+        class="error"
+        *ngIf="sendEmailForm.controls?.email?.errors?.['email']"
+        >Valid Email is required</mat-error
+      >
+    </mat-form-field> 
+ 
+    <div class="footer">
+        <div class="buttons">
+            <button mat-raised-button  color="primary" class="btn" >Send</button>
+            <a mat-raised-button color="warn" class="btn-close" (click)="onClose()">Close</a>
+        </div>
+    </div>
+</form>
+
