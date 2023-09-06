@@ -50,10 +50,10 @@
 }
 
 .dashboard-img-box-grid-container {
-  justify-content: center;
+  justify-content: space-between;
   display: grid;
-  grid-template-columns: repeat(3, 35rem);
-  grid-template-rows: repeat(2, 35rem);
+  grid-template-columns: repeat(2, 50%);
+  grid-template-rows: repeat(2);
   row-gap: 2rem;
   column-gap: 2rem;
   margin-bottom: 5rem;
