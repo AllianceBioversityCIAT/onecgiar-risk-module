@@ -125,7 +125,7 @@ export class GlossaryComponent implements OnInit {
   setCharValue(char: string) {
     this.form.controls['char'].setValue(char);
   }
-  activeButton = '';
+  activeButton = 'All';
 
   showPhase(event: any) {
     this.activeButton = event;
