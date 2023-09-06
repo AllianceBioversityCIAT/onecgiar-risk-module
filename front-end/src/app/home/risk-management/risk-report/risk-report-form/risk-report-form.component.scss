@@ -768,7 +768,7 @@
 }
 
 .popover {
-  padding: 16px !important;
+  padding: 1rem 2rem 0rem 2rem;
   position: absolute !important;
   background-color: #efefef !important;
   width: 400px !important;
@@ -836,7 +836,7 @@
   }
 
   &__text {
-    text-align: left;
+    text-align: justify;
     color: #04030f;
     font-family: "Inter", sans-serif !important;
     font-size: 1.2rem;
