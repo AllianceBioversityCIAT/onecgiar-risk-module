@@ -1,30 +1,35 @@
-<div class="form-dialog-header">
-  <div class="form-dialog-header__text-box">
-    <p class="form-dialog-header__text-box__text">
-      Submit Risks
-    </p>
+<div mat-dialog-container class="submit-box">
+  <div class="form-dialog-header">
+    <div class="form-dialog-header__text-box">
+      <p class="form-dialog-header__text-box__text">Submit Risks</p>
+    </div>
+
+    <div class="form-dialog-header__icon-box">
+      <button
+        class="form-dialog-header__icon-box__btn"
+        (click)="onCloseDialog()"
+      >
+        <mat-icon class="form-dialog-header__icon-box__icon-size">
+          <img
+            class="form-dialog-header__icon-box__icon-size__icon"
+            src="../../../assets/shared-image/Vector-close.svg"
+            alt="~/Frontend/images/icon _ Vector-close"
+          />
+        </mat-icon>
+      </button>
+    </div>
   </div>
 
-  <div class="form-dialog-header__icon-box">
-    <button class="form-dialog-header__icon-box__btn" (click)="onCloseDialog()">
-      <mat-icon class="form-dialog-header__icon-box__icon-size">
-        <img
-          class="form-dialog-header__icon-box__icon-size__icon"
-          src="../../../assets/shared-image/Vector-close.svg"
-          alt="~/Frontend/images/icon _ Vector-close"
-        />
-      </mat-icon>
-    </button>
-  </div>
-</div>
-
-<div class="form-dialog-content" *ngIf="this.tops?.top?.length + this.tops?.similar?.length > 5">
-  <!-- <ng-container> -->
+  <div
+    class="form-dialog-content"
+    *ngIf="this.tops?.top?.length + this.tops?.similar?.length > 5"
+  >
+    <!-- <ng-container> -->
     <div class="submit-risk-box">
       <h2 class="submit-risk-title-1">Top 5 Risks</h2>
       <p class="submit-risk-text">
-        Please make sure the submitted data is accurate. Take note that no further
-        changes can be made after publication.
+        Please make sure the submitted data is accurate. Take note that no
+        further changes can be made after publication.
       </p>
 
       <div
@@ -37,16 +42,24 @@
         [cdkDropListEnterPredicate]="evenPredicate"
       >
         <div class="submit-risk-drop-text-box">
-          <p class="submit-risk-drop-box__text" *ngIf="top.length == 0 ">Drop the risk here</p>
-          <div class="drag-box" *ngFor="let item of top; let i = index" [attr.data-index]="i" cdkDrag>
-            Risk <span class="index">({{i+1}}) </span> {{item.title}} ({{item.current_level}})  
+          <p class="submit-risk-drop-box__text" *ngIf="top.length == 0">
+            Drop the risk here
+          </p>
+          <div
+            class="drag-box"
+            *ngFor="let item of top; let i = index"
+            [attr.data-index]="i"
+            cdkDrag
+          >
+            Risk <span class="index">({{ i + 1 }}) </span> {{ item.title }} ({{
+              item.current_level
+            }})
           </div>
         </div>
-
       </div>
     </div>
 
-    <div class="submit-risk-flex-box" >
+    <div class="submit-risk-flex-box">
       <div class="submit-risk-flex-x">
         <div>
           <h2 class="submit-risk-title-1">Risks selection</h2>
@@ -90,13 +103,14 @@
       >
         <div class="scroll">
           <div class="">
-            <div class="example-box"  *ngFor="let item of similar"  cdkDrag>
+            <div class="example-box" *ngFor="let item of similar" cdkDrag>
               <div class="submit-risk-drag-flex-box">
-                <p class="submit-risk-drag-text">{{item.title}} ({{item.current_level}}) </p>
+                <p class="submit-risk-drag-text">
+                  {{ item.title }} ({{ item.current_level }})
+                </p>
 
                 <div class="submit-risk-drag-icon">
                   <svg
-                    
                     xmlns="http://www.w3.org/2000/svg"
                     width="9"
                     height="15"
@@ -118,45 +132,36 @@
       </div>
 
       <ng-container *ngFor="let errorMsg of error">
-        <p  class="error">{{errorMsg}}</p>
+        <p class="error">{{ errorMsg }}</p>
       </ng-container>
-      
-        <div class="form-dialog-conten-button-box-2">
-          <div class="form-dialog-conten-button-flex">
-            <div class="form-dialog-conten__button-box">
-              <button
-                class="form-dialog-conten__button-box__btn--send"
-                type="submit"
-                mat-raised-button
-                (click)="publish()"
-              >
-                Publish
-              </button>
-            </div>
+
+      <div class="form-dialog-conten-button-box-2">
+        <div class="form-dialog-conten-button-flex">
+          <div class="form-dialog-conten__button-box">
+            <button
+              class="form-dialog-conten__button-box__btn--send"
+              type="submit"
+              mat-raised-button
+              (click)="publish()"
+            >
+              Publish
+            </button>
           </div>
         </div>
+      </div>
+    </div>
   </div>
-</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="form-dialog-content" *ngIf="this.tops?.top?.length + this.tops?.similar?.length <= 5">
-  <!-- <ng-container> -->
+  <div
+    class="form-dialog-content"
+    *ngIf="this.tops?.top?.length + this.tops?.similar?.length <= 5"
+  >
+    <!-- <ng-container> -->
     <div class="submit-risk-box">
       <h2 class="submit-risk-title-1">Top 5 Risks</h2>
       <p class="submit-risk-text">
-        Please make sure the submitted data is accurate. Take note that no further
-        changes can be made after publication.
+        Please make sure the submitted data is accurate. Take note that no
+        further changes can be made after publication.
       </p>
 
       <div
@@ -168,29 +173,38 @@
         [cdkDropListEnterPredicate]="evenPredicate"
       >
         <div class="submit-risk-drop-text-box">
-          <p class="submit-risk-drop-box__text" *ngIf="top.length == 0 ">Drop the risk here</p>
-          <div class="drag-box" *ngFor="let item of top; let i = index" [attr.data-index]="i" cdkDrag>
-            Risk <span class="index">({{i+1}}) </span> {{item.title}} ({{item.current_level}})  
+          <p class="submit-risk-drop-box__text" *ngIf="top.length == 0">
+            Drop the risk here
+          </p>
+          <div
+            class="drag-box"
+            *ngFor="let item of top; let i = index"
+            [attr.data-index]="i"
+            cdkDrag
+          >
+            Risk <span class="index">({{ i + 1 }}) </span> {{ item.title }} ({{
+              item.current_level
+            }})
           </div>
         </div>
-
       </div>
     </div>
 
-    <div class="submit-risk-flex-box" >
-        <div class="form-dialog-conten-button-box-2">
-          <div class="form-dialog-conten-button-flex">
-            <div class="form-dialog-conten__button-box">
-              <button
-                class="form-dialog-conten__button-box__btn--send"
-                type="submit"
-                mat-raised-button
-                (click)="publish()"
-              >
-                Publish
-              </button>
-            </div>
+    <div class="submit-risk-flex-box">
+      <div class="form-dialog-conten-button-box-2">
+        <div class="form-dialog-conten-button-flex">
+          <div class="form-dialog-conten__button-box">
+            <button
+              class="form-dialog-conten__button-box__btn--send"
+              type="submit"
+              mat-raised-button
+              (click)="publish()"
+            >
+              Publish
+            </button>
           </div>
         </div>
+      </div>
+    </div>
   </div>
 </div>
