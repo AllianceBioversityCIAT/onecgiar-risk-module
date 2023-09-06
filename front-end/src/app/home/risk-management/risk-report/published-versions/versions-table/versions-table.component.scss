@@ -1,7 +1,7 @@
 @import "../../../../../sass/components/button";
 .risk-nav-main {
   width: 96%;
-  margin: -9rem auto 9rem auto;
+  margin: -9rem 2rem 9rem auto;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -43,7 +43,6 @@
   align-items: center;
 }
 
-
 .published-versions-container {
   max-width: 95%;
   margin: 0 auto;
@@ -56,7 +55,7 @@
 }
 
 .published-versions-content {
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

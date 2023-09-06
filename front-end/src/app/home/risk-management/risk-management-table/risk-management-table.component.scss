@@ -2,7 +2,7 @@
 .section-risk-management-component {
   background-color: #fafafa;
   min-height: calc(100vh - 210px);
-  padding: 4.5rem 0 10rem 0;
+  padding: 3.2rem 0;
 }
 
 .section-risk-report-component {
@@ -24,49 +24,16 @@
 }
 
 .risk-management-content {
-  width: 94%;
+  width: 95%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-
-  @media only screen and (max-width: 160em) {
-    //change on 2560
-    padding: 0 4.2rem;
-    width: 93%;
-  }
-
-  @media only screen and (max-width: 100em) {
-    //change on 1600
-    padding: 0 4.2rem;
-    width: 93%;
-  }
-
-  @media only screen and (max-width: 84em) {
-    //change on 1344
-
-    padding: 0 4.2rem;
-    width: 96%;
-  }
-
-  @media only screen and (max-width: 75em) {
-    //change on 1200
-
-    padding: 0 4.2rem;
-    width: 98%;
-  }
-
-  @media only screen and (max-width: 64em) {
-    //change on 1024
-
-    padding: 0 4.2rem;
-    width: 99%;
-  }
 }
 
 .risk-management-title-box {
   text-align: center;
-  padding: 9.6rem 0;
+  padding: 5.8rem 0;
   &__title {
     color: #0f212f;
     text-align: center;
@@ -833,7 +800,8 @@
 
 .table-box {
   overflow: auto;
-  margin-top: 1rem;
+  position: relative;
+
   margin-bottom: 4rem;
 
   td:nth-child(1) {

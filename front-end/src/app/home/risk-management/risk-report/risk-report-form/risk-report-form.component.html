@@ -1,49 +1,51 @@
-<nav class="risk-nav-main">
-  <ul class="risk-nav-list">
-    <li>
-      <a class="risk-nav-link" routerLink="/home">Initiatives</a>
-    </li>
-    <li>
-      <a routerLink="''" class="risk-nav-link">></a>
-    </li>
-    <li>
-      <a
-        routerLink="/home/{{ initiative?.id }}/{{ initiative?.official_code }}"
-        class="risk-nav-link"
-        >&nbsp;Risk report<span class="line">&nbsp;/</span>&nbsp;{{
-          officalCode
-        }}</a
-      >
-    </li>
-    <li>
-      <a routerLink="''" class="risk-nav-link">></a>
-    </li>
-    <li>
-      <a
-        routerLink="/home/{{ initiative?.id }}/{{
-          initiative?.official_code
-        }}/create-risk"
-        class="risk-nav-link"
-        *ngIf="!riskId"
-        >Create risk</a
-      >
-      <a
-        routerLink="/home/{{ initiative?.id }}/{{
-          initiative?.official_code
-        }}/edit-risk/:riskId"
-        class="risk-nav-link"
-        *ngIf="riskId"
-        >Edit risk</a
-      >
-    </li>
-  </ul>
-</nav>
-
 <div class="risk-report-form-container">
   <div class="risk-report-form-header">
     <h1 class="risk-report-form-header__title" *ngIf="!riskId">Create risk</h1>
     <h1 class="risk-report-form-header__title" *ngIf="riskId">Edit risk</h1>
   </div>
+
+  <nav class="risk-nav-main">
+    <ul class="risk-nav-list">
+      <li>
+        <a class="risk-nav-link" routerLink="/home">Initiatives</a>
+      </li>
+      <li>
+        <a routerLink="''" class="risk-nav-link">></a>
+      </li>
+      <li>
+        <a
+          routerLink="/home/{{ initiative?.id }}/{{
+            initiative?.official_code
+          }}"
+          class="risk-nav-link"
+          >&nbsp;Risk report<span class="line">&nbsp;/</span>&nbsp;{{
+            officalCode
+          }}</a
+        >
+      </li>
+      <li>
+        <a routerLink="''" class="risk-nav-link">></a>
+      </li>
+      <li>
+        <a
+          routerLink="/home/{{ initiative?.id }}/{{
+            initiative?.official_code
+          }}/create-risk"
+          class="risk-nav-link"
+          *ngIf="!riskId"
+          >Create risk</a
+        >
+        <a
+          routerLink="/home/{{ initiative?.id }}/{{
+            initiative?.official_code
+          }}/edit-risk/:riskId"
+          class="risk-nav-link"
+          *ngIf="riskId"
+          >Edit risk</a
+        >
+      </li>
+    </ul>
+  </nav>
 
   <div class="risk-report-form-content-container" *ngIf="newRiskForm">
     <form [formGroup]="newRiskForm" class="risk-report-form">
@@ -164,13 +166,17 @@
           appearance="outline" 
         >-->
         <div class="risk-report-form-field-icon-box">
-          <input
+          <textarea
             class="risk-report-form-field-box__input cursor-input__description report-form-field-size__description"
             matInput
             rows="4"
             placeholder="Detailed Description"
             formControlName="description"
-          />
+            style="height: 80px; resize: none"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="10"
+          >
+          </textarea>
           <!-- <mat-icon>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -262,6 +268,21 @@
           </mat-icon>
         </div>
         <!-- </mat-form-field> -->
+
+        <mat-error
+          class="error"
+          *ngIf="newRiskForm.controls['category_id'].errors?.['required'] && (newRiskForm.controls['category_id'].touched || newRiskForm.controls['category_id'].dirty)"
+          >Risk category is required</mat-error
+        >
+        <mat-error
+          class="error"
+          *ngIf="newRiskForm.controls?.category_id?.errors?.maxword"
+          >Max words you can use is
+          {{ newRiskForm.controls?.category_id?.errors?.maxword?.max }} you used
+          {{
+            newRiskForm.controls?.category_id?.errors?.maxword.actual
+          }}</mat-error
+        >
       </div>
 
       <!-- //Risk owner filed----- -->
@@ -396,7 +417,9 @@
                 </button>
               </div>
             </sat-popover>
+            
           </div>
+         
         </div>
 
         <!-- //grid-item-2----- -->

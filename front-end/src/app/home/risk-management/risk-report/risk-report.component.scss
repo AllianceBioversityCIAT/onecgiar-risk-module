@@ -6,7 +6,7 @@
   // height: 104.9rem;
   // flex-shrink: 0;
   background-color: #fafafa;
-  padding: 9.6rem 0;
+  padding: 3.2rem 0;
   min-height: calc(100vh - 210px);
 }
 
@@ -25,39 +25,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-
-  @media only screen and (max-width: 160em) {
-    //change on 2560
-    padding: 0 4.2rem;
-    width: 93%;
-  }
-
-  @media only screen and (max-width: 100em) {
-    //change on 1600
-    padding: 0 4.2rem;
-    width: 93%;
-  }
-
-  @media only screen and (max-width: 84em) {
-    //change on 1344
-
-    padding: 0 4.2rem;
-    width: 96%;
-  }
-
-  @media only screen and (max-width: 75em) {
-    //change on 1200
-
-    padding: 0 4.2rem;
-    width: 98%;
-  }
-
-  @media only screen and (max-width: 64em) {
-    //change on 1024
-
-    padding: 0 4.2rem;
-    width: 99%;
-  }
 }
 
 .risk-report-box {

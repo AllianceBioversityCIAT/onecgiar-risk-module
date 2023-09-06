@@ -1,7 +1,7 @@
 <!-- step-3 -->
 
 <div class="table-box" *ngIf="connection">
-  <div class="table-box example-container mat-elevation-z8">
+  <div class="table-box mat-elevation-z8">
     <table multiTemplateDataRows mat-table [dataSource]="dataSource">
       <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
@@ -117,7 +117,7 @@
         >
           <div class="m" *ngIf="locked && !locked[element.id]">
             <button
-            matTooltip="Update"
+              matTooltip="Update"
               class="risk-report-icon-table"
               routerLink="edit-risk/{{ element['id'] }}"
             >
@@ -139,7 +139,7 @@
             </button>
 
             <button
-            matTooltip="Delete"
+              matTooltip="Delete"
               class="risk-report-icon-table"
               (click)="deleteRisk(element)"
             >
@@ -203,8 +203,12 @@
               </mat-icon>
             </button>
           </div>
-          <ng-container  *ngIf="locked[element.id]">
-            <ngx-avatars size="35" [matTooltip]="locked[element.id]?.user?.full_name +' is editing'" [name]="locked[element.id]?.user?.full_name"></ngx-avatars>
+          <ng-container *ngIf="locked[element.id]">
+            <ngx-avatars
+              size="35"
+              [matTooltip]="locked[element.id]?.user?.full_name + ' is editing'"
+              [name]="locked[element.id]?.user?.full_name"
+            ></ngx-avatars>
           </ng-container>
         </td>
       </ng-container>
@@ -251,48 +255,47 @@
             </button>
 
             <button
-            *ngIf="expandedElement != element"
-            [class.expanded]="expandedElement == element"
-            (click)="expandedElement = element"
-            class="risk-report-icon-table-1"
-          >
-            <mat-icon>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="10"
-                viewBox="0 0 16 10"
-                fill="none"
-              >
-                <path
-                  d="M1.88 0L8 6.18084L14.12 0L16 1.90283L8 10L0 1.90283L1.88 0Z"
-                  fill="#9E553E"
-                />
-              </svg>
-            </mat-icon>
-          </button>
-          <button
-            *ngIf="expandedElement == element"
-            [class.expanded]="expandedElement == undefined"
-            (click)="expandedElement = undefined"
-            class="risk-report-icon-table-1"
-          >
-            <mat-icon>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="10"
-                viewBox="0 0 16 10"
-                fill="none"
-              >
-                <path
-                  d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
-                  fill="#9E553E"
-                />
-              </svg>
-            </mat-icon>
-          </button>
-
+              *ngIf="expandedElement != element"
+              [class.expanded]="expandedElement == element"
+              (click)="expandedElement = element"
+              class="risk-report-icon-table-1"
+            >
+              <mat-icon>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="10"
+                  viewBox="0 0 16 10"
+                  fill="none"
+                >
+                  <path
+                    d="M1.88 0L8 6.18084L14.12 0L16 1.90283L8 10L0 1.90283L1.88 0Z"
+                    fill="#9E553E"
+                  />
+                </svg>
+              </mat-icon>
+            </button>
+            <button
+              *ngIf="expandedElement == element"
+              [class.expanded]="expandedElement == undefined"
+              (click)="expandedElement = undefined"
+              class="risk-report-icon-table-1"
+            >
+              <mat-icon>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="10"
+                  viewBox="0 0 16 10"
+                  fill="none"
+                >
+                  <path
+                    d="M14.12 10L8 3.81916L1.88 10L1.66351e-07 8.09716L8 -6.99382e-07L16 8.09717L14.12 10Z"
+                    fill="#9E553E"
+                  />
+                </svg>
+              </mat-icon>
+            </button>
           </div>
         </td>
       </ng-container>
@@ -337,7 +340,10 @@
                   >Target impact: {{ element.target_impact }}</span
                 >
 
-                <div class="flex-box-risk-report-detail" *ngIf="showingVersion == false">
+                <div
+                  class="flex-box-risk-report-detail"
+                  *ngIf="showingVersion == false"
+                >
                   <span class="risk-report-detail-content__title"
                     >Redundant:
                   </span>

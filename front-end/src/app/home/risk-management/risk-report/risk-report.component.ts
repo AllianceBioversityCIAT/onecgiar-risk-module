@@ -52,14 +52,7 @@ export class RiskReportComponent implements OnInit, OnDestroy {
     private socket: AppSocket,
     private title: Title,
     private meta: Meta
-  ) {
-    console.log('Risk report');
-    this.title.setTitle('Risk report');
-    this.meta.updateTag({
-      name: 'description',
-      content: 'Risk report',
-    });
-  }
+  ) {}
 
   async deleteRisk(risk: any) {
     this.dialog
@@ -212,6 +205,11 @@ export class RiskReportComponent implements OnInit, OnDestroy {
     this.loadInitiative();
 
     this.socket.connect();
+    this.title.setTitle('Risk report');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Risk report',
+    });
   }
 
   ngOnDestroy(): void {

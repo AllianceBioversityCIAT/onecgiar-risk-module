@@ -1,45 +1,51 @@
-<div class="globalContainer">
-  <nav class="risk-nav-main">
-    <ul class="risk-nav-list">
-      <li>
-        <a class="risk-nav-link" routerLink="/home">Initiatives</a>
-      </li>
-      <li>
-        <a routerLink="''" class="risk-nav-link">></a>
-      </li>
-      <li>
-        <a
-          routerLink="/home/{{ initiativeId }}/{{ officalCode }}"
-          class="risk-nav-link"
-          >&nbsp;Risk report<span class="line">&nbsp;/</span>&nbsp;{{
-            officalCode
-          }}</a
+<section class="section-risk-management-component">
+  <div class="risk-management-container">
+    <div class="globalContainer">
+      <nav class="risk-nav-main">
+        <ul class="risk-nav-list">
+          <li>
+            <a class="risk-nav-link" routerLink="/home">Initiatives</a>
+          </li>
+          <li>
+            <a routerLink="''" class="risk-nav-link">></a>
+          </li>
+          <li>
+            <a
+              routerLink="/home/{{ initiativeId }}/{{ officalCode }}"
+              class="risk-nav-link"
+              >&nbsp;Risk report<span class="line">&nbsp;/</span>&nbsp;{{
+                officalCode
+              }}</a
+            >
+          </li>
+          <li>
+            <a routerLink="''" class="risk-nav-link">></a>
+          </li>
+          <li>
+            <a
+              routerLink="/home/{{ initiativeId }}/{{
+                officalCode
+              }}/risk-dashboard"
+              class="risk-nav-link"
+              >Risk dashboard</a
+            >
+          </li>
+        </ul>
+      </nav>
+      <div class="charts">
+        <highcharts-chart
+          *ngIf="risk_current_chartOptions"
+          [Highcharts]="Highcharts"
+          [options]="risk_current_chartOptions"
         >
-      </li>
-      <li>
-        <a routerLink="''" class="risk-nav-link">></a>
-      </li>
-      <li>
-        <a
-          routerLink="/home/{{ initiativeId }}/{{ officalCode }}/risk-dashboard"
-          class="risk-nav-link"
-          >Risk dashboard</a
+        </highcharts-chart>
+        <highcharts-chart
+          *ngIf="risk_target_chartOptions"
+          [Highcharts]="Highcharts"
+          [options]="risk_target_chartOptions"
         >
-      </li>
-    </ul>
-  </nav>
-  <div class="charts">
-    <highcharts-chart
-      *ngIf="risk_current_chartOptions"
-      [Highcharts]="Highcharts"
-      [options]="risk_current_chartOptions"
-    >
-    </highcharts-chart>
-    <highcharts-chart
-      *ngIf="risk_target_chartOptions"
-      [Highcharts]="Highcharts"
-      [options]="risk_target_chartOptions"
-    >
-    </highcharts-chart>
+        </highcharts-chart>
+      </div>
+    </div>
   </div>
-</div>
+</section>
