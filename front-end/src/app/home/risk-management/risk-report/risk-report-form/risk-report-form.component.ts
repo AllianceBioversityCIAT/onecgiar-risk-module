@@ -336,8 +336,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
               `/home/${this.initiativeId}/${this.officalCode}`,
             ]);
           }
-        }
-        else if (this.my_risks.length == 0) {
+        } else if (this.my_risks.length == 0) {
           this.router.navigate([
             `/home/${this.initiativeId}/${this.officalCode}`,
           ]);
@@ -347,12 +346,29 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           `/home/${this.initiativeId}/${this.officalCode}`,
         ]);
       }
+      this.title.setTitle('Edit risk');
+      this.meta.updateTag({
+        name: 'description',
+        content: 'Edit risk',
+      });
+    } else {
+      this.title.setTitle('Create risk');
+      this.meta.updateTag({
+        name: 'description',
+        content: 'Create risk',
+      });
     }
 
     //dont allow team member to create risk
     let url: any = '';
     url = this.router.url.split('/').at(-1);
-    if ((this.my_roles?.includes(ROLES.MEMBER) || this.my_risks.length == 0) && url == 'create-risk' && this.user_info.role != 'admin' && !this.my_roles?.includes(ROLES.LEAD) && !this.my_roles?.includes(ROLES.COORDINATOR)) {
+    if (
+      (this.my_roles?.includes(ROLES.MEMBER) || this.my_risks.length == 0) &&
+      url == 'create-risk' &&
+      this.user_info.role != 'admin' &&
+      !this.my_roles?.includes(ROLES.LEAD) &&
+      !this.my_roles?.includes(ROLES.COORDINATOR)
+    ) {
       this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
     }
 
@@ -362,12 +378,6 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     if (this.initiativeId) {
       this.riskUsers = await this.riskService.getRiskUsers(this.initiativeId);
     }
-
-    this.title.setTitle('Create risk');
-    this.meta.updateTag({
-      name: 'description',
-      content: 'Create risk',
-    });
   }
 
   unlock(risk_id: any) {

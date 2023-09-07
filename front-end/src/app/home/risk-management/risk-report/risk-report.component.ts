@@ -111,8 +111,8 @@ export class RiskReportComponent implements OnInit, OnDestroy {
   async publish(id: number) {
     this.dialog
       .open(SubmitRiskDialogComponent, {
-        maxHeight: '800px',
-        maxWidth: '700px',
+        // maxHeight: '800px',
+        // maxWidth: '700px',
         data: { initiative_id: this.id, top: [] },
       })
       .afterClosed()

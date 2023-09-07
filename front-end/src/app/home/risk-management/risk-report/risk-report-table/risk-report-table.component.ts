@@ -68,7 +68,7 @@ export class RiskReportTableComponent {
     private loading: LoadingService,
     private cd: ChangeDetectorRef,
     private RiskReportComponent: RiskReportComponent,
-
+    private titleService: Title
   ) {}
 
   @Input() dataSource: any;
@@ -210,6 +210,9 @@ export class RiskReportTableComponent {
     }
   }
 
+  public setTitle(newTitle: string) {
+    this.titleService.setTitle(newTitle);
+  }
   unlock(risk_id: any) {
     console.log('unlock');
     this.socket.emit('risk-unlock', risk_id);
