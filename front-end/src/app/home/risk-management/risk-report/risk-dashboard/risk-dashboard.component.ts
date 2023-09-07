@@ -127,7 +127,7 @@ export class RiskDashboardComponent {
         useHTML: true,
         headerFormat: '<table>',
         pointFormat:
-          '<tr><th colspan="2"><h4>{point.title}</h4></th></tr>' +
+          '<tr><th colspan="2"><span class="chart-bubble-title">{point.title}</span></th></tr>' +
           '<tr><th>' +
           ' id:</th><td>{point.id}</td></tr>' +
           '<tr><th>' +
