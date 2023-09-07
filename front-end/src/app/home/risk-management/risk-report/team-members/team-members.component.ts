@@ -38,6 +38,7 @@ export class TeamMembersComponent {
   user_info: any;
   my_roles: any;
   riskUsers: any;
+  assignedRiskOwner:any;
 
   id: number = 0;
   officalCode!: string;
@@ -69,10 +70,12 @@ export class TeamMembersComponent {
     );
   }
 
-  async deleteMember(roleId: number) {
+  async deleteMember(role: any) {
+    this.assignedRiskOwner = await this.riskService.getRisksOwner(role.initiative_id,role.user_id);
     this.dialog
       .open(DeleteConfirmDialogComponent, {
         data: {
+          risks: this.assignedRiskOwner,
           title: 'Delete',
           message: 'Are you sure you want to delete user role ?',
         },
@@ -82,7 +85,7 @@ export class TeamMembersComponent {
         if (dialogResult) {
           await this.initiativeService.deleteInitiativeRole(
             this.initiativeId,
-            roleId
+            role.id
           );
           this.loadInitiativeRoles();
           this.toastr.success('Success', `User role has been deleted`);

@@ -41,6 +41,20 @@ export class RiskController {
       return obj;
     } else return {  top:'ASC', id: 'ASC' };
   }
+  @Get('risksOwner')
+  async getRisksOwner(@Query('initId') initId: number, @Query('user_id') user_id: number) {
+    console.log(initId)
+    console.log(user_id)
+    const risks = await this.riskService.riskRepository.find({
+      where : {
+        initiative_id: initId,
+        risk_owner: {
+          user_id: user_id
+        }
+      }
+    });
+    return risks;
+  }
   @Get('')
   @ApiCreatedResponse({
     description: '',

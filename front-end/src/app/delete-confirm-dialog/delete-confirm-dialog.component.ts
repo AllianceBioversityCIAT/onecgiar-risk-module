@@ -12,8 +12,10 @@ export class DeleteConfirmDialogComponent implements OnInit {
 
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
-
-  ngOnInit(): void {}
+  risks:any;
+  ngOnInit(): void {
+    this.risks =  this.data?.risks?.map((d: any) => d.title).join(', ');
+  }
 
   closeDialog() {
     this.dialogRef.close(false);

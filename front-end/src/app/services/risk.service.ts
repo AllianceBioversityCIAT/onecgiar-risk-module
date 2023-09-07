@@ -151,4 +151,17 @@ export class RiskService extends MainService {
         .pipe(map((d) => d))
     );
   }
+  getRisksOwner(init_id: number,user_id: number) {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + `/risk/risksOwner`, {
+          params: {
+            initId: init_id,
+            user_id: user_id
+          },
+          headers: this.headers,
+        })
+        .pipe(map((d) => d))
+    );
+  }
 }

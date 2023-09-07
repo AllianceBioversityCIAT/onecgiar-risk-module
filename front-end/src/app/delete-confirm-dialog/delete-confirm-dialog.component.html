@@ -54,6 +54,13 @@
             />
           </svg>
         </div>
+        <div class="delete-text-box" *ngIf="data.risks.length > 0">
+          <p class="delete-text-box__text" >
+            <mat-dialog-content class="delete-text-box__text">
+              This user is assigned as risk owner on ({{risks}})
+            </mat-dialog-content>
+          </p>
+        </div>
         <div class="delete-text-box">
           <p class="delete-text-box__text">
             <mat-dialog-content class="delete-text-box__text">
