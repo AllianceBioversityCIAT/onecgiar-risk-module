@@ -50,14 +50,16 @@ export class HeaderComponent implements OnInit {
 
   user_info: any;
   loading = true;
+  isadmin = false;
   ngOnInit() {
-    this.router.events.subscribe(e=>{
+    this.router.events.subscribe((e) => {
       this.user_info = this.authService.getLogedInUser();
-    })
+    });
     this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
+      if (this.headerService.background == '#04030f') this.isadmin = true;
+      else this.isadmin = false;
       this.loading = d;
     });
-    console.log(this.user_info);
   }
 
   logout() {

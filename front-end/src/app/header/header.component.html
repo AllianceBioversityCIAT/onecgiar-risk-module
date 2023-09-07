@@ -185,7 +185,9 @@
     </ul>
   </nav>
 </header>
-
+<div [ngClass]="{ admin: isadmin }" class="loading-holder">
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+</div>
 <!-- section nav
 <nav class="sidebar">
   <ul class="side-nav">
