@@ -22,7 +22,7 @@
     </div>
 
     <nav class="header-user-nav-box">
-      <button
+      <!-- <button
         [style.background]="headerService.backgroundUserNavButton"
         [matMenuTriggerFor]="menu"
         class="user-nav-button--notific"
@@ -44,11 +44,11 @@
             <circle cx="22" cy="8" r="5" fill="#EB5B47" />
           </svg>
         </mat-icon>
-        <!-- Include text description of the icon's meaning for screen-readers -->
+       
         <span class="cdk-visually-hidden">
           Example with a home icon with overlaid badge showing the number 15
         </span>
-      </button>
+      </button> -->
       <mat-menu #menu="matMenu">
         <button mat-menu-item>
           <div class="notific-section">
@@ -80,7 +80,7 @@
         </button>
       </mat-menu>
       <button
-      [style.background]="headerService.backgroundUserNavButton"
+        [style.background]="headerService.backgroundUserNavButton"
         class="user-nav-button"
         mat-icon-button
         *ngIf="user_info"
@@ -97,7 +97,7 @@
       </button>
 
       <button
-      [style.background]="headerService.backgroundUserNavButton"
+        [style.background]="headerService.backgroundUserNavButton"
         class="user-nav-button"
         mat-icon-button
         (click)="logout()"
@@ -113,7 +113,7 @@
       </button>
 
       <button
-      [style.background]="headerService.backgroundUserNavButton"
+        [style.background]="headerService.backgroundUserNavButton"
         class="user-nav-button"
         mat-icon-button
         (click)="login()"
