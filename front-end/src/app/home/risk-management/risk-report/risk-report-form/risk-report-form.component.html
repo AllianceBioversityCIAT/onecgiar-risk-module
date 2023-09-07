@@ -778,7 +778,7 @@
           <mat-datepicker #picker></mat-datepicker>
         </div>
         <mat-error
-          *ngIf="newRiskForm.controls['due_date'].errors?.['required'] && this.newRiskForm.controls['due_date'].value == null && (newRiskForm.controls['due_date'].dirty || newRiskForm.controls['due_date'].touched)"
+          *ngIf="newRiskForm.controls['due_date'].errors?.['required'] && this.newRiskForm.controls['due_date'].value == null && this.newRiskForm.controls['request_assistance'].value == false && (newRiskForm.controls['due_date'].dirty || newRiskForm.controls['due_date'].touched)"
           >Due date is required</mat-error
         >
 
