@@ -365,7 +365,7 @@
               </mat-radio-group>
               <mat-error
                 class="error errorMessage"
-                *ngIf="newRiskForm.controls['current_likelihood'].errors?.['required']"
+                *ngIf="newRiskForm.controls['current_likelihood'].errors?.['required'] && (newRiskForm.controls['current_likelihood'].dirty || newRiskForm.controls['current_likelihood'].touched)"
                 >Current Likelihood is required</mat-error
               >
             </div>
@@ -442,7 +442,7 @@
               </mat-radio-group>
               <mat-error
                 class="error errorMessage"
-                *ngIf="newRiskForm.controls['current_impact'].errors?.['required']"
+                *ngIf="newRiskForm.controls['current_impact'].errors?.['required'] && (newRiskForm.controls['current_impact'].dirty || newRiskForm.controls['current_impact'].touched)"
                 >Current Impact is required</mat-error
               >
             </div>
@@ -557,7 +557,7 @@
               </mat-radio-group>
               <mat-error
                 class="error errorMessage"
-                *ngIf="newRiskForm.controls['target_likelihood'].errors?.['required']"
+                *ngIf="newRiskForm.controls['target_likelihood'].errors?.['required']  && (newRiskForm.controls['target_likelihood'].dirty || newRiskForm.controls['target_likelihood'].touched)"
                 >Target Likelihood is required</mat-error
               >
             </div>
@@ -635,7 +635,7 @@
               </mat-radio-group>
               <mat-error
                 class="error errorMessage"
-                *ngIf="newRiskForm.controls['target_impact'].errors?.['required']"
+                *ngIf="newRiskForm.controls['target_impact'].errors?.['required']  && (newRiskForm.controls['target_impact'].dirty || newRiskForm.controls['target_impact'].touched)"
                 >Target Impact is required</mat-error
               >
             </div>

@@ -89,19 +89,19 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         [Validators.required, WordCountValidators.max(150)],
       ],
       target_likelihood: [
-        String(this?.checkIfRiskExist[0]?.target_likelihood | 0),
+        String(this?.checkIfRiskExist[0]?.target_likelihood || ''),
         Validators.required,
       ],
       target_impact: [
-        String(this?.checkIfRiskExist[0]?.target_impact | 0),
+        String(this?.checkIfRiskExist[0]?.target_impact || ''),
         Validators.required,
       ],
       current_likelihood: [
-        String(this?.checkIfRiskExist[0]?.current_likelihood | 0),
+        String(this?.checkIfRiskExist[0]?.current_likelihood || ''),
         Validators.required,
       ],
       current_impact: [
-        String(this?.checkIfRiskExist[0]?.current_impact | 0),
+        String(this?.checkIfRiskExist[0]?.current_impact || ''),
         Validators.required,
       ],
       request_assistance: [
