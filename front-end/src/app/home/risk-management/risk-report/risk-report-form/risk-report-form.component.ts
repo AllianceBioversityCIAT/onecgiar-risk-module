@@ -111,9 +111,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       due_date: [
         this?.checkIfRiskExist[0]?.due_date,
         [
-          (c: AbstractControl) =>
-            new Date(c.value).getTime() < Date.now() ? { invalid: true } : null,
-          Validators.required,
+          // (c: AbstractControl) =>
+          //   new Date(c.value).getTime() < Date.now() ? { invalid: true } : null,
+          // Validators.required,
         ],
       ],
     });
