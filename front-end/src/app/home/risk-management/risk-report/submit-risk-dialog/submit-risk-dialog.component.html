@@ -46,14 +46,19 @@
             Drop the risk here
           </p>
           <div
-            class="drag-box"
+            class="drag-box drag-text-flex"
             *ngFor="let item of top; let i = index"
             [attr.data-index]="i"
             cdkDrag
           >
-            Risk <span class="index">({{ i + 1 }}) </span> {{ item.title }} ({{
-              item.current_level
-            }})
+            Risk <span class="index">({{ i + 1 }}) </span>
+            <div class="drag-text-flex">
+              <p class="submit-risk-drag-text-2">
+                {{ item.title }}
+              </p>
+
+              <p class="ww">({{ item.current_level }})</p>
+            </div>
           </div>
         </div>
       </div>
@@ -102,12 +107,18 @@
         (cdkDropListDropped)="drop($event)"
       >
         <div class="scroll">
-          <div class="">
+          <div class="qq">
             <div class="example-box" *ngFor="let item of similar" cdkDrag>
               <div class="submit-risk-drag-flex-box">
-                <p class="submit-risk-drag-text">
-                  {{ item.title }} ({{ item.current_level }})
-                </p>
+                <div class="example-text-flex">
+                  <p class="submit-risk-drag-text">
+                    {{ item.title }}
+                  </p>
+
+                  <p class="submit-risk-drag-text">
+                    ({{ item.current_level }})
+                  </p>
+                </div>
 
                 <div class="submit-risk-drag-icon">
                   <svg
