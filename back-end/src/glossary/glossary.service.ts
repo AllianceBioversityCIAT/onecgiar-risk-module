@@ -23,6 +23,7 @@ export class GlossaryService {
                 },
                 take: take,
                 skip: skip,
+                order: {title: 'ASC'}
             });
             return {
                 result: data,
