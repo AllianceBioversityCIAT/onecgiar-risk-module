@@ -70,13 +70,13 @@
   margin-top: -6rem;
   .search {
     display: flex;
-    gap: 1.5rem;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin: 0;
     height: fit-content;
     .sec-1 {
-      width: 29%;
+      width: 25%;
       position: relative;
 
       .search__button {
@@ -114,7 +114,7 @@
     }
     .sec-2 {
       position: relative;
-      width: 20%;
+      width: 15%;
       .risk-management-form-field {
         position: relative;
         .risk-management-form-field__label {

@@ -66,13 +66,14 @@
   margin-top: -6rem;
   .search {
     display: flex;
-    gap: 1rem;
+
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin: 0;
     height: fit-content;
     .sec-1 {
-      width: 51%;
+      width: 10%;
       position: relative;
 
       .search__button {
@@ -109,7 +110,7 @@
       }
     }
     .sec-2 {
-      width: 44%;
+      width: 30%;
       position: relative;
 
       .search__button {
@@ -147,7 +148,7 @@
     }
     .sec-3 {
       position: relative;
-      width: 39%;
+      width: 15%;
       .risk-management-form-field {
         position: relative;
         .risk-management-form-field__label {
@@ -177,7 +178,7 @@
 
     .sec-4 {
       position: relative;
-      width: 29%;
+      width: 10%;
       .risk-management-form-field {
         position: relative;
         .risk-management-form-field__label {
@@ -207,7 +208,7 @@
 
     .sec-5 {
       position: relative;
-      width: 29%;
+      width: 10%;
       .risk-management-form-field {
         position: relative;
         .risk-management-form-field__label {
@@ -237,7 +238,7 @@
 
     .sec-6 {
       position: relative;
-      width: 29%;
+      width: 10%;
       .risk-management-form-field {
         position: relative;
         .risk-management-form-field__label {
