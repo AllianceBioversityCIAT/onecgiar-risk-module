@@ -80,6 +80,14 @@
   font-weight: 400;
   line-height: 114.5%;
 }
+.loading-holder {
+  width: 100%;
+  min-height: 4px;
+}
+.loading-holder.admin {
+  background-color: #0f212f;
+  padding-left: 256px;
+}
 
 // :host{
 //   ::ng-deep .mdc-menu-surface--open {

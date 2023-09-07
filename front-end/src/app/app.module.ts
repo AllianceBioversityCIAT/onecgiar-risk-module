@@ -76,6 +76,7 @@ import { AvatarModule, AvatarSource } from 'ngx-avatars';
 import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
 import { AuthComponent } from './auth/auth.component';
 import { SendTestComponent } from './Admin/admin-module/announcements/send-test/send-test.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
   declarations: [
@@ -144,6 +145,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     HighchartsChartModule,
     SatPopoverModule,
     NgSelectModule,
+    MatProgressBarModule,
     AvatarModule.forRoot({
       sourcePriorityOrder: avatarSourcesOrder
     }),
