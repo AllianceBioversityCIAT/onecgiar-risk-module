@@ -140,11 +140,45 @@ export class InitiativeService {
   }
 
   async setRole(initiative_id, role: InitiativeRoles) {
-    let userInInit =  await this.iniRolesRepository.findOne({
-      where: { initiative_id: initiative_id , user_id: role.user_id},
-    });
-
-    if(userInInit == null) {
+    let userInInit:any;
+    let isExistsUser:any;
+    if(role.email == ''){
+      userInInit =  await this.iniRolesRepository.findOne({
+        where: { initiative_id: initiative_id , user_id: role.user_id},
+      });
+    }
+    else {
+      //invite by email
+      userInInit =  await this.iniRolesRepository.findOne({
+        where: { initiative_id: initiative_id , user: {email: role.email}}
+      });
+      isExistsUser = await this.userService.findByEmail(role.email);
+      if(isExistsUser == null) {
+        throw new BadRequestException('User is not exist');
+      }
+    }
+    if(userInInit == null && role.email == '') {
+      let init = await this.iniRepository.findOne({
+        where: { id: initiative_id },
+        relations: ['roles'],
+      });
+      if (!init) throw new NotFoundException();
+      const newRole = {
+        initiative_id: initiative_id,
+        user_id: +role?.user_id ? role?.user_id : null,
+        email: role.email.toLowerCase(),
+        role: role.role,
+      };
+      //To the user that was added by the Admin or Leader/Coordinator
+      if (role?.user_id) {
+        const user = await this.userService.userRepository.findOne({
+          where: { id: role?.user_id },
+        });
+        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, 11);
+      }
+      return await this.iniRolesRepository.save(newRole, { reload: true });
+    }
+    else if(userInInit == null && isExistsUser != null && role.email != '') {
       let init = await this.iniRepository.findOne({
         where: { id: initiative_id },
         relations: ['roles'],
