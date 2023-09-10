@@ -61,6 +61,7 @@ export class RiskController {
     type: GetRiskDto,
   })
   async getRisk(@Query() query) {
+    console.log(query)
     const redundentRisk = await this.riskService.riskRepository.find({
       where: {
         initiative_id: query.initiative_id,
@@ -98,7 +99,8 @@ export class RiskController {
         category_id: query?.category ? query?.category : null,
         created_by_user_id:query?.created_by ? query?.created_by : null,
         risk_owner_id:query?.owner ? query?.owner : null,
-        redundant: query?.redundant == 'true' ? null : false
+        redundant: query?.redundant == 'true' ? null : false,
+        request_assistance: query?.request_assistance == 'true' ? true : null,
       },
       relations: [
         'category',
