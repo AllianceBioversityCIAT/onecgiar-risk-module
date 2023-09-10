@@ -133,7 +133,7 @@ export class RiskReportTableComponent {
         orientation: 'landscape',
         unit: 'px',
         format: [
-          this.pdfcontent.nativeElement.scrollWidth -63,
+          this.pdfcontent.nativeElement.scrollWidth - 63,
           this.pdfcontent.nativeElement.scrollHeight + 10,
         ],
       });
@@ -183,7 +183,7 @@ export class RiskReportTableComponent {
       this.SavePDF();
     });
     this.user_info = this.userService.getLogedInUser();
-    console.log(this.user_info)
+    console.log(this.user_info);
     // my_roles
 
     const params: any = this.activatedRoute?.snapshot.params;

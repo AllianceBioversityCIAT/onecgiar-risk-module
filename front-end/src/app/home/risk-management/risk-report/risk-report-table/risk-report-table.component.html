@@ -161,12 +161,14 @@
             </button>
 
             <button
-              *ngIf="expandedElement != element"
-              [class.expanded]="expandedElement == element"
-              (click)="expandedElement = element"
+              aria-label="expand row"
+              (click)="
+                expandedElement = expandedElement === element ? null : element;
+                $event.stopPropagation()
+              "
               class="risk-report-icon-table-1"
             >
-              <mat-icon>
+              <mat-icon *ngIf="expandedElement !== element">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -180,14 +182,7 @@
                   />
                 </svg>
               </mat-icon>
-            </button>
-            <button
-              *ngIf="expandedElement == element"
-              [class.expanded]="expandedElement == undefined"
-              (click)="expandedElement = undefined"
-              class="risk-report-icon-table-1"
-            >
-              <mat-icon>
+              <mat-icon *ngIf="expandedElement === element">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -255,12 +250,14 @@
             </button>
 
             <button
-              *ngIf="expandedElement != element"
-              [class.expanded]="expandedElement == element"
-              (click)="expandedElement = element"
+              aria-label="expand row"
+              (click)="
+                expandedElement = expandedElement === element ? null : element;
+                $event.stopPropagation()
+              "
               class="risk-report-icon-table-1"
             >
-              <mat-icon>
+              <mat-icon *ngIf="expandedElement !== element">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -274,14 +271,7 @@
                   />
                 </svg>
               </mat-icon>
-            </button>
-            <button
-              *ngIf="expandedElement == element"
-              [class.expanded]="expandedElement == undefined"
-              (click)="expandedElement = undefined"
-              class="risk-report-icon-table-1"
-            >
-              <mat-icon>
+              <mat-icon *ngIf="expandedElement === element">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -435,7 +425,10 @@
             <div class="mtable">ID</div>
           </th>
           <td
-            style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 130px;"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
             mat-cell
             *matCellDef="let element"
             [ngClass]="{
@@ -472,7 +465,14 @@
           >
             <span class="h1">Title</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 200px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 200px;
+            "
+          >
             {{ element["title"] }}
           </td>
         </ng-container>
@@ -497,7 +497,14 @@
           >
             <span class="th-3">Category</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 200px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 200px;
+            "
+          >
             <span class="td-3-h">{{ element?.category?.title }}</span>
           </td>
         </ng-container>
@@ -521,7 +528,14 @@
           >
             <span class="th-3">Description Category</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 400px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 400px;
+            "
+          >
             <span class="td-3-h">{{ element.description }}</span>
           </td>
         </ng-container>
@@ -546,7 +560,14 @@
           >
             <span class="h3">Current Likelihood</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 130px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
+          >
             <span class="td-h">{{ element.current_likelihood }}</span>
           </td>
         </ng-container>
@@ -571,7 +592,14 @@
           >
             <span class="h4">Current Impact</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 130px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
+          >
             {{ element.current_impact }}
           </td>
         </ng-container>
@@ -595,7 +623,14 @@
           >
             <span class="h4">Current Risk Level</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 130px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
+          >
             {{ element.current_likelihood * element.current_impact }}
           </td>
         </ng-container>
@@ -619,7 +654,14 @@
           >
             <span class="h4">Target Likelihood</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 130px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
+          >
             {{ element.target_likelihood }}
           </td>
         </ng-container>
@@ -643,7 +685,14 @@
           >
             <span class="h4">Target Impact</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 130px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
+          >
             {{ element.target_impact }}
           </td>
         </ng-container>
@@ -667,7 +716,14 @@
           >
             <span class="h4">Target Risk Level</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 130px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
+          >
             {{ element.target_likelihood * element.target_impact }}
           </td>
         </ng-container>
@@ -692,7 +748,11 @@
           >
             <span class="h4">Due date to reach target level</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="border: 1px solid rgba(185, 185, 185, 0.7098039216)"
+          >
             {{ element.due_date | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
@@ -717,7 +777,7 @@
             <span class="h4">Actions /Controls to manage risks</span>
           </th>
           <td
-          style="border:  1px solid rgba(185, 185, 185, 0.7098039216);"
+            style="border: 1px solid rgba(185, 185, 185, 0.7098039216)"
             mat-cell
             *matCellDef="let element"
             [innerHTML]="
@@ -746,7 +806,14 @@
           >
             <span class="h4">Risk owner</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 200px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 200px;
+            "
+          >
             {{
               element.risk_owner?.user?.full_name || element.risk_owner?.email
             }}
@@ -773,7 +840,14 @@
           >
             <span class="h4">Created by</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);min-width: 200px;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 200px;
+            "
+          >
             {{ element?.created_by?.full_name }}
           </td>
         </ng-container>
@@ -797,7 +871,11 @@
           >
             <span class="h4">Flagged</span>
           </th>
-          <td mat-cell *matCellDef="let element" style="border:  1px solid rgba(185, 185, 185, 0.7098039216);">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="border: 1px solid rgba(185, 185, 185, 0.7098039216)"
+          >
             {{ toPdf ? (element.flag ? "Yes" : "") : "" }}
           </td>
         </ng-container>
