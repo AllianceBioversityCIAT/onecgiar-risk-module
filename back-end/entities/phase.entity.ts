@@ -22,14 +22,11 @@ export class Phase {
   @Column()
   reportingYear: string;
 
-  @Column({ type: 'uuid' })
-  tocPhase: string;
+  @Column({ type: 'date' })
+  startDate: Date;
 
   @Column({ type: 'date' })
-  startDate: string;
-
-  @Column({ type: 'date' })
-  endDate: string;
+  endDate: Date;
 
   @Column({ type: 'enum', enum: phaseStatus })
   status: phaseStatus;

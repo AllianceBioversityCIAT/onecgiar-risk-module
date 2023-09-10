@@ -13,15 +13,6 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>ToC Phase</mat-label>
-      <mat-select formControlName="tocPhase">
-        <mat-option *ngFor="let tocPhase of tocPhases" [value]="tocPhase.id">
-          {{ tocPhase.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field>
       <mat-label>Start date</mat-label>
       <input
         matInput

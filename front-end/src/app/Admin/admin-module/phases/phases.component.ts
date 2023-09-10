@@ -17,7 +17,6 @@ export class PhasesComponent implements AfterViewInit {
     'id',
     'name',
     'reporting_year',
-    'toc_phase',
     'start_date',
     'end_date',
     'previous_phase',
