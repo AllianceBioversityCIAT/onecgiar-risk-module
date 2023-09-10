@@ -348,10 +348,13 @@ export class DashboardComponent {
       },
 
       tooltip: {
+        borderWidth: 0,
+        backgroundColor: 'rgba(255,255,255,0)',
+        shadow: false,
         useHTML: true,
         headerFormat: '<table>',
         pointFormat:
-          '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
+          '<tr><th colspan="2"><span class="chart-bubble-title">{point.name}</span></th></tr>' +
           '<tr><th>' +
           type +
           ' impact:</th><td>{point.x}</td></tr>' +

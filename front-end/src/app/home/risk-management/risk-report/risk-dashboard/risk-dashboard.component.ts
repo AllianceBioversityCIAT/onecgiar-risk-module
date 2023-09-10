@@ -124,6 +124,9 @@ export class RiskDashboardComponent {
         },
       },
       tooltip: {
+        borderWidth: 0,
+        backgroundColor: 'rgba(255,255,255,0)',
+        shadow: false,
         useHTML: true,
         headerFormat: '<table>',
         pointFormat:
