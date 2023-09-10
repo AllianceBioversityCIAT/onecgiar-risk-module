@@ -137,7 +137,7 @@
 
 .example-box {
   // width: 55rem;
-  height: 3.5rem;
+  // height: 3.5rem;
   flex-shrink: 0;
   border: 0.5px solid #808080ab;
   background-color: #ffffff;
@@ -256,17 +256,37 @@
 }
 
 .submit-risk-drag-text-2 {
+  // font-family: "Poppins", sans-serif !important;
+  // color: #808080;
+  // font-size: 1.4rem;
+  // font-style: normal;
+  // font-weight: 400;
+  // line-height: 171.5%;
+
+  // text-overflow: ellipsis;
+  // text-wrap: nowrap;
+  // overflow: hidden;
+  // max-width: 454px;
+
   font-family: "Poppins", sans-serif !important;
   color: #808080;
   font-size: 1.4rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 171.5%; /* 2.401rem */
-
+  line-height: 171.5%;
   text-overflow: ellipsis;
-  text-wrap: nowrap;
+  /* text-wrap: nowrap; */
   overflow: hidden;
-  max-width: 454px;
+  /* max-width: 454px; */
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: block;
+  /* max-width: 450px; */
+  /* min-width: 250px; */
+  white-space: normal !important;
+  width: auto;
+  text-align: justify;
 }
 
 .submit-risk-drag-text {
@@ -275,11 +295,18 @@
   font-size: 1.4rem;
   font-style: normal;
   font-weight: 300;
-  line-height: 171.5%; /* 2.401rem */
+  line-height: 171.5%;
   text-overflow: ellipsis;
   text-wrap: nowrap;
   overflow: hidden;
   max-width: 454px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  /* display: block; */
+  white-space: normal !important;
+  width: auto;
+  text-align: justify;
 }
 
 .submit-risk-flex-box {
@@ -356,10 +383,12 @@
   color: #ffffff;
   text-align: left;
   // width: 55rem;
-  height: 3.5rem;
+  // height: 3.5rem;
+  height: auto;
   flex-shrink: 0;
   color: #808080;
-  font-family: Poppins;
+  font-family: "Poppins", sans-serif !important;
+
   font-size: 1.4rem;
   font-style: normal;
   font-weight: 400;
