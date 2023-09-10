@@ -1,5 +1,9 @@
 @import "../sass/layout/header/header";
-
+.header-risk.not-admin{
+  position: sticky;
+  top: 0;
+  z-index: 99999;
+}
 .risk-nav-list {
   background-color: #436280;
 }
