@@ -26,6 +26,7 @@ export class PhasesService {
       relations: ['previousPhase'],
     });
   }
+
   findActivePhase() {
     return this.phaseRepository.findOne({
       where: { active: true },
@@ -39,5 +40,14 @@ export class PhasesService {
 
   remove(id: number) {
     return this.phaseRepository.delete({ id });
+  }
+
+  activate(id: number) {
+    this.phaseRepository.update({}, { active: false });
+    return this.phaseRepository.update({ id }, { active: true });
+  }
+
+  deactivate(id: number) {
+    return this.phaseRepository.update({ id }, { active: false });
   }
 }

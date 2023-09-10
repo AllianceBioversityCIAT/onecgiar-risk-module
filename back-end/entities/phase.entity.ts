@@ -22,10 +22,10 @@ export class Phase {
   @Column()
   reportingYear: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'timestamp' , default:null })
   startDate: Date;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'timestamp' , default:null })
   endDate: Date;
 
   @Column({ type: 'enum', enum: phaseStatus })
@@ -45,6 +45,4 @@ export class Phase {
   @Column({ default: false })
   active: boolean;
 
-  @Column({ default: false })
-  show_eoi: boolean;
 }

@@ -21,6 +21,7 @@ export class PhasesComponent implements AfterViewInit {
     'end_date',
     'previous_phase',
     'status',
+    'active',
     'actions',
   ];
   dataSource: any;
@@ -67,6 +68,43 @@ export class PhasesComponent implements AfterViewInit {
       .subscribe(async (dialogResult) => {
         if (dialogResult == true) {
           let result = await this.phasesService.deletePhase(id);
+          if (result) this.initTable();
+        }
+      });
+  }
+
+  activate(id: number) {
+    this.dialog
+      .open(DeleteConfirmDialogComponent, {
+        maxWidth: '400px',
+        data: {
+          title: 'Activate',
+          message: `Activating phase item will deactivate other active phases.
+          Are you sure you want to activate this Phase item?`,
+        },
+      })
+      .afterClosed()
+      .subscribe(async (dialogResult) => {
+        if (dialogResult == true) {
+          let result = await this.phasesService.activatePhase(id);
+          if (result) this.initTable();
+        }
+      });
+  }
+
+  deactivate(id: number) {
+    this.dialog
+      .open(DeleteConfirmDialogComponent, {
+        maxWidth: '400px',
+        data: {
+          title: 'Deactivate',
+          message: `Are you sure you want to deactivate this Phase item?`,
+        },
+      })
+      .afterClosed()
+      .subscribe(async (dialogResult) => {
+        if (dialogResult == true) {
+          let result = await this.phasesService.deactivatePhase(id);
           if (result) this.initTable();
         }
       });
