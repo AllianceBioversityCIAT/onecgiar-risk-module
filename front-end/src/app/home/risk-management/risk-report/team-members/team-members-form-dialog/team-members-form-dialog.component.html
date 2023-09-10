@@ -22,7 +22,7 @@
   <form *ngIf="memberForm" [formGroup]="memberForm" class="form-dialog-content">
     <!-- //search-by-Email filed----- -->
 
-    <div class="form-dialog-content__field--grid-column">
+    <div class="form-dialog-content__field--grid-column" *ngIf="memberForm.controls['email']?.value == ''">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
           >Select user</mat-label
