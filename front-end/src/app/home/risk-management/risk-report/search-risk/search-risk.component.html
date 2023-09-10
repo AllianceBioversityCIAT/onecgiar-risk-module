@@ -126,6 +126,17 @@
 <!-- step-3 -->
 <div class="risk-management-export">
   <div class="risk-management-export-box">
+    <div *ngIf="user_info?.role == 'admin'">
+      <mat-label
+        >Show request assistance risk</mat-label
+      >
+      <mat-checkbox
+        labelPosition="before"
+        [(ngModel)]="request_assistance"
+        (ngModelChange)="risksNeedHelp()"
+      ></mat-checkbox>
+    </div>
+
     <div>
       <mat-label
         >Show redundant risk ({{

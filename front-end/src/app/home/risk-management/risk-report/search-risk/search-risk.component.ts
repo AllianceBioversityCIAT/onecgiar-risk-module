@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-search-risk',
@@ -50,8 +51,14 @@ export class SearchRiskComponent {
   }
 
   redundant: boolean = false;
+  request_assistance: boolean = false;
+
   redundantChange() {
     this.filterForm.controls['redundant'].setValue(this.redundant);
+  }
+
+  risksNeedHelp() {
+    this.filterForm.controls['request_assistance'].setValue(this.request_assistance);
   }
   setForm() {
     this.filterForm = this.fb.group({
@@ -61,6 +68,7 @@ export class SearchRiskComponent {
       owner: [null],
       sort: [null],
       redundant: [false],
+      request_assistance: [false],
     });
   }
 
@@ -80,7 +88,7 @@ export class SearchRiskComponent {
   riskRaiser: any;
   id: number = 0;
   initiativeId: any;
-
+  user_info:any;
   async ngOnInit() {
     let time: any = null;
     const ini = await this.initiativeService.getInitiative(
@@ -112,5 +120,10 @@ export class SearchRiskComponent {
 
     this.id = +params.id;
     this.initiativeId = params.initiativeId;
+
+    const access_token = localStorage.getItem('access_token');
+    if (access_token) {
+      this.user_info = jwt_decode(access_token);
+    }
   }
 }

@@ -20,4 +20,12 @@ export class VariableService  extends MainService {
     const data = {status: status};
     return firstValueFrom(this.http.patch(this.backend_url + `/variables/update-system-publish`, data ,{headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
   }
+
+  async editConstantsVariable(data:any) {
+    return firstValueFrom(this.http.put(this.backend_url + `/variables`, data ,{headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
+  }
+
+  async getConstantsVariable() {
+    return firstValueFrom(this.http.get(this.backend_url + `/variables`, {headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
+  }
 }

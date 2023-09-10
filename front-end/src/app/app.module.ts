@@ -79,6 +79,7 @@ import { SendTestComponent } from './Admin/admin-module/announcements/send-test/
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
 import { PhaseDialogComponent } from './Admin/admin-module/phases/phase-dialog/phase-dialog.component';
+import { EditConstantFormComponent } from './Admin/admin-module/parameters-settings/settings/edit-constant-form/edit-constant-form.component';
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
   declarations: [
@@ -132,6 +133,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     RiskReportOverviewComponent,
     AuthComponent,
     SendTestComponent,
+    EditConstantFormComponent,
   ],
   imports: [
     BrowserModule,

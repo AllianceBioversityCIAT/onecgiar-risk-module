@@ -53,6 +53,8 @@ export class HeaderComponent implements OnInit {
   isadmin = false;
   ngOnInit() {
     this.router.events.subscribe((e) => {
+      if (this.headerService.background == '#04030f') this.isadmin = true;
+      else this.isadmin = false;
       this.user_info = this.authService.getLogedInUser();
     });
     this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
