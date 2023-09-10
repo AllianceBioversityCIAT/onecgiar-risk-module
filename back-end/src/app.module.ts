@@ -19,10 +19,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { CategoriesGroupsModule } from './categories-groups/categories-groups.module';
 import { GlossaryModule } from './glossary/glossary.module';
 import { FaqModule } from './faq/faq.module';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './auth/roles.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './auth/constants';
+import { PhasesModule } from './phases/phases.module';
 
 
 @Module({
@@ -54,7 +53,8 @@ import { jwtConstants } from './auth/constants';
     DashboardModule,
     CategoriesGroupsModule,
     GlossaryModule,
-    FaqModule,    
+    FaqModule,
+    PhasesModule,    
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '30d'},

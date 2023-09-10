@@ -32,6 +32,7 @@ import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-
 import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
 import { AuthComponent } from './auth/auth.component';
+import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -81,6 +82,7 @@ const routes: Routes = [
       { path: 'glossary', component: GlossaryAdminComponent },
       { path: 'faq', component: FaqAdminComponent },
       { path: 'emails', component: EmailsComponent },
+      { path: 'phases', component: PhasesComponent },
     ],
   },
 

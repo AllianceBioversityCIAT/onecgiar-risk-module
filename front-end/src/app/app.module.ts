@@ -76,7 +76,9 @@ import { AvatarModule, AvatarSource } from 'ngx-avatars';
 import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
 import { AuthComponent } from './auth/auth.component';
 import { SendTestComponent } from './Admin/admin-module/announcements/send-test/send-test.component';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
+import { PhaseDialogComponent } from './Admin/admin-module/phases/phase-dialog/phase-dialog.component';
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
   declarations: [
@@ -87,7 +89,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     DeleteConfirmDialogComponent,
     ParametersSettingsComponent,
     AdminModuleComponent,
-
+    PhasesComponent,
     MitigationStatusComponent,
     SettingsComponent,
     CategoryFormDialogComponent,
@@ -101,6 +103,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     GlossaryComponent,
     FaqComponent,
     DashboardComponent,
+    PhaseDialogComponent,
     RiskManagementComponent,
     RiskReportComponent,
     RiskReportFormComponent,
@@ -128,7 +131,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     EmailBodyComponent,
     RiskReportOverviewComponent,
     AuthComponent,
-    SendTestComponent
+    SendTestComponent,
   ],
   imports: [
     BrowserModule,
@@ -147,7 +150,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     NgSelectModule,
     MatProgressBarModule,
     AvatarModule.forRoot({
-      sourcePriorityOrder: avatarSourcesOrder
+      sourcePriorityOrder: avatarSourcesOrder,
     }),
   ],
   providers: [

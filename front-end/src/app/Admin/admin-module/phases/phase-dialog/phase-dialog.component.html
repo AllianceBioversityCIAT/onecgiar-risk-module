@@ -1,0 +1,76 @@
+<h1 mat-dialog-title>{{ phaseId ? "Edit" : "Add" }} Phase</h1>
+
+<mat-dialog-content>
+  <form [formGroup]="phaseForm">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Reporting year</mat-label>
+      <input matInput formControlName="reportingYear" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>ToC Phase</mat-label>
+      <mat-select formControlName="tocPhase">
+        <mat-option *ngFor="let tocPhase of tocPhases" [value]="tocPhase.id">
+          {{ tocPhase.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Start date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="startDatePicker"
+        formControlName="startDate"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="startDatePicker">
+        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>End date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="endDatePicker"
+        formControlName="endDate"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="endDatePicker">
+        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Previous Phase</mat-label>
+      <mat-select formControlName="previousPhase">
+        <mat-option *ngFor="let phase of phases" [value]="phase.id">
+          {{ phase.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="open">Open</mat-option>
+        <mat-option value="closed">Closed</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button color="primary" (click)="submit()">
+    {{ phaseId ? "Save" : "Add" }}
+  </button>
+</mat-dialog-actions>
