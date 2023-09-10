@@ -1,0 +1,51 @@
+@import "../../../../../sass/pages/admin-module/user-management";
+@import "../../../../../sass/layout/admin-module/user-management";
+
+.form-dialog-conten-button-box-2 {
+  text-align: right;
+  margin-top: 2.5rem !important;
+}
+
+:host {
+  ::ng-deep {
+    /* to penetrate <ngx-editor> CSS styling */
+
+    .NgxEditor {
+      height: 100px;
+      overflow-y: scroll;
+    }
+
+    .NgxEditor__Content {
+      min-height: 100px; /* make all of the editor area clickable */
+    }
+
+    .NgxEditor::-webkit-scrollbar {
+      width: 0.8rem;
+    }
+
+    .NgxEditor::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px #d9d9d9;
+      border-radius: 0.4rem;
+      height: 2rem;
+    }
+
+    .NgxEditor::-webkit-scrollbar-thumb {
+      background-color: $color-button-primary;
+      // outline: 1px solid slategrey;
+      border-radius: 4px;
+    }
+
+    .NgxEditor {
+      cursor: auto;
+    }
+
+    .NgxEditor::-webkit-scrollbar-button,
+    .NgxEditor::-webkit-scrollbar-track,
+    .NgxEditor::-webkit-scrollbar-track-piece,
+    .NgxEditor::-webkit-scrollbar-corner,
+    .NgxEditor::-webkit-resizer {
+      display: block;
+      height: 3rem;
+    }
+  }
+}
