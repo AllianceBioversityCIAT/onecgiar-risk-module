@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PhasesService } from 'src/app/services/phases.service';
 import { PhaseDialogComponent } from './phase-dialog/phase-dialog.component';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-phases',
@@ -31,8 +32,13 @@ export class PhasesComponent implements AfterViewInit {
 
   constructor(
     private phasesService: PhasesService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private headerService: HeaderService
+  ) {
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
+  }
 
   ngAfterViewInit() {
     this.initTable();
@@ -58,7 +64,6 @@ export class PhasesComponent implements AfterViewInit {
   delete(id: number) {
     this.dialog
       .open(DeleteConfirmDialogComponent, {
-        maxWidth: '400px',
         data: {
           title: 'Delete',
           message: `Are you sure you want to delete this Phase item?`,
@@ -76,7 +81,6 @@ export class PhasesComponent implements AfterViewInit {
   activate(id: number) {
     this.dialog
       .open(DeleteConfirmDialogComponent, {
-        maxWidth: '400px',
         data: {
           title: 'Activate',
           message: `Activating phase item will deactivate other active phases.
@@ -95,7 +99,6 @@ export class PhasesComponent implements AfterViewInit {
   deactivate(id: number) {
     this.dialog
       .open(DeleteConfirmDialogComponent, {
-        maxWidth: '400px',
         data: {
           title: 'Deactivate',
           message: `Are you sure you want to deactivate this Phase item?`,

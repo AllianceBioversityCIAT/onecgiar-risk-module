@@ -61,4 +61,11 @@ export class PhaseDialogComponent implements OnInit {
       this.dialogRef.close({ submitted: true });
     }
   }
+
+
+  
+  //Close-Dialog
+  onCloseDialog() {
+    this.dialogRef.close();
+  }
 }

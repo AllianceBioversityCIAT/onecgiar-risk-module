@@ -1,67 +1,169 @@
-<h1 mat-dialog-title>{{ phaseId ? "Edit" : "Add" }} Phase</h1>
+<div mat-dialog-container class="phase-box">
+  <div class="form-dialog-header">
+    <div class="form-dialog-header__text-box">
+      <p class="form-dialog-header__text-box__text">
+        {{ phaseId ? "Edit" : "Add" }} Phase
+      </p>
+    </div>
 
-<mat-dialog-content>
-  <form [formGroup]="phaseForm">
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name" />
-    </mat-form-field>
+    <div class="form-dialog-header__icon-box">
+      <button
+        class="form-dialog-header__icon-box__btn"
+        (click)="onCloseDialog()"
+      >
+        <mat-icon class="form-dialog-header__icon-box__icon-size">
+          <img
+            class="form-dialog-header__icon-box__icon-size__icon"
+            src="../../../assets/shared-image/Vector-close.svg"
+            alt="~/Frontend/images/icon _ Vector-close"
+          />
+        </mat-icon>
+      </button>
+    </div>
+  </div>
 
-    <mat-form-field>
-      <mat-label>Reporting year</mat-label>
-      <input matInput formControlName="reportingYear" />
-    </mat-form-field>
+  <!-- <h1 mat-dialog-title>{{ phaseId ? "Edit" : "Add" }} Phase</h1> -->
+  <div class="form-dialog-conten-box-1">
+    <mat-dialog-content>
+      <form [formGroup]="phaseForm" class="form-dialog-content">
+        <div class="form-dialog-content__field--grid-column">
+          <div class="form-dialog-content__title-box">
+            <mat-label class="form-dialog-content__title-box__title"
+              >Name</mat-label
+            >
+          </div>
+          <mat-form-field
+            class="form-dialog-content__field"
+            floatLabel="always"
+            hideRequiredMarker
+            appearance="outline"
+          >
+            <input matInput formControlName="name" />
+          </mat-form-field>
+        </div>
 
-    <mat-form-field>
-      <mat-label>Start date</mat-label>
-      <input
-        matInput
-        [matDatepicker]="startDatePicker"
-        formControlName="startDate"
-      />
-      <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="startDatePicker">
-        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-      </mat-datepicker-toggle>
-      <mat-datepicker #startDatePicker></mat-datepicker>
-    </mat-form-field>
+        <div class="form-dialog-content__field--grid-column">
+          <div class="form-dialog-content__title-box">
+            <mat-label class="form-dialog-content__title-box__title"
+              >Reporting year</mat-label
+            >
+          </div>
+          <mat-form-field
+            class="form-dialog-content__field"
+            floatLabel="always"
+            hideRequiredMarker
+            appearance="outline"
+          >
+            <input matInput formControlName="reportingYear" />
+          </mat-form-field>
+        </div>
 
-    <mat-form-field>
-      <mat-label>End date</mat-label>
-      <input
-        matInput
-        [matDatepicker]="endDatePicker"
-        formControlName="endDate"
-      />
-      <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="endDatePicker">
-        <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-      </mat-datepicker-toggle>
-      <mat-datepicker #endDatePicker></mat-datepicker>
-    </mat-form-field>
+        <div class="form-dialog-conten-box-2">
+          <div class="form-dialog-content__title-box">
+            <mat-label class="form-dialog-content__title-box__title"
+              >Start date</mat-label
+            >
+          </div>
+          <mat-form-field
+            class="form-dialog-content__field--2"
+            floatLabel="always"
+            hideRequiredMarker
+            appearance="outline"
+          >
+            <input
+              matInput
+              [matDatepicker]="startDatePicker"
+              formControlName="startDate"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="startDatePicker">
+              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
 
-    <mat-form-field>
-      <mat-label>Previous Phase</mat-label>
-      <mat-select formControlName="previousPhase">
-        <mat-option *ngFor="let phase of phases" [value]="phase.id">
-          {{ phase.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <div class="form-dialog-conten-box-2">
+          <div class="form-dialog-content__title-box">
+            <mat-label class="form-dialog-content__title-box__title"
+              >End date</mat-label
+            >
+          </div>
+          <mat-form-field
+            class="form-dialog-content__field--2"
+            floatLabel="always"
+            hideRequiredMarker
+            appearance="outline"
+          >
+            <input
+              matInput
+              [matDatepicker]="endDatePicker"
+              formControlName="endDate"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="endDatePicker">
+              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
 
-    <mat-form-field>
-      <mat-label>Status</mat-label>
-      <mat-select formControlName="status">
-        <mat-option value="open">Open</mat-option>
-        <mat-option value="closed">Closed</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
+        <div class="form-dialog-conten-box-2">
+          <div class="form-dialog-content__title-box">
+            <mat-label class="form-dialog-content__title-box__title"
+              >Previous Phase<span class="star">*</span></mat-label
+            >
+          </div>
+          <mat-form-field
+            class="form-dialog-content__field--2"
+            floatLabel="always"
+            hideRequiredMarker
+            appearance="outline"
+          >
+            <mat-select formControlName="previousPhase">
+              <mat-option *ngFor="let phase of phases" [value]="phase.id">
+                {{ phase.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button color="primary" (click)="submit()">
-    {{ phaseId ? "Save" : "Add" }}
-  </button>
-</mat-dialog-actions>
+        <div class="form-dialog-conten-box-2">
+          <div class="form-dialog-content__title-box">
+            <mat-label class="form-dialog-content__title-box__title"
+              >Status<span class="star">*</span></mat-label
+            >
+          </div>
+          <mat-form-field
+            class="form-dialog-content__field--2"
+            floatLabel="always"
+            hideRequiredMarker
+            appearance="outline"
+          >
+            <mat-select formControlName="status">
+              <mat-option value="open">Open</mat-option>
+              <mat-option value="closed">Closed</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- //Update Button----- -->
+        <div class="form-dialog-conten-button-box-3">
+          <mat-dialog-actions align="end">
+            <!-- <button mat-button mat-dialog-close>Cancel</button> -->
+            <div class="form-dialog-conten__button-box">
+              <button
+                class="form-dialog-conten__button-box__btn"
+                mat-button
+                color="primary"
+                (click)="submit()"
+              >
+                {{ phaseId ? "Save" : "Add" }}
+              </button>
+            </div>
+          </mat-dialog-actions>
+        </div>
+      </form>
+    </mat-dialog-content>
+  </div>
+</div>
