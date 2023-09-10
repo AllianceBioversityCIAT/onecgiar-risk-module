@@ -188,14 +188,19 @@
             Drop the risk here
           </p>
           <div
-            class="drag-box"
+            class="drag-box drag-text-flex"
             *ngFor="let item of top; let i = index"
             [attr.data-index]="i"
             cdkDrag
           >
-            Risk <span class="index">({{ i + 1 }}) </span> {{ item.title }} ({{
-              item.current_level
-            }})
+            Risk <span class="index">({{ i + 1 }}) </span>
+            <div class="drag-text-flex">
+              <p class="submit-risk-drag-text-2">
+                {{ item.title }}
+              </p>
+
+              <p class="ww">({{ item.current_level }})</p>
+            </div>
           </div>
         </div>
       </div>
