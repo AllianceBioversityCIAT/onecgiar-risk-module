@@ -16,7 +16,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { RiskReportComponent } from '../risk-report.component';
+import { RiskReportOverviewComponent } from '../risk-report-overview/risk-report-overview.component';
 import { LoadingService } from 'src/app/services/loading.service';
 import { AppSocket } from 'src/app/services/socket.service';
 import { UserService } from 'src/app/services/user.service';
@@ -67,7 +67,7 @@ export class RiskReportTableComponent {
     private socket: AppSocket,
     private loading: LoadingService,
     private cd: ChangeDetectorRef,
-    private RiskReportComponent: RiskReportComponent,
+    private RiskReportOverviewComponent: RiskReportOverviewComponent,
     private titleService: Title
   ) {}
 
@@ -256,7 +256,7 @@ export class RiskReportTableComponent {
   }
   async checkValue(id: number, value: any) {
     await this.riskService.updateRedundant(id, value);
-    this.RiskReportComponent.loadInitiative();
+    this.RiskReportOverviewComponent.loadInitiative();
   }
   canEdit() {
     return (
