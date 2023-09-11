@@ -324,7 +324,7 @@ export class InitiativeService {
         if (found_users.length) {
           user_role.user_id = found_users[0].id;
           // To the user that was added by the Admin or Leader/Coordinator
-          this.emailsService.sendEmailTobyVarabel(found_users[0], 7);
+          //this.emailsService.sendEmailTobyVarabel(found_users[0], 7);
 
           await this.iniRolesRepository.save(user_role);
         }

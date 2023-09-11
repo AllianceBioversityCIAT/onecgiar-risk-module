@@ -42,7 +42,7 @@ export class EmailsController {
   @Get('test/test')
   async test() {
 
-    const email1 = await this.emailService.sendEmailTobyVarabel(1,1,2)
+    const email1 = await this.emailService.sendEmailTobyVarabel(1,1)
 
     return email1;
   }
