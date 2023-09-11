@@ -150,12 +150,9 @@ export class InitiativeService {
     else {
       //invite by email
       userInInit =  await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id , user: {email: role.email}}
+        where: { initiative_id: initiative_id , email: role.email}
       });
       isExistsUser = await this.userService.findByEmail(role.email);
-      if(isExistsUser == null) {
-        throw new BadRequestException('User is not exist');
-      }
     }
     if(userInInit == null && role.email == '') {
       let init = await this.iniRepository.findOne({
@@ -178,7 +175,7 @@ export class InitiativeService {
       }
       return await this.iniRolesRepository.save(newRole, { reload: true });
     }
-    else if(userInInit == null && isExistsUser != null && role.email != '') {
+    else if(userInInit == null  && role.email != '') {
       let init = await this.iniRepository.findOne({
         where: { id: initiative_id },
         relations: ['roles'],
