@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { EmailsService } from 'src/app/services/emails.service';
@@ -32,9 +32,12 @@ export class EmailsComponent {
     'createdAt',
     'action',
   ];
-  emailLogs: any;
-  formData: any;
+  emailLogs:  any = [];
+  formData: FormGroup = new FormGroup({});
   pipe = new DatePipe('en-US');
+  filters: any = null;
+  pageIndex: number = 1;
+  data:any;
 
   @ViewChild(MatPaginator) paginator: any;
 
@@ -59,40 +62,38 @@ export class EmailsComponent {
     this.visable = !this.visable;
   }
 
-  async populateFormData() {
-    this.formData = await this.fb.group({
-      search: [''],
-      status: [true],
+
+  sort = [
+    { name: 'ID (ASC)', value: 'id,ASC' },
+    { name: 'ID (DESC)', value: 'id,DESC' },
+    { name: 'Email (ASC)', value: 'email,ASC' },
+    { name: 'Email (DESC)', value: 'email,DESC' },
+  ];
+
+   populateFormData() {
+    this.formData.valueChanges.subscribe(() => {
+      this.filters = this.formData.value;
+      this.getEmailLogs(this.pageIndex,this.pageSize)
     });
-    this.formData
-      .get('search')
-      .valueChanges.subscribe(async (formValue: any) => {
-        const emailLogsData = await this.emails.filterSearchEmails(formValue);
-        this.emailLogs = new MatTableDataSource<any>(emailLogsData);
-      });
-    this.formData
-      .get('status')
-      .valueChanges.subscribe(async (formValue: any) => {
-        const emailLogsData = await this.emails.filterStatusEmails(formValue);
-        this.emailLogs = emailLogsData;
-      });
   }
 
   async pageChanged(event: any) {
-    var emailLogs = await this.emails.getEmails(
-      ++event.pageIndex,
-      event.pageSize
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.data= await this.emails.getEmails(
+      this.filters,
+      this.pageIndex,
+      this.pageSize
     );
-    this.emailLogs = emailLogs.items;
+    this.emailLogs = this.data.result;
+    this.length = this.data.count;
   }
 
   async getEmailLogs(page: number, limit: number) {
-    const emailLogs = await this.emails.getEmails(page, limit);
+    this.data = await this.emails.getEmails(this.filters,page, limit);
 
-    this.emailLogs = new MatTableDataSource<any>(emailLogs.items);
-    this.length = emailLogs.meta.totalItems;
-    this.pageSize = emailLogs.meta.itemsPerPage;
-    this.totalEmailLogsCount = emailLogs.meta.totalItems;
+    this.emailLogs = this.data.result;
+    this.length = this.data.count;
   }
 
   openShowEmailBodyDialog(data: any): void {
@@ -108,16 +109,22 @@ export class EmailsComponent {
   }
 
   async refresh() {
-    await this.getEmailLogs(1, 10);
+    await this.getEmailLogs(this.pageIndex, this.pageSize);
     this.populateFormData();
   }
 
   openFilterDialog(data: any): void {}
 
   async ngOnInit() {
-    await this.getEmailLogs(1, 10);
+    this.formData =  this.fb.group({
+      search: [null],
+      status: [null],
+      sort: [null],
+    });
+    await this.getEmailLogs(this.pageIndex, this.pageSize);
     this.ngAfterViewInit();
     this.populateFormData();
+
     this.title.setTitle('Emails');
     this.meta.updateTag({
       name: 'description',
