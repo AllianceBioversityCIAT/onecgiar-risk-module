@@ -1,8 +1,6 @@
 <div class="form-dialog-header">
   <div class="form-dialog-header__text-box">
-    <p class="form-dialog-header__text-box__text">
-      Actions /Controls to manage risks
-    </p>
+    <p class="form-dialog-header__text-box__text">Add Action to manage risk</p>
   </div>
 
   <div class="form-dialog-header__icon-box">
@@ -39,7 +37,7 @@
         appearance="outline"
       >
         <textarea
-        rows="4"
+          rows="4"
           placeholder="Description"
           matInput
           formControlName="description"
@@ -47,12 +45,21 @@
           cdkAutosizeMinRows="2"
           cdkAutosizeMaxRows="10"
         ></textarea>
-        <mat-error class="error" *ngIf="proposedForm.controls['description'].errors?.['required']">Action description is required</mat-error>
         <mat-error
-        class="error"
-        *ngIf="proposedForm.controls?.description?.errors?.maxword"
-        >Max words you can use is {{proposedForm.controls?.description?.errors?.maxword?.max}} you used {{proposedForm.controls?.description?.errors?.maxword.actual}}</mat-error
-      >
+          class="error"
+          *ngIf="proposedForm.controls['description'].errors?.['required']"
+          >Action description is required</mat-error
+        >
+        <mat-error
+          class="error"
+          *ngIf="proposedForm.controls?.description?.errors?.maxword"
+          >Max words you can use is
+          {{ proposedForm.controls?.description?.errors?.maxword?.max }} you
+          used
+          {{
+            proposedForm.controls?.description?.errors?.maxword.actual
+          }}</mat-error
+        >
       </mat-form-field>
     </div>
 
@@ -70,11 +77,20 @@
       >
         <mat-select formControlName="mitigation_status_id">
           <mat-option *ngFor="let action of Actions" [value]="action.id">
-            {{action.title}}
-              <mat-icon  matTooltip="{{action.description}}" [matTooltipPosition]="'left'" matSuffix>help_outline</mat-icon>
+            {{ action.title }}
+            <mat-icon
+              matTooltip="{{ action.description }}"
+              [matTooltipPosition]="'left'"
+              matSuffix
+              >help_outline</mat-icon
+            >
           </mat-option>
         </mat-select>
-        <mat-error class="error" *ngIf="proposedForm.controls['mitigation_status_id'].errors?.['required']">Action status is required</mat-error>
+        <mat-error
+          class="error"
+          *ngIf="proposedForm.controls['mitigation_status_id'].errors?.['required']"
+          >Action status is required</mat-error
+        >
       </mat-form-field>
     </div>
 

@@ -14,40 +14,40 @@
   background-color: #ffffff;
 }
 
-.form-dialog-header {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 4.5rem;
-  padding: 0 0.5rem;
-  // border-radius: 0.2rem 0.2rem 0rem 0;
-  background-color: #0f212f;
+// .form-dialog-header {
+//   display: flex;
+//   justify-content: space-around;
+//   align-items: center;
+//   height: 4.5rem;
+//   padding: 0 0.5rem;
+//   // border-radius: 0.2rem 0.2rem 0rem 0;
+//   background-color: #0f212f;
 
-  &__text-box {
-    width: 62.4rem;
-    height: 2.4rem;
-    font-family: "Poppins", sans-serif !important;
+//   &__text-box {
+//     width: 62.4rem;
+//     height: 2.4rem;
+//     font-family: "Poppins", sans-serif !important;
 
-    font-size: 1.6rem;
-    font-weight: 500;
-    line-height: 2.4rem;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #ffffff;
-  }
+//     font-size: 1.6rem;
+//     font-weight: 500;
+//     line-height: 2.4rem;
+//     letter-spacing: 0em;
+//     text-align: left;
+//     color: #ffffff;
+//   }
 
-  &__icon-box {
-    // width: 1.8rem;
+//   &__icon-box {
+//     // width: 1.8rem;
 
-    // style="background-color: #2a2e45; border: none; cursor: pointer"
+//     // style="background-color: #2a2e45; border: none; cursor: pointer"
 
-    &__btn {
-      border: none;
-      background-color: #0f212f;
-      cursor: pointer;
-    }
-  }
-}
+//     &__btn {
+//       border: none;
+//       background-color: #0f212f;
+//       cursor: pointer;
+//     }
+//   }
+// }
 
 .form-dialog-content {
   width: 57.8rem;
