@@ -159,18 +159,15 @@ export class EmailsService {
 
   }
 
-  async sendEmailTobyVarabel(user, subject_varabel_id, content_varabel_id) {
-    const subject = await this.variabelService.variablesRepository.findOne({
-      where: { id: subject_varabel_id },
-    });
+  async sendEmailTobyVarabel(user, subject_varabel_id) {
     const content = await this.variabelService.variablesRepository.findOne({
-      where: { id: content_varabel_id },
+      where: { id: subject_varabel_id },
     });
 
     return await this.createEmailBy(
       user.full_name,
       user.email,
-      subject.value,
+      content.label,
       content.value,
     );
   }

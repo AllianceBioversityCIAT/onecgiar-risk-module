@@ -125,13 +125,13 @@ export class InitiativeService {
           role?.user &&
           (role.role == 'Leader' || role.role == 'Coordinators')
         )
-          this.emailsService.sendEmailTobyVarabel(role?.user, 3, 4);
+          this.emailsService.sendEmailTobyVarabel(role?.user, 3);
       });
     let admins = await this.userService.userRepository.find({
       where: { role: 'admin' },
     });
     admins.forEach((user: User) => {
-      this.emailsService.sendEmailTobyVarabel(user, 3, 4);
+      this.emailsService.sendEmailTobyVarabel(user, 3);
     });
     return await this.iniRepository.findOne({
       where: { id: new_init.id },
@@ -171,7 +171,7 @@ export class InitiativeService {
         const user = await this.userService.userRepository.findOne({
           where: { id: role?.user_id },
         });
-        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, 11);
+        if (user) this.emailsService.sendEmailTobyVarabel(user, 10);
       }
       return await this.iniRolesRepository.save(newRole, { reload: true });
     }
@@ -189,7 +189,7 @@ export class InitiativeService {
       };
       //To the user that was added by the Admin or Leader/Coordinator
 
-      this.emailsService.sendEmailTobyVarabel({full_name:'',email:newRole.email}, 10, 11);
+      this.emailsService.sendEmailTobyVarabel({full_name:'',email:newRole.email}, 10);
       
       return await this.iniRolesRepository.save(newRole, { reload: true });
     }
@@ -324,7 +324,7 @@ export class InitiativeService {
         if (found_users.length) {
           user_role.user_id = found_users[0].id;
           // To the user that was added by the Admin or Leader/Coordinator
-          this.emailsService.sendEmailTobyVarabel(found_users[0], 7, 8);
+          this.emailsService.sendEmailTobyVarabel(found_users[0], 7);
 
           await this.iniRolesRepository.save(user_role);
         }
