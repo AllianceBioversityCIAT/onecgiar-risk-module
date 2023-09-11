@@ -81,7 +81,7 @@ export class RiskService {
           (role.role == 'Leader' || role?.role == 'Coordinator') &&
           role?.user?.id
         )
-          this.emailsService.sendEmailTobyVarabel(role?.user, 1, 2);
+          this.emailsService.sendEmailTobyVarabel(role?.user, 1);
       });
 
     return created_risk;
@@ -110,7 +110,7 @@ export class RiskService {
         relations: ['user'],
       });
       if (risk_owner_role?.user)
-        this.emailsService.sendEmailTobyVarabel(risk_owner_role?.user, 5, 6);
+        this.emailsService.sendEmailTobyVarabel(risk_owner_role?.user, 5);
     }
 
     return created_risk;
