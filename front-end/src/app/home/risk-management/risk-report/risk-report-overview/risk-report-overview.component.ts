@@ -147,11 +147,18 @@ export class RiskReportOverviewComponent implements OnInit {
     this.dataSourceForPdf = new MatTableDataSource<any>(
       this.AllRisk.notredundentRisk
     );
+    if(this.AllRisk?.redundentRisk?.length != 0 && this.AllRisk?.risks?.length == 0) {
+      this.toolTipMessage = 'All Risks are redundant';
+    }
+    console.log(this.AllRisk)
     // check if all risks are redundent
     this.isTrue = this.AllRisk.risks.every((obj: any) => obj.redundant == true);
     this.dontNeedHelp = this.AllRisk.risks.every(
       (obj: any) => obj.request_assistance == false
     );
+    if(this.dontNeedHelp == false) {
+      this.toolTipMessage = 'There is request assistance';
+    }
   }
   async loadRisks() {
     this.AllRisk = await this.riskService.getRisks(this.id, this.filters);
@@ -163,6 +170,9 @@ export class RiskReportOverviewComponent implements OnInit {
     this.dontNeedHelp = this.AllRisk.risks.every(
       (obj: any) => obj.request_assistance == false
     );
+    if(this.dontNeedHelp == false) {
+      this.toolTipMessage = 'There is request assistance';
+    }
   }
   dontNeedHelp!: boolean;
   isTrue: boolean = false;
@@ -178,6 +188,7 @@ export class RiskReportOverviewComponent implements OnInit {
   reload = true;
   publishStatus!: any;
   publishLocalStoreg!: any;
+  toolTipMessage:any;
   async ngOnInit() {
     this.publishStatus = await this.variableService.getPublishStatus();
     this.user_info = this.userService.getLogedInUser();
@@ -197,11 +208,13 @@ export class RiskReportOverviewComponent implements OnInit {
     this.loadInitiative();
 
     this.socket.connect();
+
+    if(this.publishStatus.value == '0') {
+      this.toolTipMessage = 'Admin closed publish';
+    }
   }
 
-  // ngOnDestroy(): void {
-  //   this.socket.disconnect();
-  // }
+  
   canPublish() {
     return (
       this.user_info?.role == 'admin' ||

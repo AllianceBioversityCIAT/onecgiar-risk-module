@@ -50,7 +50,9 @@
           </button>
         </div>
         <!-- btn-3 -->
-        <div class="risk-report-button-box">
+        <div class="risk-report-button-box"
+        [matTooltip]="toolTipMessage"
+        >
           <button
             [disabled]="
               !canPublish() ||
