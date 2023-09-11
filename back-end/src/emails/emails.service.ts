@@ -98,11 +98,11 @@ export class EmailsService {
     return `
     
     <div style="height: 800px; background-color: #f7f7f7">
-    <div style="height: 150px; background-color: rgb(107, 151, 237)">
-        <img width="50" alt="SHL" style="margin: 30px; margin-bottom:0px" src="https://www.cgiar.org/wp/wp-content/themes/cgiar/assets/images/logo_white-9a4b0e50b1.png">
-        <div style="margin: 0px; height: 90px; display: inline-block; width: 42%"></div>
+    <div style="height: 150px; background-color: rgb(67, 98, 128)">
+        <img width="50" alt="CGIAR" style="margin: 30px; margin-bottom:0px" src="https://www.cgiar.org/wp/wp-content/themes/cgiar/assets/images/logo_white-9a4b0e50b1.png">
+        <h2 style="margin: 0px; height: 48px; display: inline; position: absolute;color: white;top: 46px;"><b>CGIAR 360</b> Risk Management</h2>
         <div style="height: 60px; width: 70%; margin: auto; background-color: #fff; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-            <h2 style="color: rgb(107, 151, 237); letter-spacing: 2px; margin: 0 auto;text-align: center; margin-top: 15px; border-bottom: 1px solid #ebeae8; width: 70%; padding: 11px;">NOTIFY</h2>
+            <h2 style="color: rgb(67, 98, 128); letter-spacing: 2px; margin: 0 auto;text-align: center; margin-top: 15px; border-bottom: 1px solid #ebeae8; width: 70%; padding: 11px;">NOTIFY</h2>
         </div>
     </div>
     <div style="width: 70%; margin: auto; background-color: #fff; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
@@ -128,7 +128,7 @@ export class EmailsService {
             </p>
             <br>
             <br>
-            <a style="color: rgb(107, 151, 237)" traget="_blank" href="${'http://localhost:4200'}/request/view/${1}">${
+            <a style="color: rgb(67, 98, 128)" traget="_blank" href="${'http://localhost:4200'}/request/view/${1}">${
       process.env.FRONTEND
     }/request/view/${1}</a>
         `;

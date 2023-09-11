@@ -188,12 +188,9 @@ export class InitiativeService {
         role: role.role,
       };
       //To the user that was added by the Admin or Leader/Coordinator
-      if (role?.user_id) {
-        const user = await this.userService.userRepository.findOne({
-          where: { id: role?.user_id },
-        });
-        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, 11);
-      }
+
+      this.emailsService.sendEmailTobyVarabel({full_name:'',email:newRole.email}, 10, 11);
+      
       return await this.iniRolesRepository.save(newRole, { reload: true });
     }
     else {
