@@ -24,8 +24,6 @@ import { RiskReportComponent } from '../risk-report.component';
 import { AppSocket } from 'src/app/services/socket.service';
 import { Meta, Title } from '@angular/platform-browser';
 
-import { filter } from 'rxjs';
-
 @Component({
   selector: 'app-risk-report-form',
   templateUrl: './risk-report-form.component.html',
@@ -155,7 +153,8 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
             `${this.newRiskForm.value.title} has been updated`
           );
           // to refresh table
-          this.RiskReportcomponent.loadInitiative();
+          await this.riskService.getRisks(this.riskId, null);
+          // this.RiskReportcomponent.loadInitiative();
           setTimeout(() => {
             this.router.navigate([
               `/home/${this.initiativeId}/${this.officalCode}`,
@@ -174,7 +173,8 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
             `${this.newRiskForm.value.title} has been created`
           );
           // to refresh table
-          this.RiskReportcomponent.loadInitiative();
+          await this.riskService.getRisks(this.riskId, null);
+          // this.RiskReportcomponent.loadInitiative();
           setTimeout(() => {
             this.router.navigate([
               `/home/${this.initiativeId}/${this.officalCode}`,

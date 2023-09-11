@@ -55,7 +55,6 @@ export class UsersController {
     type: getUsers,
   })
   async getUsers(@Query() query) {
-    console.log(query)
     if(query.search == 'teamMember') {
       return this.usersService.userRepository.createQueryBuilder('users')
       .where("users.full_name like :full_name", { full_name: `%${query.full_name}%` })
@@ -69,9 +68,9 @@ export class UsersController {
       const [result, total] = await this.usersService.userRepository.findAndCount({
         where: {
           // full_name: query?.searchValue ? ILike(`%${query?.searchValue}%`) : null,
-          email: query?.searchValue ? ILike(`%${query?.searchValue}%`) : null,
+          email: query?.email ? ILike(`%${query?.email}%`) : null,
           // id: query?.id ? query?.id : null,
-          // role: query?.role ? query?.role : null,
+          role: query?.role ? query?.role : null,
         },
         order: { ...this.sort(query) },
         take: take == null ? null : take,

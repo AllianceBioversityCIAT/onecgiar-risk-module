@@ -68,8 +68,6 @@ export class RiskReportTableComponent {
     private socket: AppSocket,
     private loading: LoadingService,
     private cd: ChangeDetectorRef,
-    private RiskReportComponent: RiskReportComponent,
-    // private RiskReportOverviewComponent: RiskReportOverviewComponent,
     private titleService: Title
   ) {}
 
@@ -258,8 +256,7 @@ export class RiskReportTableComponent {
   }
   async checkValue(id: number, value: any) {
     await this.riskService.updateRedundant(id, value);
-    this.RiskReportComponent.loadInitiative();
-    // this.RiskReportOverviewComponent.loadInitiative();
+    this.refresh.emit();
   }
   canEdit() {
     return (

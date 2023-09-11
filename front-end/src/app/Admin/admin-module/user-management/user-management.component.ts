@@ -8,6 +8,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { Meta, Title } from '@angular/platform-browser';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-management',
@@ -15,12 +16,11 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./user-management.component.scss'],
 })
 export class UserManagementComponent implements OnInit {
-  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
   constructor(
-    // private apiUser: ApiUserService,
+    private fb: FormBuilder,
     private users: UserService,
     private dialog: MatDialog,
     private headerService: HeaderService,
@@ -40,9 +40,30 @@ export class UserManagementComponent implements OnInit {
   length!: number;
   pageSize: number = 5;
   pageIndex: number = 1;
+  filterForm: FormGroup = new FormGroup({});
+
+  sort = [
+    { name: 'ID (ASC)', value: 'id,ASC' },
+    { name: 'ID (DESC)', value: 'id,DESC' },
+    { name: 'Name (ASC)', value: 'full_name,ASC' },
+    { name: 'Name (DESC)', value: 'full_name,DESC' },
+  ];
+
+  setForm() {
+    this.filterForm.valueChanges.subscribe(() => {
+      this.filters = this.filterForm.value;
+      this.init();
+    });
+  }
+
   async ngOnInit() {
+    this.filterForm = this.fb.group({
+      email: [null],
+      role: [null],
+      sort: [null],
+    });
     await this.init();
-    await this.applysort();
+    this.setForm();
 
     this.title.setTitle('User management');
     this.meta.updateTag({ name: 'description', content: 'User management' });
@@ -67,29 +88,11 @@ export class UserManagementComponent implements OnInit {
     this.dataSource = this.data.result;
   }
 
-  async applysort() {
-    this.sort.sortChange.subscribe(async (res) => {
-      let finalSort = `${res.active},${res.direction}`;
-      this.filters = { ...this.filters, sort: finalSort };
-      await this.init();
-    });
-  }
-
-  // async filter(filters: any) {
-  //   this.filters = filters;
-  //   await this.init();
-  // }
-
-  async applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.filters = { ...this.filters, searchValue: filterValue };
-    await this.init();
-  }
+  
 
   displayedColumns: string[] = ['id', 'full_name', 'email', 'role', 'action'];
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
@@ -152,15 +155,8 @@ export class UserManagementComponent implements OnInit {
     await this.users.exportUsers();
   }
 
-  onReset() {}
-
-
-
-
-
-
-
-
-
-  resetForm(){}
+  resetForm() {
+    this.filterForm.reset();
+    this.filterForm.markAsUntouched();
+  }
 }
