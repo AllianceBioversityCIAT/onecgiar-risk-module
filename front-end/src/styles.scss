@@ -11,9 +11,8 @@
 //
 @import "app/sass/base/base";
 @import "app/sass/abstracts/variables";
-@import "~@ng-select/ng-select/themes/material.theme.css";
-
-::ng-deep .cdk-overlay-pane .x {
+@import "~@ng-select/ng-select/themes/default.theme.css";
+:ng-deep .cdk-overlay-pane .x {
   margin: 1rem -1rem !important;
   padding: 0 1rem !important;
 }

@@ -22,14 +22,17 @@
   <form *ngIf="memberForm" [formGroup]="memberForm" class="form-dialog-content">
     <!-- //search-by-Email filed----- -->
 
-    <div class="form-dialog-content__field--grid-column" *ngIf="memberForm.controls['email']?.value == ''">
+    <div
+      class="form-dialog-content__field--grid-column"
+      *ngIf="memberForm.controls['email']?.value == ''"
+    >
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
           >Select user</mat-label
         >
       </div>
+
       <ng-select
-        appearance="outline"
         #agesSelect
         [items]="users"
         bindValue="id"
@@ -47,7 +50,9 @@
           let-search="searchTerm"
           let-index="index"
         >
-          <span>{{ item.full_name }}</span> <span>({{ item.email }})</span>
+          <div class="ng-select-option-flex">
+            <span>{{ item.full_name }}</span> <span>({{ item.email }})</span>
+          </div>
         </ng-template>
       </ng-select>
     </div>
