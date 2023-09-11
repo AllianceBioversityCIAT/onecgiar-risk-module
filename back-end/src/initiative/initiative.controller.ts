@@ -173,12 +173,13 @@ risk.title = row['title'];
       Title: null,
       Description: null,
       'Risk owner': null,
-      'Target likelihood': null,
-      'Target impact': null,
-      'Target Risk Level': null,
       'Current likelihood': null,
       'Current impact': null,
       'Current Risk Level': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+
       Category: null,
       'Created by': null,
       Flagged: null,
@@ -196,14 +197,15 @@ risk.title = row['title'];
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
-    template['Target likelihood'] = element.target_likelihood;
-    template['Target impact'] = element.target_impact;
-    template['Target Risk Level'] =
-      element.target_likelihood * element.target_impact;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
       element.current_likelihood * element.current_impact;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+
     template.Category = element.category.title;
     template['Created by'] = element.created_by?.full_name;
     // template.Redundant = element.redundant;
@@ -272,12 +274,13 @@ risk.title = row['title'];
       Title: null,
       Description: null,
       'Risk owner': null,
-      'Target likelihood': null,
-      'Target impact': null,
-      'Target Risk Level': null,
       'Current likelihood': null,
       'Current impact': null,
       'Current Risk Level': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+
 
       Category: null,
       'Created by': null,
@@ -302,14 +305,15 @@ risk.title = row['title'];
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
-    template['Target likelihood'] = element.target_likelihood;
-    template['Target impact'] = element.target_impact;
-    template['Target Risk Level'] =
-      element.target_likelihood * element.target_impact;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
       element.current_likelihood * element.current_impact;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+
 
     template.Category = element.category.title;
     template['Created by'] = element.created_by?.full_name;
@@ -385,12 +389,13 @@ risk.title = row['title'];
       Title: null,
       Description: null,
       'Risk owner': null,
-      'Target likelihood': null,
-      'Target impact': null,
-      'Target Risk Level': null,
       'Current likelihood': null,
       'Current impact': null,
       'Current Risk Level': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+
       Category: null,
       'Created by': null,
       Flagged: null,
@@ -409,14 +414,15 @@ risk.title = row['title'];
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
-    template['Target likelihood'] = element.target_likelihood;
-    template['Target impact'] = element.target_impact;
-    template['Target Risk Level'] =
-      element.target_likelihood * element.target_impact;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
       element.current_likelihood * element.current_impact;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+
     template.Category = element.category.title;
     template['Created by'] = element.created_by?.full_name;
     // template.Redundant = element.redundant;
@@ -482,12 +488,13 @@ risk.title = row['title'];
       Title: null,
       Description: null,
       'Risk owner': null,
-      'Target likelihood': null,
-      'Target impact': null,
-      'Target Risk Level': null,
       'Current likelihood': null,
       'Current impact': null,
       'Current Risk Level': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+
       Category: null,
       'Created by': null,
       // "Flag to SGD":null,
@@ -504,14 +511,15 @@ risk.title = row['title'];
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
-    template['Target likelihood'] = element.target_likelihood;
-    template['Target impact'] = element.target_impact;
-    template['Target Risk Level'] =
-      element.target_likelihood * element.target_impact;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
       element.current_likelihood * element.current_impact;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+
     template.Category = element.category.title;
     template['Created by'] = element.created_by?.full_name;
     template['Due Date'] =
@@ -579,12 +587,13 @@ risk.title = row['title'];
       Title: null,
       Description: null,
       'Risk owner': null,
-      'Target likelihood': null,
-      'Target impact': null,
-      'Target Risk Level': null,
       'Current likelihood': null,
       'Current impact': null,
       'Current Risk Level': null,
+      'Target likelihood': null,
+      'Target impact': null,
+      'Target Risk Level': null,
+ 
       Category: null,
       'Created by': null,
       // "Flag to SGD":null,
@@ -604,14 +613,15 @@ risk.title = row['title'];
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
-    template['Target likelihood'] = element.target_likelihood;
-    template['Target impact'] = element.target_impact;
-    template['Target Risk Level'] =
-      element.target_likelihood * element.target_impact;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
       element.current_likelihood * element.current_impact;
+    template['Target likelihood'] = element.target_likelihood;
+    template['Target impact'] = element.target_impact;
+    template['Target Risk Level'] =
+      element.target_likelihood * element.target_impact;
+
     template.Category = element.category.title;
     template['Created by'] = element.created_by?.full_name;
     template['Due Date'] =
