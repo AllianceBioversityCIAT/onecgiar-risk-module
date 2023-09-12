@@ -75,7 +75,7 @@
             <span class="h3">Description</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="td-h">{{ element.description }}</span>
+            <span class="td-h" [innerHTML]="element.description | safeHtml : 'safeHtml for mitigation'"></span>
           </td>
         </ng-container>
 

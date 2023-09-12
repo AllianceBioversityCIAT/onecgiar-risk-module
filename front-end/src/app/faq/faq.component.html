@@ -56,8 +56,7 @@
               <mat-panel-title>{{ item.question }}</mat-panel-title>
               <mat-panel-description> </mat-panel-description>
             </mat-expansion-panel-header>
-            <p class="panel1">
-              {{ item.answer }}
+            <p class="panel1" [innerHTML]="item.answer | safeHtml : 'safeHtml for mitigation'">
             </p>
             <!-- <span class="panel2">{{ item.answer2 }}</span> -->
           </mat-expansion-panel>

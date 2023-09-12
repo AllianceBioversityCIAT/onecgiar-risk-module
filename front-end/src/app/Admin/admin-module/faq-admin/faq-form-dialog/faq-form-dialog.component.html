@@ -50,19 +50,16 @@
           >Answer<span class="star">*</span></mat-label
         >
       </div>
-      <mat-form-field
-        class="form-dialog-content__field"
-        floatLabel="always"
-        hideRequiredMarker
-        appearance="outline"
+
+      <div class="NgxEditor__Wrapper">
+        <ngx-editor-menu [toolbar]="toolbar" [editor]="editor"> </ngx-editor-menu>
+        <ngx-editor [editor]="editor" [ngModel]="html" [disabled]="false" [placeholder]="'Type here...'" formControlName="answer"></ngx-editor>
+      </div>
+      <mat-error
+      class="error"
+      *ngIf="Form.controls?.answer?.errors?.['required'] && Form.controls.answer.touched"
+      >Answer is required</mat-error
       >
-        <textarea matInput formControlName="answer"  placeholder="Answer"></textarea>
-        <mat-error
-        class="error"
-        *ngIf="Form.controls?.answer?.errors?.['required']"
-        >Answer is required</mat-error
-        >
-      </mat-form-field>
     </div>
 
 
