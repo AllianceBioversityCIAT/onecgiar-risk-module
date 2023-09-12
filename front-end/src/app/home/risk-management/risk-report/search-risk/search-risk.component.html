@@ -86,7 +86,7 @@
           formControlName="owner"
         >
           <mat-option>None</mat-option>
-          <mat-option *ngFor="let user of riskUsers" [value]="user.id">
+          <mat-option *ngFor="let user of risksOwners" [value]="user.id">
             {{ user?.user?.full_name || user?.email }}
           </mat-option>
         </mat-select>

@@ -89,6 +89,7 @@ export class SearchRiskComponent {
   id: number = 0;
   initiativeId: any;
   user_info:any;
+  risksOwners:any
   async ngOnInit() {
     let time: any = null;
     const ini = await this.initiativeService.getInitiative(
@@ -104,6 +105,12 @@ export class SearchRiskComponent {
     this.riskUsers = await this.riskService.getRiskUsers(
       this.initiative_id as number
     );
+    
+    this.risksOwners = ini.risks.filter((d: any) => {
+      return d.risk_owner != null ? d.risk_owner : null
+    }).map((s: any) => s.risk_owner);
+    this.risksOwners = [...new Map(this.risksOwners.map((item: any) => [item['id'], item])).values()]
+
     this.setForm();
     this.categories = await this.riskService.getInitiativeCategories(
       this.initiative_id as number
