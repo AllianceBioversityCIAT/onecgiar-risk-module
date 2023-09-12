@@ -1,7 +1,9 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Get,
+  Param,
   ParseIntPipe,
   Query,
   UseGuards,
@@ -13,13 +15,21 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
+import { Brackets, ILike, Like } from 'typeorm';
 
 @ApiTags('emails')
 @Controller('emails')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class EmailsController {
   constructor(private emailService: EmailsService) {}
-
+  sort(query) {
+    if (query?.sort) {
+      let obj = {};
+      const sorts = query.sort.split(',');
+      obj[sorts[0]] = sorts[1];
+      return obj;
+    } else return { id: 'ASC' };
+  }
   @ApiBearerAuth()
   @Roles(Role.Admin)
   @Get('')
@@ -27,17 +37,35 @@ export class EmailsController {
     description: '',
     type: getEmailsDto,
   })
-  getEmailLogs(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
-  ) {
-    limit = limit > 100 ? 100 : limit;
-    return this.emailService.emailLogsPaginate({
-      page,
-      limit,
-      route: '',
-    });
+  async getEmailLogs(@Query() query: any) {
+    let status :any = 'All';
+    if(query?.status == 'true') {
+      status = true;
+    }
+    else if(query?.status == 'false'){
+      status = false;
+    }
+    const take = query.limit || 10
+    const skip=(Number(query.page)-1)*take;
+      let result = await this.emailService.repo.createQueryBuilder('email');
+      if(status != 'All') {
+        result.where('status = :status', { status: status })
+      }
+      result.andWhere(new Brackets(qb => {
+        qb.where("email LIKE :email", { email: (`%${query?.search || ''}%`) })
+        .orWhere("name LIKE :name", { name: (`%${query?.search || ''}%`) });                                 
+      })) 
+      .orderBy(this.sort(query))
+      .skip(skip || 0)
+      .take(take || 10)
+
+      const finalResult = await result.getManyAndCount();
+      return {
+        result : finalResult[0],
+        count: finalResult[1]
+      }
   }
+
   @Roles(Role.Admin)
   @Get('test/test')
   async test() {
@@ -45,25 +73,5 @@ export class EmailsController {
     const email1 = await this.emailService.sendEmailTobyVarabel(1,1)
 
     return email1;
-  }
-  
-
-  @ApiBearerAuth()
-  @Roles(Role.Admin)
-  @Get('filter-search')
-  async filterEmailLogsTable(@Query('search') search: string) {
-    return this.emailService.filterSearchEmailLogs(search);
-  }
-
-  @ApiBearerAuth()
-  @ApiParam({ name: 'status' , type: filterStatusReq})
-  @Roles(Role.Admin)
-  @Get('filter-status')
-  async filterStatusLogsTable(@Query('status') status: any) {
-    if (status == 'false') {
-      return this.emailService.getEmailsByStatus(false);
-    } else {
-      return this.emailService.getEmailsByStatus(true);
-    }
   }
 }

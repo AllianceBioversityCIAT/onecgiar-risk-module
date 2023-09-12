@@ -50,8 +50,30 @@
               [placeholder]="'All'"
               id="select-where"
             >
+            <mat-option value="All">All</mat-option>
               <mat-option value="true">Sent</mat-option>
               <mat-option value="false"> Not Sent</mat-option>
+            </mat-select>
+          </div>
+        </div>
+
+        <div class="sec-2">
+          <div class="risk-management-form-field field-3">
+            <mat-label class="risk-management-form-field__label"
+              >Sort</mat-label
+            >
+
+            <mat-select
+              formControlName="sort"
+              panelClass="x"
+              class="risk-management-form-field-box__input-3 aa"
+              [placeholder]="'None'"
+              id="select-where"
+            >
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let item of sort" [value]="item.value">
+              {{ item.name }}
+            </mat-option>
             </mat-select>
           </div>
         </div>

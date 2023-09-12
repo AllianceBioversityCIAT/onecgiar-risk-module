@@ -84,8 +84,7 @@
           *ngFor="let term of glossary"
         >
           <p class="glossary-show-records__text">{{ term.title }}</p>
-          <p class="glossary-show-records__text--1">
-            {{ term.description }}
+          <p class="glossary-show-records__text--1" [innerHTML]="term.description | safeHtml : 'safeHtml for mitigation'">
           </p>
         </div>
       </div>

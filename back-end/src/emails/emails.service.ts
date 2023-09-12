@@ -14,7 +14,7 @@ import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class EmailsService {
   constructor(
-    @InjectRepository(Email) private repo: Repository<Email>,
+    @InjectRepository(Email) public repo: Repository<Email>,
     private variabelService: VariablesService,
     private usersService: UsersService,
   ) {}
@@ -32,11 +32,19 @@ export class EmailsService {
   }
   async getEmailsByStatus(status: boolean) {
     // return await this.repo.find({ where: { status } });
-    var emaillogs = await this.repo
+    if(status == null) {
+      var emaillogs = await this.repo
+      .createQueryBuilder('e')
+      .getMany();
+    return emaillogs;
+    } else {
+      var emaillogs = await this.repo
       .createQueryBuilder('e')
       .where({ status: Boolean(status) })
       .getMany();
     return emaillogs;
+    }
+
   }
   async send(email: Email) {
     if (Boolean(parseInt(process.env.CAN_SEND_EMAILS))) {

@@ -89,7 +89,7 @@
             <span class="h3">Answer</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="td-h">{{ element.answer }}</span>
+            <span class="td-h" [innerHTML]="element.answer | safeHtml : 'safeHtml for mitigation'"></span>
           </td>
         </ng-container>
 
