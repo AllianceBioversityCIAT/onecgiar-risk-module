@@ -7,6 +7,7 @@ import { PhasesService } from 'src/app/services/phases.service';
 import { PhaseDialogComponent } from './phase-dialog/phase-dialog.component';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-phases',
@@ -33,7 +34,9 @@ export class PhasesComponent implements AfterViewInit {
   constructor(
     private phasesService: PhasesService,
     private dialog: MatDialog,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -49,6 +52,12 @@ export class PhasesComponent implements AfterViewInit {
     this.dataSource = new MatTableDataSource(this.phases);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    this.title.setTitle('Phases');
+    this.meta.updateTag({
+      name: 'description',
+      content: 'Phases',
+    });
   }
 
   openDialog(id: number = 0): void {

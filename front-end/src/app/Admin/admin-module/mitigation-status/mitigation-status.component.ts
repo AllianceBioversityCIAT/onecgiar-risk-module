@@ -31,10 +31,10 @@ export class MitigationStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
-    this.title.setTitle('Mitigation status');
+    this.title.setTitle('Actions /Controls To Manage Risks');
     this.meta.updateTag({
       name: 'description',
-      content: 'Mitigation status',
+      content: 'Actions /Controls To Manage Risks',
     });
   }
 
