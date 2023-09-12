@@ -37,9 +37,8 @@ export class EmailsController {
     description: '',
     type: getEmailsDto,
   })
-  async getEmailLogs(@Query() query) {
-    console.log(query?.status)
-    let status :any = '';
+  async getEmailLogs(@Query() query: any) {
+    let status :any = 'All';
     if(query?.status == 'true') {
       status = true;
     }
@@ -48,51 +47,25 @@ export class EmailsController {
     }
     const take = query.limit || 10
     const skip=(Number(query.page)-1)*take;
-    if(query.status != 'All') {
-      let [result, total] = await this.emailService.repo.createQueryBuilder('email')
-      .where('status = :status', { status: status })
-      .andWhere(new Brackets(qb => {
+      let result = await this.emailService.repo.createQueryBuilder('email');
+      if(status != 'All') {
+        result.where('status = :status', { status: status })
+      }
+      result.andWhere(new Brackets(qb => {
         qb.where("email LIKE :email", { email: (`%${query?.search || ''}%`) })
         .orWhere("name LIKE :name", { name: (`%${query?.search || ''}%`) });                                 
       })) 
       .orderBy(this.sort(query))
       .skip(skip || 0)
       .take(take || 10)
-      .getManyAndCount();
-      return {
-        result : result,
-        count: total
-      } 
-    }
-    else {
-      let [result, total] = await this.emailService.repo.createQueryBuilder('email')
-      .where(new Brackets(qb => {
-        qb.where("email LIKE :email", { email: (`%${query?.search || ''}%`) })
-        .orWhere("name LIKE :name", { name: (`%${query?.search || ''}%`) });                                 
-      })) 
-      .orderBy(this.sort(query))
-      .skip(skip || 0)
-      .take(take || 10)
-      .getManyAndCount();
-      return {
-        result : result,
-        count: total
-      } 
-      
-    }
 
+      const finalResult = await result.getManyAndCount();
+      return {
+        result : finalResult[0],
+        count: finalResult[1]
+      }
   }
-  // getEmailLogs(
-  //   @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-  //   @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
-  // ) {
-  //   limit = limit > 100 ? 100 : limit;
-  //   return this.emailService.emailLogsPaginate({
-  //     page,
-  //     limit,
-  //     route: '',
-  //   });
-  // }
+
   @Roles(Role.Admin)
   @Get('test/test')
   async test() {
@@ -101,27 +74,4 @@ export class EmailsController {
 
     return email1;
   }
-  
-
-  // @ApiBearerAuth()
-  // @Roles(Role.Admin)
-  // @Get('filter-search')
-  // async filterEmailLogsTable(@Query('search') search: string) {
-  //   return this.emailService.filterSearchEmailLogs(search);
-  // }
-
-  // @ApiBearerAuth()
-  // @ApiParam({ name: 'status' , type: filterStatusReq})
-  // @Roles(Role.Admin)
-  // @Get('filter-status')
-  // async filterStatusLogsTable(@Query('status') status: any) {
-  //   if (status == 'false') {
-  //     return this.emailService.getEmailsByStatus(false);
-  //   } else if(status == 'true'){
-  //     return this.emailService.getEmailsByStatus(true);
-  //   }
-  //   else {
-  //     return this.emailService.getEmailsByStatus(null);
-  //   }
-  // }
 }
