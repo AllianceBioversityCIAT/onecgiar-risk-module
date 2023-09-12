@@ -25,5 +25,16 @@
 .btn-primary-size {
   width: auto;
   height: auto;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1rem;
+}
+
+.create-flex-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.create-text {
+  position: relative;
+  top: 0.1rem;
 }

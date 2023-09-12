@@ -56,11 +56,27 @@
       <div class="user-management__button-box">
         <button
           class="parameters-settings__button-box__btn btn-primary-size"
-          (click)="openFormDialog('', 'Create Action to manage risk')"
+          (click)="openFormDialog('', 'Actions /Controls to manage risks')"
           mat-raised-button
           color="primary"
         >
-          Create Action to manage risk
+          <div class="create-flex-box">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                fill="white"
+              />
+            </svg>
+            <span class="create-text">Create</span>
+          </div>
         </button>
         <!-- <button
         class="user-management__button-box__btn btn-export-size"
@@ -125,7 +141,9 @@
               <button
                 matTooltip="Edit"
                 style="border: none; cursor: pointer; background-color: #ffffff"
-                (click)="editMitigation(element, 'Edit Action to manage risk')"
+                (click)="
+                  editMitigation(element, 'Actions /Controls to manage risks')
+                "
               >
                 <mat-icon class="user-management-table__icon">
                   <img

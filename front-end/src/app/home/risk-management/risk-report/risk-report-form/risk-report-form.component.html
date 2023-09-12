@@ -914,11 +914,28 @@
         <!-- Add mitigation-btn -->
         <div class="risk-report-actions-controls-btn-box">
           <button
-            class="risk-report-actions-controls-btn-box__btn btn-primary-size"
+            class="parameters-settings__button-box__btn btn-primary-size"
             (click)="openNewProposedDialog()"
             mat-raised-button
+            color="primary"
           >
-            Add
+            <div class="create-flex-box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                  fill="white"
+                />
+              </svg>
+              <span class="add-text">Add</span>
+            </div>
           </button>
         </div>
       </div>
