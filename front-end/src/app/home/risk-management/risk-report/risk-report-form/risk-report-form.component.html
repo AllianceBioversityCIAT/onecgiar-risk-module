@@ -240,6 +240,12 @@
             <ng-container *ngFor="let riskCat of riskCategories">
               <mat-option *ngIf="riskCat.disabled == 0" [value]="riskCat.id">
                 {{ riskCat.title }}
+                <mat-icon
+                  matTooltip="{{ riskCat.description }}"
+                  [matTooltipPosition]="'left'"
+                  matSuffix
+                  >help_outline</mat-icon
+                >
               </mat-option>
             </ng-container>
           </mat-select>
