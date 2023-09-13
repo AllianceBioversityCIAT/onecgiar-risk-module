@@ -1,9 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder , Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
-
-import { Editor, Toolbar } from 'ngx-editor';
 import { ToastrService } from 'ngx-toastr';
 import { AnnouncementService } from 'src/app/services/announcement.service';
 
@@ -22,19 +19,7 @@ export class AnnouncementsFormDialogComponent implements OnInit {
     private fb: FormBuilder,
     private announcementService: AnnouncementService,
   ) {}
-  editor: Editor= new Editor();
 
-  html:string = '';
-  toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    ['link'],
-    ['text_color', 'background_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-  ];
 
   announcementForm = this.fb.group({
     id:this.fb.control({value:'',disabled:true}),
@@ -44,15 +29,10 @@ export class AnnouncementsFormDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.editor = new Editor();
     this.setValue();
     console.log(this.announcementData.title)
   }
 
-  // make sure to destory the editor
-  ngOnDestroy(): void {
-    this.editor.destroy();
-  }
 
 
 

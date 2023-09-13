@@ -16,7 +16,7 @@ export class GlossaryService extends MainService {
   async addGlossary(data: any) {
     return firstValueFrom(
       this.http
-        .post(this.backend_url + '/Glossary', data, {headers: this.headers})
+        .post(this.backend_url + '/glossary', data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -33,7 +33,7 @@ export class GlossaryService extends MainService {
       });
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/Glossary?page=${page}&limit=${limit}`, {
+        .get(this.backend_url + `/glossary?page=${page}&limit=${limit}`, {
           headers: this.headers,
            params: finalFilters})
         .pipe(map((d) => d))
@@ -43,7 +43,7 @@ export class GlossaryService extends MainService {
   async getGlossaryById(id: number) {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/Glossary/${id}`, {headers: this.headers})
+        .get(this.backend_url + `/glossary/${id}`, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -51,7 +51,7 @@ export class GlossaryService extends MainService {
   async updateGlossary(id: any, data: any) {
     return firstValueFrom(
       this.http
-        .put(this.backend_url + `/Glossary/${id}`, data, {headers: this.headers})
+        .put(this.backend_url + `/glossary/${id}`, data, {headers: this.headers})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }
@@ -59,7 +59,7 @@ export class GlossaryService extends MainService {
   async deleteGlossary(id:any) {
     return firstValueFrom(
       this.http
-        .delete(this.backend_url + `/Glossary/${id}`, {
+        .delete(this.backend_url + `/glossary/${id}`, {
           headers: this.headers,
         })
         .pipe(map((d) => d))

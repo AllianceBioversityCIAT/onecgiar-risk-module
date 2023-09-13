@@ -52,8 +52,18 @@
       </div>
 
       <div class="NgxEditor__Wrapper">
-        <ngx-editor-menu [toolbar]="toolbar" [editor]="editor"> </ngx-editor-menu>
-        <ngx-editor [editor]="editor" [ngModel]="html" [disabled]="false" [placeholder]="'Type here...'" formControlName="answer"></ngx-editor>
+        <!-- <ngx-editor-menu [toolbar]="toolbar" [editor]="editor"> </ngx-editor-menu>
+        <ngx-editor [editor]="editor" [ngModel]="html" [disabled]="false" [placeholder]="'Type here...'" formControlName="answer"></ngx-editor> -->
+        <editor formControlName="answer"
+        [init]="{ base_url: '/tinymce', 
+        selector: 'textarea',
+        menubar:false,
+        suffix: '.min',  
+        plugins: 'image code link paste fullscreen ', 
+        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify  | bullist numlist outdent indent  | forecolor  |fullscreen',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+      }">
+    </editor>
       </div>
       <mat-error
       class="error"
