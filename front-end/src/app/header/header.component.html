@@ -167,7 +167,7 @@
         </a>
       </li>
 
-      <li>
+      <li *ngIf="user_info?.role == 'admin'">
         <a
           routerLink="dashboard"
           class="main-nav-link"

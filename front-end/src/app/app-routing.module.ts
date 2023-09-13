@@ -163,6 +163,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [AdminGuard],
     component: DashboardComponent,
   },
 
