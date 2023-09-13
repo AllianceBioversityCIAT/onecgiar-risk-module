@@ -17,7 +17,7 @@ import {
     title: string;
 
     @ApiProperty()
-    @Column({ type: "text" })
+    @Column({ type: 'longtext' })
     description: string;
   
     @ApiProperty()

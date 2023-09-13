@@ -17,7 +17,7 @@ import {
     question: string;
 
     @ApiProperty()
-    @Column({ type: "text" })
+    @Column({ type: "longtext" })
     answer: string;
   
     @ApiProperty()

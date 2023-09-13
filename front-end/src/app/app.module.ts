@@ -80,6 +80,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
 import { PhaseDialogComponent } from './Admin/admin-module/phases/phase-dialog/phase-dialog.component';
 import { EditConstantFormComponent } from './Admin/admin-module/parameters-settings/settings/edit-constant-form/edit-constant-form.component';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
   declarations: [
@@ -154,6 +156,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     AvatarModule.forRoot({
       sourcePriorityOrder: avatarSourcesOrder,
     }),
+    EditorModule
   ],
   providers: [
     ApiUserService,
@@ -173,6 +176,9 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
       useClass: HttpRequestInterceptor,
       multi: true,
     },
+    {
+      provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'
+    }
   ],
   bootstrap: [AppComponent],
 })

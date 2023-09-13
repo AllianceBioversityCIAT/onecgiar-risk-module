@@ -6,7 +6,6 @@ import {
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FAQService } from 'src/app/services/faq.service';
 import { ToastrService } from 'ngx-toastr';
-import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-faq-form-dialog',
@@ -26,23 +25,6 @@ export class FaqFormDialogComponent {
     this.setValue();
   }
 
-  editor: Editor= new Editor();
-
-  html:string = '';
-  toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    ['link'],
-    ['text_color', 'background_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-  ];
-
-  ngOnDestroy(): void {
-    this.editor.destroy();
-  }
 
 
   Form = this.fb.group({

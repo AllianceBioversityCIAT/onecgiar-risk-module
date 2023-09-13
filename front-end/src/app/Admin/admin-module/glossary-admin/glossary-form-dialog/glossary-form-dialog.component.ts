@@ -6,7 +6,6 @@ import {
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { GlossaryService } from 'src/app/services/glossary.service';
-import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-glossary-form-dialog',
@@ -26,19 +25,6 @@ export class GlossaryFormDialogComponent implements OnInit{
     this.setValue();
   }
 
-  editor: Editor= new Editor();
-
-  html:string = '';
-  toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    ['link'],
-    ['text_color', 'background_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-  ];
 
   glossaryForm = this.fb.group({
     id:this.fb.control({value:'',disabled:true}),
@@ -47,9 +33,6 @@ export class GlossaryFormDialogComponent implements OnInit{
   });
 
 
-  ngOnDestroy(): void {
-    this.editor.destroy();
-  }
 
    async onSubmit() {
     const id = this.glossaryForm.getRawValue().id;
