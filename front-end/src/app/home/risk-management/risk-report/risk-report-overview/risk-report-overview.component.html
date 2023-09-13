@@ -1,4 +1,3 @@
-
 <div class="risk-report-container">
   <div class="risk-report-content">
     <nav class="risk-nav-main">
@@ -32,7 +31,7 @@
         <!-- btn-1 -->
         <div class="risk-report-button-box">
           <button
-            class="risk-report-button-box__btn"
+            class="risk-report-button-box__btn btn--animated btn--white btn"
             routerLink="./team-members"
             mat-raised-button
           >
@@ -42,7 +41,7 @@
         <!-- btn-2 -->
         <div class="risk-report-button-box">
           <button
-            class="risk-report-button-box__btn"
+            class="risk-report-button-box__btn btn--animated btn--white btn"
             routerLink="./versions"
             mat-raised-button
           >
@@ -50,9 +49,7 @@
           </button>
         </div>
         <!-- btn-3 -->
-        <div class="risk-report-button-box"
-        [matTooltip]="toolTipMessage"
-        >
+        <div class="risk-report-button-box" [matTooltip]="toolTipMessage">
           <button
             [disabled]="
               !canPublish() ||
@@ -63,7 +60,7 @@
               this.isTrue ||
               dontNeedHelp == false
             "
-            class="risk-report-button-box__btn"
+            class="risk-report-button-box__btn btn--animated btn--white btn"
             (click)="publish(initiative.id)"
             [ngClass]="{
               disabled:
@@ -84,7 +81,7 @@
         <!-- btn-4 -->
         <div class="risk-report-button-box">
           <button
-            class="risk-report-button-box__btn"
+            class="risk-report-button-box__btn btn--animated btn--white btn"
             routerLink="./risk-dashboard"
             mat-raised-button
           >
@@ -97,7 +94,7 @@
           <button
             [disabled]="!canEdit()"
             [ngClass]="{ disabled: !canEdit() }"
-            class="risk-report-button-box__btn--4"
+            class="risk-report-button-box__btn--4 btn--animated btn--white-2 btn"
             routerLink="./create-risk"
             mat-raised-button
           >
