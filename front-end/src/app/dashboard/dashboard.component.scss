@@ -147,3 +147,15 @@ highcharts-chart {
   left: 0 !important;
   top: 0 !important;
 }
+
+::ng-deep .highcharts-tooltip > tspan {
+  background-color: #fff;
+  border: 1px solid #172f8f !important;
+  border-radius: 5px;
+  opacity: 1;
+  z-index: 9999 !important;
+  padding: 0.8em;
+  left: 0 !important;
+  top: 0 !important;
+}
+
