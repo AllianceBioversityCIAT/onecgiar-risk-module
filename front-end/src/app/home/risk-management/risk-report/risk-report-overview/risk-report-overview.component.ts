@@ -153,12 +153,6 @@ export class RiskReportOverviewComponent implements OnInit {
     console.log(this.AllRisk)
     // check if all risks are redundent
     this.isTrue = this.AllRisk.risks.every((obj: any) => obj.redundant == true);
-    this.dontNeedHelp = this.AllRisk.risks.every(
-      (obj: any) => obj.request_assistance == false
-    );
-    if(this.dontNeedHelp == false) {
-      this.toolTipMessage = 'There is request assistance';
-    }
   }
   async loadRisks() {
     this.AllRisk = await this.riskService.getRisks(this.id, this.filters);
@@ -167,14 +161,7 @@ export class RiskReportOverviewComponent implements OnInit {
     this.dataSourceForPdf = new MatTableDataSource<any>(
       this.AllRisk.notredundentRisk
     );
-    this.dontNeedHelp = this.AllRisk.risks.every(
-      (obj: any) => obj.request_assistance == false
-    );
-    if(this.dontNeedHelp == false) {
-      this.toolTipMessage = 'There is request assistance';
-    }
   }
-  dontNeedHelp!: boolean;
   isTrue: boolean = false;
   AllRisk: any;
   NumberOfRisks: any;
