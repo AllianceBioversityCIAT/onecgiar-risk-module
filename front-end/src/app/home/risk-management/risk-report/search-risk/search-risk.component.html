@@ -36,10 +36,10 @@
 
         <mat-select
           class="risk-management-form-field-box__input-3 aa"
-          placeholder="Risk Category"
+          placeholder="All"
           formControlName="category"
         >
-          <mat-option>None</mat-option>
+          <mat-option>All</mat-option>
           <ng-container *ngFor="let riskCat of categories">
             <mat-option *ngIf="riskCat.disabled == 0" [value]="riskCat.id">
               {{ riskCat.title }}
@@ -62,10 +62,10 @@
 
         <mat-select
           class="risk-management-form-field-box__input-3 aa"
-          placeholder="Created by"
+          placeholder="All"
           formControlName="created_by"
         >
-          <mat-option>None</mat-option>
+          <mat-option>All</mat-option>
           <mat-option *ngFor="let user of riskRaiser" [value]="user.id">
             {{ user?.full_name }}
           </mat-option>
@@ -82,10 +82,10 @@
 
         <mat-select
           class="risk-management-form-field-box__input-3 aa"
-          placeholder="Risk Owner"
+          placeholder="All"
           formControlName="owner"
         >
-          <mat-option>None</mat-option>
+          <mat-option>All</mat-option>
           <mat-option *ngFor="let user of risksOwners" [value]="user.id">
             {{ user?.user?.full_name || user?.email }}
           </mat-option>
@@ -100,10 +100,10 @@
 
         <mat-select
           class="risk-management-form-field-box__input-3 aa"
-          placeholder="Sort"
+          placeholder="All"
           formControlName="sort"
         >
-          <mat-option>None</mat-option>
+          <mat-option>All</mat-option>
           <mat-option *ngFor="let item of sort" [value]="item.value">
             {{ item.name }}
           </mat-option>
@@ -127,9 +127,7 @@
 <div class="risk-management-export">
   <div class="risk-management-export-box">
     <div *ngIf="user_info?.role == 'admin'">
-      <mat-label
-        >Show request assistance risk</mat-label
-      >
+      <mat-label>Show request assistance risk</mat-label>
       <mat-checkbox
         labelPosition="before"
         [(ngModel)]="request_assistance"
