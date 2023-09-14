@@ -90,7 +90,7 @@ export class AwsStrategy extends PassportStrategy(Strategy, 'AWS') {
       });
 
     if (userInfo) {
-      let access_token = this.jwtService.sign({...user}, {
+      let access_token = this.jwtService.sign({...userInfo}, {
         expiresIn: 10 * 365 * 24 * 60 * 60,
       });
       return {
