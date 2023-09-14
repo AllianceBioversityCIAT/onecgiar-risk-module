@@ -1,1 +1,15 @@
 @import "../sass/pages/faq";
+
+.footer-link:link,
+.footer-link:visited {
+  text-decoration: none;
+  font-size: 1.6rem;
+  color: #436280;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.footer-link:hover,
+.footer-link:active {
+  color: #263749;
+}

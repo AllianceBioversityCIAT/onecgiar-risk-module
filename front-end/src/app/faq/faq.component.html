@@ -10,11 +10,14 @@
     <div class="faq-main-content">
       <div class="faq-content-container">
         <div class="faq-text-box">
-          <p class="faq-text-box__text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam
-          </p>
+          <address class="contacts">
+            <p class="faq-text-box__text">
+              If you have other questions please contact
+              <a class="footer-link" href="mailto:G.Solomos@cgiar.org"
+                >G.Solomos@cgiar.org</a
+              >
+            </p>
+          </address>
         </div>
 
         <mat-accordion *ngFor="let item of data">
@@ -56,8 +59,10 @@
               <mat-panel-title>{{ item.question }}</mat-panel-title>
               <mat-panel-description> </mat-panel-description>
             </mat-expansion-panel-header>
-            <p class="panel1" [innerHTML]="item.answer | safeHtml : 'safeHtml for mitigation'">
-            </p>
+            <p
+              class="panel1"
+              [innerHTML]="item.answer | safeHtml : 'safeHtml for mitigation'"
+            ></p>
             <!-- <span class="panel2">{{ item.answer2 }}</span> -->
           </mat-expansion-panel>
         </mat-accordion>
