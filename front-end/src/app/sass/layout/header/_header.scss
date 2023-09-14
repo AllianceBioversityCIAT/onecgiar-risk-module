@@ -9,11 +9,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 8.2rem;
+    height: 7rem;
   }
 
   &__main-nav {
-    height: 6.8rem;
+    height: 5.4rem;
     // background-color: #2a2e45;
 
     &__background-c-primary {
@@ -38,7 +38,7 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 1rem 1.5rem 0;
+  padding: 0.5rem 0.5rem 0;
 
   @media only screen and (max-width: 64em) {
     //change on 1024
@@ -47,8 +47,8 @@
   ////////////////////////////////
 
   &--1 {
-    width: 6.708rem;
-    height: 7.1797rem;
+    // width: 6.708rem;
+    // height: 7.0197rem;
 
     &__logo {
       // width: 4.9rem;
@@ -64,8 +64,8 @@
       font-weight: 400;
       line-height: 3rem;
       letter-spacing: 0em;
-      margin-top: 2rem;
-      color: #ffffffdf;
+      margin-top: 2.4rem;
+      color: rgba(255, 255, 255, 0.8745098039);
 
       &--1 {
         font-size: 2rem;
@@ -202,20 +202,16 @@
 
 .main-nav-link:link,
 .main-nav-link:visited {
-  margin: 1.5rem -5rem 1.5rem 4rem;
+  margin: 1.2rem -5rem 0.9rem 4rem;
   display: inline-block;
-
-  // width: 17.5rem;
-  padding: 1rem;
+  padding: 0.7rem;
   font-size: 2rem;
   font-weight: 400;
-
   letter-spacing: 0em;
   text-align: center;
   border-radius: 6px;
   text-decoration: none;
   color: #ffffff;
-
   transition: all 0.1s;
 }
 
@@ -223,4 +219,9 @@
   font-weight: 700 !important;
   color: #2a2e45 !important;
   background-color: #ffffff;
+}
+
+.header-logo-size {
+  height: 5.5rem;
+  width: 7rem;
 }
