@@ -32,12 +32,12 @@ export class EmailsComponent {
     'createdAt',
     'action',
   ];
-  emailLogs:  any = [];
+  emailLogs: any = [];
   formData: FormGroup = new FormGroup({});
   pipe = new DatePipe('en-US');
   filters: any = null;
   pageIndex: number = 1;
-  data:any;
+  data: any;
 
   @ViewChild(MatPaginator) paginator: any;
 
@@ -62,7 +62,6 @@ export class EmailsComponent {
     this.visable = !this.visable;
   }
 
-
   sort = [
     { name: 'ID (ASC)', value: 'id,ASC' },
     { name: 'ID (DESC)', value: 'id,DESC' },
@@ -70,17 +69,17 @@ export class EmailsComponent {
     { name: 'Email (DESC)', value: 'email,DESC' },
   ];
 
-   populateFormData() {
+  populateFormData() {
     this.formData.valueChanges.subscribe(() => {
       this.filters = this.formData.value;
-      this.getEmailLogs(this.pageIndex,this.pageSize)
+      this.getEmailLogs(this.pageIndex, this.pageSize);
     });
   }
 
   async pageChanged(event: any) {
     this.pageIndex = event.pageIndex + 1;
     this.pageSize = event.pageSize;
-    this.data= await this.emails.getEmails(
+    this.data = await this.emails.getEmails(
       this.filters,
       this.pageIndex,
       this.pageSize
@@ -90,7 +89,7 @@ export class EmailsComponent {
   }
 
   async getEmailLogs(page: number, limit: number) {
-    this.data = await this.emails.getEmails(this.filters,page, limit);
+    this.data = await this.emails.getEmails(this.filters, page, limit);
 
     this.emailLogs = this.data.result;
     this.length = this.data.count;
@@ -116,7 +115,7 @@ export class EmailsComponent {
   openFilterDialog(data: any): void {}
 
   async ngOnInit() {
-    this.formData =  this.fb.group({
+    this.formData = this.fb.group({
       search: [null],
       status: [null],
       sort: [null],
@@ -130,5 +129,10 @@ export class EmailsComponent {
       name: 'description',
       content: 'Emails',
     });
+  }
+
+  resetForm() {
+    this.formData.reset();
+    this.formData.markAsUntouched();
   }
 }

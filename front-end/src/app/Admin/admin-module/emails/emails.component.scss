@@ -3,114 +3,358 @@
 // @import "../../../sass/components/table-user-management";
 
 td {
-    border: 1px solid #b9b9b9b5;
-    text-align: left;
-    color: #04030f;
-    font-family: "Inter", sans-serif !important;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 114.5%; /* 1.374rem */
-  }
+  border: 1px solid #b9b9b9b5;
+  text-align: left;
+  color: #04030f;
+  font-family: "Inter", sans-serif !important;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 114.5%; /* 1.374rem */
+}
 
-  th {
-    color: #ffffff;
-    text-align: center;
-    font-family: "Inter", sans-serif !important;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 130%; /* 1.56rem */
-    background-color: #0f212f !important;
-  }
-
-
+th {
+  color: #ffffff;
+  text-align: center;
+  font-family: "Inter", sans-serif !important;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%; /* 1.56rem */
+  background-color: #0f212f !important;
+}
 
 .m {
-    display: flex;
-    justify-content: center;
-    .user-management-table-icon {
-        border: none;
-        cursor: pointer;
-        background-color: #ffffff;
-        text-align: center;
-      }
+  display: flex;
+  justify-content: center;
+  .user-management-table-icon {
+    border: none;
+    cursor: pointer;
+    background-color: #ffffff;
+    text-align: center;
+  }
+}
+
+.search {
+  flex: 0 0 40%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 54.8rem;
+  height: 3rem;
+  margin-left: -5rem;
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    // background-color: var(--color-Grey-light-2);
+    border: 1px solid #808080;
+    padding: 0.7rem 2rem;
+    border-radius: 100px;
+    width: 99%;
+    transition: all 0.2s;
+    margin-right: -3.25rem;
+
+    &:focus {
+      outline: none;
+      // width: 100%;
+      border: 1px solid #b9b9b9;
+    }
+
+    &::-webkit-input-placeholder {
+      font-family: "Poppins", sans-serif;
+      font-size: 1.4rem;
+      font-weight: 300;
+      line-height: 2.1rem;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #808080;
+    }
+  }
+
+  // &__input:focus + &__button {
+  // }
+
+  &__button {
+    border: none;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+  }
+
+  &__icon {
+    height: 2.8rem;
+
+    width: 2rem;
+  }
 }
 
 .form-container {
-    padding: 24px 0;
-    .search {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin: 0;
-        height: fit-content;
-        .sec-1 {
-            width: 55%;
-            position: relative;
-            .search__button {
-                position: absolute;
-                .search__icon{
-                    width: 2rem;
-                }
-            }
-        }
-        .sec-2 {
-            height: 56px;
-            width: 18%;
-            top: -17px;
-            position: relative;
+  padding: 24px 0;
+  position: relative;
+  margin-top: -2rem;
+  .search {
+    display: flex;
 
-            .risk-management-form-field {
-                position: relative;
-                .risk-management-form-field__label {
-                    display: inline-block;
-                    color: #808080;
-                    font-family: "Poppins", sans-serif;
-                    font-size: 1.4rem;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: normal;
-                    margin: 0 2rem 1rem 0;
-                }
-                .risk-management-form-field-box__input-3{
-                    font-family: inherit;
-                    font-size: inherit;
-                    color: #0f212f;
-                    border-radius: 1rem;
-                    border: 0.5px solid #808080;
-                    background-color: #ffffff;
-                    padding: 0.4rem 1rem;
-                    width: 100%;
-                    transition: all 0.2s;
-                    position: relative;
-                }
-            }
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    height: fit-content;
+    .sec-1 {
+      width: 50%;
+      position: relative;
+
+      .search__button {
+        position: absolute;
+        .search__icon {
+          width: 2rem;
         }
+      }
+
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 9rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
     }
+    .sec-2 {
+      width: 30%;
+      position: relative;
+
+      .search__button {
+        position: absolute;
+        .search__icon {
+          width: 2rem;
+        }
+      }
+
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 2rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
+    }
+    .sec-3 {
+      position: relative;
+      width: 15%;
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 2rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+          padding: 0.4rem 1rem;
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
+    }
+
+    // .sec-4 {
+    //   position: relative;
+    //   width: 10%;
+    //   .risk-management-form-field {
+    //     position: relative;
+    //     .risk-management-form-field__label {
+    //       display: inline-block;
+    //       color: #808080;
+    //       font-family: "Poppins", sans-serif;
+    //       font-size: 1.4rem;
+    //       font-style: normal;
+    //       font-weight: 400;
+    //       line-height: normal;
+    //       margin: 0 2rem 1rem 0;
+    //     }
+    //     .risk-management-form-field-box__input-3 {
+    //       font-family: inherit;
+    //       font-size: inherit;
+    //       color: #0f212f;
+    //       border-radius: 1rem;
+    //       border: 0.5px solid #808080;
+    //       background-color: #ffffff;
+    //       padding: 0.4rem 1rem;
+    //       width: 100%;
+    //       transition: all 0.2s;
+    //       position: relative;
+    //     }
+    //   }
+    // }
+
+    .sec-5 {
+      position: relative;
+      width: 15%;
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 2rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+          padding: 0.4rem 1rem;
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
+    }
+
+    .sec-6 {
+      position: relative;
+      width: 15%;
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 2rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+          padding: 0.4rem 1rem;
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
+    }
+
+    .sec-7 {
+      position: relative;
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sec-9 {
+      width: 15%;
+      position: relative;
+      margin-top: 3rem;
+      text-align: end;
+    }
+  }
 }
-.user-management__icon-box{
-    padding: 8px;
-    margin: 4rem 0 0 0;
+.user-management__icon-box {
+  padding: 8px;
+  margin: 4rem 0 0 0;
 }
 
 .pending {
-    padding: 4px;
-    background-color: #eccf96;
-    border-radius: 5px;
-    color: white;
+  padding: 4px;
+  background-color: #eccf96;
+  border-radius: 5px;
+  color: white;
 }
 
-.approved{
-    padding: 4px;
-    background-color: #8fe0a3;
-    border-radius: 5px;
-    color: white;
+.approved {
+  padding: 4px;
+  background-color: #8fe0a3;
+  border-radius: 5px;
+  color: white;
 }
 .email-icon {
-    font-size: 35px;
-    width: 35px;
-    height: 36px;
-    color: black;
+  font-size: 35px;
+  width: 35px;
+  height: 36px;
+  color: black;
+}
+
+.risk-management-reset-btn {
+  width: 9.1rem;
+  height: 3.2rem;
+
+  color: #ffffff !important;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  border-radius: 1rem;
+  background-color: #0f212f !important;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }

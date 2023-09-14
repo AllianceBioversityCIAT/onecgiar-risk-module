@@ -17,27 +17,33 @@
     <div class="form-container">
       <form *ngIf="formData" [formGroup]="formData" class="search">
         <div class="sec-1">
-          <input
-            class="search__input"
-            matInput
-            type="text"
-            formControlName="search"
-            placeholder="Search"
-          />
+          <div class="risk-management-form-field field-3">
+            <mat-label class="risk-management-form-field__label"
+              >Search
+            </mat-label>
+            <input
+              class="search__input"
+              matInput
+              type="text"
+              formControlName="search"
+              placeholder="Search"
+            />
 
-          <button
-            style="border: none; cursor: pointer; background-color: #ffffff12"
-            class="search__button"
-          >
-            <mat-icon class="search__icon">
-              <img
-                class="search__icon"
-                src="../../assets/shared-image/Vector-search.svg"
-                alt="~/Frontend/images/icon _ search-icon"
-            /></mat-icon>
-          </button>
+            <button
+              style="border: none; cursor: pointer; background-color: #ffffff12"
+              class="search__button"
+            >
+              <mat-icon class="search__icon">
+                <img
+                  class="search__icon"
+                  src="../../assets/shared-image/Vector-search.svg"
+                  alt="~/Frontend/images/icon _ search-icon"
+              /></mat-icon>
+            </button>
+          </div>
         </div>
-        <div class="sec-2">
+
+        <div class="sec-5">
           <div class="risk-management-form-field field-3">
             <mat-label class="risk-management-form-field__label"
               >Filter Status</mat-label
@@ -46,18 +52,18 @@
             <mat-select
               formControlName="status"
               panelClass="x"
-              class="risk-management-form-field-box__input-3 aa"
+              class="risk-management-form-field-box__input-3"
               [placeholder]="'All'"
               id="select-where"
             >
-            <mat-option value="All">All</mat-option>
+              <mat-option value="All">All</mat-option>
               <mat-option value="true">Sent</mat-option>
               <mat-option value="false"> Not Sent</mat-option>
             </mat-select>
           </div>
         </div>
 
-        <div class="sec-2">
+        <div class="sec-6">
           <div class="risk-management-form-field field-3">
             <mat-label class="risk-management-form-field__label"
               >Sort</mat-label
@@ -66,16 +72,27 @@
             <mat-select
               formControlName="sort"
               panelClass="x"
-              class="risk-management-form-field-box__input-3 aa"
+              class="risk-management-form-field-box__input-3"
               [placeholder]="'None'"
               id="select-where"
             >
-            <mat-option>None</mat-option>
-            <mat-option *ngFor="let item of sort" [value]="item.value">
-              {{ item.name }}
-            </mat-option>
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let item of sort" [value]="item.value">
+                {{ item.name }}
+              </mat-option>
             </mat-select>
           </div>
+        </div>
+
+        <!-- //Reset Button----- -->
+        <div class="sec-9">
+          <button
+            class="risk-management-reset-btn"
+            mat-raised-button
+            (click)="resetForm()"
+          >
+            Reset
+          </button>
         </div>
       </form>
     </div>
