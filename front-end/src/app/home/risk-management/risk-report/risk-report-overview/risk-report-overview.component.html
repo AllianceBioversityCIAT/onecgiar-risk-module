@@ -57,8 +57,7 @@
               publishStatus.value == '0' ||
               (AllRisk?.redundentRisk?.length != 0 &&
                 AllRisk?.risks?.length == 0) ||
-              this.isTrue ||
-              dontNeedHelp == false
+              this.isTrue
             "
             class="risk-report-button-box__btn btn--animated btn--white btn"
             (click)="publish(initiative.id)"
@@ -69,8 +68,7 @@
                 publishStatus.value == '0' ||
                 (AllRisk?.redundentRisk?.length != 0 &&
                   AllRisk?.risks?.length == 0) ||
-                this.isTrue ||
-                dontNeedHelp == false
+                this.isTrue
             }"
             mat-raised-button
           >
