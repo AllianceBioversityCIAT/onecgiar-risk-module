@@ -75,7 +75,7 @@
           id="select-where"
           required
         >
-          <mat-option>None</mat-option>
+          <mat-option>All</mat-option>
           <ng-container *ngFor="let riskCat of categories">
             <mat-option *ngIf="riskCat.disabled == 0" [value]="riskCat.id">
               {{ riskCat.title }}
@@ -123,7 +123,7 @@
           id="select-where"
           required
         >
-          <mat-option>None</mat-option>
+          <mat-option>All</mat-option>
           <mat-option *ngFor="let item of roles" [value]="item">
             {{ item }}
           </mat-option>
@@ -138,11 +138,11 @@
         <mat-select
           formControlName="sort"
           class="risk-management-form-field-box__input-3"
-          [placeholder]="'None'"
+          [placeholder]="'All'"
           id="select-where"
           required
         >
-          <mat-option>None</mat-option>
+          <mat-option>All</mat-option>
           <mat-option *ngFor="let item of sort" [value]="item.value">
             {{ item.name }}
           </mat-option>
