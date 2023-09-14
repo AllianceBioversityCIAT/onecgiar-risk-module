@@ -159,3 +159,6 @@ highcharts-chart {
   top: 0 !important;
 }
 
+::ng-deep .text {
+  font-size: 10px !important;
+}

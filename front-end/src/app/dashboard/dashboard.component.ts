@@ -537,9 +537,12 @@ export class DashboardComponent {
         series: {
           dataLabels: {
             enabled: true,
-            format: '{point.official_code}',
+            format: '<p class ="text">{point.official_code}</p>',
           },
         },
+        bubble: {
+          color: '#436280',
+        }
       },
       series: [
         {
@@ -552,7 +555,6 @@ export class DashboardComponent {
               ...d,
             };
           }),
-          colorByPoint: true,
         },
       ],
     };
