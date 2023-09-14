@@ -4,6 +4,7 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
@@ -182,6 +183,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           }, 2000);
         }
       }
+    }
+    else {
+      this.toastr.error('Invalid or missing data');
     }
   }
 
