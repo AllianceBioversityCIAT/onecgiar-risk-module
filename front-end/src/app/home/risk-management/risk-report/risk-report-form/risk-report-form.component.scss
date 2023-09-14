@@ -251,6 +251,13 @@
     align-items: center;
     gap: 1rem;
   }
+
+  &--3 {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    align-self: center;
+  }
 }
 
 .risk-report-form-field-select {
@@ -317,7 +324,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  row-gap: 2rem;
+  row-gap: 3rem;
 
   @media only screen and (max-width: 84em) {
     column-gap: 5rem;
@@ -862,4 +869,29 @@
 .add-text {
   position: relative;
   top: 0.1rem;
+}
+
+.el-1-line {
+  color: #436280;
+  text-decoration: none;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 40px;
+  transition: all 0.3s;
+
+  &__2 {
+    color: #436280;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 40px;
+    transition: all 0.3s;
+  }
+
+  &__3 {
+    color: #436280;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 49px;
+    transition: all 0.3s;
+    width: 239px;
+  }
 }
