@@ -807,7 +807,7 @@
 
 .table-box {
   overflow: auto;
-  margin-top: 1rem;
+  // margin-top: 1rem;
   margin-bottom: 4rem;
 
   // th,
@@ -1381,4 +1381,17 @@ tr.example-detail-row {
 .btn--animated {
   animation: moveInBottom 0.5s ease-out 0.85s;
   animation-fill-mode: backwards;
+}
+
+.zzz {
+  float: right;
+  margin: 0 !important;
+  width: 722px;
+  text-align: justify;
+  display: block;
+  position: relative;
+  top: -6rem;
+  /* text-align-last: auto; */
+  text-align: end;
+  letter-spacing: 1.75px;
 }

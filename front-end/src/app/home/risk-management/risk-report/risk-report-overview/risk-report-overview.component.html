@@ -116,18 +116,10 @@
       </div>
     </div>
 
-    <app-search-risk
-      *ngIf="initiative?.id"
-      [initiative_id]="initiative.id"
-      [AllRisk]="AllRisk"
-      (filters)="filter($event)"
-      (exportPdf)="exportPdf()"
-    ></app-search-risk>
-
     <div *ngIf="reload">
       <p
+        class="zzz"
         *ngIf="latest_version?.submit_date != initiative?.last_updated_date"
-        style="float: right; margin: 0 !important"
       >
         This is a draft version until it get submitted. last update at
         {{ initiative?.last_updated_date | date : "short" }}
@@ -145,6 +137,14 @@
         >
       </p>
     </div>
+
+    <app-search-risk
+      *ngIf="initiative?.id"
+      [initiative_id]="initiative.id"
+      [AllRisk]="AllRisk"
+      (filters)="filter($event)"
+      (exportPdf)="exportPdf()"
+    ></app-search-risk>
 
     <app-risk-report-table
       [my_risks]="my_risks"
