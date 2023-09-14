@@ -7,7 +7,8 @@ export class AppSocket extends Socket {
 
     constructor() {
       const token=  localStorage.getItem('access_token');
-        super({ url: '/', options: { autoConnect:false, auth:{authorization:'Barer '+token}} });
+      console.log('environment.socket',environment.socket)
+        super({ url: environment.socket, options: { autoConnect:false, auth:{authorization:'Barer '+token}} });
     }
 
 }
