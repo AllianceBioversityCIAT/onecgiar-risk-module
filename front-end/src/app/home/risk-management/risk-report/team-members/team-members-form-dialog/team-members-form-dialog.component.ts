@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Observable, Subject, concat, distinctUntilChanged, of } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 export enum ROLES {
   LEAD = 'Leader',
@@ -71,7 +72,7 @@ export class TeamMembersFormDialogComponent implements OnInit {
         this.data.role == 'add' ? '' : this.data.member.role,
         Validators.required,
       ],
-      user_id: [this.data.role == 'add' ? '' : this.data.member.user],
+      user_id: [this.data.role == 'add' ? null : this.data.member.user],
     });
     this.memberForm.setValidators(this.atLeastOneValidator());
   }
@@ -100,32 +101,35 @@ export class TeamMembersFormDialogComponent implements OnInit {
   compareWith(v1:any, v2:any){
     return v1?.user_id === v2?.user_id;
   }
-
-  haveSameChar!: boolean;
-  searchValue: string = '';
+  loading:boolean = false;
+  searchValue: string ='';
+  
   async search(event: any) {
     this.searchValue = event.term;
-    const filters = {
+    const filter = {
       full_name: this.searchValue,
       email: this.searchValue,
       search: 'teamMember'
     }
-    this.users = await this.usersService.getUsersForTeamMember(filters);
-    let i = this.searchValue.length;
-
-    for(let user of this.users){
-      if(this.searchValue == user.full_name.substring(0, i)) {
-        this.haveSameChar = true;
-      }
-      else if(this.searchValue == user.email.substring(0, i)){
-        this.haveSameChar = false;
-      }
-    }
+    this.users =  this.usersService.getUsersForTeamMember(filter);
+    this.loading = true;
+    this.items$.subscribe(val => {
+      this.items$ = this.users;
+      this.loading = false
+    })
   }
 
 
+  searchInput() {
+    this.items$ = concat(of([]),this.peopleInputSearch$.pipe(distinctUntilChanged()));
+  }
+
+  items$!: Observable<any>;
+  peopleInputSearch$ = new Subject<any>();
+
+
   async ngOnInit() {
-    // this.users = await this.usersService.getUsers();
+    this.searchInput();
     this.populateMemberForm();
   }
 

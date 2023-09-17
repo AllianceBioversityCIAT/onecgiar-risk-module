@@ -34,15 +34,16 @@
 
       <ng-select
         #agesSelect
-        [items]="users"
+        [items]="items$ | async"
         bindValue="id"
         [compareWith]="compareWith"
         labelForId="id"
-        [bindLabel]="
-          haveSameChar == true ? bindValue.full_name : bindValue.email
-        "
-        formControlName="user_id"
-        (search)="search($event)"
+        bindLabel="full_name"
+        [loading]="loading"
+        typeToSearchText="Type to search"
+        [typeahead]="peopleInputSearch$"
+        formControlName="user_id"   
+        (search)="search($event)"  
       >
         <ng-template
           ng-option-tmp
@@ -59,10 +60,7 @@
 
     <!-- //Email filed----- -->
     <ng-container
-      *ngIf="
-        memberForm.controls['user_id']?.value == '' ||
-        memberForm.controls['user_id']?.value == null
-      "
+      *ngIf="memberForm.controls['user_id']?.value == null"
     >
       <div class="form-dialog-content__field--grid-column">
         <div class="form-dialog-content__title-box">
