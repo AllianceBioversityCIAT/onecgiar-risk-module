@@ -33,6 +33,7 @@ import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
 import { AuthComponent } from './auth/auth.component';
 import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
+import { LicenseComponent } from './footer/license/license.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -165,6 +166,10 @@ const routes: Routes = [
     path: 'dashboard',
     canActivate: [AdminGuard],
     component: DashboardComponent,
+  },
+  {
+    path: 'license',
+    component: LicenseComponent,
   },
 
   { path: '404', component: PagenotfoundcomponentComponent },

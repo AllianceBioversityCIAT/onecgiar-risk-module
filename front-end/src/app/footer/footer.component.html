@@ -11,13 +11,19 @@
     <nav class="footer-nav">
       <ul class="footer-nav__list">
         <li class="footer-nav__list__footer-item">
-          <a href="" class="footer-link">Contact Us</a>
+          <a (click)="openDialogContactUs()" class="footer-link"
+            >Contact Us</a
+          >
         </li>
         <li class="footer-nav__list__footer-item">
-          <a href="" class="footer-link">Terms and Conditions</a>
+          <a
+            href="https://cgiar-prms.notion.site/Legal-Terms-eb2f3e436f3e46bd9057b1cb1e3391b8"
+            class="footer-link"
+            >Terms and Conditions</a
+          >
         </li>
         <li class="footer-nav__list__footer-item">
-          <a href="" class="footer-link">License</a>
+          <a routerLink="/license" class="footer-link">License</a>
         </li>
       </ul>
     </nav>

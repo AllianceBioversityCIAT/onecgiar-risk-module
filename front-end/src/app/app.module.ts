@@ -81,6 +81,8 @@ import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
 import { PhaseDialogComponent } from './Admin/admin-module/phases/phase-dialog/phase-dialog.component';
 import { EditConstantFormComponent } from './Admin/admin-module/parameters-settings/settings/edit-constant-form/edit-constant-form.component';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { LicenseComponent } from './footer/license/license.component';
+import { ContactUsDialogComponent } from './footer/contact-us-dialog/contact-us-dialog.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -136,6 +138,8 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     AuthComponent,
     SendTestComponent,
     EditConstantFormComponent,
+    LicenseComponent,
+    ContactUsDialogComponent,
   ],
   imports: [
     BrowserModule,
