@@ -1,0 +1,111 @@
+// --primary-color: #0087ca;
+// --primary-lighter-color: #b3dbef;
+// --primary-darker-color: #006ab7;
+// --text-primary-color: #fff;
+// --text-primary-lighter-color: rgba(0, 0, 0, 0.87);
+// --text-primary-darker-color: #fff;
+// --accent-color: #797979;
+// --accent-lighter-color: #d7d7d7;
+// --accent-darker-color: #5c5c5c;
+// --text-accent-color: #fff;
+// --text-accent-lighter-color: rgba(0, 0, 0, 0.87);
+// --text-accent-darker-color: #fff;
+// --warn-color: red;
+// --warn-lighter-color: #ffb3b3;
+// --warn-darker-color: red;
+// --text-warn-color: #fff;
+// --text-warn-lighter-color: rgba(0, 0, 0, 0.87);
+// --text-warn-darker-color: #fff;
+// --basic-size-unit: 8;
+// font: 400 14px/20px Roboto;
+// letter-spacing: 0.0179em;
+// color: rgba(0, 0, 0, 0.87);
+// box-sizing: border-box;
+// --u-1: 8px;
+// --u-2: 16px;
+// --u-3: 24px;
+// --u-4: 32px;
+// --u-5: 40px;
+// --u-6: 48px;
+// --u-7: 56px;
+// --u-8: 64px;
+// --u-9: 72px;
+// --max-width: 1200px;
+// --pg-color: #f6f6f6;
+// --success-color: green;
+// --light-green: #587159;
+// --light-brown: #b8855d;
+// --dark-brown: #bd503c;
+// --light-orange: #de9a1d;
+// padding: var(--u-3);
+// padding-top: var(--u-7);
+// margin: 0px auto var(--u-7);
+// width: 100%;
+// max-width: var(--max-width);
+
+.license-container {
+  padding: 24px;
+  padding-top: 56px;
+  margin: 0px auto 56px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.apache-license-box-text {
+  color: #0087ca;
+  font: 400 16px/28px Roboto;
+  letter-spacing: 0.0094em;
+  margin: 0 0 16px;
+}
+
+.license-title {
+  color: #0087ca;
+  font: 500 20px/32px Roboto;
+  letter-spacing: 0.0075em;
+  margin: 0 0 16px;
+}
+
+.license-main-list {
+  margin: 0;
+  padding: 16px;
+}
+
+.license-item-list {
+  &__h3 {
+    color: #0087ca;
+    font: 400 16px/28px Roboto;
+    letter-spacing: 0.0094em;
+    margin: 0 0 16px;
+  }
+
+  &__text {
+    color: #000000;
+    font-size: 16px;
+    line-height: 26px;
+    margin-bottom: 16px;
+  }
+
+  &__link:link,
+  &__link:visited {
+    display: inline-block;
+    text-decoration: none;
+
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+    transition: all 0.3s;
+
+    color: #0087ca;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__link:hover,
+  &__link:active {
+    color: #003a57;
+    border-bottom: 1px solid transparent;
+  }
+}
