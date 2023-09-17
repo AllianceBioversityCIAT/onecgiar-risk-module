@@ -150,6 +150,9 @@ export class RiskReportOverviewComponent implements OnInit {
     if(this.AllRisk?.redundentRisk?.length != 0 && this.AllRisk?.risks?.length == 0) {
       this.toolTipMessage = 'All Risks are redundant';
     }
+    if(this.AllRisk?.redundentRisk?.length == 0 && this.AllRisk?.risks?.length == 0 && this.AllRisk?.notredundentRisk?.length ==0) {
+      this.toolTipMessage = 'There is no risks';
+    }
     console.log(this.AllRisk)
     // check if all risks are redundent
     this.isTrue = this.AllRisk.risks.every((obj: any) => obj.redundant == true);
@@ -198,6 +201,9 @@ export class RiskReportOverviewComponent implements OnInit {
 
     if(this.publishStatus.value == '0') {
       this.toolTipMessage = 'Admin closed publish';
+    }
+    if(!this.canPublish()) {
+      this.toolTipMessage = 'Team Member/Guest can not submit';
     }
   }
 
