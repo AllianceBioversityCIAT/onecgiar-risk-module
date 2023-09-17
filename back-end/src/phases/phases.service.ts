@@ -42,12 +42,12 @@ export class PhasesService {
     return this.phaseRepository.delete({ id });
   }
 
-  activate(id: number) {
-    this.phaseRepository.update({}, { active: false });
-    return this.phaseRepository.update({ id }, { active: true });
+  async activate(id: number) {
+    await this.phaseRepository.update({}, { active: false });
+    return await this.phaseRepository.update({ id }, { active: true });
   }
 
-  deactivate(id: number) {
-    return this.phaseRepository.update({ id }, { active: false });
+  async deactivate(id: number) {
+    return await this.phaseRepository.update({ id }, { active: false });
   }
 }
