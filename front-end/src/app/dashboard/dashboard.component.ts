@@ -490,7 +490,7 @@ export class DashboardComponent {
       xAxis: {
         gridLineWidth: 1,
         title: {
-          text: type + ' impact',
+          text: `<span class="chart-title"> ${type} impact`,
         },
         labels: {
           format: '{value}',
@@ -504,7 +504,7 @@ export class DashboardComponent {
         startOnTick: false,
         endOnTick: false,
         title: {
-          text: type + ' likelihood',
+          text: `<span class="chart-title"> ${type} Likelihood</span>`,
         },
         labels: {
           format: '{value}',
@@ -542,7 +542,7 @@ export class DashboardComponent {
         },
         bubble: {
           color: '#436280',
-        }
+        },
       },
       series: [
         {

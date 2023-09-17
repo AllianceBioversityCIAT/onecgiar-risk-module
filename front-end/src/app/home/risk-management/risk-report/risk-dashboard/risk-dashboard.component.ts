@@ -98,7 +98,7 @@ export class RiskDashboardComponent {
       xAxis: {
         gridLineWidth: 1,
         title: {
-          text: type + ' impact',
+          text: `<span class="chart-title"> ${type} impact</span>`,
         },
         labels: {
           format: '{value}',
@@ -113,7 +113,7 @@ export class RiskDashboardComponent {
         startOnTick: false,
         endOnTick: false,
         title: {
-          text: type + ' Likelihood',
+          text: `<span class="chart-title"> ${type} Likelihood</span>`,
         },
         labels: {
           format: '{value}',

@@ -76,3 +76,14 @@
   font-weight: 700;
   line-height: 134.5%;
 }
+
+.chart-title {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 16px 0 12px 0;
+  display: block;
+  max-width: 450px;
+  min-width: 250px;
+  white-space: normal !important;
+  filter: brightness(0.5);
+}
