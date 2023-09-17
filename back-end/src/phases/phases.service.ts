@@ -8,7 +8,7 @@ import { Phase } from 'entities/phase.entity';
 @Injectable()
 export class PhasesService {
   constructor(
-    @InjectRepository(Phase) private phaseRepository: Repository<Phase>,
+    @InjectRepository(Phase) public phaseRepository: Repository<Phase>,
   ) {}
 
   create(createPhaseDto: CreatePhaseDto) {

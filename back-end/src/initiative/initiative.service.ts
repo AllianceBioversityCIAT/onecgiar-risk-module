@@ -12,7 +12,7 @@ import { EmailsService } from 'src/emails/emails.service';
 import { RiskService } from 'src/risk/risk.service';
 import { UsersService } from 'src/users/users.service';
 import { IsNull, Not, Repository } from 'typeorm';
-
+import { PhasesService } from 'src/phases/phases.service';
 @Injectable()
 export class InitiativeService {
   constructor(
@@ -26,6 +26,7 @@ export class InitiativeService {
     private riskService: RiskService,
     private userService: UsersService,
     private emailsService: EmailsService,
+    private phaseService: PhasesService,
   ) {}
 
   private readonly logger = new Logger(InitiativeService.name);
@@ -75,6 +76,8 @@ export class InitiativeService {
         risk.top = num++;
         await this.riskService.updateRisk(risk.id, risk, user);
       }
+      
+    const phase = await this.phaseService.findActivePhase();
 
     const initiative = this.iniRepository.create();
     initiative.clarisa_id = old_initiative.clarisa_id;
@@ -82,6 +85,7 @@ export class InitiativeService {
     initiative.official_code = old_initiative.official_code;
     initiative.parent_id = old_init_id;
     initiative.created_by_user_id = user.id;
+    initiative.phase_id = phase?.id;
     const new_init = await this.iniRepository.save(initiative, {
       reload: true,
     });

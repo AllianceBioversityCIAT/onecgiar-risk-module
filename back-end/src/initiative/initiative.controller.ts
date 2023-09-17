@@ -1037,6 +1037,7 @@ risk.title = row['title'];
         'roles',
         'roles.user',
         'created_by',
+        'phase'
       ],
       order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
     });
