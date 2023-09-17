@@ -1,10 +1,17 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  Observable,
+  Subject,
+  catchError,
+  concat,
+  debounceTime,
+  distinctUntilChanged,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 export enum ROLES {
   LEAD = 'Leader',
@@ -29,7 +36,30 @@ export class TeamMembersFormDialogComponent implements OnInit {
     { value: '>18', label: 'More than 18' },
   ];
 
- 
+  people$: Observable<any[]> = new Observable();
+  peopleLoading = false;
+  peopleInput$ = new Subject<string>();
+  private loadPeople() {
+    this.people$ = concat(
+      of([]), // default items
+      this.peopleInput$.pipe(
+        distinctUntilChanged(),
+        debounceTime(500),
+        tap(() => (this.peopleLoading = true)),
+        switchMap((term: string) => {
+          const filter = {
+            full_name: term,
+            email: term,
+            search: 'teamMember',
+          };
+          return this.usersService.getUsersForTeamMember(filter).pipe(
+            catchError(() => of([])), // empty list on error
+            tap(() => (this.peopleLoading = false))
+          );
+        })
+      )
+    );
+  }
   confirmation: any = '';
   users: any = [];
   showConfirm(content: any) {
@@ -41,13 +71,15 @@ export class TeamMembersFormDialogComponent implements OnInit {
     { value: ROLES.COORDINATOR, viewValue: ROLES.COORDINATOR },
   ];
 
-
   private atLeastOneValidator = () => {
     return (controlGroup: any) => {
       let controls = controlGroup.controls;
       if (controls) {
         // console.log(controls);
-        if (controls.email.value == '' && (controls.user_id.value == '' || controls.user_id.value == null)) {
+        if (
+          controls.email.value == '' &&
+          (controls.user_id.value == '' || controls.user_id.value == null)
+        ) {
           return {
             atLeastOneRequired: {
               text: 'At least one should be selected',
@@ -58,7 +90,6 @@ export class TeamMembersFormDialogComponent implements OnInit {
       return null;
     };
   };
-
 
   memberForm: any;
   populateMemberForm() {
@@ -71,67 +102,42 @@ export class TeamMembersFormDialogComponent implements OnInit {
         this.data.role == 'add' ? '' : this.data.member.role,
         Validators.required,
       ],
-      user_id: [this.data.role == 'add' ? '' : this.data.member.user],
+      user_id: [this.data.role == 'add' ? null : this.data.member.user],
     });
     this.memberForm.setValidators(this.atLeastOneValidator());
   }
 
-
-  showerror:boolean=false
+  showerror: boolean = false;
   submit() {
     this.memberForm.markAllAsTouched();
     this.memberForm.updateValueAndValidity();
     if (this.memberForm.valid) {
-      this.showerror =  false;
+      this.showerror = false;
       this.dialogRef.close({
         role: this.data.role,
         formValue: this.memberForm.value,
       });
-    }else{
-      this.showerror =  true;
+    } else {
+      this.showerror = true;
     }
   }
-  
-  bindValue: any = {
-    full_name: 'full_name',
-    email: 'email'
-  }
 
-  compareWith(v1:any, v2:any){
+  compareWith(v1: any, v2: any) {
     return v1?.user_id === v2?.user_id;
   }
-
-  haveSameChar!: boolean;
+  loading: boolean = false;
   searchValue: string = '';
-  async search(event: any) {
-    this.searchValue = event.term;
-    const filters = {
-      full_name: this.searchValue,
-      email: this.searchValue,
-      search: 'teamMember'
-    }
-    this.users = await this.usersService.getUsersForTeamMember(filters);
-    let i = this.searchValue.length;
 
-    for(let user of this.users){
-      if(this.searchValue == user.full_name.substring(0, i)) {
-        this.haveSameChar = true;
-      }
-      else if(this.searchValue == user.email.substring(0, i)){
-        this.haveSameChar = false;
-      }
-    }
-  }
 
+  items$!: Observable<any>;
+  peopleInputSearch$ = new Subject<any>();
 
   async ngOnInit() {
-    // this.users = await this.usersService.getUsers();
+    this.loadPeople();
     this.populateMemberForm();
   }
 
-    //Close-Dialog
   onCloseDialog() {
     this.dialogRef.close();
   }
-
 }

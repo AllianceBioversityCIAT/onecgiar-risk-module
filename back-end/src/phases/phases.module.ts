@@ -8,5 +8,6 @@ import { Phase } from 'entities/phase.entity';
   imports: [TypeOrmModule.forFeature([Phase])],
   controllers: [PhasesController],
   providers: [PhasesService],
+  exports: [PhasesService],
 })
 export class PhasesModule {}

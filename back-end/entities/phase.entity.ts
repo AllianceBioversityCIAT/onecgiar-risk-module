@@ -1,10 +1,12 @@
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Initiative } from './initiative.entity';
 
 export enum phaseStatus {
   OPEN = 'open',
@@ -45,4 +47,8 @@ export class Phase {
   @Column({ default: false })
   active: boolean;
 
+
+  @OneToMany(() => Initiative, (initiative) => initiative.phase)
+  @JoinTable()
+  initiatives
 }

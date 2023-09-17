@@ -19,6 +19,8 @@ import { VariablesService } from 'src/variables/variables.service';
 import { ActionArea } from 'entities/action-area';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
+import { PhasesService } from 'src/phases/phases.service';
+import { Phase } from 'entities/phase.entity';
 @Global()
 @Module({
   controllers: [InitiativeController],
@@ -31,7 +33,8 @@ import { jwtConstants } from 'src/auth/constants';
       Email,
       User,
       Variables,
-      ActionArea
+      ActionArea,
+      Phase
     ]),
     SharedModule,
     RiskModule,
@@ -42,7 +45,7 @@ import { jwtConstants } from 'src/auth/constants';
       signOptions: { expiresIn: '30d'},
     })
   ],
-  providers: [InitiativeService, RiskService, EmailsService, VariablesService],
+  providers: [InitiativeService, RiskService, EmailsService, VariablesService, PhasesService],
   exports:[InitiativeService,RiskService]
 })
 export class InitiativeModule {}

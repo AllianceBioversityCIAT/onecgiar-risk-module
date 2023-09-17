@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, map } from 'rxjs';
+import { Observable, firstValueFrom, map } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 import { MainService } from './main.service';
 import { saveAs } from 'file-saver';
@@ -46,27 +46,22 @@ export class UserService extends MainService {
   }
 
 
+getUsersForTeamMember(filters: any = null): Observable<any> {
+  let finalFilters: any = {};
+  if (filters)
+    Object.keys(filters).forEach((element) => {
+      if (typeof filters[element] === 'string')
+        filters[element] = filters[element].trim();
 
-  
-  async getUsersForTeamMember(filters: any = null) {
-    let finalFilters: any = {};
-    if (filters)
-      Object.keys(filters).forEach((element) => {
-        if (typeof filters[element] === 'string')
-          filters[element] = filters[element].trim();
-
-        if (filters[element] != null && filters[element] != '')
-          finalFilters[element] = filters[element];
-      });
-    return firstValueFrom(
-      this.http
-        .get(this.backend_url + `/users`, {
-          params: finalFilters,
-          headers: this.headers,
-        })
-        .pipe(map((d) => d))
-    ).catch((e) => false);
-  }
+      if (filters[element] != null && filters[element] != '')
+        finalFilters[element] = filters[element];
+    });
+  return this.http
+      .get(this.backend_url + `/users`, {
+        params: finalFilters,
+        headers: this.headers,
+      })
+}
 
   async addUser(data: any) {
     return firstValueFrom(

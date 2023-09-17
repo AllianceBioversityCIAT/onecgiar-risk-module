@@ -25,6 +25,7 @@ export class VersionsTableComponent {
     'Version',
     'Creation Date',
     'Creation By',
+    'phase name',
     'Actions',
   ];
   dataSource = new MatTableDataSource<any>([]);

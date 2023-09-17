@@ -31,18 +31,17 @@
           >Select user</mat-label
         >
       </div>
-
       <ng-select
-        #agesSelect
-        [items]="users"
+        [items]="people$ | async"
+        bindLabel="full_name"
         bindValue="id"
+        [hideSelected]="true"
         [compareWith]="compareWith"
-        labelForId="id"
-        [bindLabel]="
-          haveSameChar == true ? bindValue.full_name : bindValue.email
-        "
+        [minTermLength]="2"
         formControlName="user_id"
-        (search)="search($event)"
+        [loading]="peopleLoading"
+        typeToSearchText="Please enter 2 or more characters to search"
+        [typeahead]="peopleInput$"
       >
         <ng-template
           ng-option-tmp
@@ -58,12 +57,7 @@
     </div>
 
     <!-- //Email filed----- -->
-    <ng-container
-      *ngIf="
-        memberForm.controls['user_id']?.value == '' ||
-        memberForm.controls['user_id']?.value == null
-      "
-    >
+    <ng-container *ngIf="memberForm.controls['user_id']?.value == null">
       <div class="form-dialog-content__field--grid-column">
         <div class="form-dialog-content__title-box">
           <mat-label class="form-dialog-content__title-box__title"
