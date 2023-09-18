@@ -153,6 +153,21 @@
     max-width: 107px;
   }
 
+  &__title--3 {
+    color: #ffffff;
+
+    padding: 0.5rem;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 2.4rem;
+    letter-spacing: 0em;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    overflow: hidden;
+    max-width: 170px;
+  }
+
   &__title--2 {
     padding: 0.5rem;
     font-size: 2rem;
@@ -224,4 +239,49 @@
 .header-logo-size {
   height: 5.5rem;
   width: 7rem;
+}
+
+.user-nav-button {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+
+  & > * {
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+    gap: 1rem;
+  }
+
+  &__visible {
+    padding: 2rem 7.5rem;
+  }
+
+  &__invisible {
+    position: absolute;
+    padding: 1rem 1rem;
+
+    top: -100%;
+  }
+
+  &:hover {
+    background-image: linear-gradient(
+      to left,
+      var(--color-primary-light),
+      var(--color-primary-dark)
+    );
+  }
+
+  &:hover &__visible {
+    transform: translateY(100%);
+  }
+
+  &:hover &__invisible {
+    top: 0;
+  }
+
+  &:focus {
+    outline: none;
+    animation: pulsate 1s infinite;
+  }
 }

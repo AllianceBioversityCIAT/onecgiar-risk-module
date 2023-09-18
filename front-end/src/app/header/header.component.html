@@ -8,8 +8,8 @@
     <div class="header-content-box">
       <div class="header-content-box--1">
         <img
-          class="header-logo-size"
           src="../../assets/shared-image/Mask group.svg"
+          class="header-logo-size"
           alt="~/Frontend/images/question-circular-button.svg"
         />
       </div>
@@ -85,15 +85,23 @@
         mat-icon-button
         *ngIf="user_info"
       >
-        <mat-icon class="user-nav-button__icon">
-          <img
-            class="user-nav-button__icon--1"
-            src="../../assets/shared-image/🦆 icon _User avatar filled_.svg"
-            alt="~/Frontend/images/icon _User avatar"
-        /></mat-icon>
-        <span class="user-nav-button__title--1">{{
-          user_info?.full_name
-        }}</span>
+        <span class="user-nav-button__visible">
+          <mat-icon class="user-nav-button__icon">
+            <img
+              class="user-nav-button__icon--1"
+              src="../../assets/shared-image/🦆 icon _User avatar filled_.svg"
+              alt="~/Frontend/images/icon _User avatar"
+          /></mat-icon>
+          <span class="user-nav-button__title--1">{{
+            user_info?.full_name
+          }}</span>
+        </span>
+
+        <span class="user-nav-button__invisible">
+          <span class="user-nav-button__title--3">{{
+            user_info?.full_name
+          }}</span></span
+        >
       </button>
 
       <button
