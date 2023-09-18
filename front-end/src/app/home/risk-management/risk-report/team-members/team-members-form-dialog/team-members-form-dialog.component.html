@@ -24,7 +24,10 @@
 
     <div
       class="form-dialog-content__field--grid-column"
-      *ngIf="(this.data?.role == 'edit' && this.data?.member?.user !== null) || (memberForm.controls['email']?.value == '' && this.data?.role == 'add')"
+      *ngIf="
+        (this.data?.role == 'edit' && this.data?.member?.user !== null) ||
+        (memberForm.controls['email']?.value == '' && this.data?.role == 'add')
+      "
     >
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
@@ -120,7 +123,7 @@
             mat-raised-button
             (click)="submit()"
           >
-            save
+            Save
           </button>
         </div>
       </div>
