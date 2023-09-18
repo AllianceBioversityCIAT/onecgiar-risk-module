@@ -105,7 +105,7 @@ export class CategoryComponent implements OnInit {
           if (result) {
             this.toastr.success('Success deleted');
           } else {
-            this.toastr.error('can not deleted');
+            this.toastr.error("The category can't be deleted as it has assigned risks");
           }
         }
         await this.init();

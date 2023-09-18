@@ -1390,3 +1390,9 @@ ngx-avatars {
   display: flex;
   justify-content: center;
 }
+
+.redundant_row {
+  td {
+    color: gray !important;
+  }
+}

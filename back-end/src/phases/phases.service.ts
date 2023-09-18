@@ -17,7 +17,7 @@ export class PhasesService {
   }
 
   findAll() {
-    return this.phaseRepository.find({ relations: ['previousPhase'] });
+    return this.phaseRepository.find({ relations: ['previousPhase'] , order: {id:'ASC'} });
   }
 
   findOne(id: number) {

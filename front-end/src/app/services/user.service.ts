@@ -70,7 +70,7 @@ getUsersForTeamMember(filters: any = null): Observable<any> {
           headers: this.headers,
         })
         .pipe(map((d) => d))
-    ).catch((e) => false);
+    );
   }
 
   async updateUser(data: any) {
@@ -80,7 +80,7 @@ getUsersForTeamMember(filters: any = null): Observable<any> {
           headers: this.headers,
         })
         .pipe(map((d) => d))
-    ).catch((e) => false);
+    );
   }
   async deleteUser(id: any) {
     return firstValueFrom(
