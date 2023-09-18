@@ -70,6 +70,7 @@ export class HeaderComponent implements OnInit {
         data: {
           title: 'Logout',
           message: 'Are you sure you want to logout?',
+          svg: `../../assets/shared-image/logout.png`,
         },
       })
       .afterClosed()
