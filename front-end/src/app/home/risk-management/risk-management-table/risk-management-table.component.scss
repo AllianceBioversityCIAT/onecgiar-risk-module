@@ -579,7 +579,7 @@
 
   ::ng-deep .mat-mdc-select-arrow svg {
     opacity: -1% !important;
-    cursor: url(../../../../assets/shared-image/Vector-cursor.svg), pointer !important;
+   
   }
 }
 
@@ -950,3 +950,13 @@
   margin: 1rem 0 0 -1rem !important;
   padding: 0 1rem !important;
 }
+
+.spinner__loading {
+  display: flex;
+  justify-content: center;
+}
+
+.spinner__loadings {
+  position: relative;
+}
+

@@ -118,7 +118,6 @@
     border-radius: 5px;
     background-color: $color-button-primary !important;
     box-shadow: 4px 4px 4px 0px #00000040;
-    cursor: url(../../../../assets/shared-image/Vector-cursor.svg), pointer !important;
   }
 
   &__icon {
@@ -326,8 +325,6 @@
     background-color: $color-button-primary !important;
 
     box-shadow: 4px 4px 10px 0px #00000040;
-
-    cursor: url(../../../../assets/shared-image/Vector-cursor.svg), pointer !important;
   }
 }
 
@@ -370,7 +367,6 @@
 :host {
   ::ng-deep .mat-mdc-select-arrow svg {
     opacity: -1% !important;
-    cursor: url(../../../../assets/shared-image/Vector-cursor.svg), pointer !important;
   }
 }
 
@@ -381,16 +377,5 @@
     border-radius: 1rem;
     overflow: auto;
     opacity: 55%;
-  }
-}
-
-:host {
-  ::ng-deep .mat-mdc-option:hover:not(.mdc-list-item--disabled),
-  .mat-mdc-option:focus:not(.mdc-list-item--disabled),
-  .mat-mdc-option.mat-mdc-option-active,
-  .mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(
-      .mdc-list-item--disabled
-    ) {
-    cursor: url(../../../../assets/shared-image/Vector-cursor.svg), pointer !important;
   }
 }
