@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -89,12 +90,17 @@ export class UsersController {
     description: '',
     type: createAndUpdateUsers,
   })
-  updateUser(@Body() data: any) {
-    const user = this.usersService.userRepository.create();
-    if(data?.email)
-    data['email'] = data?.email.toLowerCase()
-    Object.assign(user, data);
-    return this.usersService.userRepository.save(user, { reload: true });
+  async updateUser(@Body() data: any) {
+    const emailExist = await this.usersService.userRepository.findOne({where: { email: data.email}});
+      if ((emailExist == null) || (emailExist.id == data.id)) {
+        const user = this.usersService.userRepository.create();
+        if(data?.email)
+        data['email'] = data?.email.toLowerCase()
+        Object.assign(user, data);
+        return this.usersService.userRepository.save(user, { reload: true });
+    } else {
+      throw new BadRequestException('The email is already used');
+    }
   }
   @Roles(Role.Admin)
   @Post()
@@ -104,13 +110,18 @@ export class UsersController {
     type: createAndUpdateUsers,
   })
   async addUser(@Body() data: any) {
-    const user = this.usersService.userRepository.create();
-    if(data?.email)
-    data['email'] = data?.email.toLowerCase()
-    Object.assign(user, data);
-    await this.usersService.userRepository.save(user, { reload: true });
-
-    return user;
+    const emailExist = await this.usersService.userRepository.findOne({where: { email: data.email}});
+    if (emailExist == null) {
+      const user = this.usersService.userRepository.create();
+      if(data?.email)
+      data['email'] = data?.email.toLowerCase()
+      Object.assign(user, data);
+      await this.usersService.userRepository.save(user, { reload: true });
+      return user;
+    } else {
+      throw new BadRequestException('User already exist');
+    }
+  
   }
   @Roles(Role.Admin)
   @Delete(':id')

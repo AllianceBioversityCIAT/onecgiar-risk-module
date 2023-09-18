@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { catchError } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 
 import { ApiUserService } from 'src/app/shared-services/admin-services/User-Management-Services/api-user.service';
@@ -41,17 +42,28 @@ export class UserFormDialogComponent implements OnInit {
     //Add
     if(this.userData.element == null) {
       if (this.userFormData.valid) {
-        await this.users.addUser(this.userFormData.value);
-        this.onCloseDialog();
-        this.toastr.success('Added successfully');
+        await this.users.addUser(this.userFormData.value).then((data) => {
+          if (data) {
+            this.onCloseDialog();
+            this.toastr.success('Added successfully');
+          }
+        },(error) => {
+          this.toastr.error(error.error.message);
+        });
+  
       }
     }
     //edit
     else {
       if (this.userFormData.valid) {
-        await this.users.updateUser(this.userFormData.value)
-        this.onCloseDialog();
-        this.toastr.success('Updated successfully');
+        await this.users.updateUser(this.userFormData.value).then((data) => {
+          if (data) {
+            this.onCloseDialog();
+            this.toastr.success('Updated successfully');
+          }
+        },(error) => {
+          this.toastr.error(error.error.message);
+        })
       }
     }
   }
