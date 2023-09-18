@@ -24,7 +24,7 @@
 
     <div
       class="form-dialog-content__field--grid-column"
-      *ngIf="memberForm.controls['email']?.value == ''"
+      *ngIf="(this.data?.role == 'edit' && this.data?.member?.user !== null) || (memberForm.controls['email']?.value == '' && this.data?.role == 'add')"
     >
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
