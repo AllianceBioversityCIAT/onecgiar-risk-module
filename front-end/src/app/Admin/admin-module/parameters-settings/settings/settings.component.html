@@ -1,19 +1,18 @@
 <mat-card class="result">
-    <mat-card-content>
-      <h2 class="example-h2">Publish</h2>
-  
-      <section class="example-section">
-        <mat-slide-toggle
-            class="example-margin"
-            [checked]="canPublish"
-            (change)="toggle()"
-            >
-          Allow submit system
-        </mat-slide-toggle>
-      </section>
-    </mat-card-content>
-</mat-card>
+  <mat-card-content>
+    <h2 class="example-h2">Submit</h2>
 
+    <section class="example-section">
+      <mat-slide-toggle
+        class="example-margin"
+        [checked]="canPublish"
+        (change)="toggle()"
+      >
+        Allow submit system
+      </mat-slide-toggle>
+    </section>
+  </mat-card-content>
+</mat-card>
 
 <div class="table-content">
   <h2 class="title">Constants Table</h2>
@@ -56,10 +55,15 @@
           <span class="h5">Action</span>
         </th>
         <td mat-cell *matCellDef="let element">
-            <div class="m">
-              <mat-icon class="edit-icon" matTooltip="Edit" (click)="editConstant(element)">edit</mat-icon>
-            </div>
-          </td>
+          <div class="m">
+            <mat-icon
+              class="edit-icon"
+              matTooltip="Edit"
+              (click)="editConstant(element)"
+              >edit</mat-icon
+            >
+          </div>
+        </td>
       </ng-container>
 
       <tr
