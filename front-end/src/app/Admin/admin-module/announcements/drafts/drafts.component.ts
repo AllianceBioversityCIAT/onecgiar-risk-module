@@ -47,7 +47,7 @@ export class DraftsComponent implements OnInit {
     this.dialog
       .open(AnnouncementsFormDialogComponent, {
         width: '68rem',
-        height: '58.2rem',
+        height: 'auto',
         data: {
           title: title,
           element: element,
@@ -72,6 +72,7 @@ export class DraftsComponent implements OnInit {
         title: 'Send to all users',
         message:
           'Are you sure you want to send this Announcement to all users in the system?',
+        svg: `../../../../../assets/shared-image/arrow.png`,
       },
     });
     _popup.afterClosed().subscribe(async (response) => {

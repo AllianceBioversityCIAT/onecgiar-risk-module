@@ -60,6 +60,20 @@
   }
 }
 
+.dialog-img {
+  filter: invert(9%) sepia(11%) saturate(3029%) hue-rotate(165deg)
+    brightness(94%) contrast(94%);
+  width: 78px;
+  height: 50px;
+  margin: 1.5rem;
+  object-fit: contain;
+}
+
+.dialog-img-2 {
+  margin: 1.5rem;
+  object-fit: contain;
+}
+
 ::ng-deep .mdc-dialog .mdc-dialog__content {
   padding: 0 !important;
 }

@@ -42,7 +42,7 @@ export class PostedComponent {
   openDialogCreateAnnouncement(title: any) {
     this.dialog.open(AnnouncementsFormDialogComponent, {
       width: '68rem',
-      height: '58.2rem',
+      height: 'auto',
       data: {
         title: title,
       },
