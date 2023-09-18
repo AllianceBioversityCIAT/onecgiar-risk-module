@@ -73,10 +73,10 @@
               formControlName="sort"
               panelClass="x"
               class="risk-management-form-field-box__input-3"
-              [placeholder]="'None'"
+              [placeholder]="'All'"
               id="select-where"
             >
-              <mat-option>None</mat-option>
+              <mat-option>All</mat-option>
               <mat-option *ngFor="let item of sort" [value]="item.value">
                 {{ item.name }}
               </mat-option>

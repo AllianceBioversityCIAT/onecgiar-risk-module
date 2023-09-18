@@ -39,7 +39,7 @@
               >Search
             </mat-label>
             <input
-            formControlName="email"
+              formControlName="email"
               class="search__input"
               matInput
               placeholder="Search"
@@ -68,12 +68,12 @@
             >
 
             <mat-select
-            formControlName="role"
+              formControlName="role"
               class="risk-management-form-field-box__input-3"
               [placeholder]="'All'"
               id="select-where"
             >
-              <mat-option>None</mat-option>
+              <mat-option>All</mat-option>
               <mat-option value="user">User</mat-option>
               <mat-option value="admin">Admin</mat-option>
             </mat-select>
@@ -89,11 +89,10 @@
             <mat-select
               formControlName="sort"
               class="risk-management-form-field-box__input-3"
-              [placeholder]="'None'"
+              [placeholder]="'All'"
               id="select-where"
-              
             >
-              <mat-option>None</mat-option>
+              <mat-option>All</mat-option>
               <mat-option *ngFor="let item of sort" [value]="item.value">
                 {{ item.name }}
               </mat-option>
