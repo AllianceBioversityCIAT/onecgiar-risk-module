@@ -35,6 +35,7 @@ export class SubmitRiskDialogComponent implements OnInit {
     this.error = [];
     // case 1
     if(this.tops.top.length + this.tops.similar.length <= 5) {
+        this.data.top = this.top;
         this.dialogRef.close(this.data);
     }
     //case 2
