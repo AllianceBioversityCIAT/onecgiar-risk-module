@@ -278,8 +278,8 @@ export class RiskReportTableComponent {
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(
         `<tr>
-      <td style=" width: 55rem;padding: 1rem; border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center;font-family: Inter, sans-serif !important;font-size: 1.2rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation.description}</td>
-      <td style=" width: 20rem;padding: 1rem;border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center;font-family: Inter, sans-serif !important;font-size: 1.2rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation?.status?.title}</td></tr>`
+      <td style=" width: 55rem;padding: 1rem; border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center; font-family: Poppins;font-size: 1.3rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation.description}</td>
+      <td style=" width: 20rem;padding: 1rem;border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center; font-family: Poppins;font-size: 1.3rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation?.status?.title}</td></tr>`
       );
     });
     let html = `
@@ -287,8 +287,8 @@ export class RiskReportTableComponent {
    <div class="table-box ">
                 <table class="mat-elevation-z8 table-box " style=" width: 100%; overflow: auto; margin-top: 1rem; margin-bottom: 4rem;">
                   <tr>
-                    <th  style="width:55rem;padding:1rem; font-family: Inter;sans-serif !important;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;">Actions/Controls description</th>
-                    <th style=" width: 20rem; padding: 1rem; font-family: Inter;sans-serif !important;font-size: 1.2rem;font-weight: 600;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;">Status</th>
+                    <th  style="width:55rem;padding:1rem; font-family: Poppins;font-size: 1.4rem;font-weight: 500;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;">Actions/Controls description</th>
+                    <th style=" width: 20rem; padding: 1rem; font-family: Poppins;font-size: 1.4rem;font-weight: 500;line-height: 130%;background-color: #436280;color: #ffffff;letter-spacing: 0em;text-align: center;font-style: normal;">Status</th>
                   </tr>
                   ${mitigationsList.join('')}
                 </table>

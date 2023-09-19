@@ -60,7 +60,7 @@
     color: #0f212f;
     text-align: center;
     font-family: "Poppins", sans-serif !important;
-    font-size: 3.2rem;
+    font-size: 4.2rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -942,7 +942,7 @@
     color: #0f212f;
     text-align: center;
     font-family: "Poppins", sans-serif !important;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-style: normal;
     font-weight: 400;
     line-height: 114.5%; /* 1.374rem */
@@ -950,7 +950,7 @@
 
   th {
     font-family: "Poppins", sans-serif !important;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 500;
     line-height: 130%; /* 1.56rem */
     background-color: #436280 !important;
@@ -1070,6 +1070,7 @@ tr.example-detail-row {
 
   padding: 2rem 0 0 0;
   text-align: left;
+  margin-bottom: 0.5rem;
 
   &__box-1 {
     display: flex;
@@ -1085,9 +1086,9 @@ tr.example-detail-row {
   &__title {
     color: #0f212f;
     font-family: "Poppins", sans-serif !important;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
     line-height: normal;
   }
 
@@ -1095,7 +1096,7 @@ tr.example-detail-row {
     color: #0f212f;
     text-align: justify;
     font-family: "Poppins", sans-serif !important;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
