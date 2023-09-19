@@ -36,14 +36,14 @@ export class SearchRiskComponent {
   // roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
-    { name: 'Risk ID (ASC)', value: 'id,ASC' },
-    { name: 'Risk ID (DESC)', value: 'id,DESC' },
-    { name: 'Risk Title (ASC)', value: 'title,ASC' },
-    { name: 'Risk Title (DESC)', value: 'title,DESC' },
-    { name: 'Current risk level (DESC)', value: 'current_level,DESC' },
-    { name: 'Current risk level (ASC)', value: 'current_level,ASC' },
-    { name: 'Target risk level (DESC)', value: 'target_level,DESC' },
-    { name: 'Target risk level (ASC)', value: 'target_level,ASC' },
+    { name: 'Risk ID (lowest first)', value: 'id,ASC' },
+    { name: 'Risk ID (highest first)', value: 'id,DESC' },
+    { name: 'Risk Title (lowest first)', value: 'title,ASC' },
+    { name: 'Risk Title (highest first)', value: 'title,DESC' },
+    { name: 'Current risk level (highest first)', value: 'current_level,DESC' },
+    { name: 'Current risk level (lowest first)', value: 'current_level,ASC' },
+    { name: 'Target risk level (highest first)', value: 'target_level,DESC' },
+    { name: 'Target risk level (lowest first)', value: 'target_level,ASC' },
   ];
   myIni: boolean = false;
   myIniChange() {

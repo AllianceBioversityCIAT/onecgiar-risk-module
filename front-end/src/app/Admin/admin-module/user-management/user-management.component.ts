@@ -43,10 +43,10 @@ export class UserManagementComponent implements OnInit {
   filterForm: FormGroup = new FormGroup({});
 
   sort = [
-    { name: 'ID (ASC)', value: 'id,ASC' },
-    { name: 'ID (DESC)', value: 'id,DESC' },
-    { name: 'Name (ASC)', value: 'full_name,ASC' },
-    { name: 'Name (DESC)', value: 'full_name,DESC' },
+    { name: 'ID (lowest first)', value: 'id,ASC' },
+    { name: 'ID (highest first)', value: 'id,DESC' },
+    { name: 'Name (lowest first)', value: 'full_name,ASC' },
+    { name: 'Name (highest first)', value: 'full_name,DESC' },
   ];
 
   setForm() {
