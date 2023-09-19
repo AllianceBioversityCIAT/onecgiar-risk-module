@@ -27,7 +27,7 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 import { unlink } from 'fs/promises';
 import { query } from 'express';
-import { ILike } from 'typeorm';
+import { ILike, In } from 'typeorm';
 import { createAndUpdateUsers, exportToExcel, getUsers } from 'DTO/users.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
@@ -56,72 +56,86 @@ export class UsersController {
     type: getUsers,
   })
   async getUsers(@Query() query) {
-    if(query.search == 'teamMember') {
-      return this.usersService.userRepository.createQueryBuilder('users')
-      .where("users.full_name like :full_name", { full_name: `%${query.full_name}%` })
-      .orWhere("users.email like :email", { email: `%${query.email}%` })
-      .select(['users.id as id', 'users.full_name as full_name', 'users.email as email'])
-      .getRawMany()
-    }
-    else {
-      const take = query.limit || 10
-      const skip=(Number(query.page)-1)*take;
-      const [result, total] = await this.usersService.userRepository.findAndCount({
-        where: {
-          // full_name: query?.searchValue ? ILike(`%${query?.searchValue}%`) : null,
-          email: query?.email ? ILike(`%${query?.email}%`) : null,
-          // id: query?.id ? query?.id : null,
-          role: query?.role ? query?.role : null,
-        },
-        order: { ...this.sort(query) },
-        take: take == null ? null : take,
-        skip: skip == null ? null : skip,
-      });
+    if (query.search == 'teamMember') {
+      return this.usersService.userRepository
+        .createQueryBuilder('users')
+        .where('users.full_name like :full_name', {
+          full_name: `%${query.full_name}%`,
+        })
+        .orWhere('users.email like :email', { email: `%${query.email}%` })
+        .select([
+          'users.id as id',
+          'users.full_name as full_name',
+          'users.email as email',
+        ])
+        .getRawMany();
+    } else {
+      let ids = await this.usersService.userRepository
+        .createQueryBuilder('users')
+        .where('users.full_name like :full_name', {
+          full_name: `%${query.email}%`,
+        })
+        .orWhere('users.email like :email', { email: `%${query.email}%` })
+        .select('users.id as id')
+        .getRawMany();
+      const take = query.limit || 10;
+      const skip = (Number(query.page) - 1) * take;
+      const [result, total] =
+        await this.usersService.userRepository.findAndCount({
+          where: {
+            id: ids.length ? In(ids.map(d=>d.id)) : null,
+            role: query?.role ? query?.role : null,
+          },
+          order: { ...this.sort(query) },
+          take: take == null ? null : take,
+          skip: skip == null ? null : skip,
+        });
       return {
         result: result,
-        count: total
-    }
+        count: total,
+      };
     }
   }
   @Roles(Role.Admin)
   @Put()
-  @ApiBody({ type : createAndUpdateUsers })
+  @ApiBody({ type: createAndUpdateUsers })
   @ApiCreatedResponse({
     description: '',
     type: createAndUpdateUsers,
   })
   async updateUser(@Body() data: any) {
-    const emailExist = await this.usersService.userRepository.findOne({where: { email: data.email}});
-      if ((emailExist == null) || (emailExist.id == data.id)) {
-        const user = this.usersService.userRepository.create();
-        if(data?.email)
-        data['email'] = data?.email.toLowerCase()
-        Object.assign(user, data);
-        return this.usersService.userRepository.save(user, { reload: true });
+    const emailExist = await this.usersService.userRepository.findOne({
+      where: { email: data.email },
+    });
+    if (emailExist == null || emailExist.id == data.id) {
+      const user = this.usersService.userRepository.create();
+      if (data?.email) data['email'] = data?.email.toLowerCase();
+      Object.assign(user, data);
+      return this.usersService.userRepository.save(user, { reload: true });
     } else {
       throw new BadRequestException('The email is already used');
     }
   }
   @Roles(Role.Admin)
   @Post()
-  @ApiBody({ type : createAndUpdateUsers })
+  @ApiBody({ type: createAndUpdateUsers })
   @ApiCreatedResponse({
     description: '',
     type: createAndUpdateUsers,
   })
   async addUser(@Body() data: any) {
-    const emailExist = await this.usersService.userRepository.findOne({where: { email: data.email}});
+    const emailExist = await this.usersService.userRepository.findOne({
+      where: { email: data.email },
+    });
     if (emailExist == null) {
       const user = this.usersService.userRepository.create();
-      if(data?.email)
-      data['email'] = data?.email.toLowerCase()
+      if (data?.email) data['email'] = data?.email.toLowerCase();
       Object.assign(user, data);
       await this.usersService.userRepository.save(user, { reload: true });
       return user;
     } else {
       throw new BadRequestException('User already exist');
     }
-  
   }
   @Roles(Role.Admin)
   @Delete(':id')
@@ -136,7 +150,7 @@ export class UsersController {
   })
   async export() {
     let users = await this.usersService.userRepository.find();
-    console.log(users)
+    console.log(users);
     const file_name = 'All-Users.xlsx';
     var wb = XLSX.utils.book_new();
 
