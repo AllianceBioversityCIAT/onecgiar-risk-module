@@ -1,38 +1,37 @@
 td {
-    border: 1px solid #b9b9b9b5;
-    text-align: left;
-    color: #04030f;
-    font-family: "Inter", sans-serif !important;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 114.5%; /* 1.374rem */
+  border: 1px solid #b9b9b9b5;
+  text-align: left;
+  color: #04030f;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 114.5%; /* 1.374rem */
+}
+
+th {
+  color: #ffffff;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%; /* 1.56rem */
+  background-color: #0f212f !important;
+}
+
+.table-content {
+  margin-top: 50px;
+  .title {
+    margin-bottom: 8px;
+    color: #1e1e1e;
   }
-
-  th {
-    color: #ffffff;
-    text-align: center;
-    font-family: "Inter", sans-serif !important;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 130%; /* 1.56rem */
-    background-color: #0f212f !important;
-  }
-
-
-.table-content{
-    margin-top: 50px;
-    .title {
-        margin-bottom: 8px;
-        color: #1e1e1e;
-    }
 }
 
 .edit-icon {
-    cursor: pointer;
+  cursor: pointer;
 }
 .m {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }

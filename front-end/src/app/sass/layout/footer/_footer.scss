@@ -1,5 +1,5 @@
 .footer-risk {
-  height: 6rem;
+  height: 6.5rem;
   // border-radius: 1rem 1rem 0rem 0rem;
   background: #0f212f;
   display: flex;
@@ -42,6 +42,7 @@
   &__logo {
     width: 2.9124rem;
     height: 3.4rem;
+    object-fit: contain;
   }
 }
 
@@ -64,7 +65,7 @@
   font-family: "Poppins", sans-serif !important;
   font-size: 1.2rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: normal;
   cursor: pointer;
 }

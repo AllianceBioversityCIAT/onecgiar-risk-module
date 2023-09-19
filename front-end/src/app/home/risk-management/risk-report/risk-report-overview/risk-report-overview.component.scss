@@ -50,6 +50,9 @@
   height: 1.5rem !important;
   flex-shrink: 0;
   display: inline-block;
+  position: relative;
+  top: 0.4rem;
+  left: 0.5rem;
 }
 .risk-report-title-box {
   text-align: center;
@@ -932,7 +935,7 @@
 
     color: #0f212f;
     text-align: center;
-    font-family: "Inter", sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 400;
@@ -940,9 +943,9 @@
   }
 
   th {
-    font-family: "Inter", sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: 1.2rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 130%; /* 1.56rem */
     background-color: #436280;
     color: #ffffff;
@@ -1266,7 +1269,7 @@ tr.example-detail-row {
 
     color: #0f212f;
     text-align: center;
-    font-family: "Inter", sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 400;
@@ -1274,7 +1277,7 @@ tr.example-detail-row {
   }
 
   th {
-    font-family: "Inter", sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: 1.2rem;
     font-weight: 600;
     line-height: 130%; /* 1.56rem */

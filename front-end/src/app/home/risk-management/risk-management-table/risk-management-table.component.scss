@@ -579,7 +579,6 @@
 
   ::ng-deep .mat-mdc-select-arrow svg {
     opacity: -1% !important;
-   
   }
 }
 
@@ -901,7 +900,7 @@
 
     color: #0f212f;
     text-align: center;
-    font-family: "Inter", sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: 1.2rem;
     font-style: normal;
     font-weight: 400;
@@ -909,9 +908,9 @@
   }
 
   th {
-    font-family: "Inter", sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: 1.2rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 130%; /* 1.56rem */
     background-color: #436280;
     color: #ffffff;
@@ -959,4 +958,3 @@
 .spinner__loadings {
   position: relative;
 }
-

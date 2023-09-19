@@ -146,7 +146,7 @@ export class DashboardComponent {
         style: {
           textAlign: 'left',
           color: '#04030f',
-          fontFamily: '"Inter", sans-serif !important',
+          fontFamily: '"Poppins", sans-serif !important',
           fontSize: '1.6rem',
           fontStyle: 'normal',
           fontWeight: '400',
@@ -180,7 +180,7 @@ export class DashboardComponent {
             style: {
               textAlign: 'left',
               color: '#04030f',
-              fontFamily: '"Inter", sans-serif !important',
+              fontFamily: '"Poppins", sans-serif !important',
               fontSize: '1.6rem',
               fontStyle: 'normal',
               fontWeight: '400',
@@ -232,7 +232,7 @@ export class DashboardComponent {
         style: {
           textAlign: 'left',
           color: '#04030f',
-          fontFamily: '"Inter", sans-serif !important',
+          fontFamily: '"Poppins", sans-serif !important',
           fontSize: '1.6rem',
           fontStyle: 'normal',
           fontWeight: '400',
@@ -267,7 +267,7 @@ export class DashboardComponent {
             style: {
               textAlign: 'left',
               color: '#04030f',
-              fontFamily: '"Inter", sans-serif !important',
+              fontFamily: '"Poppins", sans-serif !important',
               fontSize: '1.6rem',
               fontStyle: 'normal',
               fontWeight: '400',
@@ -317,7 +317,7 @@ export class DashboardComponent {
         style: {
           textAlign: 'left',
           color: '#04030f',
-          fontFamily: '"Inter", sans-serif !important',
+          fontFamily: '"Poppins", sans-serif !important',
           fontSize: '1.6rem',
           fontStyle: 'normal',
           fontWeight: '400',
@@ -352,7 +352,7 @@ export class DashboardComponent {
             style: {
               textAlign: 'left',
               color: '#04030f',
-              fontFamily: '"Inter", sans-serif !important',
+              fontFamily: '"Poppins", sans-serif !important',
               fontSize: '1.6rem',
               fontStyle: 'normal',
               fontWeight: '400',
@@ -401,7 +401,7 @@ export class DashboardComponent {
         style: {
           textAlign: 'left',
           color: '#04030f',
-          fontFamily: '"Inter", sans-serif !important',
+          fontFamily: '"Poppins", sans-serif !important',
           fontSize: '1.6rem',
           fontStyle: 'normal',
           fontWeight: '400',
@@ -436,7 +436,7 @@ export class DashboardComponent {
             style: {
               textAlign: 'left',
               color: '#04030f',
-              fontFamily: '"Inter", sans-serif !important',
+              fontFamily: '"Poppins", sans-serif !important',
               fontSize: '1.6rem',
               fontStyle: 'normal',
               fontWeight: '400',
@@ -534,6 +534,10 @@ export class DashboardComponent {
       },
 
       plotOptions: {
+        borderWidth: 0,
+        backgroundColor: 'rgba(255,255,255,0)',
+        shadow: false,
+        useHTML: true,
         series: {
           dataLabels: {
             enabled: true,

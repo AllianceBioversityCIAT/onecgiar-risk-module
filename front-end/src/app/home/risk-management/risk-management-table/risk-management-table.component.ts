@@ -6,6 +6,10 @@ import { UserService } from 'src/app/services/user.service';
 import jwt_decode from 'jwt-decode';
 import { MatPaginator } from '@angular/material/paginator';
 import { Meta, Title } from '@angular/platform-browser';
+import { Subscription, delay, interval } from 'rxjs';
+import { HeaderService } from 'src/app/header.service';
+import { LoadingService } from 'src/app/services/loading.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-risk-management-table',
@@ -25,7 +29,10 @@ export class RiskManagementTableComponent {
     public initiativeService: InitiativesService,
     private userService: UserService,
     private title: Title,
-    private meta: Meta
+    private meta: Meta,
+    public headerService: HeaderService,
+    private loadingService: LoadingService,
+    private authService: AuthService
   ) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
@@ -113,7 +120,35 @@ export class RiskManagementTableComponent {
     }
     return column;
   }
+
+  // loadContent() {
+  //   this.loading = true;
+  //   const subs$: Subscription = interval(50).subscribe((res) => {
+  //     this.value = this.value + 10;
+  //     if (this.value === 120) {
+  //       subs$.unsubscribe();
+  //       this.loading = false;
+  //       this.value = 0;
+  //       console.log('Ha terminado');
+  //     }
+  //   });
+  // }
+
+  user_info: any;
+  loading = true;
+  isadmin = false;
   async ngOnInit() {
+    // this.router.events.subscribe((e) => {
+    //   if (this.headerService.background == '#04030f') this.isadmin = true;
+    //   else this.isadmin = false;
+    //   this.user_info = this.authService.getLogedInUser();
+    // });
+    // this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
+    //   if (this.headerService.background == '#04030f') this.isadmin = true;
+    //   else this.isadmin = false;
+    //   this.loading = d;
+    // });
+
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       this.userRole = jwt_decode(access_token);

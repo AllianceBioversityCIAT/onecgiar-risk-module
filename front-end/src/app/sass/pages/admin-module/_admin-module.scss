@@ -7,11 +7,10 @@
 
     &--title {
       position: absolute;
-      font-size: 1.6rem;
-      font-weight: 700;
+      font-size: 1.7rem;
+      font-weight: 500;
       line-height: 2.4rem;
       letter-spacing: 0em;
-
       color: #ffffff;
       top: 35%;
       left: 30%;
@@ -25,11 +24,13 @@
     height: 2.5rem;
     position: absolute;
     left: 3.8rem;
+    object-fit: contain;
   }
 
   &__icon {
     width: 2.9rem;
     height: 2.4rem;
+    object-fit: contain;
   }
 
   &__title--1 {
@@ -38,7 +39,7 @@
     color: #ffffff;
     letter-spacing: 0em;
     margin-top: 0.3rem;
-    margin-left: -1.8rem;
+    margin-left: -0.8rem;
   }
 
   &__title--2 {
@@ -47,7 +48,7 @@
     color: #ffffff;
     letter-spacing: 0em;
     margin-top: 0.3rem;
-    margin-left: 4.3rem;
+    margin-left: 5rem;
   }
 
   &__title--3 {
@@ -56,7 +57,7 @@
     color: #ffffff;
     letter-spacing: 0em;
     margin-top: 0.3rem;
-    margin-left: 1.8rem;
+    margin-left: 2.5rem;
   }
 
   &__title--4 {
@@ -74,7 +75,7 @@
     color: #ffffff;
     letter-spacing: 0em;
     margin-top: 0.3rem;
-    margin-left: 2.5rem;
+    margin-left: 3rem;
   }
 
   &__title--6 {
@@ -83,7 +84,7 @@
     color: #ffffff;
     letter-spacing: 0em;
     margin-top: 0.3rem;
-    margin-left: -3.8rem;
+    margin-left: -4.1rem;
   }
 
   &__title--7 {
@@ -101,7 +102,7 @@
     color: #ffffff;
     letter-spacing: 0em;
     margin-top: 0.3rem;
-    margin-left: -5.9rem;
+    margin-left: -6.5rem;
   }
 
   &__title--9 {
@@ -110,7 +111,7 @@
     color: #ffffff;
     letter-spacing: 0em;
     margin-top: 0.3rem;
-    margin-left: -4.2rem;
+    margin-left: -4.5rem;
   }
 }
 
