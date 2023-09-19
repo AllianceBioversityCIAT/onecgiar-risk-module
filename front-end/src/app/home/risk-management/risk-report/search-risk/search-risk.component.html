@@ -35,11 +35,11 @@
         >
 
         <mat-select
+        [multiple]="true"
           class="risk-management-form-field-box__input-3 aa"
           placeholder="All"
           formControlName="category"
         >
-          <mat-option>All</mat-option>
           <ng-container *ngFor="let riskCat of categories">
             <mat-option *ngIf="riskCat.disabled == 0" [value]="riskCat.id">
               {{ riskCat.title }}
@@ -61,11 +61,11 @@
         >
 
         <mat-select
+        [multiple]="true"
           class="risk-management-form-field-box__input-3 aa"
           placeholder="All"
           formControlName="created_by"
         >
-          <mat-option>All</mat-option>
           <mat-option *ngFor="let user of riskRaiser" [value]="user.id">
             {{ user?.full_name }}
           </mat-option>
@@ -81,11 +81,11 @@
         >
 
         <mat-select
+        [multiple]="true"
           class="risk-management-form-field-box__input-3 aa"
           placeholder="All"
           formControlName="owner"
         >
-          <mat-option>All</mat-option>
           <mat-option *ngFor="let user of risksOwners" [value]="user.id">
             {{ user?.user?.full_name || user?.email }}
           </mat-option>

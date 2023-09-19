@@ -68,6 +68,7 @@
         >
 
         <mat-select
+          [multiple]="true"
           formControlName="category"
           panelClass="x"
           class="risk-management-form-field-box__input-3 aa"
@@ -75,7 +76,6 @@
           id="select-where"
           required
         >
-          <mat-option>All</mat-option>
           <ng-container *ngFor="let riskCat of categories">
             <mat-option *ngIf="riskCat.disabled == 0" [value]="riskCat.id">
               {{ riskCat.title }}
@@ -117,13 +117,13 @@
         <mat-label class="risk-management-form-field__label">My role</mat-label>
 
         <mat-select
+          [multiple]="true"
           formControlName="my_role"
           class="risk-management-form-field-box__input-3"
           [placeholder]="'All'"
           id="select-where"
           required
         >
-          <mat-option>All</mat-option>
           <mat-option *ngFor="let item of roles" [value]="item">
             {{ item }}
           </mat-option>

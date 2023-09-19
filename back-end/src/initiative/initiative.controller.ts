@@ -42,7 +42,22 @@ import { unlink } from 'fs/promises';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Request } from 'express';
 import { Risk } from 'entities/risk.entity';
-import { AllExcel, TopSimilar, createRoleReq, createRoleRes, createVersion, deleteRoleRes, getAllCategories, getAllVersions, getInitiative, getInitiativeById, getRoles, reqBodyCreateVersion, updateRoleReq, updateRoleRes } from 'DTO/initiative.dto';
+import {
+  AllExcel,
+  TopSimilar,
+  createRoleReq,
+  createRoleRes,
+  createVersion,
+  deleteRoleRes,
+  getAllCategories,
+  getAllVersions,
+  getInitiative,
+  getInitiativeById,
+  getRoles,
+  reqBodyCreateVersion,
+  updateRoleReq,
+  updateRoleRes,
+} from 'DTO/initiative.dto';
 import { RiskCategory } from 'entities/risk-category.entity';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
@@ -75,9 +90,22 @@ export class InitiativeController {
     return query.initiative_id;
   }
   roles(query, req) {
-    if (query?.my_role)
-      return { roles: { user_id: req.user.id, role: query?.my_role } };
-    else if (query?.my_ini == 'true')
+    if (query?.my_role) {
+      if (Array.isArray(query?.my_role)) {
+        return {
+          roles: {
+            user_id: req.user.id,
+            role: In(query.my_role),
+          },
+        };
+      } else
+        return {
+          roles: {
+            user_id: req.user.id,
+            role: query.my_role,
+          },
+        };
+    } else if (query?.my_ini == 'true')
       return { roles: { user_id: req.user.id } };
     else return {};
   }
@@ -109,17 +137,17 @@ export class InitiativeController {
       row['description'] = row['Description of risk (50 words max each)'];
       if (row['Skip'] != '1') {
         let risk = this.riskService.riskRepository.create();
-      
+
         risk.description = row['description'];
         risk.current_impact = row['Current Impact'];
         risk.current_likelihood = row['Current Likelihood'];
-        risk.target_likelihood = 0
-        risk.target_impact = 0
+        risk.target_likelihood = 0;
+        risk.target_impact = 0;
         risk.title = row['title'];
-if(row['title'].length >= 255){
-row['title'] = row['title'].trim().substring(0, 254);
-risk.title = row['title'];
-}
+        if (row['title'].length >= 255) {
+          row['title'] = row['title'].trim().substring(0, 254);
+          risk.title = row['title'];
+        }
         const risk_category = await this.dataSource
           .createQueryBuilder()
           .addFrom(RiskCategory, RiskCategory.name)
@@ -147,13 +175,14 @@ risk.title = row['title'];
     type: [getInitiative],
   })
   getInitiative(@Query() query: any, @Req() req) {
+    console.log(query);
     return this.iniService.iniRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         parent_id: IsNull(),
         official_code: this.offical(query),
         ...this.roles(query, req),
-        risks: { category_id: query?.category },
+        risks: { category_id: query?.category ? In(query?.category) : null },
         status: query.status,
       },
       relations: [
@@ -193,7 +222,8 @@ risk.title = row['title'];
 
   mapTemplateAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
-    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.ID =
+      element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
@@ -263,10 +293,6 @@ risk.title = row['title'];
     return { finaldata, merges };
   }
 
-
-
-
-
   getTemplateAllDataAdmin(width = false) {
     return {
       // 'top': null,
@@ -282,7 +308,6 @@ risk.title = row['title'];
       'Target impact': null,
       'Target Risk Level': null,
 
-
       Category: null,
       'Created by': null,
       Flagged: null,
@@ -291,17 +316,14 @@ risk.title = row['title'];
       Mitigations: width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
       'Help requested': null,
-
     };
   }
-
-
-
 
   mapTemplateAllDataAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
 
-    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.ID =
+      element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
@@ -315,7 +337,6 @@ risk.title = row['title'];
     template['Target Risk Level'] =
       element.target_likelihood * element.target_impact;
 
-
     template.Category = element.category.title;
     template['Created by'] = element.created_by?.full_name;
     // template.Redundant = element.redundant;
@@ -324,14 +345,9 @@ risk.title = row['title'];
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
     template['Flagged'] = element.flag;
-    template['Help requested'] = element.request_assistance == true ? 'Yes' : 'No';
-
+    template['Help requested'] =
+      element.request_assistance == true ? 'Yes' : 'No';
   }
-
-
-
-
-
 
   prepareAllDataExcelAdmin(risks) {
     let finaldata = [this.getTemplateAllDataAdmin(true)];
@@ -348,13 +364,11 @@ risk.title = row['title'];
       });
     }
 
-
     let base = 2;
     risks.forEach((element, indexbase) => {
       const template = this.getTemplateAllDataAdmin();
       this.mapTemplateAllDataAdmin(template, element);
       if (element.mitigations.length) {
-        
         for (let index = 0; index < 16; index++) {
           merges.push({
             s: { c: index, r: base },
@@ -367,7 +381,7 @@ risk.title = row['title'];
         base += 1;
       }
       element.mitigations.forEach((d, index) => {
-        console.log(index)
+        console.log(index);
         if (index == 0) {
           template.Mitigations = d.description;
           template.mitigations_status = d.status.title;
@@ -384,7 +398,7 @@ risk.title = row['title'];
   }
   getTemplateVersionAdmin(width = false) {
     return {
-      'top': null,
+      top: null,
       ID: null,
       Initiative: null,
       Title: null,
@@ -408,10 +422,10 @@ risk.title = row['title'];
     };
   }
 
-
   mapTemplateVersionAdmin(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.ID =
+      element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
@@ -435,8 +449,6 @@ risk.title = row['title'];
     template['Flagged'] = element.flag;
     template['Help requested'] = element.request_assistance == true ? 'Yes' : 'No';
   }
-
-
 
   prepareDataExcelVersionAdmin(risks) {
     let finaldata = [this.getTemplateVersionAdmin(true)];
@@ -509,7 +521,8 @@ risk.title = row['title'];
   }
 
   mapTemplateUser(template, element) {
-    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.ID =
+      element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
@@ -581,10 +594,9 @@ risk.title = row['title'];
     return { finaldata, merges };
   }
 
-
   getTemplateVersionUser(width = false) {
     return {
-      'top': null,
+      top: null,
       ID: null,
       Initiative: null,
       Title: null,
@@ -596,7 +608,7 @@ risk.title = row['title'];
       'Target likelihood': null,
       'Target impact': null,
       'Target Risk Level': null,
- 
+
       Category: null,
       'Created by': null,
       // "Flag to SGD":null,
@@ -607,11 +619,10 @@ risk.title = row['title'];
     };
   }
 
-
-
   mapTemplateVersionUser(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template.ID = element.original_risk_id == null ? element.id : element.original_risk_id;
+    template.ID =
+      element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.Initiative = element.initiative.official_code;
     template.Description = element.description;
@@ -634,8 +645,6 @@ risk.title = row['title'];
     // template.Redundant = element.redundant;
     // template['Flag to SGD'] = element.flag;
   }
-
-
 
   prepareDataExcelVersionUser(risks) {
     let finaldata = [this.getTemplateVersionUser(true)];
@@ -734,7 +743,7 @@ risk.title = row['title'];
           'roles.user',
         ],
         // order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
-        order: { risks: { top: 'ASC' } }
+        order: { risks: { top: 'ASC' } },
       })
       .catch((d) => {
         throw new BadRequestException('No data matching');
@@ -765,7 +774,7 @@ risk.title = row['title'];
         'initiative.roles',
         'initiative.roles.user',
       ],
-      order: { initiative_id: 'ASC' ,top: 'ASC' }
+      order: { initiative_id: 'ASC', top: 'ASC' },
     });
     if (userRole.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
@@ -840,7 +849,7 @@ risk.title = row['title'];
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { top: 'ASC' } }
+      order: { risks: { top: 'ASC' } },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 
@@ -876,34 +885,33 @@ risk.title = row['title'];
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${file_name}"`,
       });
-    } else if(req.user == 'admin' && req.version == 'true') {
-        const { finaldata, merges } = this.prepareDataExcelVersionAdmin(risks);
-        // console.log({ finaldata, merges });
-        const ws = XLSX.utils.json_to_sheet(finaldata);
-        ws['!merges'] = merges;
+    } else if (req.user == 'admin' && req.version == 'true') {
+      const { finaldata, merges } = this.prepareDataExcelVersionAdmin(risks);
+      // console.log({ finaldata, merges });
+      const ws = XLSX.utils.json_to_sheet(finaldata);
+      ws['!merges'] = merges;
 
-        XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
-        await XLSX.writeFile(
-          wb,
-          join(process.cwd(), 'generated_files', file_name),
-          { cellStyles: true },
-        );
-        const file = createReadStream(
-          join(process.cwd(), 'generated_files', file_name),
-        );
+      XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+      await XLSX.writeFile(
+        wb,
+        join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
+      );
+      const file = createReadStream(
+        join(process.cwd(), 'generated_files', file_name),
+      );
 
-        setTimeout(async () => {
-          try {
-            await unlink(join(process.cwd(), 'generated_files', file_name));
-          } catch (e) {}
-        }, 9000);
+      setTimeout(async () => {
+        try {
+          await unlink(join(process.cwd(), 'generated_files', file_name));
+        } catch (e) {}
+      }, 9000);
 
-        return new StreamableFile(file, {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          disposition: `attachment; filename="${file_name}"`,
-        });
-    }
-    else if(req.user == 'user' && req.version == 'false') {
+      return new StreamableFile(file, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        disposition: `attachment; filename="${file_name}"`,
+      });
+    } else if (req.user == 'user' && req.version == 'false') {
       const { finaldata, merges } = this.prepareDataExcelUser(risks);
       // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
@@ -929,46 +937,44 @@ risk.title = row['title'];
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         disposition: `attachment; filename="${file_name}"`,
       });
-  }
-  else if(req.user == 'user' && req.version == 'true') {
-    const { finaldata, merges } = this.prepareDataExcelVersionUser(risks);
-    // console.log({ finaldata, merges });
-    const ws = XLSX.utils.json_to_sheet(finaldata);
-    ws['!merges'] = merges;
+    } else if (req.user == 'user' && req.version == 'true') {
+      const { finaldata, merges } = this.prepareDataExcelVersionUser(risks);
+      // console.log({ finaldata, merges });
+      const ws = XLSX.utils.json_to_sheet(finaldata);
+      ws['!merges'] = merges;
 
-    XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
-    await XLSX.writeFile(
-      wb,
-      join(process.cwd(), 'generated_files', file_name),
-      { cellStyles: true },
-    );
-    const file = createReadStream(
-      join(process.cwd(), 'generated_files', file_name),
-    );
+      XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
+      await XLSX.writeFile(
+        wb,
+        join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
+      );
+      const file = createReadStream(
+        join(process.cwd(), 'generated_files', file_name),
+      );
 
-    setTimeout(async () => {
-      try {
-        await unlink(join(process.cwd(), 'generated_files', file_name));
-      } catch (e) {}
-    }, 9000);
+      setTimeout(async () => {
+        try {
+          await unlink(join(process.cwd(), 'generated_files', file_name));
+        } catch (e) {}
+      }, 9000);
 
-    return new StreamableFile(file, {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      disposition: `attachment; filename="${file_name}"`,
-    });
-  }
-
+      return new StreamableFile(file, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        disposition: `attachment; filename="${file_name}"`,
+      });
+    }
   }
 
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
-  @Roles(Role.Admin,Role.User)
+  @Roles(Role.Admin, Role.User)
   @Post(':initiative_id/create_version')
   @ApiCreatedResponse({
     description: '',
     type: createVersion,
   })
-  @ApiBody({type : reqBodyCreateVersion})
+  @ApiBody({ type: reqBodyCreateVersion })
   createVersion(
     @Param('initiative_id') id: number,
     @Body('top') top: any,
@@ -1040,7 +1046,7 @@ risk.title = row['title'];
         'roles',
         'roles.user',
         'created_by',
-        'phase'
+        'phase',
       ],
       order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
     });
@@ -1078,7 +1084,7 @@ risk.title = row['title'];
     });
   }
   @UseGuards(RolesGuard)
-  @Roles(Role.Admin,Role.User)
+  @Roles(Role.Admin, Role.User)
   @Post(':initiative_id/roles')
   @ApiCreatedResponse({
     description: '',
@@ -1133,7 +1139,7 @@ risk.title = row['title'];
   @Get(':id/top')
   @ApiCreatedResponse({
     description: '',
-    type: TopSimilar
+    type: TopSimilar,
   })
   async top(@Param('id') id: number) {
     const top_5 = await this.riskService.riskRepository.find({
