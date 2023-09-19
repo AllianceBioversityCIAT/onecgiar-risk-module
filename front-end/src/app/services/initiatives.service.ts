@@ -120,10 +120,11 @@ export class InitiativesService extends MainService {
     );
   }
 
-  getInitiativeForVersion(initiativeId: number): Promise<any> {
+  getInitiativeForVersion(initiativeId: number, filter: any): Promise<any> {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/initiative/InitForVersion/' + initiativeId, {
+        .get(this.backend_url + '/initiative/version/' + initiativeId, {
+          params: filter,
           headers: this.headers,
         })
         .pipe(map((d: any) => d))
