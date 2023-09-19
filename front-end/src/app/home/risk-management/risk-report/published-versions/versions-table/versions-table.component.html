@@ -82,6 +82,15 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="Help requested">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Help Requested</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ filterReqAssistance(element.risks) }}
+            </td>
+          </ng-container>
+
         <!-- Actions Name Column -->
         <ng-container matColumnDef="Actions">
           <th mat-header-cell *matHeaderCellDef>

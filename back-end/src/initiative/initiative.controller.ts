@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -398,6 +399,7 @@ risk.title = row['title'];
 
       Category: null,
       'Created by': null,
+      'Help requested': null,
       Flagged: null,
       'Due date': null,
       // Redundant: false,
@@ -431,6 +433,7 @@ risk.title = row['title'];
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
     template['Flagged'] = element.flag;
+    template['Help requested'] = element.request_assistance == true ? 'Yes' : 'No';
   }
 
 
@@ -439,11 +442,11 @@ risk.title = row['title'];
     let finaldata = [this.getTemplateVersionAdmin(true)];
     let merges = [
       {
-        s: { c: 16, r: 0 },
-        e: { c: 17, r: 0 },
+        s: { c: 17, r: 0 },
+        e: { c: 18, r: 0 },
       },
     ];
-    for (let index = 0; index < 16; index++) {
+    for (let index = 0; index < 17; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -709,15 +712,15 @@ risk.title = row['title'];
 
     return asd;
   }
-  @Get('InitForVersion/:id')
+  @Get('version/:id')
   @ApiCreatedResponse({
     description: '',
     type: getInitiativeById,
   })
-  async getInitiativesForVersion(@Param('id') id: number) {
+  async getInitiativesForVersion(@Param('id') id: number, @Query() filters: any) {
     let result = await this.iniService.iniRepository
       .findOneOrFail({
-        where: { id , risks: { redundant: false}},
+        where: { id , risks: { redundant: false, request_assistance: filters?.request_assistance == 'true' ? true : null}},
         relations: [
           'risks',
           'risks.category',
@@ -734,7 +737,7 @@ risk.title = row['title'];
         order: { risks: { top: 'ASC' } }
       })
       .catch((d) => {
-        throw new NotFoundException();
+        throw new BadRequestException('No data matching');
       });
 
     return result;
@@ -1029,7 +1032,7 @@ risk.title = row['title'];
   })
   getVersons(@Param('id') id: number) {
     return this.iniService.iniRepository.find({
-      where: { parent_id: id },
+      where: { parent_id: id, risks: {redundant: false} },
       relations: [
         'risks',
         'risks.category',
