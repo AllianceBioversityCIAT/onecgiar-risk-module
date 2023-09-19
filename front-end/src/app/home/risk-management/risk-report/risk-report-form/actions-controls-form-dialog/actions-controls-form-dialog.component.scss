@@ -40,7 +40,7 @@
 .form-dialog-conten-button-box-2 {
   text-align: right;
   margin-top: -4.5rem !important;
-  margin-right: -2rem;
+  // margin-right: -2rem;
 }
 
 .form-dialog-conten-button-flex {
@@ -51,7 +51,7 @@
 
 .form-dialog-conten__button-box__btn--send {
   display: flex;
-  width: 15.5rem;
+  width: auto !important;
   height: 3.2rem;
   flex-direction: column;
   justify-content: center;
@@ -103,4 +103,21 @@ textarea {
     padding-right: 0;
     padding: 0 1rem !important;
   }
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item {
+  align-items: center;
+  width: 260px !important;
+}
+
+::ng-deep.cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: inline-table !important;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 1rem 0 0 -1rem !important;
+  padding: 0 1rem !important;
 }
