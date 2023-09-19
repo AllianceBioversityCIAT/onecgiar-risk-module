@@ -255,8 +255,10 @@
               <mat-option *ngIf="riskCat.disabled == 0" [value]="riskCat.id">
                 {{ riskCat.title }}
                 <mat-icon
+                  [matTooltipClass]="{ 'tool-tip': true }"
                   matTooltip="{{ riskCat.description }}"
-                  [matTooltipPosition]="'left'"
+                  [matTooltipPosition]="'above'"
+                  
                   matSuffix
                   >help_outline</mat-icon
                 >
@@ -287,7 +289,10 @@
             </svg>
           </mat-icon>
         </div>
+
         <!-- </mat-form-field> -->
+
+        
 
         <mat-error
           class="error"
