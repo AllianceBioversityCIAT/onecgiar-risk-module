@@ -22,7 +22,7 @@ import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { query } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ILike } from 'typeorm';
+import { ILike, In } from 'typeorm';
 import { RiskService } from './risk.service';
 import { CreateRiskRequestDto, CreateRiskResponseDto, GetRiskDto, MitigationCreateRiskResponseDto, PatchRiskRequestDto, PatchRiskResponseDto, UpdateRiskRequestDto, UpdateRiskResponseDto } from 'DTO/risk.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -61,7 +61,8 @@ export class RiskController {
     type: GetRiskDto,
   })
   async getRisk(@Query() query) {
-    console.log(query)
+    
+  
     const redundentRisk = await this.riskService.riskRepository.find({
       where: {
         initiative_id: query.initiative_id,
@@ -96,9 +97,9 @@ export class RiskController {
       where: {
         title:query?.title ?  ILike(`%${query.title}%`) : null, 
         initiative_id: query.initiative_id,
-        category_id: query?.category ? query?.category : null,
-        created_by_user_id:query?.created_by ? query?.created_by : null,
-        risk_owner_id:query?.owner ? query?.owner : null,
+        category_id: query?.category ? In(query?.category)  : null,
+        created_by_user_id: query?.created_by_user_id ? Array.isArray(query?.created_by_user_id) ?  In( query?.created_by_user_id) : query?.created_by_user_id : null,
+        risk_owner_id:  query?.owner ? Array.isArray(query?.owner) ?  In( query?.owner) : query?.owner : null,
         redundant: query?.redundant == 'true' ? null : false,
         request_assistance: query?.request_assistance == 'true' ? true : null,
       },
