@@ -98,7 +98,7 @@ export class RiskController {
         title:query?.title ?  ILike(`%${query.title}%`) : null, 
         initiative_id: query.initiative_id,
         category_id: query?.category ? In(query?.category)  : null,
-        created_by_user_id: query?.created_by_user_id ? Array.isArray(query?.created_by_user_id) ?  In( query?.created_by_user_id) : query?.created_by_user_id : null,
+        created_by_user_id: query?.created_by ? Array.isArray(query?.created_by) ?  In( query?.created_by) : query?.created_by : null,
         risk_owner_id:  query?.owner ? Array.isArray(query?.owner) ?  In( query?.owner) : query?.owner : null,
         redundant: query?.redundant == 'true' ? null : false,
         request_assistance: query?.request_assistance == 'true' ? true : null,
