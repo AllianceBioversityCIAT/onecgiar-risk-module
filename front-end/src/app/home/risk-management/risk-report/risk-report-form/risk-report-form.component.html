@@ -38,12 +38,26 @@
         <a
           routerLink="/home/{{ initiative?.id }}/{{
             initiative?.official_code
-          }}/edit-risk/:riskId"
+          }}/edit-risk/{{ riskId }}"
           class="risk-nav-link"
           *ngIf="riskId"
           >Edit risk</a
         >
       </li>
+      <ng-container *ngIf="riskId">
+        <li>
+          <a routerLink="''" class="risk-nav-link">></a>
+        </li>
+        <li>
+          <a
+            routerLink="/home/{{ initiative?.id }}/{{
+              initiative?.official_code
+            }}/edit-risk/{{ riskId }}"
+            class="risk-nav-link"
+            >{{ riskId }}</a
+          >
+        </li>
+      </ng-container>
     </ul>
   </nav>
 
