@@ -35,7 +35,7 @@
         >
 
         <mat-select
-        [multiple]="true"
+          [multiple]="true"
           class="risk-management-form-field-box__input-3 aa"
           placeholder="All"
           formControlName="category"
@@ -61,7 +61,7 @@
         >
 
         <mat-select
-        [multiple]="true"
+          [multiple]="true"
           class="risk-management-form-field-box__input-3 aa"
           placeholder="All"
           formControlName="created_by"
@@ -81,7 +81,7 @@
         >
 
         <mat-select
-        [multiple]="true"
+          [multiple]="true"
           class="risk-management-form-field-box__input-3 aa"
           placeholder="All"
           formControlName="owner"
@@ -127,7 +127,9 @@
 <div class="risk-management-export">
   <div class="risk-management-export-box">
     <div *ngIf="user_info?.role == 'admin'">
-      <mat-label>Show request assistance risk</mat-label>
+      <mat-label class="initiatives-text-checkbox"
+        >Show request assistance risk</mat-label
+      >
       <mat-checkbox
         labelPosition="before"
         [(ngModel)]="request_assistance"
@@ -136,7 +138,7 @@
     </div>
 
     <div>
-      <mat-label
+      <mat-label class="initiatives-text-checkbox"
         >Show redundant risk ({{
           this.AllRisk?.redundentRisk?.length
         }})</mat-label

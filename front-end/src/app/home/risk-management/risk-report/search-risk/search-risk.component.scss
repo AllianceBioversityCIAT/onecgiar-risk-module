@@ -92,7 +92,7 @@
         position: relative;
         .risk-management-form-field__label {
           display: inline-block;
-          color: #0f212f;
+          color: #808080;
           font-family: "Poppins", sans-serif;
           font-size: 1.4rem;
           font-style: normal;
@@ -121,7 +121,7 @@
         position: relative;
         .risk-management-form-field__label {
           display: inline-block;
-          color: #0f212f;
+          color: #808080;
           font-family: "Poppins", sans-serif;
           font-size: 1.4rem;
           font-style: normal;
@@ -151,7 +151,7 @@
         position: relative;
         .risk-management-form-field__label {
           display: inline-block;
-          color: #0f212f;
+          color: #808080;
           font-family: "Poppins", sans-serif;
           font-size: 1.4rem;
           font-style: normal;
@@ -181,7 +181,7 @@
         position: relative;
         .risk-management-form-field__label {
           display: inline-block;
-          color: #0f212f;
+          color: #808080;
           font-family: "Poppins", sans-serif;
           font-size: 1.4rem;
           font-style: normal;
@@ -211,7 +211,7 @@
         position: relative;
         .risk-management-form-field__label {
           display: inline-block;
-          color: #0f212f;
+          color: #808080;
           font-family: "Poppins", sans-serif;
           font-size: 1.4rem;
           font-style: normal;
@@ -1298,4 +1298,15 @@ tr.example-detail-row {
   max-height: 100%;
   margin: 1rem 0 0 -1rem !important;
   padding: 0 1rem !important;
+}
+
+
+
+.initiatives-text-checkbox {
+  color: #0f212f;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
