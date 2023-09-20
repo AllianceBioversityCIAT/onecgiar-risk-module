@@ -115,7 +115,7 @@ export class InitiativeController {
       const sorts = query.sort.split(',');
       obj[sorts[0]] = sorts[1];
       return obj;
-    } else return top? { top:'ASC', id: 'ASC'} : { id: 'ASC'};
+    } else return top? { top:'ASC',id: 'ASC'} : { id: 'ASC'};
   }
 
   @Get('import-file')
@@ -212,6 +212,7 @@ export class InitiativeController {
 
       Category: null,
       'Created by': null,
+      'Help requested': null,
       Flagged: null,
       'Due date': null,
       // Redundant: false,
@@ -245,17 +246,19 @@ export class InitiativeController {
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
     template['Flagged'] = element.flag;
+    template['Help requested'] =
+    element.request_assistance == true ? 'Yes' : 'No';
   }
 
   prepareDataExcelAdmin(risks) {
     let finaldata = [this.getTemplateAdmin(true)];
     let merges = [
       {
-        s: { c: 15, r: 0 },
-        e: { c: 16, r: 0 },
+        s: { c: 16, r: 0 },
+        e: { c: 17, r: 0 },
       },
     ];
-    for (let index = 0; index < 15; index++) {
+    for (let index = 0; index < 16; index++) {
       merges.push({
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
@@ -888,7 +891,7 @@ export class InitiativeController {
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { ...this.sort(req,true) } },
+      order: { risks: { ...this.sort(req,req.version == 'true') } },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 

@@ -207,7 +207,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       date = this.newRiskForm.get('due_date');
       date.setValidators([
         (c: AbstractControl) =>
-          new Date(c.value).getTime() < Date.now() ? { invalid: true } : null,
+        new Date(c.value).getTime() < Date.now() && !this?.checkIfRiskExist[0]?.id ? { past_date: true } : null,
+        (c: AbstractControl) =>
+        new Date(c.value).getTime() <  new Date(this?.checkIfRiskExist[0]?.created_date).getTime() ? { past_date_created: true } : null,
         Validators.required,
       ]);
       date.updateValueAndValidity();

@@ -378,7 +378,7 @@
         *matRowDef="let element; let i = dataIndex; columns: displayedColumns"
         class="example-element-row"
         [class.example-expanded-row]="expandedElement === element"
-        [ngClass]="{ topRows: i <= 4 && showingVersion == true && showTops == false, redundant_row: element.redundant == true }"
+        [ngClass]="{ topRows: i <= 4 && showingVersion == true && (showTops == false || showTops == true && isTrue == true), redundant_row: element.redundant == true }"
         (click)="expandedElement = expandedElement === element ? null : element"
       >
         >
@@ -762,6 +762,38 @@
             {{ element.due_date | date : "dd/MM/yyyy" }}
           </td>
         </ng-container>
+
+        <ng-container matColumnDef="Help requested">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="
+              width: 55rem;
+              padding: 8px;
+              font-size: 1.2rem;
+              font-weight: 600;
+              line-height: 130%;
+              background-color: #436280;
+              color: #ffffff;
+              letter-spacing: 0em;
+              text-align: center;
+              font-style: normal;
+            "
+          >
+            <span class="h4">Help requested</span>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="
+              border: 1px solid rgba(185, 185, 185, 0.7098039216);
+              min-width: 130px;
+            "
+          >
+            {{ element.request_assistance == true ? 'Yes' : 'No' }}
+          </td>
+        </ng-container>
+
 
         <ng-container matColumnDef="Mitigation Action">
           <th

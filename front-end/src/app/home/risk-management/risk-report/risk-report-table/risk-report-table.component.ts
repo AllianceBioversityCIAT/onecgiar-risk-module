@@ -118,6 +118,7 @@ export class RiskReportTableComponent {
         'Target Impact',
         'Target Risk Level',
         'due date',
+        'Help requested',
         'Mitigation Action',
         'Risk Owner',
         'created_by',
@@ -167,6 +168,7 @@ export class RiskReportTableComponent {
   locked: any = {};
   connection = true;
   showTops:boolean = false;
+  isTrue:boolean = false;
   async ngOnInit() {
     this.socket.on('locked', (data: any) => {
       this.locked = data;
@@ -211,7 +213,8 @@ export class RiskReportTableComponent {
 
     //show tops in version when reqAssistance is false
     this.initiativeService.reqAssistanceValue.subscribe(val => {
-      this.showTops = val;
+      this.showTops = val.reqAssistance;
+      this.isTrue = val.reqAssistanceNotExist
     })
   }
 
