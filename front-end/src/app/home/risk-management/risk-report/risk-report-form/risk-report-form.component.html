@@ -41,9 +41,7 @@
           }}/edit-risk/{{ riskId }}"
           class="risk-nav-link"
           *ngIf="riskId"
-          >&nbsp;Edit risk<span class="line">&nbsp;/</span>&nbsp;{{
-            riskId
-          }}</a
+          >&nbsp;Edit risk<span class="line">&nbsp;/</span>&nbsp;{{ riskId }}</a
         >
       </li>
     </ul>
@@ -971,7 +969,10 @@
           <li>
             Review Risk Theme/Category and change if not correct (optional)
           </li>
-          <li>​Review Risk Owner and change if not correct (optional)</li>
+          <li>
+            On first use, adding the Risk Owner is mandatory. The authorized
+            user can change the risk owner later.
+          </li>
           <li>​Update Risk Description (optional)</li>
           <li>
             ​Update Risk Targets (default will be same as risk level; and
@@ -979,10 +980,7 @@
             targets same as risk level)
           </li>
           <li>​Add additional Actions to Manage Risk (optional)</li>
-          <li>
-            Review Status of Actions for each risk; default is “Ongoing and
-            ontrack” (optional)​
-          </li>
+          <li>Review Status of Actions for each risk (optional)​</li>
         </ol>
         <p class="risk-report-form-note-content-note">
           Note: these steps are required even if the Risk is tagged as Complete.
