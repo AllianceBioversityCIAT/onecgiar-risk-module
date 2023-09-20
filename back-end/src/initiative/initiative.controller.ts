@@ -109,9 +109,9 @@ export class InitiativeController {
       return { roles: { user_id: req.user.id } };
     else return {};
   }
-  sort(query) {
+  sort(query): any {
     if (query?.sort) {
-      let obj = {};
+      let obj = {  };
       const sorts = query.sort.split(',');
       obj[sorts[0]] = sorts[1];
       return obj;
@@ -447,7 +447,8 @@ export class InitiativeController {
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
     template['Flagged'] = element.flag;
-    template['Help requested'] = element.request_assistance == true ? 'Yes' : 'No';
+    template['Help requested'] =
+      element.request_assistance == true ? 'Yes' : 'No';
   }
 
   prepareDataExcelVersionAdmin(risks) {
@@ -726,10 +727,20 @@ export class InitiativeController {
     description: '',
     type: getInitiativeById,
   })
-  async getInitiativesForVersion(@Param('id') id: number, @Query() filters: any) {
+  async getInitiativesForVersion(
+    @Param('id') id: number,
+    @Query() filters: any,
+  ) {
     let result = await this.iniService.iniRepository
       .findOneOrFail({
-        where: { id , risks: { redundant: false, request_assistance: filters?.request_assistance == 'true' ? true : null}},
+        where: {
+          id,
+          risks: {
+            redundant: false,
+            request_assistance:
+              filters?.request_assistance == 'true' ? true : null,
+          },
+        },
         relations: [
           'risks',
           'risks.category',
@@ -759,8 +770,8 @@ export class InitiativeController {
   async exportAlltoExcel(@Query() query: any, @Req() req) {
     let ininit = await this.iniService.iniRepository.find({
       select: ['id'],
-      where: { 
-        parent_id: IsNull() ,
+      where: {
+        parent_id: IsNull(),
         ...this.roles(query, req),
         status: query?.status,
         name: query?.name ? ILike(`%${query.name}%`) : null,
@@ -768,7 +779,11 @@ export class InitiativeController {
       },
     });
     const risks = await this.riskService.riskRepository.find({
-      where: { initiative_id: In(ininit.map((d) => d.id)), redundant: false , category: { id : query?.category ? In(query?.category) : null}},
+      where: {
+        initiative_id: In(ininit.map((d) => d.id)),
+        redundant: false,
+        category: { id: query?.category ? In(query?.category) : null },
+      },
       relations: [
         'initiative',
         'category',
@@ -780,7 +795,7 @@ export class InitiativeController {
         'initiative.roles',
         'initiative.roles.user',
       ],
-      order: {  initiative:  { ...this.sort(query) } },
+      order: { initiative: { ...this.sort(query) } },
     });
     if (query.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
@@ -842,14 +857,22 @@ export class InitiativeController {
   })
   async exportExcel(@Param('id') id: number, @Query() req: any) {
     let init = await this.iniService.iniRepository.findOne({
-      where: { 
-        id: id, 
-        risks: { 
+      where: {
+        id: id,
+        risks: {
           redundant: req?.redundant == 'true' ? null : false,
-          title:req?.title ?  ILike(`%${req.title}%`) : null,
-          category: { id : req?.category ? In(req?.category) : null},
-          created_by_user_id: req?.created_by ? Array.isArray(req?.created_by) ?  In( req?.created_by) : req?.created_by : null,
-          risk_owner_id:  req?.owner ? Array.isArray(req?.owner) ?  In( req?.owner) : req?.owner : null,
+          title: req?.title ? ILike(`%${req.title}%`) : null,
+          category: { id: req?.category ? In(req?.category) : null },
+          created_by_user_id: req?.created_by
+            ? Array.isArray(req?.created_by)
+              ? In(req?.created_by)
+              : req?.created_by
+            : null,
+          risk_owner_id: req?.owner
+            ? Array.isArray(req?.owner)
+              ? In(req?.owner)
+              : req?.owner
+            : null,
           request_assistance: req?.request_assistance == 'true' ? true : null,
         },
       },
@@ -865,7 +888,7 @@ export class InitiativeController {
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { ...this.sort(req) } },
+      order: { risks: { ...this.sort(req) ,top:'ASC'} },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 
@@ -1054,7 +1077,7 @@ export class InitiativeController {
   })
   getVersons(@Param('id') id: number) {
     return this.iniService.iniRepository.find({
-      where: { parent_id: id, risks: {redundant: false} },
+      where: { parent_id: id, risks: { redundant: false } },
       relations: [
         'risks',
         'risks.category',
