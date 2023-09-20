@@ -252,7 +252,7 @@ export class InitiativeController {
     let merges = [
       {
         s: { c: 15, r: 0 },
-        e: { c: 17, r: 0 },
+        e: { c: 16, r: 0 },
       },
     ];
     for (let index = 0; index < 15; index++) {
