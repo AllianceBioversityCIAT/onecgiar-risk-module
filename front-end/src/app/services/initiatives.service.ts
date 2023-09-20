@@ -13,11 +13,20 @@ export class InitiativesService extends MainService {
     super();
   }
 
-  async getExport() { 
+  async getExport(filters: any) { 
     const userInfo = this.userService.getLogedInUser();
+    let finalFilters: any = {};
+    Object.keys(filters).forEach((element) => {
+      if (typeof filters[element] === 'string')
+        filters[element] = filters[element].trim();
+      if (filters[element] != null && filters[element] != '')
+        finalFilters[element] = filters[element];
+    });
+
     const data = await firstValueFrom(
       this.http
         .get(this.backend_url + `/initiative/all/excel?user=${userInfo.role}`, {
+          params: finalFilters,
           headers: this.headers,
           responseType: 'blob',
         })
@@ -39,11 +48,20 @@ export class InitiativesService extends MainService {
         .pipe(map((d: any) => d))
     );
   }
-  async getExportByinititave(id: number, official_code = '', versions: boolean) {
+  async getExportByinititave(id: number, official_code = '', versions: boolean, filters: any) {
     const userInfo = this.userService.getLogedInUser();
+    let finalFilters: any = {};
+    Object.keys(filters).forEach((element) => {
+      if (typeof filters[element] === 'string')
+        filters[element] = filters[element].trim();
+      if (filters[element] != null && filters[element] != '')
+        finalFilters[element] = filters[element];
+    });
+
     const data = await firstValueFrom(
       this.http
         .get(this.backend_url + '/initiative/' + id + `/excel?user=${userInfo.role}&version=${versions}`, {
+          params: finalFilters,
           headers: this.headers,
           responseType: 'blob',
         })

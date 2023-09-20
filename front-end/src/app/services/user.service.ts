@@ -99,10 +99,20 @@ getUsersForTeamMember(filters: any = null): Observable<any> {
     return false;
   }
 
-  async exportUsers() {
+  async exportUsers(filters: any) {
+    let finalFilters: any = {};
+    if (filters)
+      Object.keys(filters).forEach((element) => {
+        if (typeof filters[element] === 'string')
+          filters[element] = filters[element].trim();
+
+        if (filters[element] != null && filters[element] != '')
+          finalFilters[element] = filters[element];
+      });
     const data: any = await firstValueFrom(
       this.http
         .get(this.backend_url + '/users/export/all', {
+          params: finalFilters,
           headers: this.headers,
           responseType: 'blob',
         })

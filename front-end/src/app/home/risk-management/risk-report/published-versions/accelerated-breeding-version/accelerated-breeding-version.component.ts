@@ -84,7 +84,8 @@ export class AcceleratedBreedingVersionComponent {
     await this.initiativesService.getExportByinititave(
       this.id,
       this.official_code,
-      true
+      true,
+      this.filter
     );
   }
 }
