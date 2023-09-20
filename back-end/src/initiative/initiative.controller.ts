@@ -111,11 +111,11 @@ export class InitiativeController {
   }
   sort(query): any {
     if (query?.sort) {
-      let obj = { top: 'ASC' };
+      let obj = {  };
       const sorts = query.sort.split(',');
       obj[sorts[0]] = sorts[1];
       return obj;
-    } else return { top: 'ASC', id: 'ASC' };
+    } else return { id: 'ASC' };
   }
 
   @Get('import-file')
@@ -888,7 +888,7 @@ export class InitiativeController {
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { ...this.sort(req) } },
+      order: { risks: { ...this.sort(req) ,top:'ASC'} },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 
