@@ -57,6 +57,7 @@ export class AcceleratedBreedingVersionComponent {
     }, (error) => {
       this.toaster.error(error.error.message);
     });
+    this.initiativesService.requestAssistanceValue(this.request_assistance);
   }
 
   async ngOnInit() {
