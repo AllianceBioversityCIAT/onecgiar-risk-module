@@ -36,15 +36,14 @@ export class AuthService {
     if (access_token) {
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('access_expires_in', expires_in);
-      if (redirect_url) this.router.navigateByUrl(redirect_url);
-      else this.router.navigateByUrl('/');
     }
+    if (redirect_url) this.router.navigateByUrl(redirect_url);
+    else this.router.navigateByUrl('/home');
   }
   getLogedInUser(): any {
-    if(localStorage.getItem('access_token') as string)
-    return jwt_decode(localStorage.getItem('access_token') as string);
-    else
-    return false;
+    if (localStorage.getItem('access_token') as string)
+      return jwt_decode(localStorage.getItem('access_token') as string);
+    else return false;
   }
   goToLogin(redirect_url: string = '', type: any = null) {
     this.document.location.href =

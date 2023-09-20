@@ -149,7 +149,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'about',
     pathMatch: 'full',
   },
   { path: 'auth', component: AuthComponent },
