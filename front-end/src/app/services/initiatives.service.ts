@@ -184,7 +184,6 @@ export class InitiativesService extends MainService {
         },
         { headers: this.headers }
       )
-      .toPromise();
   }
 
   deleteInitiativeRole(initiativeId: number, roleId: number) {
