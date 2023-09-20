@@ -215,7 +215,7 @@ export class InitiativeController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -279,12 +279,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateAdmin();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -313,7 +313,7 @@ export class InitiativeController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
       'Help requested': null,
     };
@@ -383,12 +383,12 @@ export class InitiativeController {
       element.mitigations.forEach((d, index) => {
         console.log(index);
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateAllDataAdmin();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -417,7 +417,7 @@ export class InitiativeController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -482,12 +482,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateVersionAdmin();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -515,7 +515,7 @@ export class InitiativeController {
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -580,12 +580,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateUser();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -614,7 +614,7 @@ export class InitiativeController {
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -680,12 +680,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateVersionUser();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
