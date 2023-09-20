@@ -419,9 +419,13 @@
                   taking into account any existing controls and actions in place
                   and working
                 </p>
-                <button routerLink="/glossary" class="btn btn--outline">
+                <a
+                  routerLink="/glossary"
+                  target="_blank"
+                  class="btn btn--outline"
+                >
                   Learn more &rarr;
-                </button>
+                </a>
               </div>
             </sat-popover>
           </div>
@@ -495,9 +499,13 @@
                   taking into account any existing controls and actions in place
                   and working
                 </p>
-                <button routerLink="/glossary" class="btn btn--outline">
+                <a
+                  routerLink="/glossary"
+                  target="_blank"
+                  class="btn btn--outline"
+                >
                   Learn more &rarr;
-                </button>
+                </a>
               </div>
             </sat-popover>
           </div>
@@ -609,9 +617,13 @@
                   taking into account any existing controls and actions in place
                   and working
                 </p>
-                <button routerLink="/glossary" class="btn btn--outline">
+                <a
+                  routerLink="/glossary"
+                  target="_blank"
+                  class="btn btn--outline"
+                >
                   Learn more &rarr;
-                </button>
+                </a>
               </div>
             </sat-popover>
           </div>
@@ -687,9 +699,13 @@
                   taking into account any existing controls and actions in place
                   and working
                 </p>
-                <button routerLink="/glossary" class="btn btn--outline">
+                <a
+                  routerLink="/glossary"
+                  target="_blank"
+                  class="btn btn--outline"
+                >
                   Learn more &rarr;
-                </button>
+                </a>
               </div>
             </sat-popover>
           </div>
@@ -789,14 +805,6 @@
         <mat-error
           *ngIf="newRiskForm.controls['due_date'].errors?.['invalid'] && this.newRiskForm.controls['due_date'].value != null"
           >Invalid date format</mat-error
-        >
-        <mat-error
-          *ngIf="newRiskForm.controls['due_date'].errors?.['past_date'] && this.newRiskForm.controls['due_date'].value != null"
-          >Due date can't be in the past</mat-error
-        >
-        <mat-error
-          *ngIf="newRiskForm.controls['due_date'].errors?.['past_date_created'] && this.newRiskForm.controls['due_date'].value != null"
-          >Due date can't be past risk created date</mat-error
         >
 
         <!-- </mat-form-field> -->
