@@ -796,8 +796,8 @@
 
   &__h3 {
     margin: 0;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 2rem;
+    font-weight: 700;
     color: #000;
   }
 
@@ -818,7 +818,7 @@
     width: 24px;
     overflow: hidden;
     cursor: pointer;
-    color: #000;
+    color: #0f212f;
   }
 
   &__primaryButton {
@@ -852,8 +852,9 @@
     font-family: "Poppins", sans-serif !important;
     font-size: 1.3rem;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 114.5%;
+    line-height: 15.75px;
   }
 }
 
@@ -897,4 +898,37 @@
     transition: all 0.3s;
     width: 239px;
   }
+}
+
+.btn,
+.btn:link,
+.btn:visited {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 500;
+  /* padding: 1.6rem 1.2rem; */
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn--outline:link,
+.btn--outline:visited {
+  background-color: #fff;
+  color: #555;
+}
+
+.btn--outline:hover,
+.btn--outline:active {
+  background-color: #0f212f;
+  color: #fff;
+  /* border: 3px solid #fff; */
+
+  /* Trick to add border inside */
+  box-shadow: inset 0 0 0 3px #fff;
 }
