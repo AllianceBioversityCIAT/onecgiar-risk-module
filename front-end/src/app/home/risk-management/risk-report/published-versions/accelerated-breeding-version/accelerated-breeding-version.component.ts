@@ -40,6 +40,7 @@ export class AcceleratedBreedingVersionComponent {
 
   path: any = '';
   id: any;
+  official_code:any;
   initiative: any;
 
   paarentRoute: any;
@@ -66,9 +67,10 @@ export class AcceleratedBreedingVersionComponent {
     this.initiative = await this.initiativesService.getInitiativeForVersion(this.id, this.filter);
     this.dataSource.data = this.initiative?.risks;
 
-    const params2 = this.activatedRoute.parent?.parent?.snapshot.params;
+    const params2:any = this.activatedRoute.parent?.parent?.snapshot.params;
     console.log(params2);
     this.paarentRoute = params2;
+    this.official_code = params2.initiativeId;
 
     this.titlePage = this.t.a;
 
@@ -81,7 +83,7 @@ export class AcceleratedBreedingVersionComponent {
   async export() {
     await this.initiativesService.getExportByinititave(
       this.id,
-      this.initiative.official_code,
+      this.official_code,
       true
     );
   }
