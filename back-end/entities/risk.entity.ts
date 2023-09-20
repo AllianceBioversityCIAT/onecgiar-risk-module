@@ -10,6 +10,7 @@ import {
   JoinTable,
   ManyToMany,
   Index,
+  CreateDateColumn,
 } from 'typeorm';
 import { InitiativeRoles } from './initiative-roles.entity';
 import { Initiative } from './initiative.entity';
@@ -34,8 +35,6 @@ export class Risk {
   @ApiProperty()
   @Column()
   title: string;
-
-
 
   @ApiProperty()
   @Optional()
@@ -71,7 +70,7 @@ export class Risk {
   current_likelihood: number;
 
   @ApiProperty()
-  @Column({type : 'bool', default: false})
+  @Column({ type: 'bool', default: false })
   request_assistance: boolean;
 
   @ApiProperty()
@@ -113,17 +112,21 @@ export class Risk {
 
   @ApiProperty()
   @Optional()
-  @Column({ type: 'timestamp' , default:null })
+  @Column({ type: 'datetime', default: null })
   due_date: Date;
+
+  @CreateDateColumn()
+  created_date: Date;
 
   @ApiProperty({ type: () => [Mitigation] })
   @OneToMany(() => Mitigation, (mitigation) => mitigation.risk, {
+
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
   @JoinTable()
   mitigations: Array<Mitigation>;
-  
+
   @ApiProperty()
   @ManyToOne(() => User, (user) => user.risks)
   @JoinColumn({ name: 'created_by_user_id' })

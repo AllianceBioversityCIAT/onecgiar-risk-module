@@ -59,6 +59,7 @@ export class RiskService extends MainService {
   }
   // ============================================================================= RISK  --  PUT API
   async updateRisk(riskId: number, risk: any) {
+    console.log('update risk',risk)
     return firstValueFrom(
       this.http
         .put(this.backend_url + '/risk/' + riskId, risk, {

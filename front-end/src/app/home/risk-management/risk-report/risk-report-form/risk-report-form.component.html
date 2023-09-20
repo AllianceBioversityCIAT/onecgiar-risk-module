@@ -41,9 +41,7 @@
           }}/edit-risk/{{ riskId }}"
           class="risk-nav-link"
           *ngIf="riskId"
-          >&nbsp;Edit risk<span class="line">&nbsp;/</span>&nbsp;{{
-            riskId
-          }}</a
+          >&nbsp;Edit risk<span class="line">&nbsp;/</span>&nbsp;{{ riskId }}</a
         >
       </li>
     </ul>
@@ -791,6 +789,14 @@
         <mat-error
           *ngIf="newRiskForm.controls['due_date'].errors?.['invalid'] && this.newRiskForm.controls['due_date'].value != null"
           >Invalid date format</mat-error
+        >
+        <mat-error
+          *ngIf="newRiskForm.controls['due_date'].errors?.['past_date'] && this.newRiskForm.controls['due_date'].value != null"
+          >Due date can't be in the past</mat-error
+        >
+        <mat-error
+          *ngIf="newRiskForm.controls['due_date'].errors?.['past_date_created'] && this.newRiskForm.controls['due_date'].value != null"
+          >Due date can't be past risk created date</mat-error
         >
 
         <!-- </mat-form-field> -->
