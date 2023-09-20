@@ -11,14 +11,31 @@
         <th mat-header-cell *matHeaderCellDef>
           <div class="mtable">ID</div>
         </th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-          [ngClass]="{
-            flagged: element.flag == true && this.user_info.role == 'admin'
-          }"
-        >
+        <td mat-cell *matCellDef="let element">
           <div class="mtable">
+            <span class="flags">
+              <mat-icon
+                matTooltipPosition="above"
+                matTooltip="Flaged (high score)"
+                *ngIf="element.flag == true && this.user_info.role == 'admin'"
+                >flagged</mat-icon
+              >
+              <mat-icon
+                matTooltipPosition="above"
+                matTooltip="Requested assistance"
+                *ngIf="element.request_assistance == true"
+                >assignment</mat-icon
+              >
+
+              <mat-icon
+                matTooltipPosition="above"
+                matTooltip="Marked as Redundant"
+                *ngIf="
+                  element.redundant == true && this.user_info.role == 'admin'
+                "
+                >file_copy</mat-icon
+              >
+            </span>
             {{
               showingVersion == true
                 ? element.original_risk_id || element.id
@@ -348,10 +365,11 @@
                     class="example-margin"
                   ></mat-checkbox>
                 </div>
-                
+
                 <div class="flex-box-risk-report-detail">
                   <span class="risk-report-detail-content__title"
-                    >Request Assistance: {{element.request_assistance == false ? 'No' : 'Yes'}}
+                    >Request Assistance:
+                    {{ element.request_assistance == false ? "No" : "Yes" }}
                   </span>
                 </div>
               </div>
@@ -378,7 +396,13 @@
         *matRowDef="let element; let i = dataIndex; columns: displayedColumns"
         class="example-element-row"
         [class.example-expanded-row]="expandedElement === element"
-        [ngClass]="{ topRows: i <= 4 && showingVersion == true && (showTops == false || showTops == true && isTrue == true), redundant_row: element.redundant == true }"
+        [ngClass]="{
+          topRows:
+            i <= 4 &&
+            showingVersion == true &&
+            (showTops == false || (showTops == true && isTrue == true)),
+          redundant_row: element.redundant == true
+        }"
         (click)="expandedElement = expandedElement === element ? null : element"
       >
         >
