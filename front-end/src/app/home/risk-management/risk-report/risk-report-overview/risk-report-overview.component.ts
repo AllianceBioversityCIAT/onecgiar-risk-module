@@ -95,9 +95,6 @@ export class RiskReportOverviewComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  async export(id: number, official_code: string) {
-    await this.initiativeService.getExportByinititave(id, official_code, false);
-  }
   savePdf: EventEmitter<any> = new EventEmitter<any>();
   exportPdf() {
     this.savePdf.emit();
@@ -145,7 +142,7 @@ export class RiskReportOverviewComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.NumberOfRisks = this.dataSource._renderData._value.length;
     this.dataSourceForPdf = new MatTableDataSource<any>(
-      this.AllRisk.notredundentRisk
+      this.AllRisk.risks
     );
     if(this.AllRisk?.redundentRisk?.length != 0 && this.AllRisk?.risks?.length == 0) {
       this.toolTipMessage = 'All Risks are redundant';
@@ -162,7 +159,7 @@ export class RiskReportOverviewComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.isTrue = this.AllRisk.risks.every((obj: any) => obj.redundant == true);
     this.dataSourceForPdf = new MatTableDataSource<any>(
-      this.AllRisk.notredundentRisk
+      this.AllRisk.risks
     );
   }
   isTrue: boolean = false;

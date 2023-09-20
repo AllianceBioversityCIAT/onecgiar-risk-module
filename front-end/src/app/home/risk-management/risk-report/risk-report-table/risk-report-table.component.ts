@@ -139,7 +139,7 @@ export class RiskReportTableComponent {
       });
       doc.html(content.innerHTML, {
         callback: (doc) => {
-          doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
+          doc.save('Risks-' + this.initiativeId + '.pdf');
           this.toPdf = false;
         },
       });
@@ -166,7 +166,7 @@ export class RiskReportTableComponent {
   my_roles: any;
   locked: any = {};
   connection = true;
-
+  showTops:boolean = false;
   async ngOnInit() {
     this.socket.on('locked', (data: any) => {
       this.locked = data;
@@ -208,6 +208,11 @@ export class RiskReportTableComponent {
     ) {
       this.displayedColumns.pop();
     }
+
+    //show tops in version when reqAssistance is false
+    this.initiativeService.reqAssistanceValue.subscribe(val => {
+      this.showTops = val;
+    })
   }
 
   public setTitle(newTitle: string) {

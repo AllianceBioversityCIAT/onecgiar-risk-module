@@ -1,5 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActionArea } from 'entities/action-area';
@@ -11,7 +16,7 @@ import { firstValueFrom, map } from 'rxjs';
 import { EmailsService } from 'src/emails/emails.service';
 import { RiskService } from 'src/risk/risk.service';
 import { UsersService } from 'src/users/users.service';
-import { IsNull, Not, Repository } from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
 @Injectable()
 export class InitiativeService {
@@ -49,7 +54,24 @@ export class InitiativeService {
       last_updated_date: new Date(),
     });
   }
-  async updateRoles(initiative_id, id, initiativeRoles: InitiativeRoles) {
+  async updateRoles(initiative_id, id, initiativeRoles: any) {
+    const countOfleaders = await this.iniRolesRepository.findAndCount({
+      where: {
+        initiative_id: initiative_id,
+        role: 'Leader',
+        user_id: Not(
+          initiativeRoles?.user_id?.id
+            ? initiativeRoles?.user_id?.id
+            : initiativeRoles?.user_id,
+        ),
+      },
+    });
+
+    if (countOfleaders[1] >= 2 && initiativeRoles.role == 'Leader')
+      throw new BadRequestException(
+        `You can't add more than two leaders to the Initiative`,
+      );
+
     const found_roles = await this.iniRolesRepository.findOne({
       where: { initiative_id, id },
     });
@@ -63,8 +85,8 @@ export class InitiativeService {
       relations: ['roles', 'roles.user'],
     });
     const allRisks = await this.riskService.riskRepository.find({
-      where: { initiative_id: old_init_id }
-    })
+      where: { initiative_id: old_init_id },
+    });
     //set default value
     for (const risks of allRisks) {
       risks.top = 999;
@@ -76,7 +98,7 @@ export class InitiativeService {
         risk.top = num++;
         await this.riskService.updateRisk(risk.id, risk, user);
       }
-      
+
     const phase = await this.phaseService.findActivePhase();
 
     const initiative = this.iniRepository.create();
@@ -144,21 +166,28 @@ export class InitiativeService {
   }
 
   async setRole(initiative_id, role: InitiativeRoles) {
-    let userInInit:any;
-    let isExistsUser:any;
-    if(role.email == ''){
-      userInInit =  await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id , user_id: role.user_id},
+    const countOfleaders = await this.iniRolesRepository.findAndCount({
+      where: { initiative_id: initiative_id, role: 'Leader' },
+    });
+    if (countOfleaders[1] >= 2 && role.role == 'Leader')
+      throw new BadRequestException(
+        `You can't add more than two leaders to the Initiative`,
+      );
+
+    let userInInit: any;
+    let isExistsUser: any;
+    if (role.email == '') {
+      userInInit = await this.iniRolesRepository.findOne({
+        where: { initiative_id: initiative_id, user_id: role.user_id },
       });
-    }
-    else {
+    } else {
       //invite by email
-      userInInit =  await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id , email: role.email}
+      userInInit = await this.iniRolesRepository.findOne({
+        where: { initiative_id: initiative_id, email: role.email },
       });
       isExistsUser = await this.userService.findByEmail(role.email);
     }
-    if(userInInit == null && role.email == '') {
+    if (userInInit == null && role.email == '') {
       let init = await this.iniRepository.findOne({
         where: { id: initiative_id },
         relations: ['roles'],
@@ -178,8 +207,7 @@ export class InitiativeService {
         if (user) this.emailsService.sendEmailTobyVarabel(user, 10);
       }
       return await this.iniRolesRepository.save(newRole, { reload: true });
-    }
-    else if(userInInit == null  && role.email != '') {
+    } else if (userInInit == null && role.email != '') {
       let init = await this.iniRepository.findOne({
         where: { id: initiative_id },
         relations: ['roles'],
@@ -193,14 +221,17 @@ export class InitiativeService {
       };
       //To the user that was added by the Admin or Leader/Coordinator
 
-      this.emailsService.sendEmailTobyVarabel({full_name:'',email:newRole.email}, 10);
-      
-      return await this.iniRolesRepository.save(newRole, { reload: true });
-    }
-    else {
-      throw new BadRequestException('User already have role in this initiative');
-    }
+      this.emailsService.sendEmailTobyVarabel(
+        { full_name: '', email: newRole.email },
+        10,
+      );
 
+      return await this.iniRolesRepository.save(newRole, { reload: true });
+    } else {
+      throw new BadRequestException(
+        'User already have role in this initiative',
+      );
+    }
   }
 
   async syncActionAreaFromClarisa() {

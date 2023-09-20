@@ -65,7 +65,7 @@ export class SearchInitComponent {
     this.filterForm.markAsUntouched();
   }
   async export() {
-    await this.initiativeService.getExport();
+    await this.initiativeService.getExport(this.filterForm.value);
   }
   async ngOnInit() {
   

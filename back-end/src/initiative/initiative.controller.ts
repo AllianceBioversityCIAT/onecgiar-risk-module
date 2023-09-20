@@ -215,7 +215,7 @@ export class InitiativeController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -279,12 +279,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateAdmin();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -313,7 +313,7 @@ export class InitiativeController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
       'Help requested': null,
     };
@@ -383,12 +383,12 @@ export class InitiativeController {
       element.mitigations.forEach((d, index) => {
         console.log(index);
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateAllDataAdmin();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -417,7 +417,7 @@ export class InitiativeController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -482,12 +482,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateVersionAdmin();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -515,7 +515,7 @@ export class InitiativeController {
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -580,12 +580,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateUser();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -614,7 +614,7 @@ export class InitiativeController {
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
-      Mitigations: width ? 'Description' : null,
+      'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -680,12 +680,12 @@ export class InitiativeController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template.Mitigations = d.description;
+          template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateVersionUser();
-          template2.Mitigations = d.description;
+          template2['Actions /Controls to manage risks'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -756,13 +756,19 @@ export class InitiativeController {
     description: '',
     type: AllExcel,
   })
-  async exportAlltoExcel(@Query() userRole: any) {
+  async exportAlltoExcel(@Query() query: any, @Req() req) {
     let ininit = await this.iniService.iniRepository.find({
       select: ['id'],
-      where: { parent_id: IsNull() },
+      where: { 
+        parent_id: IsNull() ,
+        ...this.roles(query, req),
+        status: query?.status,
+        name: query?.name ? ILike(`%${query.name}%`) : null,
+        // risks: { category_id: query?.category ? In(query?.category) : null }
+      },
     });
     const risks = await this.riskService.riskRepository.find({
-      where: { initiative_id: In(ininit.map((d) => d.id)), redundant: false },
+      where: { initiative_id: In(ininit.map((d) => d.id)), redundant: false , category: { id : query?.category ? In(query?.category) : null}},
       relations: [
         'initiative',
         'category',
@@ -774,9 +780,9 @@ export class InitiativeController {
         'initiative.roles',
         'initiative.roles.user',
       ],
-      order: { initiative_id: 'ASC', top: 'ASC' },
+      order: {  initiative:  { ...this.sort(query) } },
     });
-    if (userRole.user == 'admin') {
+    if (query.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
       const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks);
@@ -836,7 +842,17 @@ export class InitiativeController {
   })
   async exportExcel(@Param('id') id: number, @Query() req: any) {
     let init = await this.iniService.iniRepository.findOne({
-      where: { id, risks: { redundant: false } },
+      where: { 
+        id: id, 
+        risks: { 
+          redundant: req?.redundant == 'true' ? null : false,
+          title:req?.title ?  ILike(`%${req.title}%`) : null,
+          category: { id : req?.category ? In(req?.category) : null},
+          created_by_user_id: req?.created_by ? Array.isArray(req?.created_by) ?  In( req?.created_by) : req?.created_by : null,
+          risk_owner_id:  req?.owner ? Array.isArray(req?.owner) ?  In( req?.owner) : req?.owner : null,
+          request_assistance: req?.request_assistance == 'true' ? true : null,
+        },
+      },
       relations: [
         'risks',
         'risks.category',
@@ -849,7 +865,7 @@ export class InitiativeController {
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { top: 'ASC' } },
+      order: { risks: { ...this.sort(req) } },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 

@@ -152,7 +152,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   async export() {
-    await this.users.exportUsers();
+    await this.users.exportUsers(this.filters);
   }
 
   resetForm() {

@@ -148,9 +148,18 @@ export class TeamMembersComponent {
             email: result.formValue.email,
             role: result.formValue.userRole,
           }
+        )
+        .subscribe(
+          (data) => {
+            if (data) {
+              this.toastr.success('Success', `User role has been updated`);
+              this.loadInitiativeRoles();
+            }
+          },
+          (error) => {
+            this.toastr.error(error.error.message);
+          }
         );
-        this.toastr.success('Success', `User role has been updated`);
-        this.loadInitiativeRoles();
       }
     });
   }

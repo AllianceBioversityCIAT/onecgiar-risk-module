@@ -148,13 +148,29 @@ export class UsersController {
     description: '',
     type: exportToExcel,
   })
-  async export() {
-    let users = await this.usersService.userRepository.find();
-    console.log(users);
+  async export(@Query() query:any) {
+    let users = await this.usersService.userRepository
+    .createQueryBuilder('users')
+    .where('users.full_name like :full_name', {
+      full_name: `%${query.email}%`,
+    })
+    .orWhere('users.email like :email', { email: `%${query.email}%` })
+    .select('users.id as id')
+    .getRawMany();
+    
+    const result =
+    await this.usersService.userRepository.find({
+      where: {
+        id: users.length ? In(users.map(d=>d.id)) : null,
+        role: query?.role ? query?.role : null,
+      },
+      order: { ...this.sort(query) },
+    });
+
     const file_name = 'All-Users.xlsx';
     var wb = XLSX.utils.book_new();
 
-    const ws = XLSX.utils.json_to_sheet(users);
+    const ws = XLSX.utils.json_to_sheet(result);
 
     XLSX.utils.book_append_sheet(wb, ws, 'Users');
     await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));

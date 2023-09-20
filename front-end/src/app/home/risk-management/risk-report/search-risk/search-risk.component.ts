@@ -78,11 +78,9 @@ export class SearchRiskComponent {
     this.filterForm.reset();
     this.filterForm.markAsUntouched();
   }
-  // async export() {
-  //   await this.initiativeService.getExport();
-  // }
+
   async export(id: number, official_code: string) {
-    await this.initiativeService.getExportByinititave(id, official_code, false);
+    await this.initiativeService.getExportByinititave(id, official_code, false, this.filterForm.value);
   }
   riskUsers: any;
   riskRaiser: any;
