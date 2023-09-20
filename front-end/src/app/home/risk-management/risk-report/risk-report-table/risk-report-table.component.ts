@@ -139,7 +139,7 @@ export class RiskReportTableComponent {
       });
       doc.html(content.innerHTML, {
         callback: (doc) => {
-          doc.save('Risks-' + this.initiativeId + '-' + this.id + '.pdf');
+          doc.save('Risks-' + this.initiativeId + '.pdf');
           this.toPdf = false;
         },
       });

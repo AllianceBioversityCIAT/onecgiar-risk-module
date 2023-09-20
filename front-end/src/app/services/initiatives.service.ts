@@ -67,7 +67,7 @@ export class InitiativesService extends MainService {
         })
         .pipe(map((d: Blob) => d))
     );
-    saveAs(data, 'Risks-' + official_code + '-' + id + '.xlsx');
+    saveAs(data, 'Risks-' + official_code + '.xlsx');
   }
   async getInitiatives(id = null): Promise<Array<any>> {
     if (id)
