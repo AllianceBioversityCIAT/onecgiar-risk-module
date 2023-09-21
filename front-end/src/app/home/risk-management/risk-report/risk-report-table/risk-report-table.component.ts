@@ -101,6 +101,7 @@ export class RiskReportTableComponent {
         'Target Impact',
         'Target Risk Level',
         'due date',
+        'Help requested',
         'Mitigation Action',
         'Risk Owner',
         'created_by',
