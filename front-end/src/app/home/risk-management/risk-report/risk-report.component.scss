@@ -1310,3 +1310,19 @@ tr.example-detail-row {
 .disabled {
   opacity: 0.7;
 }
+
+::ng-deep.mat-mdc-checkbox
+  .mdc-checkbox
+  .mdc-checkbox__native-control[disabled]:checked
+  ~ .mdc-checkbox__background,
+.mat-mdc-checkbox
+  .mdc-checkbox
+  .mdc-checkbox__native-control[disabled]:indeterminate
+  ~ .mdc-checkbox__background,
+.mat-mdc-checkbox
+  .mdc-checkbox
+  .mdc-checkbox__native-control[data-indeterminate="true"][disabled]
+  ~ .mdc-checkbox__background {
+  border-color: rgba(0, 0, 0, 0.186) !important;
+  background-color: #556add76 !important;
+}
