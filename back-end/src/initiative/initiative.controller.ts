@@ -112,6 +112,33 @@ export class InitiativeController {
       return { roles: { user_id: req.user.id } };}
     else return {};
   }
+  filterCategory(query, title) {
+    if(title == 'For Init') {
+      if (query?.category) {
+        if (Array.isArray(query?.category)) {
+          return {
+            category_id: In(query.category),
+          };
+        } else
+          return {
+            category_id: query.category,
+          };
+      }
+      else return {};
+    } else {
+      if (query?.category) {
+        if (Array.isArray(query?.category)) {
+          return {
+            id: In(query.category),
+          };
+        } else
+          return {
+            id: query.category,
+          };
+      }
+      else return {};
+    }
+  }
   sort(query,top=false): any {
     if (query?.sort) {
       let obj = {  };
@@ -186,7 +213,8 @@ export class InitiativeController {
         parent_id: IsNull(),
         official_code: this.offical(query),
         ...this.roles(query, req),
-        risks: { category_id: query?.category ? In(query?.category) : null },
+        risks: { ...this.filterCategory(query, 'For Init') },
+        // risks: { category_id: query?.category ? In(query?.category) : null },
         status: query.status,
       },
       relations: [
@@ -799,7 +827,8 @@ export class InitiativeController {
       where: {
         initiative_id: In(ininit.map((d) => d.id)),
         redundant: false,
-        category: { id: query?.category ? In(query?.category) : null },
+        category : { ...this.filterCategory(query, 'For risk') }
+        // category: { id: query?.category ? In(query?.category) : null },
       },
       relations: [
         'initiative',
@@ -879,7 +908,8 @@ export class InitiativeController {
         risks: {
           redundant: req?.redundant == 'true' ? null : false,
           title: req?.title ? ILike(`%${req.title}%`) : null,
-          category: { id: req?.category ? In(req?.category) : null },
+          category : { ...this.filterCategory(req, 'For risk') },
+          // category: { id: req?.category ? In(req?.category) : null },
           created_by_user_id: req?.created_by
             ? Array.isArray(req?.created_by)
               ? In(req?.created_by)
