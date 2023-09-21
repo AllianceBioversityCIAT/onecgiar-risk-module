@@ -72,7 +72,9 @@
           <th mat-header-cell *matHeaderCellDef>
             <span class="th-4-m">Start date</span>
           </th>
-          <td mat-cell *matCellDef="let phase">{{ phase.start_date | date }}</td>
+          <td mat-cell *matCellDef="let phase">
+            {{ phase.start_date | date }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="end_date">
@@ -134,7 +136,7 @@
                 (click)="activate(phase.id)"
                 matTooltip="Activate Phase"
               >
-                <mat-icon>check_circle_outline</mat-icon>
+                <mat-icon>block</mat-icon>
               </button>
               <button
                 class="user-management-table-icon"
@@ -142,7 +144,7 @@
                 (click)="deactivate(phase.id)"
                 matTooltip="Deactivate Phase"
               >
-                <mat-icon>block</mat-icon>
+                <mat-icon>check_circle_outline</mat-icon>
               </button>
               <button
                 matTooltip="Delete"
