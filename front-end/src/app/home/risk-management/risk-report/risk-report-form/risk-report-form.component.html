@@ -364,6 +364,7 @@
                 formControlName="current_likelihood"
                 aria-label="Select an option"
                 (change)="checkedReqAssistance()"
+                (change)="haveSameValue()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
@@ -444,6 +445,7 @@
                 formControlName="current_impact"
                 aria-label="Select an option"
                 (change)="checkedReqAssistance()"
+                (change)="haveSameValue()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
@@ -562,6 +564,7 @@
                 formControlName="target_likelihood"
                 aria-label="Select an option"
                 (change)="disapledCheckBox()"
+                (change)="haveSameValue()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
@@ -643,6 +646,7 @@
                 formControlName="target_impact"
                 aria-label="Select an option"
                 (change)="disapledCheckBox()"
+                (change)="haveSameValue()"
               >
                 <mat-radio-button value="1">1</mat-radio-button>
                 <mat-radio-button value="2">2</mat-radio-button>
