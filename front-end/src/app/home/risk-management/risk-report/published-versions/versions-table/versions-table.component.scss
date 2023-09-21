@@ -116,7 +116,8 @@
 }
 
 .example-container {
-  height: 41.2rem;
+  // height: 41.2rem;
+  height: auto;
   max-width: 100%;
   overflow: auto;
   padding: 0 0.5rem;
