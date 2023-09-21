@@ -7,7 +7,7 @@ import { ROLES } from '../risk-report/team-members/team-members.component';
 @Component({
   selector: 'app-search-init',
   templateUrl: './search-init.component.html',
-  styleUrls: ['./search-init.component.scss']
+  styleUrls: ['./search-init.component.scss'],
 })
 export class SearchInitComponent {
   constructor(
@@ -26,12 +26,12 @@ export class SearchInitComponent {
     { name: 'Initiative ID (lowest first)', value: 'id,ASC' },
     { name: 'Initiative ID (highest first)', value: 'id,DESC' },
     { name: 'Initiative Name (lowest first)', value: 'name,ASC' },
-    { name: 'Initiative Name (DEhighest firstSC)', value: 'name,DESC' },
+    { name: 'Initiative Name (highest first)', value: 'name,DESC' },
   ];
 
   status = [
-    { name: 'submitted', value: '1' },
-    { name: 'draft', value: '0' }
+    { name: 'Submitted', value: '1' },
+    { name: 'Draft', value: '0' },
   ];
 
   myIni: boolean = false;
@@ -48,10 +48,10 @@ export class SearchInitComponent {
       my_role: [null],
       sort: [null],
       my_ini: [false],
-      status:[null]
+      status: [null],
     });
     this.filterForm.valueChanges.subscribe(() => {
-      console.log(this.filterForm.value)
+      console.log(this.filterForm.value);
       if (time) clearTimeout(time);
       time = setTimeout(() => {
         this.filters.emit(this.filterForm.value);
@@ -68,7 +68,6 @@ export class SearchInitComponent {
     await this.initiativeService.getExport(this.filterForm.value);
   }
   async ngOnInit() {
-  
     this.setForm();
     this.categories = await this.riskService.getInitiativesCategories();
   }

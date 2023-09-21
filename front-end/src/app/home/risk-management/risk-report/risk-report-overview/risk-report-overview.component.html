@@ -129,10 +129,10 @@
         *ngIf="latest_version?.submit_date == initiative?.last_updated_date"
         style="float: right; margin: 0 !important"
       >
-        This initiative risks submitted in
+        This initiative risks submitted on
         {{ latest_version?.submit_date | date : "short" }}
         <mat-icon
-          matTooltip="Any changes to the submitted version will change convert it into the draft mode."
+          matTooltip="Any changes to the submitted version will  convert it into the draft mode."
           >help_outline</mat-icon
         >
       </p>
