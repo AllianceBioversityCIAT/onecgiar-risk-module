@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, catchError, firstValueFrom, map, of } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Observable, firstValueFrom, map } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { MainService } from './main.service';
 import { UserService } from './user.service';
@@ -194,10 +193,4 @@ export class InitiativesService extends MainService {
       )
       .toPromise();
   }
-  public reqAssistanceValue = new Subject<any>();
-
-  requestAssistanceValue(value: any) {
-      this.reqAssistanceValue.next(value);
-  }
-
 }

@@ -48,8 +48,6 @@ export class AcceleratedBreedingVersionComponent {
   user_info:any;
   request_assistance: boolean = false;
   filter:any = {request_assistance: false}
-  isTrue: boolean = true;
-  obj = {};
   data:any
   async risksNeedHelp() {
     this.filter = {
@@ -57,15 +55,10 @@ export class AcceleratedBreedingVersionComponent {
     }
     this.data = await this.initiativesService.getInitiativeForVersion(this.id, this.filter).then((data) => {
       this.dataSource.data = data?.risks;
-      this.isTrue =  data?.risks.every((obj: any) => obj.request_assistance == false);
     }, (error) => {
       this.toaster.error(error.error.message);
     });
-    this.obj = {
-      reqAssistance: this.request_assistance,
-      reqAssistanceNotExist: this.isTrue 
-    }
-    this.initiativesService.requestAssistanceValue(this.obj);
+
   }
 
   async ngOnInit() {

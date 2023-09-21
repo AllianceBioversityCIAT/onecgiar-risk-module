@@ -1,6 +1,6 @@
 export enum phaseStatus {
-  OPEN = 'open',
-  CLOSED = 'closed',
+  OPEN = 'Open',
+  CLOSED = 'Closed',
 }
 
 export class CreatePhaseDto {
@@ -8,13 +8,11 @@ export class CreatePhaseDto {
 
   name: string;
 
-  reportingYear: string;
+  year: string;
 
-  tocPhase: string;
+  start_date: string;
 
-  startDate: string;
-
-  endDate: string;
+  end_date: string;
 
   status: phaseStatus;
 }
