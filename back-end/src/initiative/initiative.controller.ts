@@ -106,8 +106,10 @@ export class InitiativeController {
             role: query.my_role,
           },
         };
-    } else if (query?.my_ini == 'true')
-      return { roles: { user_id: req.user.id } };
+    } else if (query?.my_ini == 'true'){
+
+      console.log(req.user);
+      return { roles: { user_id: req.user.id } };}
     else return {};
   }
   sort(query,top=false): any {
@@ -170,6 +172,7 @@ export class InitiativeController {
 
     return data;
   }
+  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiCreatedResponse({
     description: '',
