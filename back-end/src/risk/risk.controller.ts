@@ -41,6 +41,19 @@ export class RiskController {
       return obj;
     } else return {  top:'ASC', id: 'ASC' };
   }
+  filterCategory(query) {
+    if (query?.category) {
+      if (Array.isArray(query?.category)) {
+        return {
+          id: In(query.category),
+        };
+      } else
+        return {
+          id: query.category,
+        };
+    }
+    else return {};
+  }
   @Get('risksOwner')
   async getRisksOwner(@Query('initId') initId: number, @Query('user_id') user_id: number) {
     console.log(initId)
@@ -61,7 +74,6 @@ export class RiskController {
     type: GetRiskDto,
   })
   async getRisk(@Query() query) {
-    
   
     const redundentRisk = await this.riskService.riskRepository.find({
       where: {
@@ -97,7 +109,8 @@ export class RiskController {
       where: {
         title:query?.title ?  ILike(`%${query.title}%`) : null, 
         initiative_id: query.initiative_id,
-        category_id: query?.category ? In(query?.category)  : null,
+        category : { ...this.filterCategory(query) },
+        // category_id: query?.category ? In(query?.category)  : null,
         created_by_user_id: query?.created_by ? Array.isArray(query?.created_by) ?  In( query?.created_by) : query?.created_by : null,
         risk_owner_id:  query?.owner ? Array.isArray(query?.owner) ?  In( query?.owner) : query?.owner : null,
         redundant: query?.redundant == 'true' ? null : false,
