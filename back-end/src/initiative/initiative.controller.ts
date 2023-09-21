@@ -62,9 +62,10 @@ import { RiskCategory } from 'entities/risk-category.entity';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { OpenGuard } from 'src/auth/open.guard';
 @ApiTags('Initiative')
 @Controller('initiative')
-@UseGuards(JwtAuthGuard)
+
 export class InitiativeController {
   constructor(
     private iniService: InitiativeService,
@@ -117,7 +118,7 @@ export class InitiativeController {
       return obj;
     } else return top? { top:'ASC',id: 'ASC'} : { id: 'ASC'};
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get('import-file')
   async importFile() {
     const workbook = XLSX.readFile(
@@ -598,6 +599,7 @@ export class InitiativeController {
     return { finaldata, merges };
   }
 
+
   getTemplateVersionUser(width = false) {
     return {
       top: null,
@@ -697,6 +699,7 @@ export class InitiativeController {
     });
     return { finaldata, merges };
   }
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiCreatedResponse({
     description: '',
@@ -725,6 +728,7 @@ export class InitiativeController {
 
     return asd;
   }
+  @UseGuards(JwtAuthGuard)
   @Get('version/:id')
   @ApiCreatedResponse({
     description: '',
@@ -765,6 +769,7 @@ export class InitiativeController {
 
     return result;
   }
+  @UseGuards(JwtAuthGuard)
   @Get('all/excel')
   @ApiCreatedResponse({
     description: '',
@@ -852,7 +857,7 @@ export class InitiativeController {
       });
     }
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id/excel')
   @ApiCreatedResponse({
     description: '',
@@ -1007,10 +1012,11 @@ export class InitiativeController {
       });
     }
   }
-
+ 
   @ApiBearerAuth()
-  @UseGuards(RolesGuard)
   @Roles(Role.Admin, Role.User)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post(':initiative_id/create_version')
   @ApiCreatedResponse({
     description: '',
@@ -1024,6 +1030,7 @@ export class InitiativeController {
   ): Promise<Initiative> {
     return this.iniService.createINIT(id, req.user, top);
   }
+  @UseGuards(JwtAuthGuard)
   @Get('all/categories')
   @ApiCreatedResponse({
     description: '',
@@ -1047,7 +1054,7 @@ export class InitiativeController {
       .orderBy('risk_category.title', 'ASC')
       .execute();
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id/categories')
   @ApiCreatedResponse({
     description: '',
@@ -1072,7 +1079,7 @@ export class InitiativeController {
       .orderBy('risk_category.title', 'ASC')
       .execute();
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id/versions')
   @ApiCreatedResponse({
     description: '',
@@ -1093,7 +1100,7 @@ export class InitiativeController {
       order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
     });
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id/versions/latest')
   @ApiCreatedResponse({
     description: '',
@@ -1114,6 +1121,35 @@ export class InitiativeController {
     });
   }
 
+  @Get(['report/:official_code','report/:official_code/:phase_id'])
+  @ApiCreatedResponse({
+    description: '',
+    type: getAllVersions,
+  })
+  getLatestVersonsByPhase(@Param('official_code') official_code: string,@Param('phase_id') phase_id: number) {
+    return this.iniService.iniRepository.findOne({
+      where: { official_code,phase_id},
+      relations: [
+        'risks',
+        'action_area',
+        'phase',
+        'created_by',
+        'risks.category',
+        'risks.category.category_group',
+        'risks.mitigations',
+        'risks.mitigations.status',
+        'risks.created_by',
+        'risks.created_by',
+        'risks.risk_owner',
+        'risks.risk_owner.user',
+        'roles',
+        'roles.user',
+      ],
+      order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id/roles')
   @ApiCreatedResponse({
     description: '',
@@ -1125,8 +1161,11 @@ export class InitiativeController {
       relations: ['user'],
     });
   }
-  @UseGuards(RolesGuard)
+
+
   @Roles(Role.Admin, Role.User)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post(':initiative_id/roles')
   @ApiCreatedResponse({
     description: '',
@@ -1145,7 +1184,7 @@ export class InitiativeController {
   ) {
     return this.iniService.setRole(initiative_id, initiativeRoles);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Put(':initiative_id/roles/:initiative_roles_id')
   @ApiCreatedResponse({
     description: '',
@@ -1165,7 +1204,7 @@ export class InitiativeController {
       roles,
     );
   }
-
+  @UseGuards(JwtAuthGuard)
   @Delete(':initiative_id/roles/:initiative_roles_id')
   @ApiCreatedResponse({
     description: '',
@@ -1177,7 +1216,7 @@ export class InitiativeController {
   ) {
     return this.iniService.deleteRole(initiative_id, initiative_roles_id);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id/top')
   @ApiCreatedResponse({
     description: '',

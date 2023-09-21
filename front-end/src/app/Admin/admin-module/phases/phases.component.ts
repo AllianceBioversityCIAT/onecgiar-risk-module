@@ -18,7 +18,7 @@ export class PhasesComponent implements AfterViewInit {
   columnsToDisplay: string[] = [
     'id',
     'name',
-    'reporting_year',
+    'year',
     'start_date',
     'end_date',
     'previous_phase',

@@ -36,20 +36,20 @@ export class PhaseDialogComponent implements OnInit {
   private async formInit() {
     this.phaseForm = this.fb.group({
       name: [null, Validators.required],
-      reportingYear: [null, Validators.required],
-      startDate: [null, Validators.required],
-      endDate: [null, Validators.required],
-      previousPhase: [null],
+      year: [null, Validators.required],
+      start_date: [null, Validators.required],
+      end_date: [null, Validators.required],
+      previous_phase: [null],
       status: [null, Validators.required],
     });
     this.phases = await this.phasesService.getPhases();
     this.tocPhases = await this.phasesService.getTocPhases();
     if (this.phaseId) {
-      let { id, previousPhase, active, ...phaseValues } =
+      let { id, previous_phase, active, ...phaseValues } =
         await this.phasesService.getPhase(this.phaseId);
       this.phaseForm.setValue({
         ...phaseValues,
-        previousPhase: previousPhase ? previousPhase.id : null,
+        previous_phase: previous_phase ? previous_phase.id : null,
       });
     }
   }

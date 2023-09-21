@@ -17,20 +17,20 @@ export class PhasesService {
   }
 
   findAll() {
-    return this.phaseRepository.find({ relations: ['previousPhase'] , order: {id:'ASC'} });
+    return this.phaseRepository.find({ relations: ['previous_phase'] , order: {id:'ASC'} });
   }
 
   findOne(id: number) {
     return this.phaseRepository.findOne({
       where: { id },
-      relations: ['previousPhase'],
+      relations: ['previous_phase'],
     });
   }
 
   findActivePhase() {
     return this.phaseRepository.findOne({
       where: { active: true },
-      relations: ['previousPhase'],
+      relations: ['previous_phase'],
     });
   }
 

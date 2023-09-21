@@ -5,12 +5,13 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  VirtualColumn,
 } from 'typeorm';
 import { Initiative } from './initiative.entity';
 
 export enum phaseStatus {
-  OPEN = 'open',
-  CLOSED = 'closed',
+  OPEN = 'Open',
+  CLOSED = 'Closed',
 }
 
 @Entity()
@@ -22,13 +23,13 @@ export class Phase {
   name: string;
 
   @Column()
-  reportingYear: string;
+  year: string;
 
   @Column({ type: 'timestamp' , default:null })
-  startDate: Date;
+  start_date: Date;
 
   @Column({ type: 'timestamp' , default:null })
-  endDate: Date;
+  end_date: Date;
 
   @Column({ type: 'enum', enum: phaseStatus })
   status: phaseStatus;
@@ -36,9 +37,9 @@ export class Phase {
   @ManyToOne(() => Phase, (phase) => phase.childPhases, {
     onDelete: 'SET NULL',
   })
-  previousPhase: Phase;
+  previous_phase: Phase;
 
-  @OneToMany(() => Phase, (phase) => phase.previousPhase, {
+  @OneToMany(() => Phase, (phase) => phase.previous_phase, {
     onDelete: 'SET NULL',
   })
   childPhases: Phase[];
