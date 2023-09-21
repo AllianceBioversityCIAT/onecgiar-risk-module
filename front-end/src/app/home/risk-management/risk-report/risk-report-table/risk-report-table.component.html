@@ -360,7 +360,7 @@
 
                   <mat-checkbox
                     *ngIf="!toPdf"
-                    [disabled]="!canEdit() || showingVersion"
+                    [disabled]="!canEditOwner(element) || showingVersion"
                     matTooltip="You can check/uncheck this as redundant"
                     [(ngModel)]="element.redundant"
                     [checked]="element.redundant"
