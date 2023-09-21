@@ -36,7 +36,7 @@ export class PhaseDialogComponent implements OnInit {
   private async formInit() {
     this.phaseForm = this.fb.group({
       name: [null, Validators.required],
-      year: [null, Validators.required],
+      reporting_year: [null, Validators.required],
       start_date: [null, Validators.required],
       end_date: [null, Validators.required],
       previous_phase: [null],

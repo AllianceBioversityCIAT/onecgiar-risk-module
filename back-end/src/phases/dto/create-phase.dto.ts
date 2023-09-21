@@ -8,7 +8,7 @@ export class CreatePhaseDto {
 
   name: string;
 
-  year: string;
+  reporting_year: string;
 
   start_date: string;
 
