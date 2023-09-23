@@ -127,7 +127,8 @@
 :host {
   ::ng-deep .mat-expansion-panel-body {
     // width: 95%;
-    height: 18.9rem;
+    // height: 18.9rem;
+    height: auto;
     flex-shrink: 0;
     border-radius: 0rem 0rem 2rem 2rem;
     border: 0.5px solid #436280;
@@ -145,6 +146,14 @@
   font-weight: 400;
   line-height: normal;
   margin: 4.2rem 1.2rem 0 1.2rem !important;
+}
+
+.panel1:has(> p) {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 1rem;
+  row-gap: 1rem;
 }
 
 .panel2 {

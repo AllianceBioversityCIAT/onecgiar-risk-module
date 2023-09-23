@@ -101,3 +101,11 @@
   font-family: "Poppins", sans-serif !important;
   letter-spacing: 0.0178571429em;
 }
+
+.ww {
+  p {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
