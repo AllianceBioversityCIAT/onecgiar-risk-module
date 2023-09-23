@@ -8,7 +8,7 @@ export class Safe {
   transform(style: any, title: string) {
     if (title == 'safeHtml for mitigation') {
       return this.sanitizer.bypassSecurityTrustHtml(
-        `<div class="ww">` + style + `</div>`
+        `<div class="faq-img">` + style + `</div>`
       );
     } else {
       return style.replace(/<.*?>/g, '');

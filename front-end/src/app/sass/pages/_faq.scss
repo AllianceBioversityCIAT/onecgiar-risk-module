@@ -148,14 +148,6 @@
   margin: 4.2rem 1.2rem 0 1.2rem !important;
 }
 
-.panel1:has(> p) {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  column-gap: 1rem;
-  row-gap: 1rem;
-}
-
 .panel2 {
   color: #0f212f;
   font-family: "Poppins", sans-serif !important;
