@@ -1079,6 +1079,7 @@ export class InitiativeController {
     return this.dataSource
       .createQueryBuilder()
       .from('initiative', 'initiative')
+      .where('initiative.parent_id IS NULL')
       .distinct(true)
       .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
