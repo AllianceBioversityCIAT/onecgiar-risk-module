@@ -194,7 +194,6 @@ export class RiskReportOverviewComponent implements OnInit {
     console.log(this.my_roles);
     this.loadInitiative();
 
-    this.socket.connect();
 
     if(this.publishStatus.value == '0') {
       this.toolTipMessage = 'Admin closed publish';
