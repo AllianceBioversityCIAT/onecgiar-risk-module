@@ -209,8 +209,6 @@ export class RiskReportTableComponent {
     ) {
       this.displayedColumns.pop();
     }
-
- 
   }
 
   public setTitle(newTitle: string) {
@@ -281,7 +279,7 @@ export class RiskReportTableComponent {
     element.mitigations.forEach((mitigation: any) => {
       mitigationsList.push(
         `<tr>
-      <td style=" width: 55rem;padding: 1rem; border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center; font-family: Poppins;font-size: 1.3rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation.description}</td>
+      <td style=" width: 55rem;padding: 1rem; border: 1px solid #b9b9b9b5;color: #0f212f;text-align: justify; font-family: Poppins;font-size: 1.3rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation.description}</td>
       <td style=" width: 20rem;padding: 1rem;border: 1px solid #b9b9b9b5;color: #0f212f;text-align: center; font-family: Poppins;font-size: 1.3rem;font-style: normal;font-weight: 400;line-height: 114.5%;">${mitigation?.status?.title}</td></tr>`
       );
     });
