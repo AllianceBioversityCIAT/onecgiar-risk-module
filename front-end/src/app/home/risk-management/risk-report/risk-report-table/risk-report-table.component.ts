@@ -233,7 +233,7 @@ export class RiskReportTableComponent {
   async deleteRisk(risk: any) {
     this.dialog
       .open(DeleteConfirmDialogComponent, {
-        maxWidth: '400px',
+        // maxWidth: '400px',
         data: {
           title: 'Delete',
           message: `Are you sure you want to delete risk ${risk.title} ?`,

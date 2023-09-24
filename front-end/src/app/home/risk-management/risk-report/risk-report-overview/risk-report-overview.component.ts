@@ -54,7 +54,7 @@ export class RiskReportOverviewComponent implements OnInit {
   async deleteRisk(risk: any) {
     this.dialog
       .open(DeleteConfirmDialogComponent, {
-        maxWidth: '400px',
+        // maxWidth: '400px',
         // data: new ConfirmDialogModel(
         //   'Delete',
         //   `Are you sure you want to delete risk ${risk.title} ?`
@@ -141,16 +141,21 @@ export class RiskReportOverviewComponent implements OnInit {
     this.AllRisk = await this.riskService.getRisks(this.id, this.filters);
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.NumberOfRisks = this.dataSource._renderData._value.length;
-    this.dataSourceForPdf = new MatTableDataSource<any>(
-      this.AllRisk.risks
-    );
-    if(this.AllRisk?.redundentRisk?.length != 0 && this.AllRisk?.risks?.length == 0) {
+    this.dataSourceForPdf = new MatTableDataSource<any>(this.AllRisk.risks);
+    if (
+      this.AllRisk?.redundentRisk?.length != 0 &&
+      this.AllRisk?.risks?.length == 0
+    ) {
       this.toolTipMessage = 'All Risks are redundant';
     }
-    if(this.AllRisk?.redundentRisk?.length == 0 && this.AllRisk?.risks?.length == 0 && this.AllRisk?.notredundentRisk?.length ==0) {
+    if (
+      this.AllRisk?.redundentRisk?.length == 0 &&
+      this.AllRisk?.risks?.length == 0 &&
+      this.AllRisk?.notredundentRisk?.length == 0
+    ) {
       this.toolTipMessage = 'There is no risks';
     }
-    console.log(this.AllRisk)
+    console.log(this.AllRisk);
     // check if all risks are redundent
     this.isTrue = this.AllRisk.risks.every((obj: any) => obj.redundant == true);
   }
@@ -158,9 +163,7 @@ export class RiskReportOverviewComponent implements OnInit {
     this.AllRisk = await this.riskService.getRisks(this.id, this.filters);
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.isTrue = this.AllRisk.risks.every((obj: any) => obj.redundant == true);
-    this.dataSourceForPdf = new MatTableDataSource<any>(
-      this.AllRisk.risks
-    );
+    this.dataSourceForPdf = new MatTableDataSource<any>(this.AllRisk.risks);
   }
   isTrue: boolean = false;
   AllRisk: any;
@@ -175,7 +178,7 @@ export class RiskReportOverviewComponent implements OnInit {
   reload = true;
   publishStatus!: any;
   publishLocalStoreg!: any;
-  toolTipMessage:any;
+  toolTipMessage: any;
   async ngOnInit() {
     this.publishStatus = await this.variableService.getPublishStatus();
     this.user_info = this.userService.getLogedInUser();
@@ -194,16 +197,14 @@ export class RiskReportOverviewComponent implements OnInit {
     console.log(this.my_roles);
     this.loadInitiative();
 
-
-    if(this.publishStatus.value == '0') {
+    if (this.publishStatus.value == '0') {
       this.toolTipMessage = 'Admin closed publish';
     }
-    if(!this.canPublish()) {
+    if (!this.canPublish()) {
       this.toolTipMessage = 'Team Member/Guest can not submit';
     }
   }
 
-  
   canPublish() {
     return (
       this.user_info?.role == 'admin' ||
