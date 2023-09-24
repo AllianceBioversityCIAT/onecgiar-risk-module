@@ -67,7 +67,7 @@ export class FaqAdminComponent {
       height: 'auto',
       data: {
         title: 'Delete',
-        message: `Are you sure you want to delete ${record.answer}`,
+        message: `Are you sure you want to delete ${record.question}`,
       },
     });
     _popup.afterClosed().subscribe(async (response) => {
