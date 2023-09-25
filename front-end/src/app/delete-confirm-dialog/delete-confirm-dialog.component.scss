@@ -81,3 +81,28 @@
 ::ng-deep .mdc-dialog .mdc-dialog__content {
   padding: 0 !important;
 }
+
+.delete-text-box__text-q {
+  color: #626262;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  overflow: hidden;
+  max-width: 164px;
+  display: table-cell;
+}
+
+.delete-text-risks {
+  color: #626262;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
