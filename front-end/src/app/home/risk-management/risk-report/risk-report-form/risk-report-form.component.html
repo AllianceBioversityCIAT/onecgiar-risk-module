@@ -421,7 +421,8 @@
                   and working.
                 </p>
                 <a
-                  routerLink="/glossary"
+                  [routerLink]="['/glossary']" 
+                  [queryParams]="{search: 'Current risk level', char: 'c'}"
                   target="_blank"
                   class="btn btn--outline"
                 >
@@ -502,7 +503,8 @@
                   and working.
                 </p>
                 <a
-                  routerLink="/glossary"
+                  [routerLink]="['/glossary']" 
+                  [queryParams]="{search: 'Current risk level', char: 'c'}"
                   target="_blank"
                   class="btn btn--outline"
                 >
@@ -622,7 +624,8 @@
                   likelihood.
                 </p>
                 <a
-                  routerLink="/glossary"
+                  [routerLink]="['/glossary']" 
+                  [queryParams]="{search: 'Target risk level', char: 't'}"
                   target="_blank"
                   class="btn btn--outline"
                 >
@@ -704,7 +707,8 @@
                   place additional controls and actions to manage risk impact.
                 </p>
                 <a
-                  routerLink="/glossary"
+                  [routerLink]="['/glossary']" 
+                  [queryParams]="{search: 'Target risk level', char: 't'}"
                   target="_blank"
                   class="btn btn--outline"
                 >
