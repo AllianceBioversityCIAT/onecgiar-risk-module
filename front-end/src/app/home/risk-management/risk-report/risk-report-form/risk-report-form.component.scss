@@ -937,3 +937,16 @@
   background-color: #258d2f54 !important;
   cursor: not-allowed !important;
 }
+
+::ng-deep .mat-mdc-tooltip {
+  --mdc-plain-tooltip-supporting-text-font: "Poppins", sans-serif;
+  --mdc-plain-tooltip-supporting-text-size: 13px;
+
+  --mdc-plain-tooltip-supporting-text-align: justify;
+}
+
+::ng-deep.mdc-tooltip__surface {
+  letter-spacing: -0.5px !important;
+  border: 1px solid #333 !important;
+  text-align: unset !important;
+}
