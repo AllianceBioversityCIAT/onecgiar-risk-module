@@ -118,14 +118,14 @@
 
     <div *ngIf="reload">
       <p
-        class="zzz"
+        class="zzz btn--animated"
         *ngIf="latest_version?.submit_date != initiative?.last_updated_date"
       >
         This is a draft version until it get submitted. last update at
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
       <p
-        class="zzz"
+        class="zzz btn--animated"
         *ngIf="latest_version?.submit_date == initiative?.last_updated_date"
         style="float: right; margin: 0 !important"
       >
@@ -139,6 +139,7 @@
     </div>
 
     <app-search-risk
+      class="btn--animated"
       *ngIf="initiative?.id"
       [initiative_id]="initiative.id"
       [AllRisk]="AllRisk"
