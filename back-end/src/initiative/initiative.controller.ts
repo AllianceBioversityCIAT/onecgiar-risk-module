@@ -816,6 +816,7 @@ export class InitiativeController {
     let ininit = await this.iniService.iniRepository.find({
       select: ['id'],
       where: {
+        official_code: this.offical(query),
         parent_id: IsNull(),
         ...this.roles(query, req),
         status: query?.status,
