@@ -74,6 +74,7 @@ export class SearchRiskComponent {
 
   resetForm() {
     this.redundant = false;
+    this.request_assistance = false
     this.myIni = false;
     this.filterForm.reset();
     this.filterForm.markAsUntouched();
