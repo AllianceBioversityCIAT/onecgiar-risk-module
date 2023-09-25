@@ -1011,7 +1011,11 @@
     <div class="risk-report-form-save-btn-box">
       <button
         class="risk-report-form-save-btn-box__btn"
-        (click)="submit()"
+        [ngClass]="{
+          disabled: clicked === true
+        }"
+        (click)="submit(); clicked = true"
+        [disabled]="clicked"
         mat-raised-button
       >
         Save

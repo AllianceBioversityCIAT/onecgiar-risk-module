@@ -46,10 +46,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     private socket: AppSocket,
     private title: Title,
     private meta: Meta
-  ) {
+  ) {}
 
-  }
-
+  clicked: boolean | undefined;
   riskApi: any = null;
 
   errorMessage: any = '';
@@ -112,9 +111,15 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         this?.checkIfRiskExist[0]?.due_date,
         [
           (c: AbstractControl) =>
-            new Date(c.value).getTime() < Date.now() && !this?.checkIfRiskExist[0]?.id ? { past_date: true } : null,
-            (c: AbstractControl) =>
-            new Date(c.value).getTime() <  new Date(this?.checkIfRiskExist[0]?.created_date).getTime() ? { past_date_created: true } : null,
+            new Date(c.value).getTime() < Date.now() &&
+            !this?.checkIfRiskExist[0]?.id
+              ? { past_date: true }
+              : null,
+          (c: AbstractControl) =>
+            new Date(c.value).getTime() <
+            new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
+              ? { past_date_created: true }
+              : null,
           Validators.required,
         ],
       ],
@@ -143,6 +148,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     if (this.newRiskForm.valid) {
       this.errorMessage = '';
       if (this.riskId) {
+        this.clicked = false;
         result = await this.riskService.updateRisk(this.riskId, {
           id: Number(this.riskId),
           initiative_id:
@@ -156,6 +162,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
             'Success',
             `${this.newRiskForm.value.title} has been updated`
           );
+
           // to refresh table
           await this.riskService.getRisks(this.riskId, null);
           // this.RiskReportcomponent.loadInitiative();
@@ -166,6 +173,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           }, 2000);
         }
       } else {
+        this.clicked = false;
         result = await this.riskService.createNewRisk({
           initiative_id: this.initiativeId,
           mitigations: this.proposed.data,
@@ -176,6 +184,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
             'Success',
             `${this.newRiskForm.value.title} has been created`
           );
+
           // to refresh table
           await this.riskService.getRisks(this.riskId, null);
           // this.RiskReportcomponent.loadInitiative();
@@ -186,18 +195,21 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           }, 2000);
         }
       }
-    }
-    else {
+    } else {
       this.toastr.error('Invalid or missing data');
+      setTimeout(() => {
+        this.clicked = false;
+      }, 6000);
     }
   }
 
   checkedReqAssistance() {
     let current_likelihood =
-    this.newRiskForm.controls['current_likelihood'].value;
+      this.newRiskForm.controls['current_likelihood'].value;
     let current_impact = this.newRiskForm.controls['current_impact'].value;
 
-    let target_likelihood = this.newRiskForm.controls['target_likelihood'].value;
+    let target_likelihood =
+      this.newRiskForm.controls['target_likelihood'].value;
     let target_impact = this.newRiskForm.controls['target_impact'].value;
 
     if (this.newRiskForm.controls['request_assistance'].value == true) {
@@ -205,39 +217,59 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       this.newRiskForm.controls.target_impact.setValue(current_impact);
       this.newRiskForm.get('due_date').clearValidators();
       this.newRiskForm.get('due_date').updateValueAndValidity();
-    } else if(target_impact * target_likelihood != current_impact * current_likelihood && this.newRiskForm.controls['request_assistance'].value != true){
-        let date: any;
-        date = this.newRiskForm.get('due_date');
-        date.setValidators([
-          (c: AbstractControl) =>
-          new Date(c.value).getTime() < Date.now() && !this?.checkIfRiskExist[0]?.id ? { past_date: true } : null,
-          (c: AbstractControl) =>
-          new Date(c.value).getTime() <  new Date(this?.checkIfRiskExist[0]?.created_date).getTime() ? { past_date_created: true } : null,
-          Validators.required,
-        ]);
-        date.updateValueAndValidity();
-    }
-  }
-
-  haveSameValue() {
-    let current_likelihood = this.newRiskForm.controls['current_likelihood'].value;
-    let current_impact = this.newRiskForm.controls['current_impact'].value;
-
-    let target_likelihood = this.newRiskForm.controls['target_likelihood'].value;
-    let target_impact = this.newRiskForm.controls['target_impact'].value;
-
-    if(target_impact * target_likelihood == current_impact * current_likelihood) {
-      this.newRiskForm.get('due_date').clearValidators();
-      this.newRiskForm.get('due_date').updateValueAndValidity();
-    }
-    else {
+    } else if (
+      target_impact * target_likelihood !=
+        current_impact * current_likelihood &&
+      this.newRiskForm.controls['request_assistance'].value != true
+    ) {
       let date: any;
       date = this.newRiskForm.get('due_date');
       date.setValidators([
         (c: AbstractControl) =>
-        new Date(c.value).getTime() < Date.now() && !this?.checkIfRiskExist[0]?.id ? { past_date: true } : null,
+          new Date(c.value).getTime() < Date.now() &&
+          !this?.checkIfRiskExist[0]?.id
+            ? { past_date: true }
+            : null,
         (c: AbstractControl) =>
-        new Date(c.value).getTime() <  new Date(this?.checkIfRiskExist[0]?.created_date).getTime() ? { past_date_created: true } : null,
+          new Date(c.value).getTime() <
+          new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
+            ? { past_date_created: true }
+            : null,
+        Validators.required,
+      ]);
+      date.updateValueAndValidity();
+    }
+  }
+
+  haveSameValue() {
+    let current_likelihood =
+      this.newRiskForm.controls['current_likelihood'].value;
+    let current_impact = this.newRiskForm.controls['current_impact'].value;
+
+    let target_likelihood =
+      this.newRiskForm.controls['target_likelihood'].value;
+    let target_impact = this.newRiskForm.controls['target_impact'].value;
+
+    if (
+      target_impact * target_likelihood ==
+      current_impact * current_likelihood
+    ) {
+      this.newRiskForm.get('due_date').clearValidators();
+      this.newRiskForm.get('due_date').updateValueAndValidity();
+    } else {
+      let date: any;
+      date = this.newRiskForm.get('due_date');
+      date.setValidators([
+        (c: AbstractControl) =>
+          new Date(c.value).getTime() < Date.now() &&
+          !this?.checkIfRiskExist[0]?.id
+            ? { past_date: true }
+            : null,
+        (c: AbstractControl) =>
+          new Date(c.value).getTime() <
+          new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
+            ? { past_date_created: true }
+            : null,
         Validators.required,
       ]);
       date.updateValueAndValidity();
@@ -415,7 +447,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     if (this.initiativeId) {
       this.riskUsers = await this.riskService.getRiskUsers(this.initiativeId);
     }
-    this.haveSameValue()
+    this.haveSameValue();
   }
 
   unlock(risk_id: any) {
