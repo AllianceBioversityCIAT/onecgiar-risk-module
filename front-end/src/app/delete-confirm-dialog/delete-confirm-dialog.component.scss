@@ -3,8 +3,9 @@
 @import "../sass/components/delete-dialog";
 
 .delete-box {
-  width: auto;
+  /* width: auto; */
   height: auto;
+  width: 530px;
   background-color: #ffffff;
 }
 
@@ -41,7 +42,7 @@
   flex-direction: column;
   text-align: center;
   gap: 1rem;
-  padding: 0.2rem 2rem;
+  // padding: 0.2rem 2rem;
 }
 
 .delete-text-box {
@@ -50,17 +51,33 @@
   justify-content: center;
 
   &__text {
-    color: #626262;
-    text-align: center;
-    font-family: "Poppins", sans-serif !important;
-    font-size: 1.4rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+    // color: #626262;
+    // text-align: center;
+    // font-family: "Poppins", sans-serif !important;
+    // font-size: 1.4rem;
+    // font-style: normal;
+    // font-weight: 500;
+    // line-height: normal;
     text-overflow: ellipsis;
     text-wrap: nowrap;
     overflow: hidden;
-    max-width: 435px;
+    max-width: 458px;
+    // float: right;
+    margin: 0 !important;
+    text-align: justify;
+    display: block;
+    /* position: relative; */
+    // top: -7rem;
+    text-align: center;
+    letter-spacing: -0.25px;
+    color: #0f212f;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    /* text-align: justify; */
+    width: 500px;
   }
 }
 
@@ -74,7 +91,7 @@
 }
 
 .dialog-img-2 {
-  margin: 1.5rem;
+  // margin: 1.5rem;
   object-fit: contain;
 }
 
@@ -83,26 +100,55 @@
 }
 
 .delete-text-box__text-q {
-  color: #626262;
+  // color: #626262;
   text-align: center;
-  font-family: "Poppins", sans-serif !important;
-  font-size: 1.4rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
+  // font-family: "Poppins", sans-serif !important;
+  // font-size: 1.4rem;
+  // font-style: normal;
+  // font-weight: 500;
+  // line-height: normal;
   text-overflow: ellipsis;
   text-wrap: nowrap;
   overflow: hidden;
-  max-width: 164px;
+  max-width: 112px;
   display: table-cell;
-}
-
-.delete-text-risks {
-  color: #626262;
-  text-align: center;
+  /* float: right; */
+  margin: 0 !important;
+  text-align: justify;
+  /* display: block; */
+  /* position: relative; */
+  top: -7rem;
+  /* text-align: end; */
+  /* letter-spacing: 2.75px; */
+  color: #0f212f;
   font-family: "Poppins", sans-serif !important;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.delete-text-risks {
+  // color: #626262;
+  // text-align: center;
+  // font-family: "Poppins", sans-serif !important;
+  // font-size: 1.4rem;
+  // font-style: normal;
+  // font-weight: 500;
+  // line-height: normal;
+  /* float: right; */
+  margin: 0 !important;
+  text-align: center;
+  /* display: none; */
+  /* position: relative; */
+  top: -7rem;
+  /* text-align: end; */
+  letter-spacing: 0.75px;
+  color: #0f212f;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  width: 484px;
 }

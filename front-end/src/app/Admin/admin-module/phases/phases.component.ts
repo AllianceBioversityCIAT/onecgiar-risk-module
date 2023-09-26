@@ -122,8 +122,7 @@ export class PhasesComponent implements AfterViewInit {
       .open(DeleteConfirmDialogComponent, {
         data: {
           title: 'Activate',
-          message: `Activating phase item will deactivate other active phases.
-          Are you sure you want to activate this Phase item?`,
+          message: `Are you sure you want to activate this Phase item?`,
           svg: `../../../../assets/shared-image/checked-2.png`,
         },
       })
