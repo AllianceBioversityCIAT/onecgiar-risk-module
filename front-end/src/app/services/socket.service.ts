@@ -9,7 +9,7 @@ export class AppSocket extends Socket {
     super({
       url: '/',
       options: {
-        path: '/api/socket.io',
+        path: environment.socket,
         autoConnect: false,
         auth: { authorization: 'Barer ' + token },
       },
