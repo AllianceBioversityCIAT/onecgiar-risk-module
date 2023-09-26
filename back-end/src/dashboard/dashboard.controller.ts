@@ -1,22 +1,24 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { getCategoriesLevels, getCategoriesCount, getInitiativeScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
 import { getInitiative } from 'DTO/initiative.dto';
 import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
+import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
 import { InitiativeService } from 'src/initiative/initiative.service';
 import { RiskService } from 'src/risk/risk.service';
 import { DataSource, ILike, IsNull } from 'typeorm';
-
+@ApiBearerAuth()
 @ApiTags('Dashboard')
 @Controller('Dashboard')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class DashboardController {
   constructor(private dataSource: DataSource,private iniService: InitiativeService,private riskService: RiskService) {}
 
-  
+  @Roles()
   @Get('initiative/details')
   @ApiCreatedResponse({
     description: '',
@@ -37,6 +39,7 @@ export class DashboardController {
         order: {   risks: { current_level: 'DESC' } },
       });
   }
+  @Roles()
   @Get('initiative/score')
   @ApiCreatedResponse({
     description: '',
@@ -81,7 +84,7 @@ export class DashboardController {
       }, 'current_likelihood')
       .execute();
   }
-
+  @Roles()
   @Get('categories/levels')
   @ApiCreatedResponse({
     description: '',
@@ -108,6 +111,7 @@ export class DashboardController {
 
       .execute();
   }
+  @Roles()
   @Get('categories/count')
   @ApiCreatedResponse({
     description: '',
@@ -127,7 +131,7 @@ export class DashboardController {
       }, 'total_count')
       .execute();
   }
-
+  @Roles()
   @Get('categories/groups/count')
   @ApiCreatedResponse({
     description: '',
@@ -149,7 +153,7 @@ export class DashboardController {
       .addGroupBy('id')
       .execute();
   }
-
+  @Roles()
   @Get('action_areas/count')
   @ApiCreatedResponse({
     description: '',
@@ -167,7 +171,7 @@ export class DashboardController {
       .addGroupBy('action_area.id')
       .execute();
   }
-
+  @Roles()
   @Get('status')
   @ApiCreatedResponse({
     description: '',

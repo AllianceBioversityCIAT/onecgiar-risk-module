@@ -54,10 +54,10 @@ export class RiskController {
     }
     else return {};
   }
+  @ApiBearerAuth()
+  @Roles(Role.Admin,Role.User)
   @Get('risksOwner')
-  async getRisksOwner(@Query('initId') initId: number, @Query('user_id') user_id: number) {
-    console.log(initId)
-    console.log(user_id)
+  async getRisksOwner(@Query('initiative_id') initId: number, @Query('user_id') user_id: number) {
     const risks = await this.riskService.riskRepository.find({
       where : {
         initiative_id: initId,
@@ -68,6 +68,7 @@ export class RiskController {
     });
     return risks;
   }
+  @ApiBearerAuth()
   @Get('')
   @ApiCreatedResponse({
     description: '',
@@ -138,6 +139,7 @@ export class RiskController {
     description: '',
     type: GetRiskDto,
   })
+  @ApiBearerAuth()
   @Get(':id')
   getRisks(@Param('id') id: number) {
     return this.riskService.riskRepository.find({
@@ -170,11 +172,13 @@ export class RiskController {
     type: UpdateRiskResponseDto,
   })
   @ApiBody({ type: UpdateRiskRequestDto })
+  @ApiBearerAuth()
   @Roles(Role.Admin,Role.User)
   @Put(':risk_id')
   setRisk(@Body() risk: Risk, @Param('risk_id') id: number, @Request() req) {
     return this.riskService.updateRisk(id, risk, req.user);
   }
+  @ApiBearerAuth()
   @Roles(Role.Admin,Role.User)
   @Delete(':risk_id/init_id/:initiative_id')
   @ApiCreatedResponse({
@@ -184,7 +188,7 @@ export class RiskController {
   deleteRisk(@Param('risk_id') risk_id: number) {
     return this.riskService.deleteRisk(risk_id);
   }
-
+  @ApiBearerAuth()
   @Get(':id/mitigation')
   @ApiCreatedResponse({
     description: '',
@@ -195,14 +199,15 @@ export class RiskController {
       where: { risk_id },
     });
   }
-
-  @Patch(':id/redundant')
+  @ApiBearerAuth()
+  @Roles(Role.Admin,Role.User)
+  @Patch(':risk_id/redundant/:initiative_id')
   @ApiCreatedResponse({
     description: '',
     type: PatchRiskResponseDto,
   })
   @ApiBody({ type: PatchRiskRequestDto })
-  async patchRedandant(@Param('id') id: number, @Body('redundant') redundant) {
+  async patchRedandant(@Param('risk_id') id: number, @Body('redundant') redundant) {
     await this.riskService.riskRepository.update({ id }, { redundant });
     await this.riskService.updateInitiativeUpdateDateToNowByRiskID(id);
     return this.riskService.riskRepository.findOne({ where: { id } });

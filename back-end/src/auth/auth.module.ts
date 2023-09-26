@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { RolesGuard } from './roles.guard';
 import { AwsStrategy } from './aws.strategy';
 import { HttpModule } from '@nestjs/axios';
+import { AdminRolesGuard } from './admin-roles.guard';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { HttpModule } from '@nestjs/axios';
       signOptions: { expiresIn: '30d'},
     }),
   ],
-  providers: [AuthService, LocalStrategy,AwsStrategy, JwtStrategy, RolesGuard],
+  providers: [AuthService, LocalStrategy,AwsStrategy, JwtStrategy, RolesGuard, AdminRolesGuard],
   controllers: [AuthController],
   exports: [RolesGuard]
 })
