@@ -17,6 +17,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
+  backend_url = environment.backend_url;
   constructor(
     private http: HttpClient,
     @Inject(DOCUMENT) private document: Document,
@@ -25,7 +26,7 @@ export class AuthService {
 
   async logintoAWS(code: any, redirect_url: any = null) {
     let { access_token, expires_in } = await firstValueFrom(
-      this.http.post('api/auth/aws', { code }).pipe(
+      this.http.post(this.backend_url +'/auth/aws', { code }).pipe(
         map((d: any) => d),
         catchError((e) => {
           this.goToLogin(redirect_url, 'AWS');

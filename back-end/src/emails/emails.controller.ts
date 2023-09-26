@@ -16,10 +16,11 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 import { Brackets, ILike, Like } from 'typeorm';
+import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
 
-@ApiTags('emails')
+@ApiTags('Emails')
 @Controller('emails')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class EmailsController {
   constructor(private emailService: EmailsService) {}
   sort(query) {
@@ -31,7 +32,7 @@ export class EmailsController {
     } else return { id: 'ASC' };
   }
   @ApiBearerAuth()
-  @Roles(Role.Admin)
+  @Roles()
   @Get('')
   @ApiCreatedResponse({
     description: '',
@@ -65,8 +66,8 @@ export class EmailsController {
         count: finalResult[1]
       }
   }
-
-  @Roles(Role.Admin)
+  @ApiBearerAuth()
+  @Roles()
   @Get('test/test')
   async test() {
 

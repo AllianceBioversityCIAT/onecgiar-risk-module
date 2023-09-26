@@ -1,16 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { MitigationStatusService } from './mitigation-status.service';
-import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { Mitigation } from 'entities/mitigation.entity';
 import { createMitigationReq, deleteMitigationRes, getMitigation } from 'DTO/mitigation.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
-
-@ApiTags('mitigation-status')
+import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
+@ApiBearerAuth()
+@ApiTags('Mitigation-status')
 @Controller('mitigation-status')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class MitigationStatusController {
     constructor(private MitigationService: MitigationStatusService){}
     // @Roles(Role.Admin)
@@ -39,7 +40,7 @@ export class MitigationStatusController {
         console.log('ERROR' + error);
       }
     }
-    @Roles(Role.Admin)
+    @Roles()
     @Post('')
     @ApiCreatedResponse({
       description: '',
@@ -53,7 +54,7 @@ export class MitigationStatusController {
             console.error(error);
         }
     }
-    @Roles(Role.Admin)
+    @Roles()
     @Put(':id')
     @ApiCreatedResponse({
       description: '',
@@ -67,7 +68,7 @@ export class MitigationStatusController {
             console.error(error);
         }
     }
-    @Roles(Role.Admin)
+    @Roles()
     @Delete(':id')
     @ApiCreatedResponse({
       description: '',

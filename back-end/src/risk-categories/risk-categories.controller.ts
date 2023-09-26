@@ -1,20 +1,22 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, StreamableFile, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createRiskCategoryReq, createRiskCategoryRes, disabledCategoryReq, disabledCategoryRes, getRiskCategory } from 'DTO/risk-category.dto';
 import { RiskCategory } from 'entities/risk-category.entity';
 import { createReadStream } from 'fs';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
+import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.enum';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Repository } from 'typeorm';
 import * as XLSX from 'xlsx';
+@ApiBearerAuth()
 @ApiTags('Risk Categories')
 @Controller('risk-categories')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class RiskCategoriesController {
   constructor(
     @InjectRepository(RiskCategory)
@@ -40,7 +42,7 @@ export class RiskCategoriesController {
     .orderBy('riskCat.title', 'ASC')
     .getRawMany()
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Put()
   @ApiCreatedResponse({
     description: '',
@@ -52,7 +54,7 @@ export class RiskCategoriesController {
     Object.assign(category, data);
     return this.riskcatRepository.save(category, { reload: true });
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Post()
   @ApiCreatedResponse({
     description: '',
@@ -66,12 +68,12 @@ export class RiskCategoriesController {
 
     return category;
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Delete(':id')
   deleteCategory(@Param('id') id:number) {
     return this.riskcatRepository.delete(id)
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Patch()
   @ApiCreatedResponse({
     description: '',
@@ -105,7 +107,7 @@ export class RiskCategoriesController {
 
 
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Get('export/all')
   @ApiCreatedResponse({
     description: '',
