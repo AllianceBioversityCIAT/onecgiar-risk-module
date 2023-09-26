@@ -8,6 +8,7 @@ import { PhaseDialogComponent } from './phase-dialog/phase-dialog.component';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-phases',
@@ -26,12 +27,29 @@ export class PhasesComponent implements AfterViewInit {
     'active',
     'actions',
   ];
+  filters: any = null;
   dataSource: any;
   phases: any = [];
   @ViewChild(MatPaginator) paginator: any;
   @ViewChild(MatSort) sort: any;
+  filterForm: FormGroup = new FormGroup({});
+
+  sortBtn = [
+    { name: 'ID (lowest first)', value: 'id,ASC' },
+    { name: 'ID (highest first)', value: 'id,DESC' },
+    { name: 'Name (lowest first)', value: 'full_name,ASC' },
+    { name: 'Name (highest first)', value: 'full_name,DESC' },
+  ];
+
+  setForm() {
+    this.filterForm.valueChanges.subscribe(() => {
+      this.filters = this.filterForm.value;
+      this.initTable();
+    });
+  }
 
   constructor(
+    private fb: FormBuilder,
     private phasesService: PhasesService,
     private dialog: MatDialog,
     private headerService: HeaderService,
@@ -41,9 +59,21 @@ export class PhasesComponent implements AfterViewInit {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
     this.headerService.backgroundUserNavButton = '#0f212f';
+
+    this.filterForm = this.fb.group({
+      email: [null],
+
+      sort: [null],
+    });
+    this.initTable();
   }
 
   ngAfterViewInit() {
+    this.filterForm = this.fb.group({
+      email: [null],
+
+      sort: [null],
+    });
     this.initTable();
   }
 
@@ -122,5 +152,10 @@ export class PhasesComponent implements AfterViewInit {
           if (result) this.initTable();
         }
       });
+  }
+
+  resetForm() {
+    this.filterForm.reset();
+    this.filterForm.markAsUntouched();
   }
 }
