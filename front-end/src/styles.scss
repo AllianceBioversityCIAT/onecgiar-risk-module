@@ -108,18 +108,33 @@
     flex-direction: column;
     gap: 2rem;
     white-space: break-spaces;
-    margin-bottom: 5rem;
+    // margin-bottom: 5rem;
+    font-weight: 400;
+    text-align: left;
+    color: #04030f;
+
+    font-size: 1.4rem;
+    font-style: normal;
+    line-height: 114.5%;
+
+    font-family: "Poppins", sans-serif !important;
+    /* font-weight: 500; */
+    /* margin: 16px 0 12px 0; */
+    /* display: block; */
+    /* max-width: 450px; */
+    /* min-width: 250px; */
+    white-space: normal !important;
   }
 
   strong {
     font-weight: 400;
     text-align: left;
     color: #04030f;
-    font-family: "Poppins", sans-serif !important;
-    font-size: 1.2rem;
+
+    font-size: 1.4rem;
     font-style: normal;
     line-height: 114.5%;
-    font-size: 14px;
+
     font-family: "Poppins", sans-serif !important;
     /* font-weight: 500; */
     /* margin: 16px 0 12px 0; */
