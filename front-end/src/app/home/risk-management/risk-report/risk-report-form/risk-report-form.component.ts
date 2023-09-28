@@ -134,7 +134,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
 
   actions: any;
   async getMitigationActions() {
-    this.actions = await this.mitigationService.getMitigationStatus();
+    this.actions = await this.mitigationService.getMitigationStatus(null,null,null);
   }
 
   getStatusByID(id: number) {

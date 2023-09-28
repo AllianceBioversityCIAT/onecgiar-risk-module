@@ -16,8 +16,17 @@ export class MitigationStatusService extends MainService{
     return firstValueFrom(this.http.post(this.backend_url + `/mitigation-status`,data, {headers: this.headers,}).pipe(map((d) => d))).catch((e) => false);
   }
 
-  async getMitigationStatus() {
-    return firstValueFrom(this.http.get(this.backend_url + '/mitigation-status',{headers: this.headers}).pipe(map(d=>d))).catch((e) => false);
+  async getMitigationStatus(filters: any = null, page: any, limit: any) {
+    let finalFilters: any = {};
+    if (filters)
+      Object.keys(filters).forEach((element) => {
+        if (typeof filters[element] === 'string')
+          filters[element] = filters[element].trim();
+
+        if (filters[element] != null && filters[element] != '')
+          finalFilters[element] = filters[element];
+      });
+    return firstValueFrom(this.http.get(this.backend_url + `/mitigation-status?page=${page}&limit=${limit}`,{headers: this.headers, params: finalFilters}).pipe(map(d=>d))).catch((e) => false);
   }
 
   async getMitigationStatusById(id: number) {

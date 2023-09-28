@@ -61,7 +61,7 @@ export class ActionsControlsFormDialogComponent {
     this.getMitigationAction();
   }
   async getMitigationAction(){
-    this.Actions = await this.mitigationService.getMitigationStatus()
+    this.Actions = await this.mitigationService.getMitigationStatus(null,null,null)
   }
 
   //Close-Dialog

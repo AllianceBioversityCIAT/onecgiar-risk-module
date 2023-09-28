@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -16,7 +16,6 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./glossary-admin.component.scss'],
 })
 export class GlossaryAdminComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator: any;
   filters: any = null;
   constructor(
     private fb: FormBuilder,
@@ -33,19 +32,24 @@ export class GlossaryAdminComponent implements OnInit {
   }
 
   data: any;
+  dataSource: any;
+  length!: number;
+  pageSize: number = 10;
+  pageIndex: number = 1;
   filterForm: FormGroup = new FormGroup({});
 
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'full_name,ASC' },
-    { name: 'Name (highest first)', value: 'full_name,DESC' },
+    { name: 'Name (lowest first)', value: 'title,ASC' },
+    { name: 'Name (highest first)', value: 'title,DESC' },
   ];
 
   setForm() {
     this.filterForm.valueChanges.subscribe(() => {
+      this.pageIndex = 1;
       this.filters = this.filterForm.value;
-      this.ngOnInit();
+      this.getData();
     });
   }
 
@@ -53,11 +57,11 @@ export class GlossaryAdminComponent implements OnInit {
 
   async ngOnInit() {
     this.filterForm = this.fb.group({
-      email: [null],
-
+      title: [null],
       sort: [null],
     });
     await this.getData();
+    this.setForm();
     this.title.setTitle('Glossary');
     this.meta.updateTag({
       name: 'description',
@@ -65,9 +69,19 @@ export class GlossaryAdminComponent implements OnInit {
     });
   }
   async getData() {
-    this.data = await this.GlossaryService.getGlossary();
-    this.data = new MatTableDataSource(this.data);
-    this.data.paginator = this.paginator;
+    this.data = await this.GlossaryService.getGlossary(
+      this.filters,
+      this.pageIndex,
+      this.pageSize
+    );
+    this.dataSource = this.data.result;
+    this.length = this.data.count;
+  }
+
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getData();
   }
 
   openFormDialog(id: any, action: string) {

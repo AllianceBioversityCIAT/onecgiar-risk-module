@@ -38,7 +38,7 @@ export class UserManagementComponent implements OnInit {
   filters: any = null;
   userTable: boolean = true;
   length!: number;
-  pageSize: number = 5;
+  pageSize: number = 10;
   pageIndex: number = 1;
   filterForm: FormGroup = new FormGroup({});
 

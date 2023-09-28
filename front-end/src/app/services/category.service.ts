@@ -13,10 +13,20 @@ export class CategoryService extends MainService {
 
 
 
-  async getCategories() {
+  async getCategories(filters: any = null, page: number, limit: number) {
+    let finalFilters: any = {};
+    if (filters)
+      Object.keys(filters).forEach((element) => {
+        if (typeof filters[element] === 'string')
+          filters[element] = filters[element].trim();
+
+        if (filters[element] != null && filters[element] != '')
+          finalFilters[element] = filters[element];
+      });
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/risk-categories`, {
+        .get(this.backend_url + `/risk-categories?page=${page}&limit=${limit}`, {
+          params: finalFilters,
           headers: this.headers,
         })
         .pipe(map((d) => d))

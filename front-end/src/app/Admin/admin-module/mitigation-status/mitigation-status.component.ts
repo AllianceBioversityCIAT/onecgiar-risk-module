@@ -6,9 +6,8 @@ import { MitigationStatusService } from 'src/app/services/mitigation-status.serv
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-mitigation-status',
@@ -21,20 +20,24 @@ export class MitigationStatusComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'title', 'description', 'actions'];
   dataSource: any;
-
+  data: any;
   filterForm: FormGroup = new FormGroup({});
+  length!: number;
+  pageSize: number = 10;
+  pageIndex: number = 1;
 
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'full_name,ASC' },
-    { name: 'Name (highest first)', value: 'full_name,DESC' },
+    { name: 'Name (lowest first)', value: 'title,ASC' },
+    { name: 'Name (highest first)', value: 'title,DESC' },
   ];
 
   setForm() {
     this.filterForm.valueChanges.subscribe(() => {
+      this.pageIndex = 1;
       this.filters = this.filterForm.value;
-      this.ngOnInit();
+      this.getData();
     });
   }
 
@@ -54,11 +57,11 @@ export class MitigationStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterForm = this.fb.group({
-      email: [null],
-
+      title: [null],
       sort: [null],
     });
     this.getData();
+    this.setForm();
     this.title.setTitle('Actions /Controls To Manage Risks');
     this.meta.updateTag({
       name: 'description',
@@ -67,9 +70,19 @@ export class MitigationStatusComponent implements OnInit {
   }
 
   async getData() {
-    this.dataSource = await this.mitigationService.getMitigationStatus();
-    this.dataSource = new MatTableDataSource(this.dataSource);
-    this.dataSource.paginator = this.paginator;
+    this.data = await this.mitigationService.getMitigationStatus(
+      this.filters,
+      this.pageIndex,
+      this.pageSize
+    );
+    this.dataSource = this.data.result;
+    this.length = this.data.count;
+  }
+
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getData();
   }
 
   openFormDialog(element: any, action: string) {

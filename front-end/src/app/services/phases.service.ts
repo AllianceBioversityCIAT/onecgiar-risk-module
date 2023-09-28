@@ -11,9 +11,18 @@ export class PhasesService extends MainService {
     super();
   }
 
-  async getPhases() {
+  async getPhases(filters: any = null, page: any, limit: any) {
+    let finalFilters: any = {};
+    if (filters)
+      Object.keys(filters).forEach((element) => {
+        if (typeof filters[element] === 'string')
+          filters[element] = filters[element].trim();
+
+        if (filters[element] != null && filters[element] != '')
+          finalFilters[element] = filters[element];
+      });
     return firstValueFrom(
-      this.http.get('api/phases', {headers: this.headers}).pipe(map((d: any) => d))
+      this.http.get(`api/phases?page=${page}&limit=${limit}`, {headers: this.headers, params: finalFilters}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
 

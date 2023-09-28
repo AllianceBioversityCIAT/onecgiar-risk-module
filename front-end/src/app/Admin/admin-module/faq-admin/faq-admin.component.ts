@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FaqFormDialogComponent } from './faq-form-dialog/faq-form-dialog.component';
 import { ToastrService } from 'ngx-toastr';
@@ -6,9 +6,8 @@ import { FAQService } from 'src/app/services/faq.service';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { MatPaginator } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-faq-admin',
@@ -16,7 +15,6 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./faq-admin.component.scss'],
 })
 export class FaqAdminComponent {
-  @ViewChild(MatPaginator) paginator: any;
   filters: any = null;
   constructor(
     private fb: FormBuilder,
@@ -33,32 +31,38 @@ export class FaqAdminComponent {
   }
 
   data: any;
+  dataSource: any;
   filterForm: FormGroup = new FormGroup({});
-
+  length!: number;
+  pageSize: number = 10;
+  pageIndex: number = 1;
   displayedColumns: string[] = ['id', 'question', 'answer', 'actions'];
 
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'full_name,ASC' },
-    { name: 'Name (highest first)', value: 'full_name,DESC' },
+    { name: 'Question (lowest first)', value: 'question,ASC' },
+    { name: 'Question (highest first)', value: 'question,DESC' },
+    { name: 'Answer (lowest first)', value: 'answer,ASC' },
+    { name: 'Answer (highest first)', value: 'answer,DESC' }
   ];
 
   setForm() {
     this.filterForm.valueChanges.subscribe(() => {
+      this.pageIndex = 1;
       this.filters = this.filterForm.value;
-      this.ngOnInit();
+      this.getData();
     });
   }
 
   async ngOnInit() {
     this.filterForm = this.fb.group({
-      email: [null],
-
+      search: [null],
       sort: [null],
     });
     await this.getData();
-    this.title.setTitle('FAQ');
+    this.setForm();
+    this.title.setTitle('Faq');
     this.meta.updateTag({
       name: 'description',
       content: 'FAQ',
@@ -66,9 +70,19 @@ export class FaqAdminComponent {
   }
 
   async getData() {
-    this.data = await this.FaqService.getData();
-    this.data = new MatTableDataSource(this.data);
-    this.data.paginator = this.paginator;
+    this.data = await this.FaqService.getData(
+      this.filters,
+      this.pageIndex,
+      this.pageSize
+    );
+    this.dataSource = this.data.result;
+    this.length = this.data.count;
+  }
+
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getData();
   }
 
   openFormDialog(id: any, action: string) {

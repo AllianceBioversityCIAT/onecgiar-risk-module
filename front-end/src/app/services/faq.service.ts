@@ -21,10 +21,19 @@ export class FAQService extends MainService {
     ).catch((e) => false);
   }
 
-  async getData() {
+  async getData(filters: any = null, page: any, limit: any) {
+    let finalFilters: any = {};
+    if (filters)
+      Object.keys(filters).forEach((element) => {
+        if (typeof filters[element] === 'string')
+          filters[element] = filters[element].trim();
+
+        if (filters[element] != null && filters[element] != '')
+          finalFilters[element] = filters[element];
+      });
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/faq', {headers: this.headers})
+        .get(this.backend_url + `/faq?page=${page}&limit=${limit}`, {headers: this.headers, params: finalFilters})
         .pipe(map((d) => d))
     ).catch((e) => false);
   }

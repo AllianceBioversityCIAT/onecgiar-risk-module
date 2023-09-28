@@ -36,7 +36,7 @@
               >Search
             </mat-label>
             <input
-              formControlName="email"
+              formControlName="title"
               class="search__input"
               matInput
               placeholder="Search"
@@ -102,7 +102,7 @@
     </div>
 
     <div class="table-box mat-elevation-z8">
-      <table mat-table [dataSource]="data">
+      <table mat-table [dataSource]="dataSource">
         <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
@@ -191,7 +191,10 @@
       <mat-paginator
         class="glossary-content-container user-management-paginator-box"
         [pageSizeOptions]="[10, 20, 30, 50, 100]"
-        aria-label="Select page"
+        [length]="length"
+        [pageIndex]="pageIndex - 1"
+        (page)="pagination($event)"
+        aria-label="Select page of users"
       >
       </mat-paginator>
     </div>

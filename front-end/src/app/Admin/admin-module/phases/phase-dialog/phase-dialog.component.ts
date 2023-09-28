@@ -42,7 +42,7 @@ export class PhaseDialogComponent implements OnInit {
       previous_phase: [null],
       status: [null, Validators.required],
     });
-    this.phases = await this.phasesService.getPhases();
+    this.phases = await this.phasesService.getPhases(null, null, null);
     this.tocPhases = await this.phasesService.getTocPhases();
     if (this.phaseId) {
       let { id, previous_phase, active, ...phaseValues } =

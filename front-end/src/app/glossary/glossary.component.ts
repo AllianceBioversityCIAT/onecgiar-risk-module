@@ -133,7 +133,7 @@ export class GlossaryComponent implements OnInit {
   ];
 
   form = new FormGroup({
-    search: new FormControl(''),
+    title: new FormControl(''),
     char: new FormControl(''),
   });
 

@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { MatPaginator } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -32,27 +32,31 @@ export class CategoryComponent implements OnInit {
 
   filters: any = null;
   dataSource: any = [];
-  @ViewChild(MatPaginator) paginator: any;
+  data: any;
+  length!: number;
+  pageSize: number = 10;
+  pageIndex: number = 1;
   filterForm: FormGroup = new FormGroup({});
 
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'full_name,ASC' },
-    { name: 'Name (highest first)', value: 'full_name,DESC' },
+    { name: 'Name (lowest first)', value: 'title,ASC' },
+    { name: 'Name (highest first)', value: 'title,DESC' },
   ];
 
   setForm() {
     this.filterForm.valueChanges.subscribe(() => {
       this.filters = this.filterForm.value;
+      //reset pageIndex
+      this.pageIndex = 1;
       this.init();
     });
   }
 
   async ngOnInit() {
     this.filterForm = this.fb.group({
-      email: [null],
-      role: [null],
+      title: [null],
       sort: [null],
     });
     await this.init();
@@ -66,9 +70,19 @@ export class CategoryComponent implements OnInit {
   }
 
   async init() {
-    this.dataSource = await this.categoriesService.getCategories();
-    this.dataSource = new MatTableDataSource(this.dataSource);
-    this.dataSource.paginator = this.paginator;
+    this.data = await this.categoriesService.getCategories(
+      this.filters,
+      this.pageIndex,
+      this.pageSize
+    );
+    this.dataSource =  this.data?.result;
+    this.length = this.data?.count;
+  }
+
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.init();
   }
 
   displayedColumns: string[] = [
