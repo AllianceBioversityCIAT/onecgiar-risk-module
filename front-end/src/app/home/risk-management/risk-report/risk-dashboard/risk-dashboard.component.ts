@@ -130,6 +130,8 @@ export class RiskDashboardComponent {
         },
       },
       tooltip: {
+        backgroundColor: 'rgba(255,255,255,0)',
+        shadow: false,
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat:
           '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
