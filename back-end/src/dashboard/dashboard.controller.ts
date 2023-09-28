@@ -198,7 +198,6 @@ export class DashboardController {
     return this.riskService.riskRepository.find(
       {
         where: { initiative_id: id, redundant: false },
-        select : ['original_risk_id','title','id','target_impact','target_likelihood','current_impact','current_likelihood']
       }
     );
   }

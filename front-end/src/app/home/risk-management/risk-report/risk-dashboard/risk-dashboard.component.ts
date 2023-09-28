@@ -43,15 +43,15 @@ export class RiskDashboardComponent {
   ) {}
 
   data: any = null;
-  risk_current_chartOptions: any = null;
-  risk_target_chartOptions: any = null;
+  risk_level_chartOptions: any = null;
+  risk_base_chartOptions: any = null;
 
   async ngOnInit(): Promise<void> {
     const params: any = this.activatedRoute.parent?.snapshot.params;
     console.log(params);
     this.data = await this.dashboardService.riskDashboardData(params.id);
-    this.risk_current_chartOptions = this.riskProfile(this.data, 'Current');
-    this.risk_target_chartOptions = this.riskProfile(this.data, 'Target');
+    this.risk_level_chartOptions = this.riskProfile(this.data, 'level');
+    this.risk_base_chartOptions = this.riskProfile(this.data, 'base');
 
     this.riskId = +params.riskId;
 
@@ -76,96 +76,165 @@ export class RiskDashboardComponent {
   }
 
   Highcharts: typeof Highcharts = Highcharts;
-
+  getSeries(type: string) {
+    if (type == 'level')
+      return [
+        {
+          name: 'Target',
+          data: this.data.map((d: any) => d.current_level),
+        },
+        {
+          name: 'Current',
+          data: this.data.map((d: any) => d.target_level),
+        },
+      ];
+    else
+      return [
+        {
+          name: 'Current Impact',
+          data: this.data.map((d: any) => d.current_impact),
+        },
+        {
+          name: 'Current Likelihood',
+          data: this.data.map((d: any) => d.current_likelihood),
+        },
+        {
+          name: 'Target Impact',
+          data: this.data.map((d: any) => d.target_impact),
+        },
+        {
+          name: 'Target Likelihood',
+          data: this.data.map((d: any) => d.target_likelihood),
+        },
+      ];
+  }
   riskProfile(data: any, type: string) {
     return {
       chart: {
-        type: 'bubble',
-        plotBorderWidth: 1,
-        zoomType: 'xy',
+        type: 'column',
       },
-
-      legend: {
-        enabled: false,
+      title: {
+        text: type == 'level' ? 'Risk Levels' : 'Risk Score',
       },
       credits: {
         enabled: false,
       },
-      title: {
-        text: type + ' Risk profile',
-      },
-
       xAxis: {
-        gridLineWidth: 1,
-        title: {
-          text: `<span class="chart-title"> ${type} impact</span>`,
-        },
-        labels: {
-          format: '{value}',
-        },
-
-        accessibility: {
-          rangeDescription: 'Range: 1 to 5',
-        },
+        categories: this.data.map((d: any) => d.title),
+        crosshair: true,
       },
-
       yAxis: {
-        startOnTick: false,
-        endOnTick: false,
+        min: 0,
         title: {
-          text: `<span class="chart-title"> ${type} Likelihood</span>`,
-        },
-        labels: {
-          format: '{value}',
-        },
-        maxPadding: 0.1,
-        accessibility: {
-          rangeDescription: 'Range: 1 to 5',
+          text: 'Value',
         },
       },
       tooltip: {
-        borderWidth: 0,
-        backgroundColor: 'rgba(255,255,255,0)',
-        shadow: false,
-        useHTML: true,
-        headerFormat: '<table>',
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat:
-          '<tr><th colspan="2"><span class="chart-bubble-title">{point.title}</span></th></tr>' +
-          '<tr><th>' +
-          ' id:</th><td>{point.id}</td></tr>' +
-          '<tr><th>' +
-          type +
-          ' impact:</th><td>{point.x}</td></tr>' +
-          '<tr><th>' +
-          type +
-          ' Likelihood:</th><td>{point.y}</td></tr>',
+          '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
         footerFormat: '</table>',
-        followPointer: true,
+        shared: true,
+        useHTML: true,
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+        },
       },
 
-      plotOptions: {
-        series: {
-          dataLabels: {
-            enabled: true,
-            format: '{point.id}',
-          },
-        },
-      },
-      series: [
-        {
-          data: data.map((d: any) => {
-            return {
-              x: +d[type == 'Target' ? 'target_impact' : 'current_impact'],
-              y: +d[
-                type == 'Target' ? 'target_likelihood' : 'current_likelihood'
-              ],
-              ...d,
-            };
-          }),
-          colorByPoint: true,
-        },
-      ],
+      series: this.getSeries(type),
     };
+    //  {
+    //   chart: {
+    //     type: 'bubble',
+    //     plotBorderWidth: 1,
+    //     zoomType: 'xy',
+    //   },
+
+    //   legend: {
+    //     enabled: false,
+    //   },
+    //   credits: {
+    //     enabled: false,
+    //   },
+    //   title: {
+    //     text: type + ' Risk profile',
+    //   },
+
+    //   xAxis: {
+    //     gridLineWidth: 1,
+    //     title: {
+    //       text: `<span class="chart-title"> ${type} impact</span>`,
+    //     },
+    //     labels: {
+    //       format: '{value}',
+    //     },
+
+    //     accessibility: {
+    //       rangeDescription: 'Range: 1 to 5',
+    //     },
+    //   },
+
+    //   yAxis: {
+    //     startOnTick: false,
+    //     endOnTick: false,
+    //     title: {
+    //       text: `<span class="chart-title"> ${type} Likelihood</span>`,
+    //     },
+    //     labels: {
+    //       format: '{value}',
+    //     },
+    //     maxPadding: 0.1,
+    //     accessibility: {
+    //       rangeDescription: 'Range: 1 to 5',
+    //     },
+    //   },
+    //   tooltip: {
+    //     borderWidth: 0,
+    //     backgroundColor: 'rgba(255,255,255,0)',
+    //     shadow: false,
+    //     useHTML: true,
+    //     headerFormat: '<table>',
+    //     pointFormat:
+    //       '<tr><th colspan="2"><span class="chart-bubble-title">{point.title}</span></th></tr>' +
+    //       '<tr><th>' +
+    //       ' id:</th><td>{point.id}</td></tr>' +
+    //       '<tr><th>' +
+    //       type +
+    //       ' impact:</th><td>{point.x}</td></tr>' +
+    //       '<tr><th>' +
+    //       type +
+    //       ' Likelihood:</th><td>{point.y}</td></tr>',
+    //     footerFormat: '</table>',
+    //     followPointer: true,
+    //   },
+
+    //   plotOptions: {
+    //     series: {
+    //       dataLabels: {
+    //         enabled: true,
+    //         format: '{point.id}',
+    //       },
+    //     },
+    //   },
+    //   series: [
+    //     {
+    //       data: data.map((d: any) => {
+    //         return {
+    //           x: +d[type == 'Target' ? 'target_impact' : 'current_impact'],
+    //           y: +d[
+    //             type == 'Target' ? 'target_likelihood' : 'current_likelihood'
+    //           ],
+    //           ...d,
+    //         };
+    //       }),
+    //       colorByPoint: true,
+    //     },
+    //   ],
+    // };
   }
 }
 function jwt_decode(access_token: string): any {
