@@ -29,6 +29,6 @@ export class FaqComponent implements OnInit {
   }
   data: any;
   async getData() {
-    this.data = await this.FaqService.getData();
+    this.data = await this.FaqService.getData(null, null ,null);
   }
 }

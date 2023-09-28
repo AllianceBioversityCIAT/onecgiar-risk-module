@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { PhasesService } from './phases.service';
 import { CreatePhaseDto } from './dto/create-phase.dto';
@@ -15,6 +16,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
+import { ILike } from 'typeorm';
 
 @ApiBearerAuth()
 @ApiTags('Phases')
@@ -22,6 +24,14 @@ import { Roles } from 'src/auth/roles.decorator';
 @Controller('phases')
 @UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class PhasesController {
+  sort(query) {
+    if (query?.sort) {
+      let obj = {};
+      const sorts = query.sort.split(',');
+      obj[sorts[0]] = sorts[1];
+      return obj;
+    } else return { id: 'ASC' };
+  }
   constructor(private readonly phasesService: PhasesService) {}
   @Roles()
   @Post()
@@ -30,8 +40,23 @@ export class PhasesController {
   }
   @Roles()
   @Get()
-  findAll() {
-    return this.phasesService.findAll();
+  async findAll(@Query() query) {
+    if(query.page == 'null') {
+      return this.phasesService.findAll();
+    } else {
+      const take = query.limit || 10;
+      const skip = (Number(query.page) - 1) * take;
+      let [finalResult,total] = await this.phasesService.phaseRepository.findAndCount({
+        where: { name:query?.name ?  ILike(`%${query.name}%`) : null},
+        order: { ...this.sort(query) },
+        take: take,
+        skip: skip,
+      });
+      return {
+        result: finalResult,
+        count: total,
+      };
+    }
   }
   @Roles()
   @Get('active')

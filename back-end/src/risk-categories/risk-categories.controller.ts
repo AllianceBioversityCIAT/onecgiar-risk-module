@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, StreamableFile, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, StreamableFile, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createRiskCategoryReq, createRiskCategoryRes, disabledCategoryReq, disabledCategoryRes, getRiskCategory } from 'DTO/risk-category.dto';
@@ -11,13 +11,21 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.enum';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import * as XLSX from 'xlsx';
 @ApiBearerAuth()
 @ApiTags('Risk Categories')
 @Controller('risk-categories')
 @UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class RiskCategoriesController {
+  sort(query) {
+    if (query?.sort) {
+      let obj = {};
+      const sorts = query.sort.split(',');
+      obj[sorts[0]] = sorts[1];
+      return obj;
+    } else return { id: 'ASC' };
+  }
   constructor(
     @InjectRepository(RiskCategory)
     public riskcatRepository: Repository<RiskCategory>,
@@ -27,20 +35,37 @@ export class RiskCategoriesController {
     type: [getRiskCategory],
   })
   @Get()
-  get() {
-    return this.riskcatRepository.createQueryBuilder('riskCat')
-    .leftJoinAndSelect('riskCat.category_group', 'category_group')
-    .select([
-      'riskCat.id AS id',
-      'riskCat.title AS title',
-      'riskCat.description AS description',
-      'riskCat.disabled AS disabled',
-      'category_group.id AS category_group_id',
-      'category_group.name AS category_group_name',
-      'category_group.description AS category_group_description'
-        ])
-    .orderBy('riskCat.title', 'ASC')
-    .getRawMany()
+  async get(@Query() query) {
+    console.log(query)
+    if(query.page == 'null') {
+      return this.riskcatRepository.createQueryBuilder('riskCat')
+      .leftJoinAndSelect('riskCat.category_group', 'category_group')
+      .select([
+        'riskCat.id AS id',
+        'riskCat.title AS title',
+        'riskCat.description AS description',
+        'riskCat.disabled AS disabled',
+        'category_group.id AS category_group_id',
+        'category_group.name AS category_group_name',
+        'category_group.description AS category_group_description'
+          ])
+      .orderBy('riskCat.title', 'ASC')
+      .getRawMany()
+    } else {
+      const take = query.limit || 10;
+      const skip = (Number(query.page) - 1) * take;
+      let [finalResult,total] = await this.riskcatRepository.findAndCount({
+        where: { title:query?.title ?  ILike(`%${query.title}%`) : null},
+        relations: ['category_group'],
+        order: { ...this.sort(query) },
+        take: take,
+        skip: skip,
+      });
+      return {
+        result: finalResult,
+        count: total,
+      };
+    }
   }
   @Roles()
   @Put()

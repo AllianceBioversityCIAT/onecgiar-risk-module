@@ -122,10 +122,15 @@ export class RiskService extends MainService {
       .toPromise();
   }
 
-  getRiskCategories() {
+  getRiskCategories(filters: any = null, page: any = null, limit: any = null) {
+    let finalFilter = {
+      filters : filters,
+      page : page,
+      limit : limit
+    }
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/risk-categories', { headers: this.headers })
+        .get(this.backend_url + '/risk-categories', { headers: this.headers , params: finalFilter})
         .pipe(map((d) => d))
     );
   }
