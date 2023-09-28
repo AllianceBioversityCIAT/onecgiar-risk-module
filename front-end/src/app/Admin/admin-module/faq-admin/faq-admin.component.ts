@@ -58,10 +58,10 @@ export class FaqAdminComponent {
       sort: [null],
     });
     await this.getData();
-    this.title.setTitle('Faq');
+    this.title.setTitle('FAQ');
     this.meta.updateTag({
       name: 'description',
-      content: 'Faq',
+      content: 'FAQ',
     });
   }
 

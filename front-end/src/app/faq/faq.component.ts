@@ -24,8 +24,8 @@ export class FaqComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getData();
-    this.title.setTitle('Faq');
-    this.meta.updateTag({ name: 'description', content: 'Faq' });
+    this.title.setTitle('FAQ');
+    this.meta.updateTag({ name: 'description', content: 'FAQ' });
   }
   data: any;
   async getData() {
