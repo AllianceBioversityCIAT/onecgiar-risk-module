@@ -55,8 +55,8 @@
           </div>
         </div>
 
-         <!-- //Sort----- -->
-         <div class="sec-6">
+        <!-- //Sort----- -->
+        <div class="sec-6">
           <div class="risk-management-form-field field-3">
             <mat-label class="risk-management-form-field__label"
               >Sort</mat-label
@@ -86,17 +86,16 @@
           </button>
         </div>
 
-
-     <div class="sec-7">
-        <button
-          class="user-management__button-box__btn btn-primary-size"
-          mat-raised-button
-          color="primary"
-          (click)="openDialog()"
-        >
-          Add new phases
-        </button>
-      </div>
+        <div class="sec-7">
+          <button
+            class="user-management__button-box__btn btn-primary-size"
+            mat-raised-button
+            color="primary"
+            (click)="openDialog()"
+          >
+            Add new phases
+          </button>
+        </div>
       </form>
     </div>
 
@@ -219,6 +218,7 @@
       </table>
 
       <mat-paginator
+        class="glossary-content-container user-management-paginator-box"
         [pageSizeOptions]="[10, 20, 30, 50, 100]"
         [length]="length"
         [pageIndex]="pageIndex - 1"
