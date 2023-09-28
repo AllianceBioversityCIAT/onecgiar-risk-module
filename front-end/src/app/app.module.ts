@@ -83,6 +83,7 @@ import { EditConstantFormComponent } from './Admin/admin-module/parameters-setti
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { LicenseComponent } from './footer/license/license.component';
 import { ContactUsDialogComponent } from './footer/contact-us-dialog/contact-us-dialog.component';
+import { FaqPipePipe } from './pipes/faq-pipe.pipe';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -140,6 +141,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     EditConstantFormComponent,
     LicenseComponent,
     ContactUsDialogComponent,
+    FaqPipePipe,
   ],
   imports: [
     BrowserModule,
@@ -160,7 +162,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     AvatarModule.forRoot({
       sourcePriorityOrder: avatarSourcesOrder,
     }),
-    EditorModule
+    EditorModule,
   ],
   providers: [
     ApiUserService,
@@ -181,8 +183,9 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
       multi: true,
     },
     {
-      provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'
-    }
+      provide: TINYMCE_SCRIPT_SRC,
+      useValue: 'tinymce/tinymce.min.js',
+    },
   ],
   bootstrap: [AppComponent],
 })

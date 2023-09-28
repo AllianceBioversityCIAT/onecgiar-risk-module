@@ -134,9 +134,7 @@
           <td mat-cell *matCellDef="let element">
             <span
               class="td-h"
-              [innerHTML]="
-                element.description | safeHtml : 'safeHtml for mitigation'
-              "
+              [innerHTML]="element.description | faqPipe"
             ></span>
           </td>
         </ng-container>
