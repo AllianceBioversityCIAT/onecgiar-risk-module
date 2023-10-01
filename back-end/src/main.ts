@@ -20,7 +20,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('', app, document);
+  SwaggerModule.setup(env.APP_Prefix, app, document);
   await app.listen(env.APP_PORT);
 }
 bootstrap();
