@@ -34,10 +34,12 @@ export class RolesGuard implements CanActivate {
 
       // 1) if the user have permission on this initiative
 
-      const initiative_id: any = request.params.initiative_id || request.body.initiative_id;
+      const initiative_id: any = request.params.initiative_id || request.body.initiative_id || request.query.initiative_id;
       const risk_id: any = request.params.risk_id || request.body.risk_id;
 
-
+      // console.log('params ==> ',request.params)
+      // console.log('query ==> ',request.query)
+      // console.log('body ==> ',request.body)
 
 
       const user_init_role: any = await this.initService.iniRolesRepository.find({
@@ -58,7 +60,7 @@ export class RolesGuard implements CanActivate {
       });
 
       if(user_init_role.length > 0) {
-        if(user_init_role[0].role == 'Team Member' && request.route.methods.put == true && user_risk_role.length > 0) {
+        if(user_init_role[0].role == 'Team Member' && (request.route.methods.put == true || request.route.methods.patch == true) && user_risk_role.length > 0) {
           // user is risk owner
           return true;
         }

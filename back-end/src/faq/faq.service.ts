@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 export class FaqService {
     constructor(
         @InjectRepository(FAQ)
-        private FaqRepository: Repository<FAQ>,
+        public FaqRepository: Repository<FAQ>,
       ) {}
     async getFaq() {
         return await this.FaqRepository.find();

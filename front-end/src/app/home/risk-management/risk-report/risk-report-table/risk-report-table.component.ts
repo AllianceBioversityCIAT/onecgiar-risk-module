@@ -256,7 +256,7 @@ export class RiskReportTableComponent {
     return this.user_info.role == 'admin' || this.my_roles.includes(ROLES.LEAD);
   }
   async checkValue(id: number, value: any) {
-    await this.riskService.updateRedundant(id, value);
+    await this.riskService.updateRedundant(id, this.id , value);
     this.refresh.emit();
   }
   canEdit() {

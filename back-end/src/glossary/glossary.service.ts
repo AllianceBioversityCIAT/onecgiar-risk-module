@@ -4,31 +4,33 @@ import { Glossary } from 'entities/glossary.entity';
 import { ILike, Repository } from 'typeorm';
 @Injectable()
 export class GlossaryService {
+    sort(query) {
+        if (query?.sort) {
+          let obj = {};
+          const sorts = query.sort.split(',');
+          obj[sorts[0]] = sorts[1];
+          return obj;
+        } else return { id: 'ASC' };
+    }
     constructor(
         @InjectRepository(Glossary)
         private GlossaryRepository: Repository<Glossary>,
       ) {}
     async getGlossary(filters: any) {
-        if(filters.page == 'null' && filters.limit == 'null') {
-            let result=  await this.GlossaryRepository.find();
-            return result;
-        }
-        else {
-            let take = filters.limit;
-            let skip=(Number(filters.page)-1)*take;
-            const [data, total] =  await this.GlossaryRepository.findAndCount({
-                where: {
-                    title : filters?.search ? ILike(`%${filters?.search}%`) : null,
-                    firstCharInTitle: filters?.char ? ILike(`%${filters?.char}%`) : null
-                },
-                take: take,
-                skip: skip,
-                order: {title: 'ASC'}
-            });
-            return {
-                result: data,
-                count: total
-            }
+        let take = filters.limit;
+        let skip=(Number(filters.page)-1)*take;
+        const [data, total] =  await this.GlossaryRepository.findAndCount({
+            where: {
+                title : filters?.title ? ILike(`%${filters?.title}%`) : null,
+                firstCharInTitle: filters?.char ? ILike(`%${filters?.char}%`) : null
+            },
+            take: take,
+            skip: skip,
+            order: {...this.sort(filters)}
+        });
+        return {
+            result: data,
+            count: total
         }
     }
     async getGlossaryById(id: number) {

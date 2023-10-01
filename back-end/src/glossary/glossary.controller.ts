@@ -1,12 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GlossaryService } from './glossary.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
-@ApiTags('glossary')
+import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
+@ApiTags('Glossary')
 @Controller('glossary')
 // @UseGuards(JwtAuthGuard, RolesGuard)
 export class GlossaryController {
@@ -31,8 +32,9 @@ export class GlossaryController {
           console.log('ERROR' + error);
         }
       }
-      @UseGuards(JwtAuthGuard, RolesGuard)
-      @Roles(Role.Admin)
+      @ApiBearerAuth()
+      @UseGuards(JwtAuthGuard, AdminRolesGuard)
+      @Roles()
       @Post('')
       addGlossary(@Body() data: any) {
         try {
@@ -41,8 +43,9 @@ export class GlossaryController {
           console.error(error);
         }
       }
-      @UseGuards(JwtAuthGuard, RolesGuard)
-      @Roles(Role.Admin)
+      @ApiBearerAuth()
+      @UseGuards(JwtAuthGuard, AdminRolesGuard)
+      @Roles()
       @Put(':id')
       updateGlossary(@Body() data: any, @Param('id') id: number) {
         try {
@@ -51,8 +54,9 @@ export class GlossaryController {
           console.error(error);
         }
       }
-      @UseGuards(JwtAuthGuard, RolesGuard)
-      @Roles(Role.Admin)
+      @ApiBearerAuth()
+      @UseGuards(JwtAuthGuard, AdminRolesGuard)
+      @Roles()
       @Delete(':id')
       deleteGlossary(@Param('id') id: number) {
         try {

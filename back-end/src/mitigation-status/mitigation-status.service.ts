@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class MitigationStatusService {
     constructor(
-        @InjectRepository(MitigationStatus) private MitigationRepository: Repository<MitigationStatus>,
+        @InjectRepository(MitigationStatus) public MitigationRepository: Repository<MitigationStatus>,
     ) {}
     async getMitigation() {
         try {

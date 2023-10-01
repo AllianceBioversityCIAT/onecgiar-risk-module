@@ -11,11 +11,11 @@ export class RiskService extends MainService {
   constructor(private http: HttpClient) {
     super();
   }
-  updateRedundant(iniitave_id: number, redundant: number) {
+  updateRedundant(risk_id: number, initiative_id: number, redundant: number) {
     return firstValueFrom(
       this.http
         .patch(
-          this.backend_url + '/risk/' + iniitave_id + '/redundant',
+          this.backend_url + '/risk/' + risk_id + '/redundant/' + initiative_id,
           { redundant },
           {
             headers: this.headers,
@@ -122,10 +122,15 @@ export class RiskService extends MainService {
       .toPromise();
   }
 
-  getRiskCategories() {
+  getRiskCategories(filters: any = null, page: any = null, limit: any = null) {
+    let finalFilter = {
+      filters : filters,
+      page : page,
+      limit : limit
+    }
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/risk-categories', { headers: this.headers })
+        .get(this.backend_url + '/risk-categories', { headers: this.headers , params: finalFilter})
         .pipe(map((d) => d))
     );
   }
@@ -157,7 +162,7 @@ export class RiskService extends MainService {
       this.http
         .get(this.backend_url + `/risk/risksOwner`, {
           params: {
-            initId: init_id,
+            initiative_id: init_id,
             user_id: user_id
           },
           headers: this.headers,

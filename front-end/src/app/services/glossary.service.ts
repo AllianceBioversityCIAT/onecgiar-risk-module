@@ -21,7 +21,7 @@ export class GlossaryService extends MainService {
     ).catch((e) => false);
   }
 
-  async getGlossary(filters: any = null, page: any = null, limit: any = null) {
+  async getGlossary(filters: any = null, page: number , limit: number ) {
     let finalFilters: any = {};
     if (filters)
       Object.keys(filters).forEach((element) => {

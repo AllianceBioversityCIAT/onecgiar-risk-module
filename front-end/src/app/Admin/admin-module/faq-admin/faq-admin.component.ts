@@ -6,6 +6,8 @@ import { FAQService } from 'src/app/services/faq.service';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { PageEvent } from '@angular/material/paginator';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-faq-admin',
@@ -13,7 +15,9 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./faq-admin.component.scss'],
 })
 export class FaqAdminComponent {
+  filters: any = null;
   constructor(
+    private fb: FormBuilder,
     private dialog: MatDialog,
     private toster: ToastrService,
     private FaqService: FAQService,
@@ -27,20 +31,58 @@ export class FaqAdminComponent {
   }
 
   data: any;
-
+  dataSource: any;
+  filterForm: FormGroup = new FormGroup({});
+  length!: number;
+  pageSize: number = 10;
+  pageIndex: number = 1;
   displayedColumns: string[] = ['id', 'question', 'answer', 'actions'];
 
+  sort = [
+    { name: 'ID (lowest first)', value: 'id,ASC' },
+    { name: 'ID (highest first)', value: 'id,DESC' },
+    { name: 'Question (lowest first)', value: 'question,ASC' },
+    { name: 'Question (highest first)', value: 'question,DESC' },
+    { name: 'Answer (lowest first)', value: 'answer,ASC' },
+    { name: 'Answer (highest first)', value: 'answer,DESC' },
+  ];
+
+  setForm() {
+    this.filterForm.valueChanges.subscribe(() => {
+      this.pageIndex = 1;
+      this.filters = this.filterForm.value;
+      this.getData();
+    });
+  }
+
   async ngOnInit() {
+    this.filterForm = this.fb.group({
+      search: [null],
+      sort: [null],
+    });
     await this.getData();
-    this.title.setTitle('Faq');
+    this.setForm();
+    this.title.setTitle('FAQ');
     this.meta.updateTag({
       name: 'description',
-      content: 'Faq',
+      content: 'FAQ',
     });
   }
 
   async getData() {
-    this.data = await this.FaqService.getData();
+    this.data = await this.FaqService.getData(
+      this.filters,
+      this.pageIndex,
+      this.pageSize
+    );
+    this.dataSource = this.data.result;
+    this.length = this.data.count;
+  }
+
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getData();
   }
 
   openFormDialog(id: any, action: string) {
@@ -77,5 +119,10 @@ export class FaqAdminComponent {
         this.toster.success(`Delete ${record.answer} successfully`);
       }
     });
+  }
+
+  resetForm() {
+    this.filterForm.reset();
+    this.filterForm.markAsUntouched();
   }
 }

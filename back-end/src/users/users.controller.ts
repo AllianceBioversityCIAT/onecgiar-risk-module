@@ -32,8 +32,9 @@ import { createAndUpdateUsers, exportToExcel, getUsers } from 'DTO/users.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
+import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, AdminRolesGuard)
 @ApiCreatedResponse({
   description: '',
   type: [User],
@@ -79,7 +80,7 @@ export class UsersController {
         .select('users.id as id')
         .getRawMany();
       const take = query.limit || 10;
-      const skip = (Number(query.page) - 1) * take;
+      const skip = (Number(query.page || 1) - 1) * take;
       const [result, total] =
         await this.usersService.userRepository.findAndCount({
           where: {
@@ -96,7 +97,7 @@ export class UsersController {
       };
     }
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Put()
   @ApiBody({ type: createAndUpdateUsers })
   @ApiCreatedResponse({
@@ -116,7 +117,7 @@ export class UsersController {
       throw new BadRequestException('The email is already used');
     }
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Post()
   @ApiBody({ type: createAndUpdateUsers })
   @ApiCreatedResponse({
@@ -137,12 +138,12 @@ export class UsersController {
       throw new BadRequestException('User already exist');
     }
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Delete(':id')
   deleteUser(@Param('id') id: number) {
     return this.usersService.userRepository.delete(id);
   }
-  @Roles(Role.Admin)
+  @Roles()
   @Get('export/all')
   @ApiCreatedResponse({
     description: '',

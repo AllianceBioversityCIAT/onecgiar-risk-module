@@ -34,17 +34,21 @@
       </nav>
       <div class="charts">
         <highcharts-chart
-          *ngIf="risk_current_chartOptions"
+          *ngIf="risk_level_chartOptions"
           [Highcharts]="Highcharts"
-          [options]="risk_current_chartOptions"
+          [options]="risk_level_chartOptions"
         >
         </highcharts-chart>
+
+      </div>
+      <div class="charts">
         <highcharts-chart
-          *ngIf="risk_target_chartOptions"
+          *ngIf="risk_base_chartOptions"
           [Highcharts]="Highcharts"
-          [options]="risk_target_chartOptions"
+          [options]="risk_base_chartOptions"
         >
         </highcharts-chart>
+
       </div>
     </div>
   </div>

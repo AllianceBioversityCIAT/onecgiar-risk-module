@@ -36,7 +36,7 @@
     <div class="user-management__button-box">
       <button
         style="width: 230px"
-        class="parameters-settings__button-box__btn btn-primary-size "
+        class="parameters-settings__button-box__btn btn-primary-size"
         (click)="openDialogCreateAnnouncement('Create new announcement')"
         mat-raised-button
         color="primary"
@@ -46,12 +46,15 @@
     </div>
   </div>
 
-  <div class="posted-scroll-box mat-elevation-z8">
+  <!-- <div class="posted-scroll-box mat-elevation-z8"> -->
 
-  <div class="announcement-box" *ngFor="let announcement of postedAnnouncements">
+  <div
+    class="announcement-box"
+    *ngFor="let announcement of postedAnnouncements"
+  >
     <div class="announcement-box__1">
       <p class="announcement-box__1--title">
-        {{ announcement.send_date | date : 'medium' }}
+        {{ announcement.send_date | date : "medium" }}
         <!-- <span class="announcement-box__1--title--1">{{
           announcement.time
         }}</span> -->
@@ -66,12 +69,17 @@
     </div>
     <div class="announcement-box__2">
       <p class="announcement-box__2--title-2">
-        <span class="announcement-box__2--title-3">{{announcement.subject}}</span> 
-        - 
-        <span [innerHTML]="announcement.description  | safeHtml : 'safeHtml for announcement'"></span> 
-        
+        <span class="announcement-box__2--title-3">{{
+          announcement.subject
+        }}</span>
+        -
+        <span
+          [innerHTML]="
+            announcement.description | safeHtml : 'safeHtml for announcement'
+          "
+        ></span>
       </p>
     </div>
   </div>
-</div>
+  <!-- </div> -->
 </div>

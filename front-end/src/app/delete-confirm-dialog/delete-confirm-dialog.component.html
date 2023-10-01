@@ -54,14 +54,11 @@
         <div class="delete-text-box" *ngIf="data?.risks?.length > 0">
           <p class="delete-text-risks">
             This user is assigned as risk owner on (
-            <strong class="">
-              <span class="delete-text-box__text-q"
-                ><strong class="delete-text-box__text-q">{{
-                  risks
-                }}</strong></span
-              >
+            <strong class="delete-text-box__text-q">
+              {{ risks }}
             </strong>
-            )
+            ). If the user is deleted, make sure to appoint another team member
+            for the risk(s) above
           </p>
         </div>
         <div class="delete-text-box">

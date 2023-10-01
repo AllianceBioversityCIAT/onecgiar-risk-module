@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MitigationStatusFormDialogComponent } from './mitigation-status-form-dialog/mitigation-status-form-dialog.component';
 import { ToastrService } from 'ngx-toastr';
@@ -6,6 +6,8 @@ import { MitigationStatusService } from 'src/app/services/mitigation-status.serv
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-mitigation-status',
@@ -13,10 +15,34 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./mitigation-status.component.scss'],
 })
 export class MitigationStatusComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: any;
+  filters: any = null;
+
   displayedColumns: string[] = ['id', 'title', 'description', 'actions'];
   dataSource: any;
+  data: any;
+  filterForm: FormGroup = new FormGroup({});
+  length!: number;
+  pageSize: number = 10;
+  pageIndex: number = 1;
+
+  sort = [
+    { name: 'ID (lowest first)', value: 'id,ASC' },
+    { name: 'ID (highest first)', value: 'id,DESC' },
+    { name: 'Name (lowest first)', value: 'title,ASC' },
+    { name: 'Name (highest first)', value: 'title,DESC' },
+  ];
+
+  setForm() {
+    this.filterForm.valueChanges.subscribe(() => {
+      this.pageIndex = 1;
+      this.filters = this.filterForm.value;
+      this.getData();
+    });
+  }
 
   constructor(
+    private fb: FormBuilder,
     private toster: ToastrService,
     private mitigationService: MitigationStatusService,
     private dialog: MatDialog,
@@ -30,7 +56,12 @@ export class MitigationStatusComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.filterForm = this.fb.group({
+      title: [null],
+      sort: [null],
+    });
     this.getData();
+    this.setForm();
     this.title.setTitle('Actions /Controls To Manage Risks');
     this.meta.updateTag({
       name: 'description',
@@ -39,7 +70,19 @@ export class MitigationStatusComponent implements OnInit {
   }
 
   async getData() {
-    this.dataSource = await this.mitigationService.getMitigationStatus();
+    this.data = await this.mitigationService.getMitigationStatus(
+      this.filters,
+      this.pageIndex,
+      this.pageSize
+    );
+    this.dataSource = this.data.result;
+    this.length = this.data.count;
+  }
+
+  async pagination(event: PageEvent) {
+    this.pageIndex = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getData();
   }
 
   openFormDialog(element: any, action: string) {
@@ -77,5 +120,10 @@ export class MitigationStatusComponent implements OnInit {
         this.toster.success(`Delete ${record.title} successfully`);
       }
     });
+  }
+
+  resetForm() {
+    this.filterForm.reset();
+    this.filterForm.markAsUntouched();
   }
 }

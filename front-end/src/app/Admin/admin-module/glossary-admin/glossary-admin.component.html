@@ -27,25 +27,82 @@
 </div>
 
 <div class="user-management__content--1">
-  <div class="user-management__container-1">
-    <div class="user-management__search-box-flex">
-      <div class="user-management__search-box">
+  <div class="user-management__container">
+    <div class="form-container">
+      <form *ngIf="filterForm" [formGroup]="filterForm" class="search">
+        <div class="sec-1">
+          <div class="risk-management-form-field field-3">
+            <mat-label class="risk-management-form-field__label"
+              >Search
+            </mat-label>
+            <input
+              formControlName="title"
+              class="search__input"
+              matInput
+              placeholder="Search"
+              #input
+            />
 
-      </div>
-      <div class="user-management__button-box">
-        <button
-          class="parameters-settings__button-box__btn btn-primary-size"
-          (click)="openFormDialog('', 'Add')"
-          mat-raised-button
-          color="primary"
-        >
-          Create Glossary
-        </button>
-      </div>
+            <button
+              style="border: none; cursor: pointer; background-color: #ffffff12"
+              class="search__button"
+            >
+              <mat-icon class="search__icon">
+                <img
+                  class="search__icon"
+                  src="../../assets/shared-image/Vector-search.svg"
+                  alt="~/Frontend/images/icon _ search-icon"
+              /></mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- //Sort----- -->
+        <div class="sec-6">
+          <div class="risk-management-form-field field-3">
+            <mat-label class="risk-management-form-field__label"
+              >Sort</mat-label
+            >
+
+            <mat-select
+              formControlName="sort"
+              class="risk-management-form-field-box__input-3"
+              [placeholder]="'All'"
+              id="select-where"
+            >
+              <mat-option>All</mat-option>
+              <mat-option *ngFor="let item of sort" [value]="item.value">
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <!-- //Reset Button----- -->
+        <div class="sec-9">
+          <button
+            class="risk-management-reset-btn"
+            mat-raised-button
+            (click)="resetForm()"
+          >
+            Reset
+          </button>
+        </div>
+
+        <div class="sec-7">
+          <button
+            class="parameters-settings__button-box__btn btn-primary-size"
+            (click)="openFormDialog('', 'Add')"
+            mat-raised-button
+            color="primary"
+          >
+            Create Glossary
+          </button>
+        </div>
+      </form>
     </div>
 
-    <div class="table-box example-container">
-      <table mat-table [dataSource]="data">
+    <div class="table-box mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
         <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
@@ -75,7 +132,10 @@
             <span class="h3">Description</span>
           </th>
           <td mat-cell *matCellDef="let element">
-            <span class="td-h" [innerHTML]="element.description | safeHtml : 'safeHtml for mitigation'"></span>
+            <span
+              class="td-h"
+              [innerHTML]="element.description | faqPipe"
+            ></span>
           </td>
         </ng-container>
 
@@ -126,6 +186,15 @@
           *matRowDef="let row; columns: displayedColumns"
         ></tr>
       </table>
+      <mat-paginator
+        class="glossary-content-container user-management-paginator-box"
+        [pageSizeOptions]="[10, 20, 30, 50, 100]"
+        [length]="length"
+        [pageIndex]="pageIndex - 1"
+        (page)="pagination($event)"
+        aria-label="Select page of users"
+      >
+      </mat-paginator>
     </div>
   </div>
 </div>

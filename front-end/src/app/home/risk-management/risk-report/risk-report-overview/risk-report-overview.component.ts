@@ -123,7 +123,7 @@ export class RiskReportOverviewComponent implements OnInit {
       });
   }
   async checkValue(id: number, value: any) {
-    await this.riskService.updateRedundant(id, value);
+    await this.riskService.updateRedundant(id, this.id , value);
   }
   my_risks: any = null;
   async loadInitiative() {
