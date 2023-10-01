@@ -41,7 +41,7 @@ export class GlossaryComponent implements OnInit {
     private title: Title,
     private meta: Meta,
     private _router: Router,
-    private _route: ActivatedRoute,
+    private _route: ActivatedRoute
   ) {
     this.headerService.background = '#0f212f';
     this.headerService.backgroundNavMain = '#436280';
@@ -49,7 +49,7 @@ export class GlossaryComponent implements OnInit {
   }
   filters: any;
   length: number = 0;
-  pageSize: number = 5;
+  pageSize: number = 10;
   pageIndex: number = 1;
   data: any;
   glossary: any;
@@ -63,9 +63,9 @@ export class GlossaryComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.changeFilter();
     const params: any = this._route.snapshot.queryParams;
-    if(Object.keys(params).length != 0 ) {
-      this.filters = {...params}
-      this.activeButton = this.filters?.char?.toUpperCase()
+    if (Object.keys(params).length != 0) {
+      this.filters = { ...params };
+      this.activeButton = this.filters?.char?.toUpperCase();
     }
     await this.getData(this.filters);
     // this.changeDetectorRef.detectChanges();
@@ -86,9 +86,9 @@ export class GlossaryComponent implements OnInit {
     this._router.navigate([], {
       relativeTo: this._route,
       queryParams: {
-       ...filters
+        ...filters,
       },
-    })
+    });
   }
 
   async pagination(event: PageEvent) {
