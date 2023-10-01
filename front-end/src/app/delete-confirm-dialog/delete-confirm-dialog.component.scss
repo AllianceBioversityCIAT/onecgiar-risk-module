@@ -99,33 +99,48 @@
   padding: 0 !important;
 }
 
-.delete-text-box__text-q {
-  // color: #626262;
+.delete-text-box__text-qs {
   text-align: center;
-  // font-family: "Poppins", sans-serif !important;
-  // font-size: 1.4rem;
-  // font-style: normal;
-  // font-weight: 500;
-  // line-height: normal;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
   text-wrap: nowrap;
-  overflow: hidden;
+  /* overflow: hidden; */
   max-width: 112px;
   display: table-cell;
-  /* float: right; */
   margin: 0 !important;
   text-align: justify;
-  /* display: block; */
-  /* position: relative; */
   top: -7rem;
-  /* text-align: end; */
-  /* letter-spacing: 2.75px; */
   color: #0f212f;
   font-family: "Poppins", sans-serif !important;
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin: 0 !important;
+  text-align: justify;
+  top: -7rem;
+
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flow;
+  width: min-content;
+  white-space: break-spaces;
+}
+
+.delete-text-box__text-q {
+  margin: 0 !important;
+  text-align: left;
+  top: -7rem;
+  letter-spacing: 1.75px;
+  color: #0f212f;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  width: 484px;
 }
 
 .delete-text-risks {
@@ -138,17 +153,15 @@
   // line-height: normal;
   /* float: right; */
   margin: 0 !important;
-  text-align: justify;
-  /* display: none; */
-  /* position: relative; */
+  text-align: left;
   top: -7rem;
-  /* text-align: end; */
-  letter-spacing: 0.75px;
+  letter-spacing: 1.75px;
   color: #0f212f;
   font-family: "Poppins", sans-serif !important;
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 484px;
+  width: 491px;
+  /* max-width: 300px; */
 }
