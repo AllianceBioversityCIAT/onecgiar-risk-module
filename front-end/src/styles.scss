@@ -104,9 +104,6 @@
 
 .faq-img {
   p {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
     white-space: break-spaces;
     // margin-bottom: 5rem;
     font-weight: 400;
@@ -148,15 +145,16 @@
   }
 
   img {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 1rem;
     // width: 100%;
   }
 }
 
 .faq-imgs {
   p {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
     white-space: break-spaces;
     // margin-bottom: 5rem;
     font-weight: 400;
@@ -199,5 +197,9 @@
 
   img {
     width: 50%;
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 1rem;
   }
 }
