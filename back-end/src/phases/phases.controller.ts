@@ -38,7 +38,7 @@ export class PhasesController {
   create(@Body() createPhaseDto: CreatePhaseDto) {
     return this.phasesService.create(createPhaseDto);
   }
-  @Roles()
+  // @Roles()
   @Get()
   async findAll(@Query() query) {
     if(query.page == 'null') {
@@ -58,7 +58,7 @@ export class PhasesController {
       };
     }
   }
-  @Roles()
+  // @Roles()
   @Get('active')
   findActiveOne() {
     return this.phasesService.findActivePhase();
