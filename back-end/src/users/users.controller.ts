@@ -80,7 +80,7 @@ export class UsersController {
         .select('users.id as id')
         .getRawMany();
       const take = query.limit || 10;
-      const skip = (Number(query.page) - 1) * take;
+      const skip = (Number(query.page || 1) - 1) * take;
       const [result, total] =
         await this.usersService.userRepository.findAndCount({
           where: {

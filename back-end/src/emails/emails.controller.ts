@@ -47,7 +47,7 @@ export class EmailsController {
       status = false;
     }
     const take = query.limit || 10
-    const skip=(Number(query.page)-1)*take;
+    const skip=(Number(query.page || 1)-1)*take;
       let result = await this.emailService.repo.createQueryBuilder('email');
       if(status != 'All') {
         result.where('status = :status', { status: status })

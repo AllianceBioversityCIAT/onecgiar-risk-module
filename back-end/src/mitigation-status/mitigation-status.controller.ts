@@ -35,7 +35,7 @@ export class MitigationStatusController {
           return this.MitigationService.getMitigation();
         } else {
           const take = query.limit || 10;
-          const skip = (Number(query.page) - 1) * take;
+          const skip = (Number(query.page || 1) - 1) * take;
           let [finalResult,total] = await this.MitigationService.MitigationRepository.findAndCount({
             where: { title:query?.title ?  ILike(`%${query.title}%`) : null},
             order: { ...this.sort(query) },

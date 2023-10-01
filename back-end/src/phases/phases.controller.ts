@@ -20,9 +20,7 @@ import { ILike } from 'typeorm';
 
 @ApiBearerAuth()
 @ApiTags('Phases')
-// @UseGuards(AuthGuard)
 @Controller('phases')
-@UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class PhasesController {
   sort(query) {
     if (query?.sort) {
@@ -33,6 +31,7 @@ export class PhasesController {
     } else return { id: 'ASC' };
   }
   constructor(private readonly phasesService: PhasesService) {}
+  @UseGuards(JwtAuthGuard, AdminRolesGuard)
   @Roles()
   @Post()
   create(@Body() createPhaseDto: CreatePhaseDto) {
@@ -45,7 +44,7 @@ export class PhasesController {
       return this.phasesService.findAll();
     } else {
       const take = query.limit || 10;
-      const skip = (Number(query.page) - 1) * take;
+      const skip = (Number(query.page || 1) - 1) * take;
       let [finalResult,total] = await this.phasesService.phaseRepository.findAndCount({
         where: { name:query?.name ?  ILike(`%${query.name}%`) : null},
         order: { ...this.sort(query) },
@@ -68,24 +67,29 @@ export class PhasesController {
   findOne(@Param('id') id: string) {
     return this.phasesService.findOne(+id);
   }
+  @UseGuards(JwtAuthGuard, AdminRolesGuard)
   @Roles()
   @Get('activate/:id')
   activate(@Param('id') id: string) {
     return this.phasesService.activate(+id);
   }
+  @UseGuards(JwtAuthGuard, AdminRolesGuard)
   @Roles()
   @Get('deactivate/:id')
   deactivate(@Param('id') id: string) {
     return this.phasesService.deactivate(+id);
   }
+  @UseGuards(JwtAuthGuard, AdminRolesGuard)
   @Roles()
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePhaseDto: UpdatePhaseDto) {
     return this.phasesService.update(+id, updatePhaseDto);
   }
+  @UseGuards(JwtAuthGuard, AdminRolesGuard)
   @Roles()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.phasesService.remove(+id);
   }
+
 }
