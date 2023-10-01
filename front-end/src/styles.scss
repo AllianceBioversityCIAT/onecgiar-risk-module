@@ -147,7 +147,7 @@
   img {
     display: flex;
     flex-direction: column;
-
+    max-width: 100%;
     margin-bottom: 1rem;
     // width: 100%;
   }
@@ -199,7 +199,7 @@
     width: 50%;
     display: flex;
     flex-direction: column;
-
+    max-width: 100%;
     margin-bottom: 1rem;
   }
 }
