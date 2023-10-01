@@ -30,7 +30,7 @@ export class FaqController {
             return this.FaqService.getFaq();
           } else {
             const take = query.limit || 10;
-            const skip = (Number(query.page) - 1) * take;
+            const skip = (Number(query.page || 1) - 1) * take;
             let [finalResult,total] = await this.FaqService.FaqRepository.findAndCount({
               where: { question:query?.search ?  ILike(`%${query.search}%`) : null},
               order: { ...this.sort(query) },
