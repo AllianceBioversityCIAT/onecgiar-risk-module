@@ -23,7 +23,7 @@ export class Phase {
   name: string;
 
   @Column()
-  reporting_year: string;
+  reporting_year: Number;
 
   @Column({ type: 'timestamp' , default:null })
   start_date: Date;
