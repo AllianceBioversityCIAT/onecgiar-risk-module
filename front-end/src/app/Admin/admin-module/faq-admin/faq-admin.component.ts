@@ -44,7 +44,7 @@ export class FaqAdminComponent {
     { name: 'Question (lowest first)', value: 'question,ASC' },
     { name: 'Question (highest first)', value: 'question,DESC' },
     { name: 'Answer (lowest first)', value: 'answer,ASC' },
-    { name: 'Answer (highest first)', value: 'answer,DESC' }
+    { name: 'Answer (highest first)', value: 'answer,DESC' },
   ];
 
   setForm() {
@@ -62,7 +62,7 @@ export class FaqAdminComponent {
     });
     await this.getData();
     this.setForm();
-    this.title.setTitle('Faq');
+    this.title.setTitle('FAQ');
     this.meta.updateTag({
       name: 'description',
       content: 'FAQ',
