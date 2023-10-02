@@ -6,12 +6,12 @@ import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix(env.APP_Prefix);
+  app.setGlobalPrefix(env.APP_Prefix || '');
   app.enableCors({
     origin: '*',
     methods: 'GET, PUT, POST, PATCH, DELETE',
     allowedHeaders: 'Content-Type, Authorization',
-    credentials: true
+    credentials: true,
   });
   app.use(json({ limit: '20mb' }));
   app.use(urlencoded({ extended: true, limit: '20mb' }));
@@ -20,7 +20,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(env.APP_Prefix, app, document);
+  SwaggerModule.setup(env.APP_Prefix || '', app, document);
   await app.listen(env.APP_PORT);
 }
 bootstrap();
