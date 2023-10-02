@@ -65,7 +65,6 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { OpenGuard } from 'src/auth/open.guard';
 @ApiTags('Initiative')
 @Controller('initiative')
-
 export class InitiativeController {
   constructor(
     private iniService: InitiativeService,
@@ -106,14 +105,13 @@ export class InitiativeController {
             role: query.my_role,
           },
         };
-    } else if (query?.my_ini == 'true'){
-
+    } else if (query?.my_ini == 'true') {
       console.log(req.user);
-      return { roles: { user_id: req.user.id } };}
-    else return {};
+      return { roles: { user_id: req.user.id } };
+    } else return {};
   }
   filterCategory(query, title) {
-    if(title == 'For Init') {
+    if (title == 'For Init') {
       if (query?.category) {
         if (Array.isArray(query?.category)) {
           return {
@@ -123,8 +121,7 @@ export class InitiativeController {
           return {
             category_id: query.category,
           };
-      }
-      else return {};
+      } else return {};
     } else {
       if (query?.category) {
         if (Array.isArray(query?.category)) {
@@ -135,17 +132,16 @@ export class InitiativeController {
           return {
             id: query.category,
           };
-      }
-      else return {};
+      } else return {};
     }
   }
-  sort(query,top=false): any {
+  sort(query, top = false): any {
     if (query?.sort) {
-      let obj = {  };
+      let obj = {};
       const sorts = query.sort.split(',');
       obj[sorts[0]] = sorts[1];
       return obj;
-    } else return top? { top:'ASC',id: 'ASC'} : { id: 'ASC'};
+    } else return top ? { top: 'ASC', id: 'ASC' } : { id: 'ASC' };
   }
   @UseGuards(JwtAuthGuard)
   @Get('import-file')
@@ -244,7 +240,7 @@ export class InitiativeController {
 
       Category: null,
       'Created by': null,
-      'Help requested': null,
+      'Targets not set': null,
       Flagged: null,
       'Due date': null,
       // Redundant: false,
@@ -278,8 +274,8 @@ export class InitiativeController {
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
     template['Flagged'] = element.flag;
-    template['Help requested'] =
-    element.request_assistance == true ? 'Yes' : 'No';
+    template['Targets not set'] =
+      element.request_assistance == true ? 'Yes' : 'No';
   }
 
   prepareDataExcelAdmin(risks) {
@@ -350,7 +346,7 @@ export class InitiativeController {
       // Redundant: false,
       'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
-      'Help requested': null,
+      'Targets not set': null,
     };
   }
 
@@ -380,7 +376,7 @@ export class InitiativeController {
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
     template['Flagged'] = element.flag;
-    template['Help requested'] =
+    template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
 
@@ -448,7 +444,7 @@ export class InitiativeController {
 
       Category: null,
       'Created by': null,
-      'Help requested': null,
+      'Targets not set': null,
       Flagged: null,
       'Due date': null,
       // Redundant: false,
@@ -482,7 +478,7 @@ export class InitiativeController {
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
     template['Flagged'] = element.flag;
-    template['Help requested'] =
+    template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
 
@@ -548,7 +544,7 @@ export class InitiativeController {
 
       Category: null,
       'Created by': null,
-      'Help requested': null,
+      'Targets not set': null,
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
@@ -579,7 +575,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Help requested'] =
+    template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
     // template.Redundant = element.redundant;
     // template['Flag to SGD'] = element.flag;
@@ -633,7 +629,6 @@ export class InitiativeController {
     return { finaldata, merges };
   }
 
-
   getTemplateVersionUser(width = false) {
     return {
       top: null,
@@ -651,7 +646,7 @@ export class InitiativeController {
 
       Category: null,
       'Created by': null,
-      'Help requested': null,
+      'Targets not set': null,
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
@@ -683,7 +678,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Help requested'] =
+    template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
     // template.Redundant = element.redundant;
     // template['Flag to SGD'] = element.flag;
@@ -828,7 +823,7 @@ export class InitiativeController {
       where: {
         initiative_id: In(ininit.map((d) => d.id)),
         redundant: false,
-        category : { ...this.filterCategory(query, 'For risk') }
+        category: { ...this.filterCategory(query, 'For risk') },
         // category: { id: query?.category ? In(query?.category) : null },
       },
       relations: [
@@ -909,7 +904,7 @@ export class InitiativeController {
         risks: {
           redundant: req?.redundant == 'true' ? null : false,
           title: req?.title ? ILike(`%${req.title}%`) : null,
-          category : { ...this.filterCategory(req, 'For risk') },
+          category: { ...this.filterCategory(req, 'For risk') },
           // category: { id: req?.category ? In(req?.category) : null },
           created_by_user_id: req?.created_by
             ? Array.isArray(req?.created_by)
@@ -936,7 +931,7 @@ export class InitiativeController {
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { ...this.sort(req,req.version == 'true') } },
+      order: { risks: { ...this.sort(req, req.version == 'true') } },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 
@@ -1052,7 +1047,7 @@ export class InitiativeController {
       });
     }
   }
- 
+
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.User)
   @UseGuards(RolesGuard)
@@ -1162,14 +1157,17 @@ export class InitiativeController {
     });
   }
 
-  @Get(['report/:official_code','report/:official_code/:phase_id'])
+  @Get(['report/:official_code', 'report/:official_code/:phase_id'])
   @ApiCreatedResponse({
     description: '',
     type: getAllVersions,
   })
-  getLatestVersonsByPhase(@Param('official_code') official_code: string,@Param('phase_id') phase_id: number) {
+  getLatestVersonsByPhase(
+    @Param('official_code') official_code: string,
+    @Param('phase_id') phase_id: number,
+  ) {
     return this.iniService.iniRepository.findOne({
-      where: { official_code,phase_id},
+      where: { official_code, phase_id },
       relations: [
         'risks',
         'action_area',
@@ -1202,7 +1200,6 @@ export class InitiativeController {
       relations: ['user'],
     });
   }
-
 
   @Roles(Role.Admin, Role.User)
   @UseGuards(RolesGuard)
