@@ -21,13 +21,7 @@ export class AcceleratedBreedingVersionComponent {
     private meta: Meta,
     private t: TitlePageService,
     private toaster: ToastrService
-  ) {
-    this.title.setTitle('Accelerated breeding versio');
-    this.meta.updateTag({
-      name: 'description',
-      content: 'Accelerated breeding versio',
-    });
-  }
+  ) {}
 
   dataSource = new MatTableDataSource<any>([]);
   showReduntent: boolean = false;
@@ -40,25 +34,29 @@ export class AcceleratedBreedingVersionComponent {
 
   path: any = '';
   id: any;
-  official_code:any;
+  official_code: any;
   initiative: any;
 
   paarentRoute: any;
 
-  user_info:any;
+  user_info: any;
   request_assistance: boolean = false;
-  filter:any = {request_assistance: false}
-  data:any
+  filter: any = { request_assistance: false };
+  data: any;
   async risksNeedHelp() {
     this.filter = {
-      request_assistance: this.request_assistance
-    }
-    this.data = await this.initiativesService.getInitiativeForVersion(this.id, this.filter).then((data) => {
-      this.dataSource.data = data?.risks;
-    }, (error) => {
-      this.toaster.error(error.error.message);
-    });
-
+      request_assistance: this.request_assistance,
+    };
+    this.data = await this.initiativesService
+      .getInitiativeForVersion(this.id, this.filter)
+      .then(
+        (data) => {
+          this.dataSource.data = data?.risks;
+        },
+        (error) => {
+          this.toaster.error(error.error.message);
+        }
+      );
   }
 
   async ngOnInit() {
@@ -66,11 +64,15 @@ export class AcceleratedBreedingVersionComponent {
     const params: any = this.activatedRoute.snapshot.params;
 
     this.id = params.versionId;
-    this.initiative = await this.initiativesService.getInitiativeForVersion(this.id, this.filter);
+    this.initiative = await this.initiativesService.getInitiativeForVersion(
+      this.id,
+      this.filter
+    );
     this.dataSource.data = this.initiative?.risks;
 
-    const params2:any = this.activatedRoute.parent?.parent?.snapshot.params;
+    const params2: any = this.activatedRoute.parent?.parent?.snapshot.params;
     console.log(params2);
+    console.log(this.initiative?.name);
     this.paarentRoute = params2;
     this.official_code = params2.initiativeId;
 
@@ -80,6 +82,12 @@ export class AcceleratedBreedingVersionComponent {
     if (access_token) {
       this.user_info = jwt_decode(access_token);
     }
+
+    this.title.setTitle(`${this.initiative?.name} Version `);
+    this.meta.updateTag({
+      name: 'description',
+      content: `${this.initiative?.name} Version  `,
+    });
   }
 
   async export() {
