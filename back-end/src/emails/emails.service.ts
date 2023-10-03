@@ -182,7 +182,7 @@ export class EmailsService {
             </p>
             <br>
             <br>
-            <a style="color: rgb(67, 98, 128)" traget="_blank" href="${'http://localhost:4200'}/request/view/${1}">${
+            <a style="color: rgb(67, 98, 128)" traget="_blank" href="${process.env.FRONTEND}/request/view/${1}">${
       process.env.FRONTEND
     }/request/view/${1}</a>
         `;
@@ -218,7 +218,7 @@ export class EmailsService {
             </tr>
           </table>
           </p>
-          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${'http://localhost:4200'}/home">${process.env.FRONTEND}/home</a>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home">${process.env.FRONTEND}/home</a>
           <br>
           <br>
             `;
@@ -249,7 +249,7 @@ export class EmailsService {
             </tr>
           </table>
           </p>
-          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${'http://localhost:4200'}/home/${init.id}/${init.official_code}/versions/${init.last_version_id}">${process.env.FRONTEND}/home/${init.id}/${init.official_code}/versions/${init.last_version_id}</a>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${init.id}/${init.official_code}/versions/${init.last_version_id}">${process.env.FRONTEND}/home/${init.id}/${init.official_code}/versions/${init.last_version_id}</a>
           <br>
           <br>
             `;
@@ -274,7 +274,7 @@ export class EmailsService {
             </tr>
           </table>
           </p>
-          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${'http://localhost:4200'}/home/${init.id}/${init.official_code}">${process.env.FRONTEND}/home/${init.id}/${init.official_code}</a>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${init.id}/${init.official_code}">${process.env.FRONTEND}/home/${init.id}/${init.official_code}</a>
           <br>
           <br>
             `;
