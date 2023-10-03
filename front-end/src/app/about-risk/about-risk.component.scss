@@ -1,1 +1,40 @@
 @import "../sass/pages/about-risk";
+
+.our-founding-main-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  left: 0rem;
+  margin-bottom: 5rem;
+  padding: 0 4rem;
+
+  &__list {
+    color: #0f212f;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.7rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    // padding: 0 1rem 0 1.5rem;
+    text-align: justify;
+  }
+}
+
+.our-founding-titles {
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #0f212f;
+}
+
+.about-p {
+  padding: 3rem;
+}
+
+.section-variety-tools {
+  background-color: #fafafa;
+  padding: 2rem 0;
+  /* height: 207vh; */
+  min-height: calc(100vh - 210px);
+}
