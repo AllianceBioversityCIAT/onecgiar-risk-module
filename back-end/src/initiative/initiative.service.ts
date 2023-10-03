@@ -176,7 +176,7 @@ export class InitiativeService {
 
     let userInInit: any;
     let isExistsUser: any;
-    let emailIsInUsersEmail:any;
+    let emailIsInUsersEmail: any;
     if (role.email == '') {
       userInInit = await this.iniRolesRepository.findOne({
         where: { initiative_id: initiative_id, user_id: role.user_id },
@@ -187,8 +187,8 @@ export class InitiativeService {
         where: { initiative_id: initiative_id, email: role.email },
       });
       emailIsInUsersEmail = await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id, user: { email: role.email }}
-      })
+        where: { initiative_id: initiative_id, user: { email: role.email } },
+      });
       isExistsUser = await this.userService.findByEmail(role.email);
     }
     if (userInInit == null && role.email == '') {
@@ -211,7 +211,11 @@ export class InitiativeService {
         if (user) this.emailsService.sendEmailTobyVarabel(user, 10);
       }
       return await this.iniRolesRepository.save(newRole, { reload: true });
-    } else if ((userInInit == null && emailIsInUsersEmail == null) && role.email != '') {
+    } else if (
+      userInInit == null &&
+      emailIsInUsersEmail == null &&
+      role.email != ''
+    ) {
       let init = await this.iniRepository.findOne({
         where: { id: initiative_id },
         relations: ['roles'],
@@ -233,7 +237,7 @@ export class InitiativeService {
       return await this.iniRolesRepository.save(newRole, { reload: true });
     } else {
       throw new BadRequestException(
-        'User already have role in this initiative',
+        'the user already has already the role in this initiative',
       );
     }
   }
