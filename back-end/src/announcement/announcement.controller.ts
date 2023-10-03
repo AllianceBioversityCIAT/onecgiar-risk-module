@@ -108,6 +108,9 @@ export class AnnouncementController {
           user.email,
           announcement.subject,
           announcement.description,
+          null,
+          null,
+          null
         );
         return await sendon(index + 1);
       };
@@ -134,6 +137,9 @@ export class AnnouncementController {
         email,
         announcement.subject + ' ( TEST )',
         announcement.description,
+        null,
+        null,
+        null
       );
     } catch (error) {
       console.error(error);
