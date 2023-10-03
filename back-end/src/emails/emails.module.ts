@@ -10,6 +10,9 @@ import { User } from 'entities/user.entitiy';
 import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/auth/constants';
+import { Initiative } from 'entities/initiative.entity';
+import { Risk } from 'entities/risk.entity';
+import { InitiativeRoles } from 'entities/initiative-roles.entity';
 
 @Module({
   controllers: [EmailsController],
@@ -17,7 +20,7 @@ import { jwtConstants } from 'src/auth/constants';
   imports: [
     VariablesModule,
     UsersModule,
-    TypeOrmModule.forFeature([Email,Variables,User]),
+    TypeOrmModule.forFeature([Email,Variables,User,Initiative,Risk,InitiativeRoles]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '30d'},

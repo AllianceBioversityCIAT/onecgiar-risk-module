@@ -79,7 +79,8 @@ export class EmailsController {
   @Roles()
   @Get('test/test')
   async test() {
-    const email1 = await this.emailService.sendEmailTobyVarabel(1, 1);
+
+    const email1 = await this.emailService.sendEmailTobyVarabel(1,1, null,null)
 
     return email1;
   }

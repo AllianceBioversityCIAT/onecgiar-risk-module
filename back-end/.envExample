@@ -12,6 +12,6 @@ Cognito_API=https://aws.com/api
 Gognito_client_id=sadasf
 Gognito_client_secret=i7sdasdasdasdasdq0fisasdasdac
 Gognito_client_redirect_uri=https://localhost:4200/auth
-
 APP_PORT=3000
 APP_Prefix=
+FRONTEND=http://localhost:4200

@@ -5,18 +5,28 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
-import { Like, Repository } from 'typeorm';
+import { LessThanOrEqual, Like, Repository } from 'typeorm';
 import { Email } from './email.entity';
 import * as sgMail from '@sendgrid/mail';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
+import { InitiativeService } from 'src/initiative/initiative.service';
+import { Initiative } from 'entities/initiative.entity';
+import { Risk } from 'entities/risk.entity';
+import { InitiativeRoles } from 'entities/initiative-roles.entity';
 @Injectable()
 export class EmailsService {
   constructor(
     @InjectRepository(Email) public repo: Repository<Email>,
     private variabelService: VariablesService,
     private usersService: UsersService,
+    @InjectRepository(Initiative)
+    public iniRepository: Repository<Initiative>,
+    @InjectRepository(Risk)
+    public riskRepository: Repository<Risk>,
+    @InjectRepository(InitiativeRoles)
+    public initRoleRepository: Repository<InitiativeRoles>,
   ) {}
   private readonly logger = new Logger(EmailsService.name);
   async sendEmailWithSendGrid(to, subject, html) {
@@ -68,6 +78,42 @@ export class EmailsService {
       emails.forEach(async (email) => {
         await this.send(email);
       });
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_11PM, {
+    name: 'Due-Date-notifications',
+  })
+  private async dueDateNotifications() {
+    this.logger.log('Due-Date-notifications Runing');
+    const nowDate = new Date()
+
+
+
+    const start = new Date(nowDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 1);
+
+
+    const risks = await this.riskRepository.createQueryBuilder('risk')
+      .where(`risk.due_date BETWEEN '${start.toISOString()}' AND '${end.toISOString()}'`)
+      .andWhere(`risk.original_risk_id IS NULL`)
+      .getMany();
+
+      for (let risk of risks) {
+      const init = await this.initRoleRepository.find({
+        where : {
+          initiative_id : risk.initiative_id
+        },
+        relations: ['user']
+      })
+  
+      init.forEach((init) => {
+        if(init.role == 'Leader' || init.role == 'Coordinator') {
+          this.sendEmailTobyVarabel(init.user, 6, init.initiative_id, risk);
+        }
+      })
+    }
   }
 
   async createEmail(
@@ -146,17 +192,95 @@ export class EmailsService {
     return email1;
   }
 
-  async createEmailBy(name, email, subject, contnet) {
+  async createEmailBy(name, email, subject, contnet, init_id, risk, content_id) {
+    const init = await this.iniRepository.findOne({
+      where : {
+        id: init_id
+      }
+    })
+    let body = ``;
     try {
-      const body = `
-      <p style="font-weight: 200">
-      Dear, ${name}
-      <br>
-      ${contnet}
-      </p>
-      <br>
-      <br>
-        `;
+      if(init_id != null && risk == null) {
+        if(content_id == 10) {
+          body = `
+          <p style="font-weight: 200">
+          Dear, ${name}
+          <br>
+          ${contnet}
+          <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
+            <tr>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">INIT Code</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Initiative name</th>
+            </tr>
+            <tr>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${init.official_code}</td>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${init.name}</td>
+            </tr>
+          </table>
+          </p>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${'http://localhost:4200'}/home">${process.env.FRONTEND}/home</a>
+          <br>
+          <br>
+            `;
+        } else {
+          const lastVersion = await this.iniRepository.findOne({
+            where : {
+              id: init.last_version_id
+            }
+          })
+          let creationDate = lastVersion.submit_date.toISOString().split('T')[0];
+          body = `
+          <p style="font-weight: 200">
+          Dear, ${name}
+          <br>
+          ${contnet}
+          <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
+            <tr>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">INIT Code</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Initiative name</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Version ID</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Creation Date</th>
+            </tr>
+            <tr>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${init.official_code}</td>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${init.name}</td>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${init.last_version_id}</td>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${creationDate}</td>
+            </tr>
+          </table>
+          </p>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${'http://localhost:4200'}/home/${init.id}/${init.official_code}/versions/${init.last_version_id}">${process.env.FRONTEND}/home/${init.id}/${init.official_code}/versions/${init.last_version_id}</a>
+          <br>
+          <br>
+            `;
+        }
+      } else {
+        
+        if(content_id == 5 || content_id == 1 || content_id == 6) { 
+          // console.log('wowo risk ==> ', risk)
+          body = `
+          <p style="font-weight: 200">
+          Dear, ${name}
+          <br>
+          ${contnet}
+          <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
+            <tr>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Risk Id</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Risk Name</th>
+            </tr>
+            <tr>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${risk.id}</td>
+              <td style="border:1px solid gray !important; border-collapse: collapse;">${risk.title}</td>
+            </tr>
+          </table>
+          </p>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${'http://localhost:4200'}/home/${init.id}/${init.official_code}">${process.env.FRONTEND}/home/${init.id}/${init.official_code}</a>
+          <br>
+          <br>
+            `;
+        }
+      }
+
       const emailBody = this.emailTemplate(body);
       const email1 = await this.createEmail(name, subject, email, emailBody);
 
@@ -167,7 +291,7 @@ export class EmailsService {
 
   }
 
-  async sendEmailTobyVarabel(user, subject_varabel_id) {
+  async sendEmailTobyVarabel(user, subject_varabel_id, initiative_id, risk) {
     const content = await this.variabelService.variablesRepository.findOne({
       where: { id: subject_varabel_id },
     });
@@ -177,6 +301,9 @@ export class EmailsService {
       user.email,
       content.label,
       content.value,
+      initiative_id,
+      risk,
+      content.id
     );
   }
 }
