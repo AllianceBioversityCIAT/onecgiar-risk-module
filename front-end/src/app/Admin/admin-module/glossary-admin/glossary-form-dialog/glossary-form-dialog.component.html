@@ -58,15 +58,11 @@
       <div class="NgxEditor__Wrapper">
         <!-- <ngx-editor-menu [toolbar]="toolbar" [editor]="editor"> </ngx-editor-menu>
         <ngx-editor [editor]="editor" [ngModel]="html" [disabled]="false" [placeholder]="'Type here...'" formControlName="description"></ngx-editor> -->
-        <editor formControlName="description"
-            [init]="{ base_url: '/tinymce', 
-            selector: 'textarea',
-            menubar:false,
-            suffix: '.min',  
-            plugins: 'image code link paste fullscreen ', 
-            toolbar: 'undo redo | blocks fontsize  | bold italic | alignleft aligncenter alignright alignjustify  | bullist numlist outdent indent  | forecolor  |fullscreen',
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-          }">
+        <mat-spinner *ngIf="(editorSubject | async) === null" class="spinner"></mat-spinner>
+        <editor 
+            (onInit)="onEditorInit($event)"
+            formControlName="description"
+            [init]="settings">
         </editor>
       </div>
       <mat-error

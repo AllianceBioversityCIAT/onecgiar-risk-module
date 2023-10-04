@@ -28,6 +28,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatCardModule } from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 const MaterialComponets = [
@@ -58,7 +59,8 @@ const MaterialComponets = [
   MatBadgeModule,
   MatCardModule,
   MatSlideToggleModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({

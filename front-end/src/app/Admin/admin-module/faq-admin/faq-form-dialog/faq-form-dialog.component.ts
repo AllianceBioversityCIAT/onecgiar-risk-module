@@ -6,6 +6,8 @@ import {
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FAQService } from 'src/app/services/faq.service';
 import { ToastrService } from 'ngx-toastr';
+import { Editor } from 'ngx-editor';
+import { AsyncSubject, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-faq-form-dialog',
@@ -23,9 +25,32 @@ export class FaqFormDialogComponent {
   ){}
   ngOnInit(): void {
     this.setValue();
+    this.setupEditor();
+  }
+  editor: Editor | undefined;
+  settings: any;
+  editorSubject: Subject<any> = new AsyncSubject();
+
+  onEditorInit(event: any) {
+    this.editorSubject.next(event.editor);
+    this.editorSubject.complete();
   }
 
 
+  setupEditor() {
+    this.settings = {
+      base_url: '/tinymce',
+      selector: 'textarea',
+      menubar:false,
+      suffix: '.min',
+      toolbar: 'undo redo | blocks fontsize  | bold italic | alignleft aligncenter alignright alignjustify  | bullist numlist outdent indent  | forecolor  |fullscreen',
+      plugins: 'image code link paste fullscreen ',
+      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+      setup: (editor: Editor) => {
+        this.editor = editor;
+      }
+    };
+  }
 
   Form = this.fb.group({
     id:this.fb.control({value:'',disabled:true}),
