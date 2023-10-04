@@ -80,7 +80,7 @@ export class EmailsService {
       });
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_8AM, {
+  @Cron(CronExpression.EVERY_DAY_AT_10AM, {
     name: 'Due-Date-notifications',
   })
   private async dueDateNotifications() {
