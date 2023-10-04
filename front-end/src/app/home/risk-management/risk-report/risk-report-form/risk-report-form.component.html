@@ -782,7 +782,7 @@
           >help_outline</mat-icon
         >
         <mat-label class="risk-report-form-field__label--Request"
-          >Targets can not be set</mat-label
+          >Targets can't be set</mat-label
         >
         <mat-checkbox
           type="checkbox"
@@ -797,9 +797,10 @@
       <div class="risk-report-form-field field-1 m-b--3">
         <mat-label class="risk-report-form-field__label"
           >Due date to reach target level<span
+          *ngIf="dueDateRequired"
             class="risk-report-form-field__label__star"
-          ></span
-        ></mat-label>
+            >*</span
+          ></mat-label>
         <!-- <mat-form-field
           class="form-dialog-content__field n"
           floatLabel="always"
