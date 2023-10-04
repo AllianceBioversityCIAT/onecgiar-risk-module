@@ -39,3 +39,16 @@
   min-height: calc(100vh - 210px);
   background-image: linear-gradient(to right, #fafafa, #e8e8e8);
 }
+
+.qq {
+  padding: 1rem 4.5rem;
+  -webkit-box-decoration-break: clone;
+  background-image: linear-gradient(to right, #a3bad2, #6d91b7);
+  filter: inherit;
+  padding: 1rem 4.5rem;
+  // background-image: -webkit-gradient(
+  //   to right bottom,
+  //   rgba(41, 152, 255, 0.85),
+  //   rgba(86, 67, 250, 0.85)
+  // );
+}
