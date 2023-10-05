@@ -90,13 +90,13 @@ export class InitiativeService {
     //set default value
     for (const risks of allRisks) {
       risks.top = 999;
-      await this.riskService.updateRisk(risks.id, risks, user);
+      await this.riskService.updateRisk(risks.id, risks, user, true);
     }
     let num = 1;
     if (top.length)
       for (const risk of top) {
         risk.top = num++;
-        await this.riskService.updateRisk(risk.id, risk, user);
+        await this.riskService.updateRisk(risk.id, risk, user, true);
       }
 
     const phase = await this.phaseService.findActivePhase();
@@ -149,15 +149,15 @@ export class InitiativeService {
       old_initiative.roles.forEach((role) => {
         if (
           role?.user &&
-          (role.role == 'Leader' || role.role == 'Coordinators')
+          (role.role == 'Leader' || role.role == 'Coordinator')
         )
-          this.emailsService.sendEmailTobyVarabel(role?.user, 3);
+          this.emailsService.sendEmailTobyVarabel(role?.user, 3, old_init_id, null);
       });
     let admins = await this.userService.userRepository.find({
       where: { role: 'admin' },
     });
     admins.forEach((user: User) => {
-      this.emailsService.sendEmailTobyVarabel(user, 3);
+      this.emailsService.sendEmailTobyVarabel(user, 3, old_init_id, null);
     });
     return await this.iniRepository.findOne({
       where: { id: new_init.id },
@@ -176,7 +176,7 @@ export class InitiativeService {
 
     let userInInit: any;
     let isExistsUser: any;
-    let emailIsInUsersEmail:any;
+    let emailIsInUsersEmail: any;
     if (role.email == '') {
       userInInit = await this.iniRolesRepository.findOne({
         where: { initiative_id: initiative_id, user_id: role.user_id },
@@ -187,8 +187,8 @@ export class InitiativeService {
         where: { initiative_id: initiative_id, email: role.email },
       });
       emailIsInUsersEmail = await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id, user: { email: role.email }}
-      })
+        where: { initiative_id: initiative_id, user: { email: role.email } },
+      });
       isExistsUser = await this.userService.findByEmail(role.email);
     }
     if (userInInit == null && role.email == '') {
@@ -208,10 +208,14 @@ export class InitiativeService {
         const user = await this.userService.userRepository.findOne({
           where: { id: role?.user_id },
         });
-        if (user) this.emailsService.sendEmailTobyVarabel(user, 10);
+        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, initiative_id, null);
       }
       return await this.iniRolesRepository.save(newRole, { reload: true });
-    } else if ((userInInit == null && emailIsInUsersEmail == null) && role.email != '') {
+    } else if (
+      userInInit == null &&
+      emailIsInUsersEmail == null &&
+      role.email != ''
+    ) {
       let init = await this.iniRepository.findOne({
         where: { id: initiative_id },
         relations: ['roles'],
@@ -228,12 +232,14 @@ export class InitiativeService {
       this.emailsService.sendEmailTobyVarabel(
         { full_name: '', email: newRole.email },
         10,
+        initiative_id,
+        null
       );
 
       return await this.iniRolesRepository.save(newRole, { reload: true });
     } else {
       throw new BadRequestException(
-        'User already have role in this initiative',
+        'the user already has already the role in this initiative',
       );
     }
   }

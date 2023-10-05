@@ -168,6 +168,7 @@ export class RiskReportTableComponent {
   my_roles: any;
   locked: any = {};
   connection = true;
+  initiative:any;
   async ngOnInit() {
     this.socket.on('locked', (data: any) => {
       this.locked = data;
@@ -192,6 +193,14 @@ export class RiskReportTableComponent {
     this.id = +params.id;
     this.initiativeId = params.initiativeId;
     this.riskUsers = await this.riskService.getRiskUsers(this.id);
+    this.initiative = await this.initiativeService.getInitiative(this.id);
+    this.my_risks = this.initiative.risks
+    .filter(
+      (d: any) =>
+        d?.risk_owner && d?.risk_owner?.user?.id == this.user_info.id
+    )
+    .map((d: any) => d);
+
     this.my_roles = this.riskUsers
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);

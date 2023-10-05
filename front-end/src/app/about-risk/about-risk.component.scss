@@ -1,1 +1,171 @@
 @import "../sass/pages/about-risk";
+
+.our-founding-main-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  left: 0rem;
+  margin-bottom: 5rem;
+  padding: 0 4rem;
+
+  &__list {
+    color: #0f212f;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.7rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    // padding: 0 1rem 0 1.5rem;
+    text-align: justify;
+  }
+}
+
+.our-founding-titles {
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #0f212f;
+}
+
+.about-p {
+  padding: 3rem;
+}
+
+.section-variety-tools {
+  // background-color: #fafafa;
+  padding: 2rem 0;
+  /* height: 207vh; */
+  min-height: calc(100vh - 210px);
+  background-image: linear-gradient(to right, #fafafa, #e8e8e8);
+}
+
+.qq {
+  padding: 1rem 4.5rem;
+  -webkit-box-decoration-break: clone;
+  background-image: linear-gradient(to right, #a3bad2, #6d91b7);
+  filter: inherit;
+  padding: 1rem 4.5rem;
+  // background-image: -webkit-gradient(
+  //   to right bottom,
+  //   rgba(41, 152, 255, 0.85),
+  //   rgba(86, 67, 250, 0.85)
+  // );
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+// .btn,
+// .btn:link,
+// .btn:visited {
+//   text-decoration: none;
+
+//   display: inline-block;
+
+//   transition: all 0.2s;
+//   position: relative;
+
+//   border: none;
+//   cursor: pointer;
+// }
+
+// .btn:hover {
+//   transform: translateY(-3px);
+//   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+// }
+// .btn:hover::after {
+//   transform: scaleX(1.4) scaleY(1.6);
+//   opacity: 0;
+// }
+
+// .btn:active,
+// .btn:focus {
+//   outline: none;
+//   transform: translateY(-1px);
+//   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+// }
+
+// .btn--white {
+//   background-color: #0f212f;
+//   color: #ffffff;
+// }
+// .btn--white::after {
+//   background-color: #0f212f;
+// }
+
+// .btn--white-2 {
+//   background-color: #436280;
+//   color: #ffffff;
+// }
+// .btn--white-2::after {
+//   background-color: #436280;
+// }
+
+// .btn::after {
+//   content: "";
+//   display: inline-block;
+//   height: 100%;
+//   width: 100%;
+//   border-radius: 10rem;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   z-index: -1;
+//   transition: all 0.4s;
+// }
+
+// .btn--animated {
+//   animation: moveInBottom 0.5s ease-out 0.85s;
+//   animation-fill-mode: backwards;
+
+//   .btn--animated > * {
+//     transform: skewY(7deg);
+//   }
+// }
+
+.sec-animat {
+  // transform: skewY(5.9deg);
+  margin-top: -6vh;
+}
+
+.step-img-box::before,
+.step-img-box::after {
+  content: "";
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-48.7%, -39.4%);
+}
+
+.step-img-box::before {
+  width: 59%;
+  padding-bottom: 59%;
+  padding-left: 59%;
+  /* background-color: #fdf2e9; */
+  z-index: -2;
+  /* position: relative; */
+  background-image: linear-gradient(to right, #a3bad2, #6d91b7);
+}
+
+.step-img-box::after {
+  width: 45%;
+  padding-bottom: 45%;
+  // background-color: #fae5d3;
+  z-index: -1;
+}
+
+.step-img {
+  width: 35%;
+  /* z-index: 10; */
+}

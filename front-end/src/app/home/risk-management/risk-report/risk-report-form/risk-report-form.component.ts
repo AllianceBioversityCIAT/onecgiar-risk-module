@@ -24,6 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 import { RiskReportComponent } from '../risk-report.component';
 import { AppSocket } from 'src/app/services/socket.service';
 import { Meta, Title } from '@angular/platform-browser';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-risk-report-form',
@@ -66,7 +67,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
   leader_corleader_risks: any;
   officalCode: any;
   checkIfRiskExist: any;
-
+  dueDateRequired: boolean = true;
   populateNewRiskForm() {
     if (this.riskId) this.socket.emit('risk-lock', this.riskId);
     this.newRiskForm = this.fb.group({
@@ -145,6 +146,11 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     this.newRiskForm.markAllAsTouched();
     this.newRiskForm.updateValueAndValidity();
     let result = null;
+    if(this.newRiskForm.value.due_date != null) {
+      const due_date = this.newRiskForm.value.due_date;
+      let dateToDB = moment(due_date).format("YYYY-MM-DD");
+      this.newRiskForm.controls['due_date'].patchValue(dateToDB);
+    }
     if (this.newRiskForm.valid) {
       this.errorMessage = '';
       if (this.riskId) {
@@ -217,6 +223,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       this.newRiskForm.controls.target_impact.setValue(current_impact);
       this.newRiskForm.get('due_date').clearValidators();
       this.newRiskForm.get('due_date').updateValueAndValidity();
+      this.dueDateRequired = false;
     } else if (
       target_impact * target_likelihood !=
         current_impact * current_likelihood &&
@@ -238,6 +245,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         Validators.required,
       ]);
       date.updateValueAndValidity();
+      this.dueDateRequired = true;
     }
   }
 
@@ -250,29 +258,33 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       this.newRiskForm.controls['target_likelihood'].value;
     let target_impact = this.newRiskForm.controls['target_impact'].value;
 
-    if (
-      target_impact * target_likelihood ==
-      current_impact * current_likelihood
-    ) {
-      this.newRiskForm.get('due_date').clearValidators();
-      this.newRiskForm.get('due_date').updateValueAndValidity();
-    } else {
-      let date: any;
-      date = this.newRiskForm.get('due_date');
-      date.setValidators([
-        (c: AbstractControl) =>
-          new Date(c.value).getTime() < Date.now() &&
-          !this?.checkIfRiskExist[0]?.id
-            ? { past_date: true }
-            : null,
-        (c: AbstractControl) =>
-          new Date(c.value).getTime() <
-          new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
-            ? { past_date_created: true }
-            : null,
-        Validators.required,
-      ]);
-      date.updateValueAndValidity();
+    if(current_likelihood != '' && current_impact != '' && target_likelihood != '' && target_impact != '') {
+      if (
+        target_impact * target_likelihood ==
+        current_impact * current_likelihood
+      ) {
+        this.newRiskForm.get('due_date').clearValidators();
+        this.newRiskForm.get('due_date').updateValueAndValidity();
+        this.dueDateRequired = false;
+      } else {
+        let date: any;
+        date = this.newRiskForm.get('due_date');
+        date.setValidators([
+          (c: AbstractControl) =>
+            new Date(c.value).getTime() < Date.now() &&
+            !this?.checkIfRiskExist[0]?.id
+              ? { past_date: true }
+              : null,
+          (c: AbstractControl) =>
+            new Date(c.value).getTime() <
+            new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
+              ? { past_date_created: true }
+              : null,
+          Validators.required,
+        ]);
+        date.updateValueAndValidity();
+        this.dueDateRequired = true;
+      }
     }
   }
 

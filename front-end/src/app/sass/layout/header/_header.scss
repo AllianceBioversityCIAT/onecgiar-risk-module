@@ -233,7 +233,8 @@
 .active {
   font-weight: 700 !important;
   color: #2a2e45 !important;
-  background-color: #ffffff;
+  // background-color: #ffffff;
+  background-image: linear-gradient(to right, #ffffff, #dbdbdb);
 }
 
 .header-logo-size {

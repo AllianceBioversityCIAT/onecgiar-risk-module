@@ -176,7 +176,7 @@ export class RiskController {
   @Roles(Role.Admin,Role.User)
   @Put(':risk_id')
   setRisk(@Body() risk: Risk, @Param('risk_id') id: number, @Request() req) {
-    return this.riskService.updateRisk(id, risk, req.user);
+    return this.riskService.updateRisk(id, risk, req.user,false);
   }
   @ApiBearerAuth()
   @Roles(Role.Admin,Role.User)

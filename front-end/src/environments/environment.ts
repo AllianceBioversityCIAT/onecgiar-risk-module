@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  socket:"http://localhost:3000/socket.io",
+  socket_path:"/api/socket.io",
+  socket_url:"/",
   backend_url: '/api',
   aws_cognito_link:'https://ost-toc.auth.us-east-1.amazoncognito.com',
   aws_cognito_client_id:'7j40ekbpnbq4aegcsgjmm66c90',

@@ -44,14 +44,14 @@ export class RiskDashboardComponent {
 
   data: any = null;
   risk_level_chartOptions: any = null;
-  risk_base_chartOptions: any = null;
+  // risk_base_chartOptions: any = null;
 
   async ngOnInit(): Promise<void> {
     const params: any = this.activatedRoute.parent?.snapshot.params;
     console.log(params);
     this.data = await this.dashboardService.riskDashboardData(params.id);
     this.risk_level_chartOptions = this.riskProfile(this.data, 'level');
-    this.risk_base_chartOptions = this.riskProfile(this.data, 'base');
+    // this.risk_base_chartOptions = this.riskProfile(this.data, 'base');
 
     this.riskId = +params.riskId;
 

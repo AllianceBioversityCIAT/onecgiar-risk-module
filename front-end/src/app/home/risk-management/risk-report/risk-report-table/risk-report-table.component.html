@@ -28,7 +28,7 @@
               >
               <mat-icon
                 matTooltipPosition="above"
-                matTooltip="Requested assistance"
+                matTooltip="Risks with targets not set"
                 *ngIf="element.request_assistance == true"
                 >assignment</mat-icon
               >
@@ -374,13 +374,13 @@
 
                 <div class="flex-box-risk-report-detail">
                   <span class="risk-report-detail-content__title"
-                    >Targets can't be set:
+                    >Targets can not be set:
                     {{ element.request_assistance == false ? "No" : "Yes" }}
                   </span>
                 </div>
               </div>
 
-              <div class="box">
+              <div *ngIf="element.mitigations.length > 0" class="box">
                 <span class="risk-report-detail-content__title">
                   Actions/Controls to manage risks</span
                 >
