@@ -60,7 +60,7 @@ export class EmailsService {
     if (Boolean(parseInt(process.env.CAN_SEND_EMAILS))) {
       let sendGridStatus = await this.sendEmailWithSendGrid(
         email.email,
-        email.name,
+        email.subject,
         email.emailBody,
       );
       if (sendGridStatus) this.repo.update(email.id, { status: true });
