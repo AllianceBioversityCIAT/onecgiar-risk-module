@@ -17,9 +17,12 @@ export class FaqComponent implements OnInit {
     private title: Title,
     private meta: Meta
   ) {
-    this.headerService.background = '#0f212f';
-    this.headerService.backgroundNavMain = '#436280';
-    this.headerService.backgroundUserNavButton = '#436280';
+    this.headerService.background =
+      'linear-gradient(to right, #0F212F, #0E1E2B)';
+    this.headerService.backgroundNavMain =
+      'linear-gradient(to right, #436280, #30455B)';
+    this.headerService.backgroundUserNavButton =
+      'linear-gradient(to right, #436280, #30455B)';
   }
 
   async ngOnInit(): Promise<void> {
@@ -29,6 +32,6 @@ export class FaqComponent implements OnInit {
   }
   data: any;
   async getData() {
-    this.data = await this.FaqService.getData(null, null ,null);
+    this.data = await this.FaqService.getData(null, null, null);
   }
 }

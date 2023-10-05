@@ -187,8 +187,8 @@
   &__img {
     margin-top: 1%;
     margin-bottom: 3rem;
-    width: 527px;
-    height: 390px;
+    width: 788px;
+    height: 550px;
     // &:hover {
     //   outline: 1.5rem solid #436180b0;
     //   -webkit-transform: scale(1.05) translateY(-0.5rem);
@@ -197,6 +197,25 @@
     //   box-shadow: 0 2.5rem 4rem rgba(0, 0, 0, 0.5);
     //   z-index: 20;
     // }
+
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &__img::before {
+    width: 60%;
+    /* height: 60%; */
+    padding-bottom: 60%;
+    background-color: #fdf2e9;
+    z-index: -2;
   }
 }
 

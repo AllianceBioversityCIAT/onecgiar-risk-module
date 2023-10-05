@@ -43,9 +43,12 @@ export class GlossaryComponent implements OnInit {
     private _router: Router,
     private _route: ActivatedRoute
   ) {
-    this.headerService.background = '#0f212f';
-    this.headerService.backgroundNavMain = '#436280';
-    this.headerService.backgroundUserNavButton = '#436280';
+    this.headerService.background =
+      'linear-gradient(to right, #0F212F, #0E1E2B)';
+    this.headerService.backgroundNavMain =
+      'linear-gradient(to right, #436280, #30455B)';
+    this.headerService.backgroundUserNavButton =
+      'linear-gradient(to right, #436280, #30455B)';
   }
   filters: any;
   length: number = 0;
