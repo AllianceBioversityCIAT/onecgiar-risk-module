@@ -112,8 +112,8 @@ export class Risk {
 
   @ApiProperty()
   @Optional()
-  @Column({ type: 'datetime', default: null })
-  due_date: Date;
+  @Column({ type: 'date', default: null })
+  due_date: string;
 
   @CreateDateColumn()
   created_date: Date;

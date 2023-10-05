@@ -5,7 +5,7 @@ import {
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
-import { LessThanOrEqual, Like, Repository } from 'typeorm';
+import { IsNull, LessThanOrEqual, Like, Repository } from 'typeorm';
 import { Email } from './email.entity';
 import * as sgMail from '@sendgrid/mail';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -85,20 +85,20 @@ export class EmailsService {
   })
   private async dueDateNotifications() {
     this.logger.log('Due-Date-notifications Runing');
-    const nowDate = new Date()
 
+    let date = new Date()
+    let a = date.getFullYear();
+    let b = date.getMonth()+1;
+    let c = date.getDate();
 
+    const currentDate = a+'-'+b+'-'+c;
 
-    const start = new Date(nowDate);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(start);
-    end.setDate(start.getDate() + 1);
-
-
-    const risks = await this.riskRepository.createQueryBuilder('risk')
-      .where(`risk.due_date BETWEEN '${start.toISOString()}' AND '${end.toISOString()}'`)
-      .andWhere(`risk.original_risk_id IS NULL`)
-      .getMany();
+    const risks = await this.riskRepository.find({
+      where : {
+        due_date: currentDate,
+        original_risk_id: IsNull()
+      }
+    });
 
       for (let risk of risks) {
       const init = await this.initRoleRepository.find({

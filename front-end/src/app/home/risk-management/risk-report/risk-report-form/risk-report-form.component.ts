@@ -24,6 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 import { RiskReportComponent } from '../risk-report.component';
 import { AppSocket } from 'src/app/services/socket.service';
 import { Meta, Title } from '@angular/platform-browser';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-risk-report-form',
@@ -145,6 +146,11 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     this.newRiskForm.markAllAsTouched();
     this.newRiskForm.updateValueAndValidity();
     let result = null;
+    if(this.newRiskForm.value.due_date != null) {
+      const due_date = this.newRiskForm.value.due_date;
+      let dateToDB = moment(due_date).format("YYYY-MM-DD");
+      this.newRiskForm.controls['due_date'].patchValue(dateToDB);
+    }
     if (this.newRiskForm.valid) {
       this.errorMessage = '';
       if (this.riskId) {
