@@ -1362,11 +1362,11 @@ tr.example-detail-row {
 }
 
 .btn--white-2 {
-  background-color: #436280;
+  background-image: linear-gradient(to right, #436280, #30455b);
   color: #ffffff;
 }
 .btn--white-2::after {
-  background-color: #436280;
+  background-image: linear-gradient(to right, #436280, #30455b);
 }
 
 .btn::after {
