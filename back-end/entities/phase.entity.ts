@@ -25,11 +25,11 @@ export class Phase {
   @Column()
   reporting_year: Number;
 
-  @Column({ type: 'timestamp' , default:null })
-  start_date: Date;
+  @Column({ type: 'date' , default:null })
+  start_date: string;
 
-  @Column({ type: 'timestamp' , default:null })
-  end_date: Date;
+  @Column({ type: 'date' , default:null })
+  end_date: string;
 
   @Column({ type: 'enum', enum: phaseStatus })
   status: phaseStatus;

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import * as moment from "moment";
 import { ToastrService } from "ngx-toastr";
 import { PhasesService } from "src/app/services/phases.service";
 
@@ -55,6 +56,13 @@ export class PhaseDialogComponent implements OnInit {
   }
 
   async submit() {
+      const startDate = this.phaseForm.value.start_date;
+      const endDate = this.phaseForm.value.end_date;
+      let startDateToDB = moment(startDate).format("YYYY-MM-DD");
+      let endDateToDB = moment(endDate).format("YYYY-MM-DD");
+      this.phaseForm.controls['start_date'].patchValue(startDateToDB);
+      this.phaseForm.controls['end_date'].patchValue(endDateToDB);
+      
     if (this.phaseForm.valid) {
       await this.phasesService.submitPhase(this.phaseId, this.phaseForm.value);
       this.toast.success("Phase saved successfully");
