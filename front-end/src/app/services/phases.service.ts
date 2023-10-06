@@ -22,51 +22,43 @@ export class PhasesService extends MainService {
           finalFilters[element] = filters[element];
       });
     return firstValueFrom(
-      this.http.get(`api/phases?page=${page}&limit=${limit}`, {headers: this.headers, params: finalFilters}).pipe(map((d: any) => d))
+      this.http.get(`${this.backend_url}/phases?page=${page}&limit=${limit}`, {headers: this.headers, params: finalFilters}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
 
   async getPhase(id: number) {
     return firstValueFrom(
-      this.http.get('api/phases/' + id, {headers: this.headers}).pipe(map((d: any) => d))
+      this.http.get(this.backend_url+'/phases/' + id, {headers: this.headers}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
 
   submitPhase(id: number = 0, data: {}) {
     if (id) {
       return firstValueFrom(
-        this.http.patch('api/phases/' + id, data, {headers: this.headers}).pipe(map((d: any) => d))
+        this.http.patch(this.backend_url+'/phases/' + id, data, {headers: this.headers}).pipe(map((d: any) => d))
       ).catch((e) => false);
     } else {
       return firstValueFrom(
-        this.http.post('api/phases', data, {headers: this.headers}).pipe(map((d: any) => d))
+        this.http.post(this.backend_url+'/phases', data, {headers: this.headers}).pipe(map((d: any) => d))
       ).catch((e) => false);
     }
   }
 
   deletePhase(id: number) {
     return firstValueFrom(
-      this.http.delete('api/phases/' + id, {headers: this.headers}).pipe(map((d: any) => d))
-    ).catch((e) => false);
-  }
-
-  getTocPhases() {
-    return firstValueFrom(
-      this.http
-        .get('https://toc.loc.codeobia.com/api/phases', {headers: this.headers})
-        .pipe(map((d: any) => d.data))
+      this.http.delete(this.backend_url+'/phases/' + id, {headers: this.headers}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
 
   activatePhase(id: number) {
     return firstValueFrom(
-      this.http.get('api/phases/activate/' + id, {headers: this.headers}).pipe(map((d: any) => d))
+      this.http.get(this.backend_url+'/phases/activate/' + id, {headers: this.headers}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
 
   deactivatePhase(id: number) {
     return firstValueFrom(
-      this.http.get('api/phases/deactivate/' + id, {headers: this.headers}).pipe(map((d: any) => d))
+      this.http.get(this.backend_url+'/phases/deactivate/' + id, {headers: this.headers}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
 }
