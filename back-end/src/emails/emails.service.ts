@@ -206,7 +206,7 @@ export class EmailsService {
         id: init_id,
       },
     });
-    let body = ``;
+    let body = `<p style="font-weight: 200"> Dear, ${name}<br>${contnet}</p>`;
     try {
       if (init_id != null && risk == null) {
         if (content_id == 10) {
