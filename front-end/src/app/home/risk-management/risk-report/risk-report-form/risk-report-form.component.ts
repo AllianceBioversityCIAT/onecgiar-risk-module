@@ -224,6 +224,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       let date: any;
       date = this.newRiskForm.get('due_date');
       date.clearValidators()
+      date.updateValueAndValidity();
       date.setValidators([
         (c: AbstractControl) =>
           new Date(c.value).getTime() < Date.now() &&
@@ -236,7 +237,6 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
             ? { past_date_created: true }
             : null
       ]);
-      date.updateValueAndValidity();
       this.dueDateRequired = false;
     } else if (
       target_impact * target_likelihood !=
@@ -280,6 +280,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         let date: any;
         date = this.newRiskForm.get('due_date');
         date.clearValidators()
+        date.updateValueAndValidity();
         date.setValidators([
           (c: AbstractControl) =>
             new Date(c.value).getTime() < Date.now() &&
@@ -292,7 +293,6 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
               ? { past_date_created: true }
               : null
         ]);
-        date.updateValueAndValidity();
         this.dueDateRequired = false;
       } else {
         let date: any;
