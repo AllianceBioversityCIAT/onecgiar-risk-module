@@ -22,7 +22,7 @@ export class RiskManagementComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.title.setTitle('Risk management');
+    this.title.setTitle('Risk Management');
     this.meta.updateTag({ name: 'description', content: 'Risk management' });
   }
 
