@@ -60,7 +60,7 @@
           hideRequiredMarker
           appearance="outline"
         >
-          <input matInput formControlName="value"  placeholder="value" />
+          <textarea matInput formControlName="value"  placeholder="value"></textarea>
           <mat-error
           class="error"
           *ngIf="constantForm.controls?.value?.errors?.['required']"
