@@ -33,7 +33,10 @@ export class EmailsService {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to,
-      from: process.env.DEFAULT_EMAIL, //default Use the email address or domain you verified above
+      from: {
+        email: process.env.DEFAULT_EMAIL,
+        name: 'CGIAR Risk Management',
+      }, //default Use the email address or domain you verified above
       subject,
       text: html.replace(/(<([^>]+)>)/gi, ''),
       html,
@@ -42,25 +45,22 @@ export class EmailsService {
   }
   async getEmailsByStatus(status: boolean) {
     // return await this.repo.find({ where: { status } });
-    if(status == null) {
-      var emaillogs = await this.repo
-      .createQueryBuilder('e')
-      .getMany();
-    return emaillogs;
+    if (status == null) {
+      var emaillogs = await this.repo.createQueryBuilder('e').getMany();
+      return emaillogs;
     } else {
       var emaillogs = await this.repo
-      .createQueryBuilder('e')
-      .where({ status: Boolean(status) })
-      .getMany();
-    return emaillogs;
+        .createQueryBuilder('e')
+        .where({ status: Boolean(status) })
+        .getMany();
+      return emaillogs;
     }
-
   }
   async send(email: Email) {
     if (Boolean(parseInt(process.env.CAN_SEND_EMAILS))) {
       let sendGridStatus = await this.sendEmailWithSendGrid(
         email.email,
-        email.name,
+        email.subject,
         email.emailBody,
       );
       if (sendGridStatus) this.repo.update(email.id, { status: true });
@@ -86,33 +86,33 @@ export class EmailsService {
   private async dueDateNotifications() {
     this.logger.log('Due-Date-notifications Runing');
 
-    let date = new Date()
+    let date = new Date();
     let a = date.getFullYear();
-    let b = date.getMonth()+1;
+    let b = date.getMonth() + 1;
     let c = date.getDate();
 
-    const currentDate = a+'-'+b+'-'+c;
+    const currentDate = a + '-' + b + '-' + c;
 
     const risks = await this.riskRepository.find({
-      where : {
+      where: {
         due_date: currentDate,
-        original_risk_id: IsNull()
-      }
+        original_risk_id: IsNull(),
+      },
     });
 
-      for (let risk of risks) {
+    for (let risk of risks) {
       const init = await this.initRoleRepository.find({
-        where : {
-          initiative_id : risk.initiative_id
+        where: {
+          initiative_id: risk.initiative_id,
         },
-        relations: ['user']
-      })
-  
+        relations: ['user'],
+      });
+
       init.forEach((init) => {
-        if(init.role == 'Leader' || init.role == 'Coordinator') {
+        if (init.role == 'Leader' || init.role == 'Coordinator') {
           this.sendEmailTobyVarabel(init.user, 6, init.initiative_id, risk);
         }
-      })
+      });
     }
   }
 
@@ -182,9 +182,9 @@ export class EmailsService {
             </p>
             <br>
             <br>
-            <a style="color: rgb(67, 98, 128)" traget="_blank" href="${process.env.FRONTEND}/request/view/${1}">${
-      process.env.FRONTEND
-    }/request/view/${1}</a>
+            <a style="color: rgb(67, 98, 128)" traget="_blank" href="${
+              process.env.FRONTEND
+            }/request/view/${1}">${process.env.FRONTEND}/request/view/${1}</a>
         `;
     const emailBody = this.emailTemplate(body);
     const email1 = await this.createEmail(name, subject, email, emailBody);
@@ -192,16 +192,24 @@ export class EmailsService {
     return email1;
   }
 
-  async createEmailBy(name, email, subject, contnet, init_id, risk, content_id) {
+  async createEmailBy(
+    name,
+    email,
+    subject,
+    contnet,
+    init_id,
+    risk,
+    content_id,
+  ) {
     const init = await this.iniRepository.findOne({
-      where : {
-        id: init_id
-      }
-    })
-    let body = ``;
+      where: {
+        id: init_id,
+      },
+    });
+    let body = `<p style="font-weight: 200"> Dear, ${name}<br>${contnet}</p>`;
     try {
-      if(init_id != null && risk == null) {
-        if(content_id == 10) {
+      if (init_id != null && risk == null) {
+        if (content_id == 10) {
           body = `
           <p style="font-weight: 200">
           Dear, ${name}
@@ -224,11 +232,13 @@ export class EmailsService {
             `;
         } else {
           const lastVersion = await this.iniRepository.findOne({
-            where : {
-              id: init.last_version_id
-            }
-          })
-          let creationDate = lastVersion.submit_date.toISOString().split('T')[0];
+            where: {
+              id: init.last_version_id,
+            },
+          });
+          let creationDate = lastVersion.submit_date
+            .toISOString()
+            .split('T')[0];
           body = `
           <p style="font-weight: 200">
           Dear, ${name}
@@ -255,8 +265,7 @@ export class EmailsService {
             `;
         }
       } else {
-        
-        if(content_id == 5 || content_id == 1 || content_id == 6) { 
+        if (content_id == 5 || content_id == 1 || content_id == 6) {
           // console.log('wowo risk ==> ', risk)
           body = `
           <p style="font-weight: 200">
@@ -288,7 +297,6 @@ export class EmailsService {
     } catch (error) {
       console.error(error);
     }
-
   }
 
   async sendEmailTobyVarabel(user, subject_varabel_id, initiative_id, risk) {
@@ -303,7 +311,7 @@ export class EmailsService {
       content.value,
       initiative_id,
       risk,
-      content.id
+      content.id,
     );
   }
 }

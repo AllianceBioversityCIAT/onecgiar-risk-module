@@ -221,8 +221,22 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     if (this.newRiskForm.controls['request_assistance'].value == true) {
       this.newRiskForm.controls.target_likelihood.setValue(current_likelihood);
       this.newRiskForm.controls.target_impact.setValue(current_impact);
-      this.newRiskForm.get('due_date').clearValidators();
-      this.newRiskForm.get('due_date').updateValueAndValidity();
+      let date: any;
+      date = this.newRiskForm.get('due_date');
+      date.clearValidators()
+      date.updateValueAndValidity();
+      date.setValidators([
+        (c: AbstractControl) =>
+          new Date(c.value).getTime() < Date.now() &&
+          !this?.checkIfRiskExist[0]?.id
+            ? { past_date: true }
+            : null,
+        (c: AbstractControl) =>
+          new Date(c.value).getTime() <
+          new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
+            ? { past_date_created: true }
+            : null
+      ]);
       this.dueDateRequired = false;
     } else if (
       target_impact * target_likelihood !=
@@ -263,8 +277,22 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         target_impact * target_likelihood ==
         current_impact * current_likelihood
       ) {
-        this.newRiskForm.get('due_date').clearValidators();
-        this.newRiskForm.get('due_date').updateValueAndValidity();
+        let date: any;
+        date = this.newRiskForm.get('due_date');
+        date.clearValidators()
+        date.updateValueAndValidity();
+        date.setValidators([
+          (c: AbstractControl) =>
+            new Date(c.value).getTime() < Date.now() &&
+            !this?.checkIfRiskExist[0]?.id
+              ? { past_date: true }
+              : null,
+          (c: AbstractControl) =>
+            new Date(c.value).getTime() <
+            new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
+              ? { past_date_created: true }
+              : null
+        ]);
         this.dueDateRequired = false;
       } else {
         let date: any;

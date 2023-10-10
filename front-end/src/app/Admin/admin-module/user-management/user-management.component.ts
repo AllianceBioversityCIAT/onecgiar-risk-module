@@ -144,7 +144,7 @@ export class UserManagementComponent implements OnInit {
           if (result) {
             this.toastr.success('Success deleted');
           } else {
-            this.toastr.error('can not deleted');
+            this.toastr.error('The user can not be deleted since he/she has responsibilities within the Initiative(s)');
           }
         }
         await this.init();
