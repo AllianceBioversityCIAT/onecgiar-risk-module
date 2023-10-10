@@ -112,12 +112,17 @@
           appearance="outline" 
         >-->
         <div class="risk-report-form-field-icon-box">
-          <input
+          <textarea
             class="risk-report-form-field-box__input cursor-input report-form-field-size"
             matInput
             placeholder="Risk title"
             formControlName="title"
-          />
+            rows="4"
+            style="height: 80px; resize: none"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="10"
+          >
+          </textarea>
           <mat-icon>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -797,10 +802,11 @@
       <div class="risk-report-form-field field-1 m-b--3">
         <mat-label class="risk-report-form-field__label"
           >Due date to reach target level<span
-          *ngIf="dueDateRequired"
+            *ngIf="dueDateRequired"
             class="risk-report-form-field__label__star"
             >*</span
-          ></mat-label>
+          ></mat-label
+        >
         <!-- <mat-form-field
           class="form-dialog-content__field n"
           floatLabel="always"

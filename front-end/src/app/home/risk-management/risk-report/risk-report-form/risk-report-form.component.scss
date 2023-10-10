@@ -164,8 +164,8 @@
     font-weight: 300;
 
     position: absolute;
-    top: 50%;
-    left: 15%;
+    top: 23%;
+    left: 13%;
     transform: translate(-71%, -43%);
 
     color: #142837d9;
@@ -177,10 +177,10 @@
 }
 
 .cursor-input {
-  padding: 0.7rem 1.7rem !important;
+  padding: 0.7rem 1rem !important;
 
   &__description {
-    padding: 0.7rem 1.8rem !important;
+    padding: 0.7rem 0.6rem !important;
     &::-webkit-input-placeholder {
       font-family: "Poppins", sans-serif;
 
