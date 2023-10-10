@@ -128,11 +128,11 @@ You can visit the OpenAPI module at https://api.risk.cgiar.org/ or the root dire
 ## Authors
 The following people have made significant contributions to the technical development of Risk Management:
 
-- Moayad Al-Najdawi (CodeObia) https://codeobia.com/
-- Monther AlAzhari (CodeObia) https://codeobia.com/
-- Tareq anshasi (CodeObia) https://codeobia.com/
-- Mohammad Musa (CodeObia) https://codeobia.com/
-- Rand Awad (CodeObia) https://codeobia.com/
+- Moayad Al-Najdawi [CodeObia](http://codeobia.com/)
+- Monther AlAzhari [CodeObia](http://codeobia.com/)
+- Tareq anshasi [CodeObia](http://codeobia.com/)
+- Mohammad Musa [CodeObia](http://codeobia.com/)
+- Rand Awad [CodeObia](http://codeobia.com/)
 
 
 The following people have made significant contributions to the design and overall function of Risk Management:
