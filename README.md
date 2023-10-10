@@ -114,6 +114,32 @@ $ npm run build
 ```
 Then you can serve the dist folder by any server like nginx or apache2
 
+## Documentations 
+We are using in the Risk management two of the most known frameworks in the nodejs community and we did all the development in a standard way to help any new contributor to contribute right away. Below is the only documentation needed to start 
+
+- Nestjs for backend  https://docs.nestjs.com/
+
+- Angular for frontend https://angular.io/docs
+
+## Authors
+The following people have made significant contributions to the technical development of Risk Management:
+
+- Moayad Al-Najdawi (CodeObia) https://codeobia.com/
+- Monther AlAzhari (CodeObia) https://codeobia.com/
+- Tareq anshasi (CodeObia) https://codeobia.com/
+- Mohammad Musa (CodeObia) https://codeobia.com/
+- Rand Awad (CodeObia) https://codeobia.com/
 
 
+The following people have made significant contributions to the design and overall function of Risk Management:
 
+- Saakova, Svetlana (International Center for Agricultural Research in the Dry Areas)
+- Cadavid, Juan Carlos (CCAFS - Alliance Bioversity-CIAT)
+- Chaves, Laura (Alliance Bioversity-CIAT)
+- Solomos, Georgios (CGIAR System Organization)
+- Poulos, Allison (Alliance Bioversity-CIAT)
+
+
+## License
+
+This work is licensed under the Apache License Version 2.0
