@@ -1,5 +1,5 @@
-CLARISA_USERNAME=toc.data
-CLARISA_PASSWORD=toc.2021
+CLARISA_USERNAME=username
+CLARISA_PASSWORD=password
 CLARISA_URL=https://api.clarisa.cgiar.org
 DATABASE_HOST=localhost
 DATABASE_PORT=3306
