@@ -121,6 +121,10 @@ We are using in the Risk management two of the most known frameworks in the node
 
 - Angular for frontend https://angular.io/docs
 
+We implemented an OpenAPI Module in Risk management to make it easy for frontend developers and other applications to understand easily how to consume the Risk management data
+
+You can visit the OpenAPI module at https://api.risk.cgiar.org/ or the root directory of your backend server 
+
 ## Authors
 The following people have made significant contributions to the technical development of Risk Management:
 
