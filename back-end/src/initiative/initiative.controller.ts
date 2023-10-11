@@ -63,6 +63,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { OpenGuard } from 'src/auth/open.guard';
+import { UsersService } from 'src/users/users.service';
 @ApiTags('Initiative')
 @Controller('initiative')
 export class InitiativeController {
@@ -70,6 +71,7 @@ export class InitiativeController {
     private iniService: InitiativeService,
     private riskService: RiskService,
     private dataSource: DataSource,
+    private userService: UsersService,
   ) {}
 
   offical(query) {
@@ -193,6 +195,52 @@ export class InitiativeController {
       }
     }
 
+    return data;
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get('import-users_roles')
+  async importUsersRolesFile() {
+    const workbook = XLSX.readFile(join(process.cwd(), 'user_report.xlsx'));
+
+    const data: any = XLSX.utils.sheet_to_json(workbook.Sheets['data']);
+
+    for (let row of data) {
+      var code = row['Initiative name'].substring(
+        row['Initiative name'].indexOf('(') + 1,
+        row['Initiative name'].lastIndexOf(')'),
+      );
+
+      let exist_user = await this.userService.findByEmail(row.Email);
+      if (!exist_user) {
+        const new_user = this.userService.userRepository.create();
+        new_user.email = row.Email;
+        new_user.first_name = row['First name'];
+        new_user.last_name = row['Last name'];
+        new_user.role = 'user';
+        exist_user = await this.userService.userRepository.save(new_user, {
+          reload: true,
+        });
+      }
+
+      const initiative = await this.iniService.iniRepository.findOne({
+        where: {
+          parent_id: IsNull(),
+          official_code: code,
+        },
+      });
+      if (initiative) {
+        const exist_role = await this.iniService.iniRolesRepository.find({
+          where: { user_id: exist_user.id, initiative_id: initiative.id },
+        });
+        if (!exist_role.length) {
+          const new_role = this.iniService.iniRolesRepository.create();
+          new_role.initiative_id = initiative.id;
+          new_role.role = row['Initiative role'];
+          new_role.user_id = exist_user.id;
+          await this.iniService.iniRolesRepository.save(new_role);
+        }
+      }
+    }
     return data;
   }
   @UseGuards(JwtAuthGuard)
