@@ -4,17 +4,13 @@ import { AnnouncementService } from './announcement.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Announcement } from 'entities/announcement.entity';
 import { EmailsModule } from 'src/emails/emails.module';
-import { UsersModule } from 'src/users/users.module';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from 'src/auth/constants';
+import { UsersModule } from 'src/users/users.module'
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [AnnouncementController],
   providers: [AnnouncementService],
   imports: [TypeOrmModule.forFeature([Announcement]),EmailsModule,UsersModule,
-  JwtModule.register({
-    secret: jwtConstants.secret,
-    signOptions: { expiresIn: '30d'},
-  })]
+  AuthModule]
 })
 export class AnnouncementModule {}

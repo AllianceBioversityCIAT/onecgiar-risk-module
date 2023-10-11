@@ -5,16 +5,12 @@ import { SharedModule } from 'src/shared/shared.module';
 import { RiskCategoriesController } from './risk-categories.controller';
 import { RiskCategoriesService } from './risk-categories.service';
 import { CategoryGroup } from 'entities/categories-groups';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from 'src/auth/constants';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [RiskCategoriesController],
   imports: [SharedModule, TypeOrmModule.forFeature([RiskCategory,CategoryGroup]),
-  JwtModule.register({
-    secret: jwtConstants.secret,
-    signOptions: { expiresIn: '30d'},
-  })],
+ AuthModule],
   providers: [RiskCategoriesService],
 })
 export class RiskCategoriesModule {}

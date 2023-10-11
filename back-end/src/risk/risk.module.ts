@@ -16,7 +16,7 @@ import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from 'src/auth/constants';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [RiskController],
@@ -29,13 +29,10 @@ import { jwtConstants } from 'src/auth/constants';
       Email,
       Variables,
       User,
-      InitiativeRoles
+      InitiativeRoles,
     ]),
     SharedModule,
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '30d'},
-    })
+    AuthModule,
   ],
   providers: [RiskService, EmailsService, VariablesService, UsersService],
   exports: [RiskService],
