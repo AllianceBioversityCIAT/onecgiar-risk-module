@@ -145,6 +145,24 @@
     width: 27rem;
     height: 3.5rem;
     padding: 1rem;
+    /* width: 58rem; */
+    /* height: 3.5rem; */
+    /* padding: 1rem; */
+    /* width: 100%; */
+    // height: 13rem;
+    // padding: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 107px;
+    text-justify: distribute;
+    text-align: unset !important;
+    white-space: break-spaces;
+    text-align: left;
+
+    font-style: normal;
+    line-height: 18.75px;
+    font-family: "Poppins", sans-serif !important;
+    white-space: normal !important;
   }
 
   th:nth-child(3) {
@@ -157,6 +175,25 @@
     width: 58rem;
     height: 3.5rem;
     padding: 1rem;
+
+    /* width: 58rem; */
+    /* height: 3.5rem; */
+    /* padding: 1rem; */
+    /* width: 100%; */
+    // height: 13rem;
+    // padding: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 107px;
+    text-justify: distribute;
+    text-align: unset !important;
+    white-space: break-spaces;
+    text-align: left;
+
+    font-style: normal;
+    line-height: 18.75px;
+    font-family: "Poppins", sans-serif !important;
+    white-space: normal !important;
   }
 
   th:nth-child(4) {
@@ -176,7 +213,7 @@
     text-align: left;
     color: #04030f;
     font-family: "Poppins", sans-serif !important;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-style: normal;
     font-weight: 400;
     line-height: 114.5%; /* 1.374rem */
@@ -190,7 +227,7 @@
     color: #ffffff;
     text-align: center;
     font-family: "Poppins", sans-serif !important;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-style: normal;
     font-weight: 500;
     line-height: 130%; /* 1.56rem */
