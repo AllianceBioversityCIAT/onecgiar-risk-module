@@ -148,8 +148,8 @@ export class RiskDashboardComponent {
         },
       },
       colors: [
-        '#A4DBFF',
-        '#544FC5'
+        '#436280',
+        '#0F212F'
       ],
       series: this.getSeries(type),
     };
