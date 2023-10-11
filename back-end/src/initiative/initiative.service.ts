@@ -55,18 +55,44 @@ export class InitiativeService {
     });
   }
   async updateRoles(initiative_id, id, initiativeRoles: any) {
+    let userInInit: any;
+    let emailIsInUsersEmail: any;
+
     const countOfleaders = await this.iniRolesRepository.findAndCount({
       where: {
         initiative_id: initiative_id,
         role: 'Leader',
-        user_id: Not(
-          initiativeRoles?.user_id?.id
-            ? initiativeRoles?.user_id?.id
-            : initiativeRoles?.user_id,
-        ),
+        id: Not(initiativeRoles.id)
       },
     });
 
+    if(initiativeRoles.user_id == null) {
+      userInInit = await this.iniRolesRepository.findOne({
+        where: { id: Not(initiativeRoles?.id), initiative_id: initiative_id, email: initiativeRoles.email },
+      });
+
+      emailIsInUsersEmail = await this.iniRolesRepository.findOne({
+        where: { initiative_id: initiative_id, user: { email: initiativeRoles.email } },
+        relations: ['user']
+      });
+
+      if(userInInit?.email == initiativeRoles?.email || initiativeRoles?.email == emailIsInUsersEmail?.user?.email) {
+        throw new BadRequestException(
+          `the user already has already the role in this initiative`,
+        );
+      }
+    } else {
+      userInInit = await this.iniRolesRepository.findOne({
+        where: { id: Not(initiativeRoles?.id), initiative_id: initiative_id, user_id: initiativeRoles?.user_id?.id ? initiativeRoles?.user_id?.id : initiativeRoles?.user_id,},
+      });
+      if(userInInit != null) {
+        throw new BadRequestException(
+          `the user already has already the role in this initiative`,
+        );
+      }
+    }
+
+    // console.log('countOfleaders', countOfleaders)
     if (countOfleaders[1] >= 2 && initiativeRoles.role == 'Leader')
       throw new BadRequestException(
         `You can't add more than two leaders to the Initiative`,

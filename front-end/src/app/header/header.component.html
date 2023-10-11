@@ -15,8 +15,8 @@
       </div>
       <div class="header-content-box--2">
         <p class="header-content-box--2__title">
-          <span class="header-content-box--2__title--1">CGIAR 360</span> Risk
-          Management
+          <span class="header-content-box--2__title--1">CGIAR</span>
+          Risk Management
         </p>
       </div>
     </div>
@@ -148,7 +148,7 @@
         <a
           (click)="accessHome()"
           [routerLink]="[homeRoute]"
-          class="main-nav-link"
+          class="main-nav-link cool-link"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
@@ -156,19 +156,27 @@
         </a>
       </li>
       <li>
-        <a routerLink="about" class="main-nav-link" routerLinkActive="active">
+        <a
+          routerLink="about"
+          class="main-nav-link cool-link"
+          routerLinkActive="active"
+        >
           <span>About Risk</span>
         </a>
       </li>
       <li>
-        <a routerLink="faq" class="main-nav-link" routerLinkActive="active">
+        <a
+          routerLink="faq"
+          class="main-nav-link cool-link"
+          routerLinkActive="active"
+        >
           <span>FAQ</span>
         </a>
       </li>
       <li>
         <a
           routerLink="glossary"
-          class="main-nav-link"
+          class="main-nav-link cool-link"
           routerLinkActive="active"
         >
           <span>Glossary</span>
@@ -178,7 +186,7 @@
       <li *ngIf="user_info?.role == 'admin'">
         <a
           routerLink="dashboard"
-          class="main-nav-link"
+          class="main-nav-link cool-link"
           routerLinkActive="active"
         >
           <span>Dashboard</span>
@@ -186,7 +194,11 @@
       </li>
 
       <li *ngIf="user_info?.role == 'admin'">
-        <a routerLink="admin" class="main-nav-link" routerLinkActive="active">
+        <a
+          routerLink="admin"
+          class="main-nav-link cool-link"
+          routerLinkActive="active"
+        >
           <span>Admin Module</span>
         </a>
       </li>

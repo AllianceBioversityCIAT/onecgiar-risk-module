@@ -26,8 +26,7 @@ import { UsersService } from './users.service';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { unlink } from 'fs/promises';
-import { query } from 'express';
-import { ILike, In } from 'typeorm';
+import { Brackets, In } from 'typeorm';
 import { createAndUpdateUsers, exportToExcel, getUsers } from 'DTO/users.dto';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
@@ -71,30 +70,27 @@ export class UsersController {
         ])
         .getRawMany();
     } else {
-      let ids = await this.usersService.userRepository
-        .createQueryBuilder('users')
-        .where('users.full_name like :full_name', {
-          full_name: `%${query.email}%`,
-        })
-        .orWhere('users.email like :email', { email: `%${query.email}%` })
-        .select('users.id as id')
-        .getRawMany();
       const take = query.limit || 10;
       const skip = (Number(query.page || 1) - 1) * take;
-      const [result, total] =
-        await this.usersService.userRepository.findAndCount({
-          where: {
-            id: ids.length ? In(ids.map(d=>d.id)) : null,
-            role: query?.role ? query?.role : null,
-          },
-          order: { ...this.sort(query) },
-          take: take == null ? null : take,
-          skip: skip == null ? null : skip,
-        });
-      return {
-        result: result,
-        count: total,
-      };
+      let ids = await this.usersService.userRepository
+        .createQueryBuilder('users')
+        .where('users.role = :role', {role: query?.role ? query?.role : 0})
+        .andWhere(
+          new Brackets((qb) => {
+            qb.where('users.full_name like :full_name', {
+              full_name: `%${query.email || ''}%`,
+            }).orWhere('users.email like :email', { email: `%${query.email || ''}%` });
+          }),
+        )
+        .orderBy(this.sort(query))
+        .skip(skip || 0)
+        .take(take || 10)
+
+        const finalResult = await ids.getManyAndCount();
+        return {
+          result: finalResult[0],
+          count: finalResult[1],
+        };
     }
   }
   @Roles()

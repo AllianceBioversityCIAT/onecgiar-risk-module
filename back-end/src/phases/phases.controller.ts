@@ -47,6 +47,7 @@ export class PhasesController {
       const skip = (Number(query.page || 1) - 1) * take;
       let [finalResult,total] = await this.phasesService.phaseRepository.findAndCount({
         where: { name:query?.name ?  ILike(`%${query.name}%`) : null},
+        relations: ['previous_phase'],
         order: { ...this.sort(query) },
         take: take,
         skip: skip,
