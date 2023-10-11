@@ -41,8 +41,8 @@ export class GlossaryAdminComponent implements OnInit {
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'title,ASC' },
-    { name: 'Name (highest first)', value: 'title,DESC' },
+    { name: 'Title (A to Z)', value: 'title,ASC' },
+    { name: 'Title (Z to A)', value: 'title,DESC' },
   ];
 
   setForm() {
