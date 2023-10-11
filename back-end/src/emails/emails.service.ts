@@ -154,7 +154,7 @@ export class EmailsService {
     <div style="height: 800px; background-color: #f7f7f7">
     <div style="height: 150px; background-color: rgb(67, 98, 128)">
         <img width="50" alt="CGIAR" style="margin: 30px; margin-bottom:0px" src="https://www.cgiar.org/wp/wp-content/themes/cgiar/assets/images/logo_white-9a4b0e50b1.png">
-        <h2 style="margin: 0px; height: 48px; display: inline; position: absolute;color: white;top: 46px;"><b>CGIAR 360</b> Risk Management</h2>
+        <h2 style="margin: 0px; height: 48px; display: inline; position: absolute;color: white;top: 46px;"><b>CGIAR</b> Risk Management</h2>
         <div style="height: 60px; width: 70%; margin: auto; background-color: #fff; border-top-left-radius: 10px; border-top-right-radius: 10px;">
             <h2 style="color: rgb(67, 98, 128); letter-spacing: 2px; margin: 0 auto;text-align: center; margin-top: 15px; border-bottom: 1px solid #ebeae8; width: 70%; padding: 11px;">NOTIFY</h2>
         </div>
@@ -176,7 +176,7 @@ export class EmailsService {
   async test(name, email, subject) {
     const body = `
             <p style="font-weight: 200">
-            Dear, ${'fullName'}
+            Dear ${'fullName'}
             <br>
             This is a new notify you.
             </p>
@@ -206,13 +206,13 @@ export class EmailsService {
         id: init_id,
       },
     });
-    let body = `<p style="font-weight: 200"> Dear, ${name}<br>${contnet}</p>`;
+    let body = `<p style="font-weight: 200"> Dear ${name}<br>${contnet}</p>`;
     try {
       if (init_id != null && risk == null) {
         if (content_id == 10) {
           body = `
           <p style="font-weight: 200">
-          Dear, ${name}
+          Dear ${name}
           <br>
           ${contnet}
           <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
@@ -241,7 +241,7 @@ export class EmailsService {
             .split('T')[0];
           body = `
           <p style="font-weight: 200">
-          Dear, ${name}
+          Dear ${name}
           <br>
           ${contnet}
           <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
@@ -269,7 +269,7 @@ export class EmailsService {
           // console.log('wowo risk ==> ', risk)
           body = `
           <p style="font-weight: 200">
-          Dear, ${name}
+          Dear ${name}
           <br>
           ${contnet}
           <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
