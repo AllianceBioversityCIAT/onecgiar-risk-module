@@ -142,11 +142,15 @@ export class RiskDashboardComponent {
       },
       plotOptions: {
         column: {
-          pointPadding: 0.2,
+          pointPadding: -0.5,
           borderWidth: 0,
+          groupPadding: 0.3,
         },
       },
-
+      colors: [
+        '#A4DBFF',
+        '#544FC5'
+      ],
       series: this.getSeries(type),
     };
     //  {
