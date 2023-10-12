@@ -17,7 +17,7 @@ export interface DialogData {
 export class PhaseDialogComponent implements OnInit {
   phaseId: number = 0;
   phaseForm: FormGroup = new FormGroup('');
-  phases: any = [];
+  phases: any[] = [];
   tocPhases: any = [];
 
   constructor(
@@ -45,6 +45,10 @@ export class PhaseDialogComponent implements OnInit {
     });
     this.phases = await this.phasesService.getPhases(null, null, null);
     if (this.phaseId) {
+      let currentPhase = this.phases.map(x => {
+        return x.id;
+      }).indexOf(this.phaseId);
+      this.phases.splice(currentPhase, 1);
       let { id, previous_phase, active, ...phaseValues } =
         await this.phasesService.getPhase(this.phaseId);
       this.phaseForm.setValue({
