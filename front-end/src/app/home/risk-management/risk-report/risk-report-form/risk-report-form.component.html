@@ -551,7 +551,12 @@
             </p>
           </div>
 
-          <mat-icon class="move-end">
+          <mat-icon
+            matTooltip="Click to more info"
+            (click)="popoverCurrentRiskLevel.toggle()"
+            [satPopoverAnchor]="popoverCurrentRiskLevel"
+            class="move-end"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -573,6 +578,30 @@
               </defs>
             </svg>
           </mat-icon>
+          <sat-popover #popoverCurrentRiskLevel hasBackdrop>
+            <div class="popover-2">
+              <div class="popover-2__head">
+                <h3 class="popover-2__h3">Current Risk level</h3>
+
+                <mat-icon
+                  class="popover-2__icon"
+                  (click)="popoverCurrentRiskLevel.close()"
+                  >close</mat-icon
+                >
+              </div>
+              <p class="popover-2__text">
+                Current level of risk considering existing controls in place.
+              </p>
+              <a
+                [routerLink]="['/glossary']"
+                [queryParams]="{ search: 'Current risk level', char: 'c' }"
+                target="_blank"
+                class="btn btn--outline"
+              >
+                Learn more &rarr;
+              </a>
+            </div>
+          </sat-popover>
         </div>
 
         <!-- //grid-item-4----- -->
@@ -755,7 +784,12 @@
             </p>
           </div>
 
-          <mat-icon class="move-end">
+          <mat-icon
+            matTooltip="Click to more info"
+            (click)="popoverTargetRiskLevel.toggle()"
+            [satPopoverAnchor]="popoverTargetRiskLevel"
+            class="move-end"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -777,6 +811,32 @@
               </defs>
             </svg>
           </mat-icon>
+
+          <sat-popover #popoverTargetRiskLevel hasBackdrop>
+            <div class="popover-2">
+              <div class="popover-2__head">
+                <h3 class="popover-2__h3">Target Risk level</h3>
+
+                <mat-icon
+                  class="popover-2__icon"
+                  (click)="popoverTargetRiskLevel.close()"
+                  >close</mat-icon
+                >
+              </div>
+              <p class="popover-2__text">
+                Targeted level of risk within an agreed time horizon, guided by
+                the risk appetite.
+              </p>
+              <a
+                [routerLink]="['/glossary']"
+                [queryParams]="{ search: 'Target risk level', char: 't' }"
+                target="_blank"
+                class="btn btn--outline"
+              >
+                Learn more &rarr;
+              </a>
+            </div>
+          </sat-popover>
         </div>
       </div>
 

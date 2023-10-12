@@ -49,6 +49,8 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     private meta: Meta
   ) {}
 
+  
+  
   clicked: boolean | undefined;
   riskApi: any = null;
 
