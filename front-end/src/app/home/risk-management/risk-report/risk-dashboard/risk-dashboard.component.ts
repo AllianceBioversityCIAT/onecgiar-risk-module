@@ -130,15 +130,33 @@ export class RiskDashboardComponent {
         },
       },
       tooltip: {
+        borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
         shadow: false,
+        useHTML: true,
+        style: {
+          textAlign: 'left',
+          color: '#04030f',
+          fontFamily: '"Poppins", sans-serif !important',
+          fontSize: '1.6rem',
+          fontStyle: 'normal',
+          fontWeight: '400',
+          backgroundColor: '#fff',
+          border: '1px solid #172f8f !important',
+          borderRadius: '5px',
+          opacity: '1',
+          zIndex: '9999 !important',
+          padding: '0.8em',
+          left: '0 !important',
+          top: '0 !important',
+        },
+
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat:
           '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
           '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
         footerFormat: '</table>',
         shared: true,
-        useHTML: true,
       },
       plotOptions: {
         column: {
