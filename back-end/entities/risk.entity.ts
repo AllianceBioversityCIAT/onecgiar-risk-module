@@ -137,6 +137,15 @@ export class Risk {
   created_by_user_id: number;
 
   @ApiProperty()
+  @ManyToOne(() => User, (user) => user.risks)
+  @JoinColumn({ name: 'update_by_user_id' })
+  update_by: User;
+  @ApiProperty()
+  @Optional()
+  @Column({ default: null })
+  update_by_user_id: number;
+
+  @ApiProperty()
   @Optional()
   @Column({ default: null })
   original_risk_id: number;
