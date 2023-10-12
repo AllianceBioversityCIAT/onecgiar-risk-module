@@ -80,12 +80,12 @@ export class RiskDashboardComponent {
     if (type == 'level')
       return [
         {
-          name: 'Target',
-          data: this.data.map((d: any) => d.current_level),
-        },
-        {
           name: 'Current',
           data: this.data.map((d: any) => d.target_level),
+        },
+        {
+          name: 'Target',
+          data: this.data.map((d: any) => d.current_level),
         },
       ];
     else
@@ -147,10 +147,7 @@ export class RiskDashboardComponent {
           groupPadding: 0.3,
         },
       },
-      colors: [
-        '#436280',
-        '#0F212F'
-      ],
+      colors: ['#436280', '#0F212F'],
       series: this.getSeries(type),
     };
     //  {
