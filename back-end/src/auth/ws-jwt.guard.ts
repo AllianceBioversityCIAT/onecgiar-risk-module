@@ -9,7 +9,6 @@ import {
 import { Observable } from 'rxjs';
 import { Socket } from 'socket.io';
 import { verify } from 'jsonwebtoken';
-import { jwtConstants } from './constants';
 @Injectable()
 export class WsJwtGuard implements CanActivate {
   canActivate(
@@ -22,7 +21,7 @@ export class WsJwtGuard implements CanActivate {
     if (!authorization) throw new UnauthorizedException();
 
     const token: string = authorization.split(' ')[1];
-    const payload = verify(token, jwtConstants.secret);
+    const payload = verify(token, process.env.JWT_SECRET_KEY);
 
     return true;
   }
@@ -33,7 +32,7 @@ export class WsJwtGuard implements CanActivate {
 
     const token: string = authorization.split(' ')[1];
 
-    const payload = verify(token, jwtConstants.secret);
+    const payload = verify(token, process.env.JWT_SECRET_KEY);
     return payload;
   }
 
@@ -41,7 +40,7 @@ export class WsJwtGuard implements CanActivate {
     const { authorization } = auth;
     const token: string = authorization.split(' ')[1];
 
-    const payload = verify(token, jwtConstants.secret);
+    const payload = verify(token, process.env.JWT_SECRET_KEY);
     return payload;
   }
 }

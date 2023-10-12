@@ -9,7 +9,7 @@ export class UsersService {
     @InjectRepository(User)
     public userRepository: Repository<User>,
   ) {}
-  async findByEmail(email: string): Promise<any | undefined> {
+  async findByEmail(email: string): Promise<User | undefined> {
     return this.userRepository.findOne({where:{email}})
   }
 }

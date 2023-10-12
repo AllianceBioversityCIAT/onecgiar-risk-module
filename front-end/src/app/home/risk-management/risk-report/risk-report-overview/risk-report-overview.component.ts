@@ -198,7 +198,7 @@ export class RiskReportOverviewComponent implements OnInit {
     this.loadInitiative();
 
     if (this.publishStatus.value == '0') {
-      this.toolTipMessage = 'Admin closed publish';
+      this.toolTipMessage = 'Admin closed submit';
     }
     if (!this.canPublish()) {
       this.toolTipMessage = 'Team Member/Guest can not submit';
