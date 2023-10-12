@@ -171,6 +171,7 @@ export class InitiativeController {
         risk.current_likelihood = row['Current Likelihood'];
         risk.target_likelihood = 0;
         risk.target_impact = 0;
+        risk.created_by_user_id=1
         risk.title = row['title'];
         if (row['title'].length >= 255) {
           row['title'] = row['title'].trim().substring(0, 254);

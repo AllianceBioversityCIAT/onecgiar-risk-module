@@ -19,10 +19,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { CategoriesGroupsModule } from './categories-groups/categories-groups.module';
 import { GlossaryModule } from './glossary/glossary.module';
 import { FaqModule } from './faq/faq.module';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './auth/constants';
 import { PhasesModule } from './phases/phases.module';
-
 
 @Module({
   imports: [
@@ -39,12 +36,12 @@ import { PhasesModule } from './phases/phases.module';
       autoLoadEntities: true,
       namingStrategy: new SnakeNamingStrategy(),
     }),
+    AuthModule,
     RiskModule,
     InitiativeModule,
     ScheduleModule.forRoot(),
     EmailsModule,
-    RiskCategoriesModule, 
-    AuthModule,
+    RiskCategoriesModule,
     UsersModule,
     VariablesModule,
     EventsModule,
@@ -54,11 +51,7 @@ import { PhasesModule } from './phases/phases.module';
     CategoriesGroupsModule,
     GlossaryModule,
     FaqModule,
-    PhasesModule,    
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '30d'},
-    }),
+    PhasesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

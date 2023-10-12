@@ -778,7 +778,7 @@
 .popover {
   padding: 1rem 2rem 0rem 2rem;
   position: absolute !important;
-  background-color: #efefef !important;
+  background: linear-gradient(to right, #efefef, #bcbcbc) !important;
   width: 400px !important;
   top: -41px !important;
   left: 42px !important;
@@ -799,6 +799,7 @@
     font-size: 2rem;
     font-weight: 700;
     color: #000;
+    font-family: "Josefin Sans", sans-serif;
   }
 
   &__head {
@@ -849,12 +850,98 @@
   &__text {
     text-align: justify;
     color: #04030f;
-    font-family: "Poppins", sans-serif !important;
+    // font-family: "Poppins", sans-serif !important;
     font-size: 1.3rem;
     font-style: normal;
     font-weight: 500;
     line-height: 114.5%;
     line-height: 15.75px;
+    font-family: "Josefin Sans", sans-serif;
+  }
+}
+
+.popover-2 {
+  padding: 1rem 2rem 0rem 2rem;
+  position: absolute !important;
+  background: linear-gradient(to left, #efefef, #bcbcbc) !important;
+  width: 400px !important;
+  top: -181px !important;
+  left: -368px !important;
+  border-radius: 20px !important;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 368px;
+    top: 127px;
+    border-top: 12px solid transparent;
+    border-right: 16px solid #efefef;
+    border-bottom: 12px solid transparent;
+  }
+
+  &__h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    font-family: "Josefin Sans", sans-serif;
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  &__icon {
+    -webkit-user-select: none;
+    user-select: none;
+    background-repeat: no-repeat;
+    display: inline-block;
+    fill: currentColor;
+    height: 24px;
+    width: 24px;
+    overflow: hidden;
+    cursor: pointer;
+    color: #0f212f;
+  }
+
+  &__primaryButton {
+    /* display: flex; */
+    align-items: center;
+    padding: 5px;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background-color: #0f212f !important;
+    color: #ffffff !important;
+    text-align: center;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+
+  // .popover-icon {
+  //   width: 18px;
+  //   height: 17px;
+  //   object-fit: contain;
+  //   font-size: large;
+  // }
+
+  &__text {
+    text-align: justify;
+    color: #04030f;
+    // font-family: "Poppins", sans-serif !important;
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 114.5%;
+    line-height: 15.75px;
+    font-family: "Josefin Sans", sans-serif;
   }
 }
 
@@ -896,7 +983,7 @@
     border-bottom: 2px solid currentColor;
     padding-bottom: 49px;
     transition: all 0.3s;
-    width: 239px;
+    width: 240px;
   }
 }
 
@@ -904,16 +991,23 @@
 .btn:link,
 .btn:visited {
   display: inline-block;
-  text-decoration: none;
   font-size: 1.3rem;
-  font-weight: 500;
-  /* padding: 1.6rem 1.2rem; */
+  font-weight: 400;
+  padding: 1rem 1rem;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: "Josefin Sans", sans-serif;
+
+  background-image: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 50%,
+    #223140 50%
+  );
+  background-size: 220%;
+  transition: all 0.4s;
   border-radius: 9px;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.3s;
-  padding: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -925,12 +1019,11 @@
 
 .btn--outline:hover,
 .btn--outline:active {
-  background-color: #0f212f;
-  color: #fff;
-  /* border: 3px solid #fff; */
-
-  /* Trick to add border inside */
-  box-shadow: inset 0 0 0 3px #fff;
+  background-position: 100%;
+  color: #ffffff;
+  font-family: "Josefin Sans", sans-serif;
+  -webkit-transform: translateX(1rem);
+  transform: translateX(1rem);
 }
 
 .disabled {

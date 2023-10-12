@@ -469,3 +469,22 @@
   font-weight: 400;
   line-height: normal;
 }
+
+::ng-deep.cdk-overlay-pane:not(
+    .mat-mdc-select-panel-above
+  ).mdc-menu-surface.mat-mdc-select-panel {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  transform-origin: top center;
+  // overflow-y: scroll !important;
+  overflow-x: hidden !important;
+}
+
+::ng-deep.mat-mdc-option.mdc-list-item {
+  align-items: baseline !important;
+}
+
+::ng-deep.mat-mdc-option.mdc-list-item {
+  align-items: center;
+  padding: 1rem !important;
+}

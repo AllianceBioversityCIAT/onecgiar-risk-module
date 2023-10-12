@@ -51,6 +51,7 @@ export class RiskService {
   }
 
   async updateRisk(id, risk: Risk, user: User, create_version: boolean) {
+    if (user) risk['update_by_user_id'] = user.id;
     let tobeadded = { ...risk };
     if (tobeadded.mitigations) delete tobeadded.mitigations;
     const created_risk = await this.riskRepository.save(
