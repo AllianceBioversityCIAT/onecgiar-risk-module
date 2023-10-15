@@ -81,11 +81,11 @@ export class RiskDashboardComponent {
       return [
         {
           name: 'Current',
-          data: this.data.map((d: any) => d.target_level),
+          data: this.data.map((d: any) => d.current_level),
         },
         {
           name: 'Target',
-          data: this.data.map((d: any) => d.current_level),
+          data: this.data.map((d: any) => d.target_level),
         },
       ];
     else

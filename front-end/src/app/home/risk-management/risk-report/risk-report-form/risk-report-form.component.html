@@ -63,7 +63,7 @@
           <input
             [disabled]="true"
             [value]="
-              checkIfRiskExist?.created_by?.full_name || user_info?.full_name
+              checkIfRiskExist[0]?.created_by?.full_name || user_info?.full_name
             "
             class="risk-report-form-field-box__input report-form-field-size"
             matInput

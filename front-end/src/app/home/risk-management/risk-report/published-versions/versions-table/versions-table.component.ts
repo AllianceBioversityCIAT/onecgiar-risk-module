@@ -57,7 +57,7 @@ export class VersionsTableComponent {
       this.displayedColumns.splice(
         this.displayedColumns.length - 1,
         0,
-        'Help requested'
+        'Targets not set'
       );
     }
 
