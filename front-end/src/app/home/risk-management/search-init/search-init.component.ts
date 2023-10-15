@@ -25,8 +25,8 @@ export class SearchInitComponent {
   sort = [
     { name: 'Initiative ID (lowest first)', value: 'id,ASC' },
     { name: 'Initiative ID (highest first)', value: 'id,DESC' },
-    { name: 'Initiative Name (lowest first)', value: 'name,ASC' },
-    { name: 'Initiative Name (highest first)', value: 'name,DESC' },
+    { name: 'Initiative Name (A to Z)', value: 'name,ASC' },
+    { name: 'Initiative Name (Z to A)', value: 'name,DESC' },
   ];
 
   status = [

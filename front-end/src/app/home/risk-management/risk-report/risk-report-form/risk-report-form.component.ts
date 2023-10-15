@@ -49,8 +49,6 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     private meta: Meta
   ) {}
 
-  
-  
   clicked: boolean | undefined;
   riskApi: any = null;
 
@@ -137,7 +135,11 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
 
   actions: any;
   async getMitigationActions() {
-    this.actions = await this.mitigationService.getMitigationStatus(null,null,null);
+    this.actions = await this.mitigationService.getMitigationStatus(
+      null,
+      null,
+      null
+    );
   }
 
   getStatusByID(id: number) {
@@ -148,9 +150,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     this.newRiskForm.markAllAsTouched();
     this.newRiskForm.updateValueAndValidity();
     let result = null;
-    if(this.newRiskForm.value.due_date != null) {
+    if (this.newRiskForm.value.due_date != null) {
       const due_date = this.newRiskForm.value.due_date;
-      let dateToDB = moment(due_date).format("YYYY-MM-DD");
+      let dateToDB = moment(due_date).format('YYYY-MM-DD');
       this.newRiskForm.controls['due_date'].patchValue(dateToDB);
     }
     if (this.newRiskForm.valid) {
@@ -225,7 +227,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       this.newRiskForm.controls.target_impact.setValue(current_impact);
       let date: any;
       date = this.newRiskForm.get('due_date');
-      date.clearValidators()
+      date.clearValidators();
       date.updateValueAndValidity();
       date.setValidators([
         (c: AbstractControl) =>
@@ -237,7 +239,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           new Date(c.value).getTime() <
           new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
             ? { past_date_created: true }
-            : null
+            : null,
       ]);
       this.dueDateRequired = false;
     } else if (
@@ -274,14 +276,19 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       this.newRiskForm.controls['target_likelihood'].value;
     let target_impact = this.newRiskForm.controls['target_impact'].value;
 
-    if(current_likelihood != '' && current_impact != '' && target_likelihood != '' && target_impact != '') {
+    if (
+      current_likelihood != '' &&
+      current_impact != '' &&
+      target_likelihood != '' &&
+      target_impact != ''
+    ) {
       if (
         target_impact * target_likelihood ==
         current_impact * current_likelihood
       ) {
         let date: any;
         date = this.newRiskForm.get('due_date');
-        date.clearValidators()
+        date.clearValidators();
         date.updateValueAndValidity();
         date.setValidators([
           (c: AbstractControl) =>
@@ -293,7 +300,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
             new Date(c.value).getTime() <
             new Date(this?.checkIfRiskExist[0]?.created_date).getTime()
               ? { past_date_created: true }
-              : null
+              : null,
         ]);
         this.dueDateRequired = false;
       } else {
@@ -343,7 +350,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
   async removeProposed(mitigation: any) {
     this.dialog
       .open(DeleteConfirmDialogComponent, {
-        maxWidth: '400px',
+        width: 'auto',
         data: {
           tiile: 'Delete',
           message: 'Are you sure you want to delete this action ?',
