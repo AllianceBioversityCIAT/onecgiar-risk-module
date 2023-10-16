@@ -8,15 +8,14 @@ import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-search-risk',
   templateUrl: './search-risk.component.html',
-  styleUrls: ['./search-risk.component.scss']
+  styleUrls: ['./search-risk.component.scss'],
 })
 export class SearchRiskComponent {
   constructor(
     private fb: FormBuilder,
     private riskService: RiskService,
     public initiativeService: InitiativesService,
-    public activatedRoute: ActivatedRoute,
-
+    public activatedRoute: ActivatedRoute
   ) {}
   categories: any;
   filterForm: any;
@@ -25,7 +24,6 @@ export class SearchRiskComponent {
   @Input() initiative_id: number | null = null;
 
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
-
 
   @Output() exportPdf = new EventEmitter<string>();
 
@@ -38,8 +36,8 @@ export class SearchRiskComponent {
   sort = [
     { name: 'Risk ID (lowest first)', value: 'id,ASC' },
     { name: 'Risk ID (highest first)', value: 'id,DESC' },
-    { name: 'Risk Title (lowest first)', value: 'title,ASC' },
-    { name: 'Risk Title (highest first)', value: 'title,DESC' },
+    { name: 'Risk Title (A to Z)', value: 'title,ASC' },
+    { name: 'Risk Title (Z to A)', value: 'title,DESC' },
     { name: 'Current risk level (highest first)', value: 'current_level,DESC' },
     { name: 'Current risk level (lowest first)', value: 'current_level,ASC' },
     { name: 'Target risk level (highest first)', value: 'target_level,DESC' },
@@ -58,7 +56,9 @@ export class SearchRiskComponent {
   }
 
   risksNeedHelp() {
-    this.filterForm.controls['request_assistance'].setValue(this.request_assistance);
+    this.filterForm.controls['request_assistance'].setValue(
+      this.request_assistance
+    );
   }
   setForm() {
     this.filterForm = this.fb.group({
@@ -74,21 +74,26 @@ export class SearchRiskComponent {
 
   resetForm() {
     this.redundant = false;
-    this.request_assistance = false
+    this.request_assistance = false;
     this.myIni = false;
     this.filterForm.reset();
     this.filterForm.markAsUntouched();
   }
 
   async export(id: number, official_code: string) {
-    await this.initiativeService.getExportByinititave(id, official_code, false, this.filterForm.value);
+    await this.initiativeService.getExportByinititave(
+      id,
+      official_code,
+      false,
+      this.filterForm.value
+    );
   }
   riskUsers: any;
   riskRaiser: any;
   id: number = 0;
   initiativeId: any;
-  user_info:any;
-  risksOwners:any
+  user_info: any;
+  risksOwners: any;
   async ngOnInit() {
     let time: any = null;
     const ini = await this.initiativeService.getInitiative(
@@ -104,18 +109,24 @@ export class SearchRiskComponent {
     this.riskUsers = await this.riskService.getRiskUsers(
       this.initiative_id as number
     );
-    
-    this.risksOwners = ini.risks.filter((d: any) => {
-      return d.risk_owner != null ? d.risk_owner : null
-    }).map((s: any) => s.risk_owner);
-    this.risksOwners = [...new Map(this.risksOwners.map((item: any) => [item['id'], item])).values()]
+
+    this.risksOwners = ini.risks
+      .filter((d: any) => {
+        return d.risk_owner != null ? d.risk_owner : null;
+      })
+      .map((s: any) => s.risk_owner);
+    this.risksOwners = [
+      ...new Map(
+        this.risksOwners.map((item: any) => [item['id'], item])
+      ).values(),
+    ];
 
     this.setForm();
     this.categories = await this.riskService.getInitiativeCategories(
       this.initiative_id as number
     );
     this.filterForm.valueChanges.subscribe(() => {
-      console.log(this.filterForm.value)
+      console.log(this.filterForm.value);
       if (time) clearTimeout(time);
       time = setTimeout(() => {
         this.filters.emit(this.filterForm.value);

@@ -65,8 +65,8 @@ export class EmailsComponent {
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Email (lowest first)', value: 'email,ASC' },
-    { name: 'Email (highest first)', value: 'email,DESC' },
+    { name: 'Email (A to Z)', value: 'email,ASC' },
+    { name: 'Email (Z to A)', value: 'email,DESC' },
   ];
 
   populateFormData() {

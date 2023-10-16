@@ -45,8 +45,8 @@ export class UserManagementComponent implements OnInit {
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'full_name,ASC' },
-    { name: 'Name (highest first)', value: 'full_name,DESC' },
+    { name: 'Name (A to Z)', value: 'full_name,ASC' },
+    { name: 'Name (Z to A)', value: 'full_name,DESC' },
   ];
 
   setForm() {
@@ -87,8 +87,6 @@ export class UserManagementComponent implements OnInit {
     );
     this.dataSource = this.data.result;
   }
-
-  
 
   displayedColumns: string[] = ['id', 'full_name', 'email', 'role', 'action'];
 
@@ -144,7 +142,9 @@ export class UserManagementComponent implements OnInit {
           if (result) {
             this.toastr.success('Success deleted');
           } else {
-            this.toastr.error('The user can not be deleted since he/she has responsibilities within the Initiative(s)');
+            this.toastr.error(
+              'The user can not be deleted since he/she has responsibilities within the Initiative(s)'
+            );
           }
         }
         await this.init();

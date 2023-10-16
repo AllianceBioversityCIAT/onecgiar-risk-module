@@ -41,8 +41,8 @@ export class CategoryComponent implements OnInit {
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'title,ASC' },
-    { name: 'Name (highest first)', value: 'title,DESC' },
+    { name: 'Name (A to Z)', value: 'title,ASC' },
+    { name: 'Name (Z to A)', value: 'title,DESC' },
   ];
 
   setForm() {
@@ -75,7 +75,7 @@ export class CategoryComponent implements OnInit {
       this.pageIndex,
       this.pageSize
     );
-    this.dataSource =  this.data?.result;
+    this.dataSource = this.data?.result;
     this.length = this.data?.count;
   }
 
