@@ -80,12 +80,12 @@ export class RiskDashboardComponent {
     if (type == 'level')
       return [
         {
-          name: 'Current',
-          data: this.data.map((d: any) => d.current_level),
-        },
-        {
           name: 'Target',
           data: this.data.map((d: any) => d.target_level),
+        },
+        {
+          name: 'Current',
+          data: this.data.map((d: any) => d.current_level),
         },
       ];
     else
@@ -108,6 +108,7 @@ export class RiskDashboardComponent {
         },
       ];
   }
+
   riskProfile(data: any, type: string) {
     return {
       chart: {
@@ -151,11 +152,11 @@ export class RiskDashboardComponent {
           top: '0 !important',
         },
 
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat:
-          '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-        footerFormat: '</table>',
+        headerFormat:
+          '<span style="font-size:10px">{point.key}</span><table><tbody style="display: flex;flex-direction: column-reverse;">',
+        pointFormat: `<tr ><td style="color:{series.color};padding:0">{series.name}: </td> 
+          <td style="padding:0"><b>{point.y:.1f}</b></td></tr>`,
+        footerFormat: '</tbody></table>',
         shared: true,
       },
       plotOptions: {
@@ -258,6 +259,7 @@ export class RiskDashboardComponent {
     // };
   }
 }
+
 function jwt_decode(access_token: string): any {
   throw new Error('Function not implemented.');
 }
