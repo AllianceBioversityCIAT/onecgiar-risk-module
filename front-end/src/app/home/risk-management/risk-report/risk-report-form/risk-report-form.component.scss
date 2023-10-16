@@ -799,7 +799,7 @@
     font-size: 2rem;
     font-weight: 700;
     color: #000;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Poppins", sans-serif !important;
   }
 
   &__head {
@@ -856,7 +856,7 @@
     font-weight: 500;
     line-height: 114.5%;
     line-height: 15.75px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Poppins", sans-serif !important;
   }
 }
 
@@ -884,7 +884,7 @@
     font-size: 2rem;
     font-weight: 700;
     color: #000;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Poppins", sans-serif !important;
   }
 
   &__head {
@@ -941,7 +941,7 @@
     font-weight: 500;
     line-height: 114.5%;
     line-height: 15.75px;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Poppins", sans-serif !important;
   }
 }
 
@@ -997,7 +997,7 @@
   color: #fff;
   text-decoration: none;
   text-transform: uppercase;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Poppins", sans-serif !important;
 
   background-image: linear-gradient(
     120deg,
@@ -1021,7 +1021,7 @@
 .btn--outline:active {
   background-position: 100%;
   color: #ffffff;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Poppins", sans-serif !important;
   -webkit-transform: translateX(1rem);
   transform: translateX(1rem);
 }

@@ -36,8 +36,8 @@ export class PhasesComponent implements OnInit {
   sortBtn = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Name (lowest first)', value: 'name,ASC' },
-    { name: 'Name (highest first)', value: 'name,DESC' },
+    { name: 'Name (A to Z)', value: 'name,ASC' },
+    { name: 'Name (Z to A)', value: 'name,DESC' },
   ];
 
   setForm() {

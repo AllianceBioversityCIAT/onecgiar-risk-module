@@ -41,10 +41,10 @@ export class FaqAdminComponent {
   sort = [
     { name: 'ID (lowest first)', value: 'id,ASC' },
     { name: 'ID (highest first)', value: 'id,DESC' },
-    { name: 'Question (lowest first)', value: 'question,ASC' },
-    { name: 'Question (highest first)', value: 'question,DESC' },
-    { name: 'Answer (lowest first)', value: 'answer,ASC' },
-    { name: 'Answer (highest first)', value: 'answer,DESC' },
+    { name: 'Question (A to Z)', value: 'question,ASC' },
+    { name: 'Question (Z to A)', value: 'question,DESC' },
+    { name: 'Answer (A to Z)', value: 'answer,ASC' },
+    { name: 'Answer (Z to A)', value: 'answer,DESC' },
   ];
 
   setForm() {
