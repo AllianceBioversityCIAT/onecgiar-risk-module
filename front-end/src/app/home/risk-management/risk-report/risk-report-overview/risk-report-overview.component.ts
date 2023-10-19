@@ -115,15 +115,14 @@ export class RiskReportOverviewComponent implements OnInit {
           await this.initiativeService.Publish(id, dialogResult);
 
           this.toastr.success(
-            'Success',
-            `Risks for ${this.initiative.name} has been published successfully`
+            `Risks for ${this.initiative.name} has been submitted successfully`
           );
           this.loadInitiative();
         }
       });
   }
   async checkValue(id: number, value: any) {
-    await this.riskService.updateRedundant(id, this.id , value);
+    await this.riskService.updateRedundant(id, this.id, value);
   }
   my_risks: any = null;
   async loadInitiative() {
