@@ -31,7 +31,7 @@ export class Phase {
   @Column({ type: 'date' , default:null })
   end_date: string;
 
-  @Column({ type: 'enum', enum: phaseStatus })
+  @Column({ type: 'enum', enum: phaseStatus , default: phaseStatus.CLOSED})
   status: phaseStatus;
 
   @ManyToOne(() => Phase, (phase) => phase.childPhases, {

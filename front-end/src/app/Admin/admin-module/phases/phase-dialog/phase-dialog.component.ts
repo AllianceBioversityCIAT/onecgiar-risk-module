@@ -41,7 +41,7 @@ export class PhaseDialogComponent implements OnInit {
       start_date: [null, Validators.required],
       end_date: [null, Validators.required],
       previous_phase: [null],
-      status: [null, Validators.required],
+      status: ['Closed'],
     });
     this.phases = await this.phasesService.getPhases(null, null, null);
     if (this.phaseId) {

@@ -47,7 +47,7 @@ export class PhasesService extends MainService {
   deletePhase(id: number) {
     return firstValueFrom(
       this.http.delete(this.backend_url+'/phases/' + id, {headers: this.headers}).pipe(map((d: any) => d))
-    ).catch((e) => false);
+    );
   }
 
   activatePhase(id: number) {
