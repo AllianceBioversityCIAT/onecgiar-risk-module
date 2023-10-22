@@ -7,6 +7,7 @@ import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/dele
 import { HeaderService } from 'src/app/header.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-phases',
@@ -22,7 +23,7 @@ export class PhasesComponent implements OnInit {
     'end_date',
     'previous_phase',
     'status',
-    'active',
+    // 'active',
     'actions',
   ];
   filters: any = null;
@@ -54,7 +55,8 @@ export class PhasesComponent implements OnInit {
     private dialog: MatDialog,
     private headerService: HeaderService,
     private title: Title,
-    private meta: Meta
+    private meta: Meta,
+    private toast: ToastrService,
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
@@ -112,9 +114,13 @@ export class PhasesComponent implements OnInit {
       .afterClosed()
       .subscribe(async (dialogResult) => {
         if (dialogResult == true) {
-          let result = await this.phasesService.deletePhase(id);
-          if (result) this.initTable();
-        }
+          await this.phasesService.deletePhase(id).then((data) => {
+            this.toast.success('Deleted successfully');
+            this.initTable();
+          }, (error) => {
+              this.toast.error(error.error.message);
+          });  
+        } 
       });
   }
 
