@@ -1043,3 +1043,8 @@
   border: 1px solid #333 !important;
   text-align: unset !important;
 }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
