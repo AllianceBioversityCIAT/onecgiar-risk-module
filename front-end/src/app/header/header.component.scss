@@ -133,3 +133,111 @@
   width: 100%;
   //transition: width .3s;
 }
+
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem);
+  }
+  80% {
+    transform: translateX(1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(10rem);
+  }
+  80% {
+    transform: translateX(-1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+.envp {
+  animation: 1.2s cubic-bezier(0, 0.32, 0.3, 1) 0s 1 normal none running jtljpH;
+  border-radius: 22px;
+  width: 172px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 140px;
+  right: 100px;
+  opacity: 0.95;
+  text-align: center;
+  height: auto;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 8px 20px 0px;
+  color: #0f212f;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  animation-name: moveInBottom;
+  animation-duration: 2s;
+  animation-timing-function: ease-out;
+  height: 29px;
+}
+
+.envp-admin {
+  animation: 1.2s cubic-bezier(0, 0.32, 0.3, 1) 0s 1 normal none running jtljpH;
+  border-radius: 22px;
+  width: 172px;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 144px;
+  right: 100px;
+  opacity: 0.95;
+  text-align: center;
+  height: auto;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 8px 20px 0px;
+  color: #0f212f;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  animation-name: moveInBottom;
+  animation-duration: 2s;
+  animation-timing-function: ease-out;
+  height: 29px;
+}
+
+.qw {
+  display: flex;
+}
+
+.test {
+  white-space: nowrap;
+  position: relative;
+  right: 1rem;
+  top: -1rem;
+}
+
+.svg-icon-test {
+  position: relative;
+  left: 16rem;
+  /* margin-bottom: 1.6rem; */
+  margin-top: 0.7rem;
+  top: -2rem;
+}

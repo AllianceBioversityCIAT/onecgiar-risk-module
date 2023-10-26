@@ -8,6 +8,8 @@ import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-co
 import { HeaderService } from '../header.service';
 import { AuthService } from '../services/auth.service';
 
+import { environment } from 'src/environments/environment.development';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -15,6 +17,8 @@ import { AuthService } from '../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   notificationNumberCount: number;
+
+  envp: any;
 
   increment() {
     this.notificationNumberCount++;
@@ -46,6 +50,9 @@ export class HeaderComponent implements OnInit {
   ) {
     this.notificationNumberCount = 5;
     this.headerService.background = '#0f212f';
+
+    this.envp = environment.production;
+    console.log(this.envp);
   }
 
   user_info: any;
@@ -97,4 +104,23 @@ export class HeaderComponent implements OnInit {
       this.login();
     }
   }
+
+
+
+
+  public adminUrl = {
+    admin: '/admin',
+    userManagement: '/admin/user-management',
+    parameterSetttings: '/admin/parameters-settings',
+    categories: '/admin/category',
+    mitigation: '/admin/mitigation-status',
+    settings: '/admin/parameters-settings/settings',
+    announcements: '/admin/announcements',
+    posted: '/admin/announcements/posted',
+    drafts: '/admin/announcements/drafts',
+    glossary: '/admin/glossary',
+    faq: '/admin/faq',
+    pageNotFounds: '/404',
+  };
+
 }

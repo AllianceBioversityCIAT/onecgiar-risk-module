@@ -207,6 +207,71 @@
   <div [ngClass]="{ admin: isadmin }" class="loading-holder">
     <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   </div>
+
+  <div class="qw">
+    <div
+      class="envp"
+      *ngIf="envp === false"
+      [ngClass]="{
+        'envp-admin':
+          router.url === adminUrl.admin ||
+          router.url === adminUrl.parameterSetttings ||
+          router.url === adminUrl.categories ||
+          router.url === adminUrl.mitigation ||
+          router.url === adminUrl.settings ||
+          router.url === adminUrl.announcements ||
+          router.url === adminUrl.posted ||
+          router.url === adminUrl.drafts ||
+          router.url === adminUrl.userManagement ||
+          router.url === adminUrl.glossary ||
+          router.url === adminUrl.faq ||
+          router.url === adminUrl.pageNotFounds
+      }"
+    >
+      <svg
+        class="svg-icon-test"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fill="#9e553e"
+          d="M1.796 2.098a.5.5 0 1 0-.6.8L3.198 4.4a.5.5 0 1 0 .6-.8L1.796 2.098ZM1 7a.5.5 0 0 0 0 1h1.5a.5.5 0 0 0 0-1H1Zm8.998-5c3.149 0 5.744 2.334 5.984 5.355l.014.222l.004.225l-.001 3.596l.925 2.222a1 1 0 0 1 .053.167l.016.086l.008.131a1 1 0 0 1-.749.963l-.116.027l-.135.01H12.5l-.005.16a2.5 2.5 0 0 1-4.99 0l-.005-.16H3.999a.992.992 0 0 1-.26-.034l-.124-.043a1 1 0 0 1-.603-1.052l.021-.127l.043-.128l.923-2.22L4 7.793l.004-.224C4.127 4.45 6.771 2 9.998 2ZM11.5 15.004h-3l.007.141a1.5 1.5 0 0 0 1.349 1.348L10 16.5a1.5 1.5 0 0 0 1.493-1.356l.007-.14ZM9.998 3c-2.623 0-4.77 1.923-4.98 4.385l-.014.212L5 7.802V11.5l-.038.192l-.963 2.312l11.958.002l.045-.002l-.964-2.312L15 11.5V7.812l-.004-.204C14.891 5.034 12.695 3 9.998 3Zm8.906-.802a.5.5 0 0 0-.7-.1L16.202 3.6a.5.5 0 0 0 .6.8l2.002-1.502a.5.5 0 0 0 .1-.7ZM19.5 7.5A.5.5 0 0 0 19 7h-1.5a.5.5 0 0 0 0 1H19a.5.5 0 0 0 .5-.5Z"
+        />
+      </svg>
+
+      <!-- <svg
+        class="svg-icon-test"
+        xmlns="http://www.w3.org/2000/svg"
+        width="27"
+        height="27"
+        viewBox="0 0 27 27"
+        fill="none"
+      >
+        <path
+          d="M23.75 14.7375C23.125 14.9 22.5 15 21.875 15C20.0527 14.9967 18.3059 14.2713 17.0173 12.9827C15.7287 11.6941 15.0033 9.94736 15 8.12501C15 6.28751 15.725 4.62501 16.875 3.38751C16.6482 3.10943 16.3621 2.88547 16.0378 2.73194C15.7134 2.5784 15.3589 2.49917 15 2.50001C13.625 2.50001 12.5 3.62501 12.5 5.00001V5.36251C8.7875 6.46251 6.25 9.87501 6.25 13.75V21.25L3.75 23.75V25H26.25V23.75L23.75 21.25V14.7375ZM15 28.75C16.3875 28.75 17.5 27.6375 17.5 26.25H12.5C12.5 26.913 12.7634 27.5489 13.2322 28.0178C13.7011 28.4866 14.337 28.75 15 28.75Z"
+          fill="white"
+        />
+        <circle cx="22" cy="8" r="5" fill="#EB5B47" />
+      </svg> -->
+
+      <!-- <svg
+        class="svg-icon-test"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="27"
+        viewBox="0 0 24 27"
+        fill="none"
+      >
+        <path
+          d="M20.75 12.7375C20.125 12.9 19.5 13 18.875 13C17.0527 12.9967 15.3059 12.2713 14.0173 10.9827C12.7287 9.69412 12.0033 7.94736 12 6.12501C12 4.28751 12.725 2.62501 13.875 1.38751C13.6482 1.10943 13.3621 0.885469 13.0378 0.731937C12.7134 0.578404 12.3589 0.499169 12 0.500007C10.625 0.500007 9.5 1.62501 9.5 3.00001V3.36251C5.7875 4.46251 3.25 7.87501 3.25 11.75V19.25L0.75 21.75V23H23.25V21.75L20.75 19.25V12.7375ZM12 26.75C13.3875 26.75 14.5 25.6375 14.5 24.25H9.5C9.5 24.913 9.76339 25.5489 10.2322 26.0178C10.7011 26.4866 11.337 26.75 12 26.75Z"
+          fill="white"
+        />
+      </svg> -->
+      <span class="test">testing environment</span>
+    </div>
+  </div>
 </header>
 
 <!-- section nav
