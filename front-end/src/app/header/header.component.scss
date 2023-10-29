@@ -192,9 +192,7 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  animation-name: moveInBottom;
-  animation-duration: 2s;
-  animation-timing-function: ease-out;
+
   height: 31px;
 }
 
@@ -217,9 +215,7 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  animation-name: moveInBottom;
-  animation-duration: 2s;
-  animation-timing-function: ease-out;
+
   height: 31px;
 }
 
@@ -239,4 +235,19 @@
   left: 8rem;
   margin-top: 0.7rem;
   top: -2rem;
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+.btn--animated {
+  animation: moveInBottom 0.5s ease-out 0.85s;
+  animation-fill-mode: backwards;
 }
