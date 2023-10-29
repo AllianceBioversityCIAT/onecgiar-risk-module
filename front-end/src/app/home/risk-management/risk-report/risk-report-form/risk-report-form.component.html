@@ -48,6 +48,51 @@
   </nav>
 
   <div class="risk-report-form-content-container" *ngIf="newRiskForm">
+    <div class="grid-2">
+      <div class="risk-report-form-note-box">
+        <svg
+          class="risk-report-form-note-content-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+        >
+          <path
+            d="M11 22C17.0751 22 22 17.0751 22 11C22 4.92487 17.0751 0 11 0C4.92487 0 0 4.92487 0 11C0 17.0751 4.92487 22 11 22Z"
+            fill="#2196F3"
+          />
+          <path
+            d="M9.95227 9.95312H12.0475V15.715H9.95227V9.95312Z"
+            fill="white"
+          />
+          <path
+            d="M11.0002 8.38467C11.7234 8.38467 12.3097 7.79838 12.3097 7.07515C12.3097 6.35192 11.7234 5.76562 11.0002 5.76562C10.277 5.76562 9.69067 6.35192 9.69067 7.07515C9.69067 7.79838 10.277 8.38467 11.0002 8.38467Z"
+            fill="white"
+          />
+        </svg>
+        <div class="risk-report-form-note-content-container">
+          <p class="risk-report-form-note-content-text">
+            Instructions before you can save:​
+          </p>
+          <ol class="risk-report-form-note-content-list">
+            <li>Review Risk Category and change if not correct (mandatory)</li>
+            <li>
+              On first use, adding the Risk Owner is mandatory. The authorized
+              user can change the risk owner later.
+            </li>
+            <li>​Update Risk Description (mandatory)</li>
+            <li>​Update Risk Targets</li>
+            <li>​Add additional Actions to Manage Risk (optional)</li>
+            <!-- <li>Review Status of Actions for each risk (optional)​</li> -->
+          </ol>
+          <!-- <p class="risk-report-form-note-content-note">
+        Note: these steps are required even if the Risk is tagged as Complete.
+        ​
+      </p> -->
+        </div>
+      </div>
+    </div>
     <form [formGroup]="newRiskForm" class="risk-report-form">
       <!-- //Created by filed----- -->
 
@@ -851,11 +896,11 @@
       <div>
         <mat-icon
           class="icon"
-          matTooltip="If targets can not be set, by ticking this button the system will retain the current likelihood and impact risk levels"
+          matTooltip="If targets cannot be set, by ticking this button the system will retain the current likelihood and impact risk levels"
           >help_outline</mat-icon
         >
         <mat-label class="risk-report-form-field__label--Request"
-          >Targets can not be set</mat-label
+          >Targets cannot be set</mat-label
         >
         <mat-checkbox
           type="checkbox"
@@ -1055,50 +1100,6 @@
             </div>
           </button>
         </div>
-      </div>
-    </div>
-
-    <div class="risk-report-form-note-box">
-      <svg
-        class="risk-report-form-note-content-icon"
-        xmlns="http://www.w3.org/2000/svg"
-        width="22"
-        height="22"
-        viewBox="0 0 22 22"
-        fill="none"
-      >
-        <path
-          d="M11 22C17.0751 22 22 17.0751 22 11C22 4.92487 17.0751 0 11 0C4.92487 0 0 4.92487 0 11C0 17.0751 4.92487 22 11 22Z"
-          fill="#2196F3"
-        />
-        <path
-          d="M9.95227 9.95312H12.0475V15.715H9.95227V9.95312Z"
-          fill="white"
-        />
-        <path
-          d="M11.0002 8.38467C11.7234 8.38467 12.3097 7.79838 12.3097 7.07515C12.3097 6.35192 11.7234 5.76562 11.0002 5.76562C10.277 5.76562 9.69067 6.35192 9.69067 7.07515C9.69067 7.79838 10.277 8.38467 11.0002 8.38467Z"
-          fill="white"
-        />
-      </svg>
-      <div class="risk-report-form-note-content-container">
-        <p class="risk-report-form-note-content-text">
-          Instructions before you can save:​
-        </p>
-        <ol class="risk-report-form-note-content-list">
-          <li>Review Risk Category and change if not correct (mandatory)</li>
-          <li>
-            On first use, adding the Risk Owner is mandatory. The authorized
-            user can change the risk owner later.
-          </li>
-          <li>​Update Risk Description (mandatory)</li>
-          <li>​Update Risk Targets</li>
-          <li>​Add additional Actions to Manage Risk (optional)</li>
-          <!-- <li>Review Status of Actions for each risk (optional)​</li> -->
-        </ol>
-        <!-- <p class="risk-report-form-note-content-note">
-          Note: these steps are required even if the Risk is tagged as Complete.
-          ​
-        </p> -->
       </div>
     </div>
 

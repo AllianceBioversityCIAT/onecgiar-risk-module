@@ -193,7 +193,7 @@
                 class="user-management-table-icon"
                 *ngIf="!phase.active"
                 (click)="activate(phase.id)"
-                matTooltip="Activate Phase"
+                matTooltip="Phase disabled"
               >
                 <mat-icon>block</mat-icon>
               </button>
@@ -201,7 +201,7 @@
                 class="user-management-table-icon"
                 *ngIf="phase.active"
                 (click)="deactivate(phase.id)"
-                matTooltip="Deactivate Phase"
+                matTooltip="Phase enabled"
               >
                 <mat-icon>check_circle_outline</mat-icon>
               </button>
