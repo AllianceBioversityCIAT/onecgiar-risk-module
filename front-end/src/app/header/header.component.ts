@@ -8,7 +8,7 @@ import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-co
 import { HeaderService } from '../header.service';
 import { AuthService } from '../services/auth.service';
 
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment.local';
 
 @Component({
   selector: 'app-header',
@@ -105,9 +105,6 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-
-
-
   public adminUrl = {
     admin: '/admin',
     userManagement: '/admin/user-management',
@@ -122,5 +119,4 @@ export class HeaderComponent implements OnInit {
     faq: '/admin/faq',
     pageNotFounds: '/404',
   };
-
 }
