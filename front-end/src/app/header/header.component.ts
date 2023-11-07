@@ -8,7 +8,7 @@ import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-co
 import { HeaderService } from '../header.service';
 import { AuthService } from '../services/auth.service';
 
-import { environment } from 'src/environments/environment.local';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
