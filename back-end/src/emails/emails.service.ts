@@ -57,6 +57,7 @@ export class EmailsService {
     }
   }
   async send(email: Email) {
+    this.logger.log('Email Notifications send =>'+email.id);
     if (Boolean(parseInt(process.env.CAN_SEND_EMAILS))) {
       let sendGridStatus = await this.sendEmailWithSendGrid(
         email.email,
@@ -74,10 +75,7 @@ export class EmailsService {
   private async sendEmailNotifications() {
     this.logger.log('Email Notifications Runing');
     let emails = await this.getEmailsByStatus(false);
-    if (emails.length <= 10)
-      emails.forEach(async (email) => {
-        await this.send(email);
-      });
+    if (emails.length <= 200) for (let email of emails) await this.send(email);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_10AM, {
