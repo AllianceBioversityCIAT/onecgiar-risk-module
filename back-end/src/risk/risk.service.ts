@@ -51,6 +51,20 @@ export class RiskService {
   }
 
   async updateRisk(id, risk: Risk, user: User, create_version: boolean) {
+    const oldRisk = await this.riskRepository.findOne({
+      where: {
+        id : id
+      },
+      relations : ['risk_owner']
+    })
+
+    const newRiskOwner = await this.initativeRolesRepository.findOne({
+      where: {
+        id: risk.risk_owner_id
+      },
+      relations: ['user']
+    })
+
     if (user) risk['update_by_user_id'] = user.id;
     let tobeadded = { ...risk };
     if (tobeadded.mitigations) delete tobeadded.mitigations;
@@ -84,6 +98,10 @@ export class RiskService {
         )
           this.emailsService.sendEmailTobyVarabel(role?.user, 1, initiative.id, created_risk);
       });
+
+    if(oldRisk.risk_owner.user_id != newRiskOwner.user_id) {
+      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, initiative.id, created_risk);
+    }
 
     return created_risk;
   }
