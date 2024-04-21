@@ -392,10 +392,10 @@ export class InitiativeController {
       'Created by': null,
       Flagged: null,
       'Due date': null,
+      'Targets not set': null,
       // Redundant: false,
       'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
-      'Targets not set': null,
     };
   }
 
@@ -434,7 +434,7 @@ export class InitiativeController {
     let merges = [
       {
         s: { c: 16, r: 0 },
-        e: { c: 15, r: 0 },
+        e: { c: 17, r: 0 },
       },
     ];
     for (let index = 0; index < 16; index++) {
@@ -449,7 +449,7 @@ export class InitiativeController {
       const template = this.getTemplateAllDataAdmin();
       this.mapTemplateAllDataAdmin(template, element);
       if (element.mitigations.length) {
-        for (let index = 0; index < 16; index++) {
+        for (let index = 0; index < 15; index++) {
           merges.push({
             s: { c: index, r: base },
             e: { c: index, r: base + element.mitigations.length - 1 },
