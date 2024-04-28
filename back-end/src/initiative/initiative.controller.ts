@@ -24,7 +24,9 @@ import {
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { InitiativeService } from './initiative.service';
-import * as XLSX from 'xlsx';
+// import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
+
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { RiskService } from 'src/risk/risk.service';
@@ -322,7 +324,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Flagged'] = element.flag;
+    template['Flagged'] = element.flag == true ? 'True' : 'False';
     template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
@@ -424,7 +426,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Flagged'] = element.flag;
+    template['Flagged'] = element.flag == true ? 'True' : 'False';
     template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
@@ -526,7 +528,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Flagged'] = element.flag;
+    template['Flagged'] = element.flag == true ? 'True' : 'False';
     template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
@@ -895,10 +897,16 @@ export class InitiativeController {
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
+
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
       await XLSX.writeFile(
         wb,
         join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
       );
       const file = createReadStream(
         join(process.cwd(), 'generated_files', file_name),
@@ -920,10 +928,15 @@ export class InitiativeController {
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
+
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
       await XLSX.writeFile(
         wb,
         join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
       );
       const file = createReadStream(
         join(process.cwd(), 'generated_files', file_name),
@@ -940,6 +953,89 @@ export class InitiativeController {
       });
     }
   }
+
+  appendStyleForXlsx(ws: XLSX.WorkSheet) {
+
+    const range = XLSX.utils.decode_range(ws["!ref"] ?? "");
+    const rowCount = range.e.r;
+    const columnCount = range.e.c;
+
+    for (let row = 0; row <= rowCount; row++) {
+      for (let col = 0; col <= columnCount; col++) {
+        const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+        // Add center alignment to every cell
+        
+        ws[cellRef].s = {
+          alignment: {
+            horizontal: 'center',
+            vertical: 'center',
+            wrapText: true,
+          },
+        };
+
+
+        if (row === 0 || row === 1) {
+          // Format headers and names
+          ws[cellRef].s = {
+            ...ws[cellRef].s,
+            fill: { fgColor: { rgb: '436280' } },
+            font: { color: { rgb: 'ffffff' } ,  bold: true },
+            alignment: {
+              horizontal: 'center',
+              vertical: 'center',
+              wrapText: true,
+            },
+          };
+        }
+      }
+    }
+  }
+
+  //#3
+  autofitColumnsXlsx(json: any[], worksheet: XLSX.WorkSheet, header?: string[]) {
+
+    const jsonKeys = header ? header : Object.keys(json[0]);
+
+    let objectMaxLength = []; 
+    for (let i = 0; i < json.length; i++) {
+      let objValue = json[i];
+      for (let j = 0; j < jsonKeys.length; j++) {
+        if (typeof objValue[jsonKeys[j]] == "number") {
+          objectMaxLength[j] = 10;
+        } else {
+
+          const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
+
+          objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j] : l;
+        }
+      }
+
+      let key = jsonKeys;
+      for (let j = 0; j < key.length; j++) {
+        objectMaxLength[j] =
+          objectMaxLength[j] >= key[j].length
+            ? objectMaxLength[j]
+            : key[j].length + 1; //for Flagged column
+      }
+    }
+
+    const wscols = objectMaxLength.map(w => { return { width: w} });
+
+    //row height
+    worksheet['!rows'] = [];
+    for(let i = 0 ; i < json.length + 1 ; i++) {
+       worksheet['!rows'].push({
+        hpt: 100
+       })
+    }
+
+    worksheet["!cols"] = wscols;
+  }
+
+
+
+
+
   @UseGuards(JwtAuthGuard)
   @Get(':id/excel')
   @ApiCreatedResponse({
@@ -990,11 +1086,13 @@ export class InitiativeController {
     const risks = init.risks;
 
     if (req.user == 'admin' && req.version == 'false') {
-      // to be
       const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1018,9 +1116,12 @@ export class InitiativeController {
       });
     } else if (req.user == 'admin' && req.version == 'true') {
       const { finaldata, merges } = this.prepareDataExcelVersionAdmin(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1044,9 +1145,12 @@ export class InitiativeController {
       });
     } else if (req.user == 'user' && req.version == 'false') {
       const { finaldata, merges } = this.prepareDataExcelUser(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1070,9 +1174,12 @@ export class InitiativeController {
       });
     } else if (req.user == 'user' && req.version == 'true') {
       const { finaldata, merges } = this.prepareDataExcelVersionUser(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
