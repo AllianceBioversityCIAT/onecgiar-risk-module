@@ -1003,10 +1003,12 @@ export class InitiativeController {
         if (typeof objValue[jsonKeys[j]] == "number") {
           objectMaxLength[j] = 10;
         } else {
-
           const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
-
-          objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j] : l;
+          if(l > 300) {
+            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l / 7;
+          } else {
+            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l;
+          }
         }
       }
 
