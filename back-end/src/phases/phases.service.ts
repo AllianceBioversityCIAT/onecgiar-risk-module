@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreatePhaseDto } from './dto/create-phase.dto';
 import { UpdatePhaseDto } from './dto/update-phase.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { Phase, phaseStatus } from 'entities/phase.entity';
 import { Initiative } from 'entities/initiative.entity';
 
@@ -59,5 +59,32 @@ export class PhasesService {
 
   async deactivate(id: number) {
     return await this.phaseRepository.update({ id }, { active: false, status: phaseStatus.CLOSED });
+  }
+
+  async getInitVersion(phaseId) {
+    const data = await this.phaseRepository.findOne({
+      where: {
+        id: phaseId,
+        initiatives: {
+          last_version_id: IsNull(),
+        }
+      },
+      relations: ['initiatives', 'initiatives.created_by', 'initiatives.risks']
+    });
+
+
+    //filter last version
+    const newData = new Map<string, any>()
+    data.initiatives.forEach(value => {
+      if (newData.has(value.official_code)) {
+        const v1 = +newData.get(value.official_code).id;
+        const v2 = + value.id;
+        if (v1 < v2) newData.set(value.official_code, value);
+      } else newData.set(value.official_code, value);
+    });
+
+    data.initiatives = [...newData.values()]
+
+    return data
   }
 }

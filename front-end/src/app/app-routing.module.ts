@@ -34,6 +34,8 @@ import { RiskReportOverviewComponent } from './home/risk-management/risk-report/
 import { AuthComponent } from './auth/auth.component';
 import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
 import { LicenseComponent } from './footer/license/license.component';
+import { LastSubmitionPhaseComponent } from './Admin/admin-module/phases/last-submition-phase/last-submition-phase.component';
+import { PhaseComponent } from './Admin/admin-module/phases/phase/phase.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -83,7 +85,21 @@ const routes: Routes = [
       { path: 'glossary', component: GlossaryAdminComponent },
       { path: 'faq', component: FaqAdminComponent },
       { path: 'emails', component: EmailsComponent },
-      { path: 'phases', component: PhasesComponent },
+      {
+        path: 'phases',
+        component: PhaseComponent,
+        children: [
+          {
+            path: '',
+            component: PhasesComponent
+          },
+          {
+            path: ':id',
+            component: LastSubmitionPhaseComponent
+          },
+          
+        ]
+      },
     ],
   },
 

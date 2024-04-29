@@ -1,0 +1,99 @@
+
+<!-- user-management-content -->
+
+<div class="header">
+  <mat-icon class="user-management__icon-box__icon">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="40"
+      height="30"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor"
+        d="M19 11q-.95 0-2.025-.537t-2-1.488q-.925-.95-1.462-2.025t-.538-2q0-.425.125-.775t.375-.6q.65-.65 2.638-1.138t3.737-.412q.625.05 1.038.15t.612.3q.175.175.288.537t.162.913q.125 1.725-.35 3.8t-1.15 2.75q-.25.25-.637.388T19 11Zm.875-5q.05-.45.075-.95T20 4q-.5-.025-1.012.013t-1.013.087q.275.2.537.425t.488.45q.25.25.463.5t.412.525ZM19 9q.025-.5-.375-1.238T17.575 6.4q-.625-.625-1.338-1.012T15.026 5q.05.575.425 1.3t.925 1.275q.6.6 1.313.988T19 9Zm2.3 9.7L16.6 14h-10L1.3 8.7l1.4-1.4L7.4 12h10l5.3 5.3l-1.4 1.4ZM8 22v-4q0-.825.588-1.413T10 16h4q.825 0 1.413.588T16 18v4H8Z"
+        fill="black"
+      /></svg
+  ></mat-icon>
+  <span class="user-management__icon-box__title">Submitted version by phase</span>
+</div>
+
+
+
+<div class="user-management__content--1">
+  <div class="user-management__container">
+
+    <div class="table-box mat-elevation-z8">
+      <table mat-table matSort [dataSource]="dataSource">
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+
+        <ng-container matColumnDef="INIT-ID">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-1-m">INIT-ID</span>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.official_code }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Initiative name">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-2-m">Initiative name</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="td-3-h">{{ element.name }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Version ID">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-3-m">Version ID</span>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Created date">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-4-m">Created date</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.submit_date | date }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Created by">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-5-m">Created by</span>
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.created_by.full_name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Targets not set">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-6-m">Targets not set</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ filterReqAssistance(element.risks) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-9-m">Actions</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="m">
+              <a
+                class="user-management-table-icon"
+                *ngIf="!element.active"
+                href="home/{{ element['original_init_id'] }}/{{ element['official_code'] }}/versions/{{ element['id'] }}"
+                matTooltip="View"
+              >
+              <mat-icon class="view-icon">visibility</mat-icon>
+            </a>
+            </div>
+          </td>
+        </ng-container>
+      </table>
+    </div>
+  </div>
+</div>
