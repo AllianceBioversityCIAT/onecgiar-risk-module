@@ -49,6 +49,18 @@
           </button>
         </div>
         <!-- btn-3 -->
+        <div class="risk-report-button-box">
+          <button
+            class="risk-report-button-box__btn btn--animated btn--white btn"
+            routerLink="./risk-dashboard"
+            mat-raised-button
+          >
+            Risk dashboard
+          </button>
+        </div>
+
+        <!-- btn-4 -->
+
         <div class="risk-report-button-box" [matTooltip]="toolTipMessage">
           <button
             [disabled]="
@@ -59,7 +71,7 @@
                 AllRisk?.risks?.length == 0) ||
               this.isTrue
             "
-            class="risk-report-button-box__btn btn--animated btn--white btn"
+            class="risk-report-button-box__btn--5 btn--animated btn--dark btn"
             (click)="publish(initiative.id)"
             [ngClass]="{
               disabled:
@@ -73,17 +85,6 @@
             mat-raised-button
           >
             Submit
-          </button>
-        </div>
-
-        <!-- btn-4 -->
-        <div class="risk-report-button-box">
-          <button
-            class="risk-report-button-box__btn btn--animated btn--white btn"
-            routerLink="./risk-dashboard"
-            mat-raised-button
-          >
-            Risk dashboard
           </button>
         </div>
 
