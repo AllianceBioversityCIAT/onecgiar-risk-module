@@ -27,6 +27,10 @@ export class Email {
     @Column({default: false})
     status: boolean;
 
+    @ApiProperty()
+    @Column({ nullable: true })
+    variable_id: number;
+
     
     @ApiProperty()
     @CreateDateColumn({ type: "timestamp" })

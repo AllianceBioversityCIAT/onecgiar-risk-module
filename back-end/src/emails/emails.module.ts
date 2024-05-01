@@ -11,6 +11,7 @@ import { Initiative } from 'entities/initiative.entity';
 import { Risk } from 'entities/risk.entity';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { CollectedEmail } from 'entities/collected-emails.entity';
 
 @Module({
   controllers: [EmailsController],
@@ -25,6 +26,7 @@ import { AuthModule } from 'src/auth/auth.module';
       Initiative,
       Risk,
       InitiativeRoles,
+      CollectedEmail
     ]),
     AuthModule,
   ],

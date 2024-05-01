@@ -15,10 +15,12 @@ import { InitiativeService } from 'src/initiative/initiative.service';
 import { Initiative } from 'entities/initiative.entity';
 import { Risk } from 'entities/risk.entity';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
+import { CollectedEmail } from 'entities/collected-emails.entity';
 @Injectable()
 export class EmailsService {
   constructor(
     @InjectRepository(Email) public repo: Repository<Email>,
+    @InjectRepository(CollectedEmail) public collectedEmails: Repository<CollectedEmail>,
     private variabelService: VariablesService,
     private usersService: UsersService,
     @InjectRepository(Initiative)
@@ -52,6 +54,8 @@ export class EmailsService {
       var emaillogs = await this.repo
         .createQueryBuilder('e')
         .where({ status: Boolean(status) })
+        .andWhere(`e.variable_id != ${1}`)
+        .andWhere(`e.variable_id != ${6}`)
         .getMany();
       return emaillogs;
     }
@@ -76,6 +80,71 @@ export class EmailsService {
     this.logger.log('Email Notifications Runing');
     let emails = await this.getEmailsByStatus(false);
     if (emails.length <= 200) for (let email of emails) await this.send(email);
+  }
+
+
+
+  @Cron(CronExpression.EVERY_DAY_AT_10PM, {
+    name: 'email-notifications-for-risk-changes',
+  })
+  private async sendEmailNotificationsForRiskChanges() { 
+    this.logger.log('Email Notifications For Risk Changes');
+    await this.getEmailsByVariable(1);
+
+    let emails = await this.getEmailsByStatusAndVariableId(false, 1);
+
+    if (emails.length <= 200) for (let email of emails) await this.send(email);
+  } 
+
+  async getEmailsByStatusAndVariableId(status: boolean, variableId) {
+      let emaillogs = await this.repo
+      .find({
+        where: {
+          status: status,
+          variable_id: variableId
+        }
+      });
+      return emaillogs;
+  }
+
+  async getEmailsByVariable(variableId) {
+    const content = await this.variabelService.variablesRepository.findOne({
+      where: { id: variableId },
+    });
+
+    const emails = await this.collectedEmails.find({
+      where: {
+        variable_id: variableId,
+        status: false
+      },
+      relations: ['initiative', 'risk']
+    });
+
+    let userEmail = emails.map(d => d.email);
+    userEmail = [...new Set(userEmail)];
+
+    let emailsForEachUser = [];
+    userEmail.forEach(async userEmail => {
+      emailsForEachUser = emails.filter(d => d.email == userEmail);
+
+      const newEmail = await this.repo.create({
+        name: emailsForEachUser[0].name,
+        email: emailsForEachUser[0].email,
+        subject: emailsForEachUser[0].subject,
+        emailBody: this.testTemplate(emailsForEachUser[0].name, emailsForEachUser , content.value),
+        variable_id: content.id
+      });
+
+
+      return await this.repo.save(newEmail)
+      .then(async (data) => {
+        for(let email of emails) {
+          this.collectedEmails.update(email.id, { status: true });
+        }
+      }, (error) => {
+        console.log('error => ', error)
+      });
+    });
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_10AM, {
@@ -112,6 +181,9 @@ export class EmailsService {
         }
       });
     }
+    await this.getEmailsByVariable(6);
+    let emails = await this.getEmailsByStatusAndVariableId(false, 6);
+    if (emails.length <= 200) for (let email of emails) await this.send(email);
   }
 
   async createEmail(
@@ -119,15 +191,36 @@ export class EmailsService {
     subject: string,
     email: string,
     body: string,
+    variable_id
   ) {
     const newEmail = await this.repo.create({
       name,
       email,
       subject,
       emailBody: body,
+      variable_id
     });
 
     return await this.repo.save(newEmail);
+  }
+  async createCollectedEmails(
+    name: string,
+    subject: string,
+    email: string,
+    risk: any,
+    init: any,
+    variableId: number
+  ) {
+
+    const newEmail = await this.collectedEmails.create({
+      name,
+      email,
+      subject,
+      risk_id: risk.id,
+      init_id: init.id,
+      variable_id: variableId
+    });
+    return await this.collectedEmails.save(newEmail);
   }
   async emailLogsPaginate(
     options: IPaginationOptions,
@@ -145,6 +238,66 @@ export class EmailsService {
       .getMany();
     return emaillogs;
   }
+
+  testTemplate(name, data: any[], contentLabel) {
+    let content = `<div style="height: 800px; background-color: #f7f7f7">
+    <div style="height: 150px; background-color: rgb(67, 98, 128)">
+        <img width="50" alt="CGIAR" style="margin: 30px; margin-bottom:0px" src="https://www.cgiar.org/wp/wp-content/themes/cgiar/assets/images/logo_white-9a4b0e50b1.png">
+        <h2 style="margin: 0px; height: 48px; display: inline; position: absolute;color: white;top: 46px;"><b>CGIAR</b> Risk Management</h2>
+        <div style="height: 60px; width: 70%; margin: auto; background-color: #fff; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+            <h2 style="color: rgb(67, 98, 128); letter-spacing: 2px; margin: 0 auto;text-align: center; margin-top: 15px; border-bottom: 1px solid #ebeae8; width: 70%; padding: 11px;">Notification</h2>
+        </div>
+    </div>
+    <div style="width: 70%; margin: auto; background-color: #fff; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <div style="margin-top: 50px; width: 85%; padding-bottom: 30px;">`; 
+    
+
+    content += `
+    Dear ${name}
+    <br>
+    ${contentLabel}
+
+
+
+
+    <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
+    <tr>
+      <th style="border:1px solid gray !important; border-collapse: collapse;">Risk Id</th>
+      <th style="border:1px solid gray !important; border-collapse: collapse;">Risk Name</th>
+      <th style="border:1px solid gray !important; border-collapse: collapse;">Link</th>
+
+    </tr>
+    `
+
+    for(let d of data) {
+    content += `
+    <tr>
+      <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.id}</td>
+      <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.title}</td>
+      <td style="border:1px solid gray !important; border-collapse: collapse;">
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${d.initiative.id}/${d.initiative.official_code}">${process.env.FRONTEND}/home/${d.initiative.id}/${d.initiative.official_code}</a>
+      </td>
+      </tr>
+      `
+    }
+
+    content += `
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+    `
+    
+    return content
+  }
+
+
+
 
   emailTemplate(body: string) {
     return `
@@ -185,7 +338,7 @@ export class EmailsService {
             }/request/view/${1}">${process.env.FRONTEND}/request/view/${1}</a>
         `;
     const emailBody = this.emailTemplate(body);
-    const email1 = await this.createEmail(name, subject, email, emailBody);
+    const email1 = await this.createEmail(name, subject, email, emailBody, null);
 
     return email1;
   }
@@ -263,7 +416,7 @@ export class EmailsService {
             `;
         }
       } else {
-        if (content_id == 5 || content_id == 1 || content_id == 6) {
+        if (content_id == 5 || content_id == 6) {
           // console.log('wowo risk ==> ', risk)
           body = `
           <p style="font-weight: 200">
@@ -289,7 +442,12 @@ export class EmailsService {
       }
 
       const emailBody = this.emailTemplate(body);
-      const email1 = await this.createEmail(name, subject, email, emailBody);
+      let email1;
+      if(content_id != 1 && content_id != 6) {
+        email1 = await this.createEmail(name, subject, email, emailBody, content_id);
+      } else {
+        email1 = await this.createCollectedEmails(name, subject, email, risk, init, content_id);
+      }
 
       return email1;
     } catch (error) {

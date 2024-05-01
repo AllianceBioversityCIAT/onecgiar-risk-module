@@ -17,6 +17,7 @@ import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 import { ActionArea } from './action-area';
 import { Phase } from './phase.entity';
+import { CollectedEmail } from './collected-emails.entity';
 @Entity()
 export class Initiative {
   @ApiProperty()
@@ -92,4 +93,9 @@ export class Initiative {
   @ManyToOne(() => Phase, (phase) => phase.initiatives)
   @JoinColumn({ name: 'phase_id' })
   phase: Phase;
+
+
+  @ApiProperty()
+  @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.initiative)
+  email: any;
 }
