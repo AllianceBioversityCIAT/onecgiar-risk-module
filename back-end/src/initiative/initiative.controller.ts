@@ -1005,7 +1005,7 @@ export class InitiativeController {
         } else {
           const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
           if(l > 300) {
-            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l / 7;
+            objectMaxLength[j] = 50
           } else {
             objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l;
           }
@@ -1025,10 +1025,48 @@ export class InitiativeController {
 
     //row height
     worksheet['!rows'] = [];
-    for(let i = 0 ; i < json.length + 1 ; i++) {
-       worksheet['!rows'].push({
-        hpt: 100
-       })
+    worksheet['!rows'].push({ //for header
+      hpt: 40
+     })
+     worksheet['!rows'].push({ //for header
+      hpt: 40
+     })
+    for(let i = 1 ; i <= json.length -1 ; i++) {
+      console.log(json[i])
+      if(json[i]) {
+        if(json[i]['Actions /Controls to manage risks'] && json[i].Description) {
+          if(json[i]['Actions /Controls to manage risks'].length > 300  || json[i].Description.length > 300) {
+            worksheet['!rows'].push({
+              hpt: json[i]['Actions /Controls to manage risks'].length > json[i].Description.length ?  json[i]['Actions /Controls to manage risks'].length / 3 : json[i].Description.length / 3
+             })
+          } 
+          else {
+            worksheet['!rows'].push({
+              hpt: 100
+             })
+          }
+        } else if(json[i]['Actions /Controls to manage risks'] && json[i].Description == null) {
+          if(json[i]['Actions /Controls to manage risks'].length > 300) {
+            worksheet['!rows'].push({
+              hpt: json[i]['Actions /Controls to manage risks'].length / 3
+            })
+          } else {
+            worksheet['!rows'].push({
+              hpt: 100
+             })
+          }
+        } else if(json[i].Description && json[i]['Actions /Controls to manage risks'] == null) {
+          if(json[i].Description.length > 300) {
+            worksheet['!rows'].push({
+              hpt: json[i].Description.length / 3
+            })
+          }          else {
+            worksheet['!rows'].push({
+              hpt: 100
+             })
+          }
+        }
+      }
     }
 
     worksheet["!cols"] = wscols;
