@@ -99,7 +99,10 @@ export class RiskService {
           this.emailsService.sendEmailTobyVarabel(role?.user, 1, initiative.id, created_risk);
       });
 
-    if(oldRisk.risk_owner.user_id != newRiskOwner.user_id) {
+    if(oldRisk?.risk_owner?.user_id != newRiskOwner.user_id) {
+      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, initiative.id, created_risk);
+    } 
+    else if(!oldRisk.risk_owner) { 
       this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, initiative.id, created_risk);
     }
 
