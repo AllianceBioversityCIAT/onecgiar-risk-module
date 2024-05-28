@@ -111,6 +111,30 @@
         </mat-select>
       </div>
     </div>
+
+
+    <div class="sec-4">
+      <div class="risk-management-form-field field-3">
+        <mat-label class="risk-management-form-field__label">Phase</mat-label>
+
+        <mat-select
+          (valueChange)="selectedPhase($event)"
+          formControlName="phase_id"
+          class="risk-management-form-field-box__input-3"
+          [placeholder]="'All'"
+          id="select-where"
+        >
+          <mat-option
+            *ngFor="let Phase of phases?.result"
+            [value]="Phase.id"
+          >
+            {{ Phase.name }}
+          </mat-option>
+        </mat-select>
+      </div>
+    </div>
+
+
     <!-- //My role----- -->
     <div class="sec-5">
       <div class="risk-management-form-field field-3">
