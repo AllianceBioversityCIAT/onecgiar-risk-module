@@ -252,9 +252,8 @@ export class InitiativeController {
     description: '',
     type: [getInitiative],
   })
-  getInitiative(@Query() query: any, @Req() req) {
-    console.log(query);
-    return this.iniService.iniRepository.find({
+  async getInitiative(@Query() query: any, @Req() req) {
+    const data = await this.iniService.iniRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         parent_id: IsNull(),
@@ -273,6 +272,25 @@ export class InitiativeController {
       ],
       order: { ...this.sort(query), risks: { id: 'DESC', top: 'ASC' } },
     });
+
+    const activePhase = await this.iniService.phaseService.findActivePhase();
+    if(activePhase) {
+      if(activePhase.id != query.phase_id) {
+        for(let init of data) {
+          const lastVersion = await this.iniService.iniRepository.findOne({
+            where: { parent_id: init.id, phase_id: query.phase_id },
+            order: { id: 'DESC'},
+          });
+          if(lastVersion) {
+            init['status_by_phase'] = 'submitted';
+          } else {
+            init['status_by_phase'] = 'N/A';
+          }
+        }
+      }
+    }
+
+    return data;
   }
   getTemplateAdmin(width = false) {
     return {

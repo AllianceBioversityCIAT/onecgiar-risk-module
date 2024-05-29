@@ -31,7 +31,7 @@ export class InitiativeService {
     private riskService: RiskService,
     private userService: UsersService,
     private emailsService: EmailsService,
-    private phaseService: PhasesService,
+    public phaseService: PhasesService,
   ) {}
 
   private readonly logger = new Logger(InitiativeService.name);

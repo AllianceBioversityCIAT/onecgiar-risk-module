@@ -78,7 +78,7 @@
                 <span class="h4">Status</span>
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ activePhaseSelected ? element.status == 1 ? "submitted" : "draft" : !activePhaseSelected && !element.last_version_id ? 'N/A' : 'submitted' }}
+                {{ activePhaseSelected ? element.status == 1 ? "submitted" : "draft" : element.status_by_phase  }}
               </td>
             </ng-container>
 
@@ -121,8 +121,20 @@
                   </button>
                 </div>
 
-                <div class="m" *ngIf="!activePhaseSelected">
+                <div class="m" *ngIf="!activePhaseSelected && element.status_by_phase == 'N/A'">
                   {{'N/A'}}
+                </div>
+                <div class="m" *ngIf="!activePhaseSelected && element.status_by_phase == 'submitted'">
+                  <button class="risk-management-table-icon">
+                    <mat-icon
+                      routerLink="./{{ element['id'] }}/{{
+                        element['official_code']
+                      }}/versions"
+                      class="version-icon"
+                    >
+                    view_carousel
+                    </mat-icon>
+                  </button>
                 </div>
               </td>
             </ng-container>
