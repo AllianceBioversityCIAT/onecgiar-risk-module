@@ -77,7 +77,7 @@ export class SearchInitComponent {
     this.setForm();
     this.phases = await this.phaseService.getPhases({},1,200);
     this.activePhase = this.phases.result.filter((d: any) => d.status == 'Open')
-    this.filterForm.controls['phase_id'].setValue(this.activePhase[0].id);
+    this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
     this.categories = await this.riskService.getInitiativesCategories();
   }
 
