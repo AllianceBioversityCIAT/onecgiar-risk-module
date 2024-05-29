@@ -120,14 +120,14 @@
     <div *ngIf="reload">
       <p
         class="zzz btn--animated"
-        *ngIf="latest_version?.submit_date != initiative?.last_updated_date"
+        *ngIf="latest_version?.status == false || !latest_version"
       >
         This is a draft version until it get submitted. last update at
         {{ initiative?.last_updated_date | date : "short" }}
       </p>
       <p
         class="zzz btn--animated"
-        *ngIf="latest_version?.submit_date == initiative?.last_updated_date"
+        *ngIf="latest_version?.status == true"
         style="float: right; margin: 0 !important"
       >
         This initiative risks submitted on

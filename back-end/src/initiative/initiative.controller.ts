@@ -275,16 +275,27 @@ export class InitiativeController {
 
     const activePhase = await this.iniService.phaseService.findActivePhase();
     if(activePhase) {
-      if(activePhase.id != query.phase_id) {
-        for(let init of data) {
-          const lastVersion = await this.iniService.iniRepository.findOne({
-            where: { parent_id: init.id, phase_id: query.phase_id },
-            order: { id: 'DESC'},
-          });
+      for(let init of data) {
+        const lastVersion = await this.iniService.iniRepository.findOne({
+          where: { parent_id: init.id, phase_id: query.phase_id },
+          order: { id: 'DESC'},
+        });
+        if(activePhase.id != query.phase_id) {
           if(lastVersion) {
             init['status_by_phase'] = 'submitted';
           } else {
             init['status_by_phase'] = 'N/A';
+          }
+        } else {
+          if(lastVersion) {
+            if(lastVersion.status) {
+              init['status_by_phase'] = 'submitted';
+            } else {
+              init['status_by_phase'] = 'draft';
+            }
+          }
+          if(!lastVersion) {
+            init['status_by_phase'] = 'draft';
           }
         }
       }
@@ -1356,9 +1367,10 @@ export class InitiativeController {
     description: '',
     type: getAllVersions,
   })
-  getLatestVersons(@Param('id') id: number) {
+  async getLatestVersons(@Param('id') id: number) {
+    const phase = await this.iniService.phaseService.findActivePhase();
     return this.iniService.iniRepository.findOne({
-      where: { parent_id: id },
+      where: { parent_id: id , phase_id: phase.id},
       relations: [
         'risks',
         'risks.category',
