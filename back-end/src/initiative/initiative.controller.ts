@@ -1045,7 +1045,7 @@ export class InitiativeController {
           if(l > 300) {
             objectMaxLength[j] = 50
           } else {
-            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l;
+            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l / 3;
           }
         }
       }
