@@ -1043,9 +1043,9 @@ export class InitiativeController {
         } else {
           const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
           if(l > 300) {
-            objectMaxLength[j] = 50
+            objectMaxLength[j] = 60;
           } else {
-            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l / 3;
+            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l / 5;
           }
         }
       }
