@@ -68,7 +68,7 @@
   margin-top: -6rem;
   .search {
     display: flex;
-
+    flex-wrap: wrap !important;
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -182,7 +182,7 @@
 
     .sec-4 {
       position: relative;
-      width: 10%;
+      width: 15%;
       .risk-management-form-field {
         position: relative;
         .risk-management-form-field__label {
@@ -212,7 +212,38 @@
 
     .sec-5 {
       position: relative;
-      width: 10%;
+      width: 15%;
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 2rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+          padding: 0.4rem 1rem;
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
+    }
+
+
+    .sec-5 {
+      position: relative;
+      width: 25%;
       .risk-management-form-field {
         position: relative;
         .risk-management-form-field__label {
@@ -275,6 +306,16 @@
       margin-top: 3rem;
     }
   }
+}
+
+.set-flex{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 2rem;
+  margin-top: 17px;
+
+
 }
 
 .reset-m-btn {
