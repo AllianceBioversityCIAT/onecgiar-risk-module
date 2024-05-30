@@ -253,7 +253,7 @@ export class InitiativeController {
     type: [getInitiative],
   })
   async getInitiative(@Query() query: any, @Req() req) {
-    const data = await this.iniService.iniRepository.find({
+    let data = await this.iniService.iniRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         parent_id: IsNull(),
@@ -261,7 +261,6 @@ export class InitiativeController {
         ...this.roles(query, req),
         risks: { ...this.filterCategory(query, 'For Init') },
         // risks: { category_id: query?.category ? In(query?.category) : null },
-        status: query.status,
       },
       relations: [
         'risks',
@@ -284,7 +283,7 @@ export class InitiativeController {
           if(lastVersion) {
             init['status_by_phase'] = 'submitted';
           } else {
-            init['status_by_phase'] = 'N/A';
+            init['status_by_phase'] = 'draft';
           }
         } else {
           if(lastVersion) {
@@ -298,6 +297,14 @@ export class InitiativeController {
             init['status_by_phase'] = 'draft';
           }
         }
+      }
+    }
+
+    if(query.status) {
+      if(query.status == '1') {
+        data = data.filter(d => d['status_by_phase'] == 'submitted');
+      } else {
+        data = data.filter(d => d['status_by_phase'] == 'draft');
       }
     }
 
