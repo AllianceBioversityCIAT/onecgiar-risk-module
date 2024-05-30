@@ -70,6 +70,7 @@ export class SearchInitComponent {
     this.filterForm.reset();
     this.filterForm.markAsUntouched();
     this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
+    this.selectedPhase(this.activePhase[0]?.id)
   }
   async export() {
     await this.initiativeService.getExport(this.filterForm.value);
