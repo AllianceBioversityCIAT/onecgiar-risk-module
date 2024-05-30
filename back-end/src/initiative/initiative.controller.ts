@@ -273,6 +273,8 @@ export class InitiativeController {
     });
 
     const activePhase = await this.iniService.phaseService.findActivePhase();
+    if(!query.phase_id)
+      query.phase_id = activePhase.id;
     if(activePhase) {
       for(let init of data) {
         const lastVersion = await this.iniService.iniRepository.findOne({
