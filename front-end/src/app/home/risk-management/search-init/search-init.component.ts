@@ -19,7 +19,7 @@ export class SearchInitComponent {
   ) {}
   categories: any;
   filterForm: FormGroup = new FormGroup({});
-
+  phaseSelected: any;
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
   @Output() activePhaseSelected = new EventEmitter<boolean>();
 
@@ -79,10 +79,13 @@ export class SearchInitComponent {
     this.phases = await this.phaseService.getPhases({},1,200);
     this.activePhase = this.phases.result.filter((d: any) => d.status == 'Open')
     this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
+    const phase_id = this.filterForm.get('phase_id')?.value;
+    this.phaseSelected = this.phases.result.filter((d: any) => d.id == phase_id)[0];
     this.categories = await this.riskService.getInitiativesCategories();
   }
 
   selectedPhase(phase_id: any) {
+    this.phaseSelected = this.phases.result.filter((d: any) => d.id == phase_id)[0];
     this.activePhaseSelect = this.activePhase[0].id == phase_id ? true : false;
     this.activePhaseSelected.emit(this.activePhaseSelect);
   }
