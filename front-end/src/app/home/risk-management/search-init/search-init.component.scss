@@ -484,11 +484,16 @@
     padding: 0 1rem !important;
   }
 }
+::ng-deep .phase.mat-mdc-option.mdc-list-item {
+  align-items: center;
+  width: 100% !important;
+}
 
 ::ng-deep .mat-mdc-option.mdc-list-item {
   align-items: center;
   width: 260px !important;
 }
+
 
 ::ng-deep.cdk-overlay-pane {
   position: absolute;
