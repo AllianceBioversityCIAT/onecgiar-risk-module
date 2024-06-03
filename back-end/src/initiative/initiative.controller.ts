@@ -110,7 +110,6 @@ export class InitiativeController {
           },
         };
     } else if (query?.my_ini == 'true') {
-      console.log(req.user);
       return { roles: { user_id: req.user.id } };
     } else return {};
   }
@@ -252,7 +251,7 @@ export class InitiativeController {
     description: '',
     type: [getInitiative],
   })
-  async getInitiative(@Query() query: any, @Req() req) {
+  async getInitiative(@Query() query: any, @Req() req) { 
     let data = await this.iniService.iniRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
@@ -311,7 +310,7 @@ export class InitiativeController {
     }
 
     return data;
-  }
+  } 
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
@@ -501,7 +500,6 @@ export class InitiativeController {
         base += 1;
       }
       element.mitigations.forEach((d, index) => {
-        console.log(index);
         if (index == 0) {
           template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
@@ -683,7 +681,6 @@ export class InitiativeController {
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
       });
-      // console.log(merges[0].s);
     }
 
     let base = 2;
@@ -786,7 +783,6 @@ export class InitiativeController {
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
       });
-      // console.log(merges[0].s);
     }
 
     let base = 2;
@@ -903,31 +899,100 @@ export class InitiativeController {
         official_code: this.offical(query),
         parent_id: IsNull(),
         ...this.roles(query, req),
-        status: query?.status,
         name: query?.name ? ILike(`%${query.name}%`) : null,
-        // risks: { category_id: query?.category ? In(query?.category) : null }
       },
     });
-    const risks = await this.riskService.riskRepository.find({
-      where: {
-        initiative_id: In(ininit.map((d) => d.id)),
-        redundant: false,
-        category: { ...this.filterCategory(query, 'For risk') },
-        // category: { id: query?.category ? In(query?.category) : null },
-      },
-      relations: [
-        'initiative',
-        'category',
-        'created_by',
-        'mitigations',
-        'mitigations.status',
-        'risk_owner',
-        'risk_owner.user',
-        'initiative.roles',
-        'initiative.roles.user',
-      ],
-      order: { initiative: { ...this.sort(query) } },
-    });
+
+
+    const lastVersionsByPhase = [];
+
+    const activePhase = await this.iniService.phaseService.findActivePhase();
+    if(!query.phase_id)
+      query.phase_id = activePhase.id;
+    if(activePhase) {
+      for(let init of ininit) {
+        const lastVersion = await this.iniService.iniRepository.findOne({
+          where: { parent_id: init.id, phase_id: query.phase_id },
+          order: { id: 'DESC'},
+        });
+        if(activePhase.id != query.phase_id) {
+          lastVersionsByPhase.push(lastVersion);
+          if(lastVersion) {
+            init['status_by_phase'] = 'submitted';
+          } else {
+            init['status_by_phase'] = 'draft';
+          }
+        } else {
+          if(lastVersion) {
+            if(lastVersion.status) {
+              init['status_by_phase'] = 'submitted';
+            } else {
+              init['status_by_phase'] = 'draft';
+            }
+          }
+          if(!lastVersion) {
+            init['status_by_phase'] = 'draft';
+          }
+        }
+      }
+    }
+
+
+
+
+    if(query.status) {
+      if(query.status == '1') {
+        ininit = ininit.filter(d => d['status_by_phase'] == 'submitted');
+      } else {
+        ininit = ininit.filter(d => d['status_by_phase'] == 'draft');
+      }
+    }
+
+    let risks = [];
+
+    if(activePhase.id == query.phase_id) {
+      risks = await this.riskService.riskRepository.find({
+        where: {
+          initiative_id: In(ininit.map((d) => d.id)),
+          redundant: false,
+          category: { ...this.filterCategory(query, 'For risk') },
+        },
+        relations: [
+          'initiative',
+          'category',
+          'created_by',
+          'mitigations',
+          'mitigations.status',
+          'risk_owner',
+          'risk_owner.user',
+          'initiative.roles',
+          'initiative.roles.user',
+        ],
+        order: { initiative: { ...this.sort(query) } },
+      });
+    } else {
+      const lastVersionsIdsByPhase = lastVersionsByPhase.filter(d => d).map(d => d.id);
+      risks = await this.riskService.riskRepository.find({
+        where: {
+          initiative_id: In(lastVersionsIdsByPhase),
+          redundant: false,
+          category: { ...this.filterCategory(query, 'For risk') },
+        },
+        relations: [
+          'initiative',
+          'category',
+          'created_by',
+          'mitigations',
+          'mitigations.status',
+          'risk_owner',
+          'risk_owner.user',
+          'initiative.roles',
+          'initiative.roles.user',
+        ],
+        order: { initiative: { ...this.sort(query) } },
+      });
+    }
+
     if (query.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
@@ -1070,7 +1135,6 @@ export class InitiativeController {
       hpt: 40
      })
     for(let i = 1 ; i <= json.length -1 ; i++) {
-      console.log(json[i])
       if(json[i]) {
         if(json[i]['Actions /Controls to manage risks'] && json[i].Description) {
           if(json[i]['Actions /Controls to manage risks'].length > 300  || json[i].Description.length > 300) {
