@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
+import { Phase } from 'entities/phase.entity';
 import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
 import { EmailsService } from 'src/emails/emails.service';
@@ -21,11 +22,28 @@ export class RiskService {
     private emailsService: EmailsService,
     @InjectRepository(InitiativeRoles)
     public initativeRolesRepository: Repository<InitiativeRoles>,
+    @InjectRepository(Phase)
+    public PhaseRepository: Repository<Phase>,
   ) {}
   async updateInitiativeUpdateDateToNow(initiative_id) {
     await this.initativeRepository.update(initiative_id, {
       last_updated_date: new Date(),
     });
+
+    const activePhase = await this.PhaseRepository.findOne({
+      where: {
+        active: true
+      }
+    });
+
+    const lastVersionByPhase = await this.initativeRepository.findOne({
+      where: { parent_id: initiative_id, phase_id: activePhase.id },
+      order: { id: 'DESC' },
+    });
+    if(lastVersionByPhase)
+      await this.initativeRepository.update(lastVersionByPhase?.id, {
+        status: false
+      });
   }
   async setMitigation(risk_id, mitigation: Mitigation) {
     let risk = await this.riskRepository.findOne({
@@ -51,6 +69,20 @@ export class RiskService {
   }
 
   async updateRisk(id, risk: Risk, user: User, create_version: boolean) {
+    const oldRisk = await this.riskRepository.findOne({
+      where: {
+        id : id
+      },
+      relations : ['risk_owner']
+    })
+
+    const newRiskOwner = await this.initativeRolesRepository.findOne({
+      where: {
+        id: risk.risk_owner_id
+      },
+      relations: ['user']
+    })
+
     if (user) risk['update_by_user_id'] = user.id;
     let tobeadded = { ...risk };
     if (tobeadded.mitigations) delete tobeadded.mitigations;
@@ -84,6 +116,13 @@ export class RiskService {
         )
           this.emailsService.sendEmailTobyVarabel(role?.user, 1, initiative.id, created_risk);
       });
+
+    if(oldRisk?.risk_owner?.user_id != newRiskOwner.user_id) {
+      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, initiative.id, created_risk);
+    } 
+    else if(!oldRisk.risk_owner) { 
+      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, initiative.id, created_risk);
+    }
 
     return created_risk;
   }

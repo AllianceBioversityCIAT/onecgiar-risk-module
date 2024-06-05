@@ -17,6 +17,7 @@ import { Initiative } from './initiative.entity';
 import { Mitigation } from './mitigation.entity';
 import { RiskCategory } from './risk-category.entity';
 import { User } from './user.entitiy';
+import { CollectedEmail } from './collected-emails.entity';
 
 @Entity()
 export class Risk {
@@ -149,4 +150,9 @@ export class Risk {
   @Optional()
   @Column({ default: null })
   original_risk_id: number;
+
+  @ApiProperty()
+  @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.risk)
+  email: any;
+
 }

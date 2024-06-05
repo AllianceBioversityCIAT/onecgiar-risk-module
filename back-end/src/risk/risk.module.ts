@@ -17,6 +17,8 @@ import { UsersService } from 'src/users/users.service';
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
+import { CollectedEmail } from 'entities/collected-emails.entity';
+import { Phase } from 'entities/phase.entity';
 
 @Module({
   controllers: [RiskController],
@@ -30,6 +32,8 @@ import { AuthModule } from 'src/auth/auth.module';
       Variables,
       User,
       InitiativeRoles,
+      CollectedEmail,
+      Phase
     ]),
     SharedModule,
     AuthModule,

@@ -63,22 +63,22 @@ export class RiskManagementTableComponent {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.getInitiatives();
   }
+
+  activePhaseSelected: boolean = true;
+  isActiveSelected(element: any) {
+    this.activePhaseSelected = element;
+  }
+
+  filters: any = {};
   filter(filters: any) {
+    this.filters = filters
     this.getInitiatives(filters);
   }
   async getInitiatives(filters = null) {
-    if (filters)
-      var Initiatives: any =
-        await this.initiativeService.getInitiativesWithFilters(filters);
-    else var Initiatives: any = await this.initiativeService.getInitiatives();
-
+    let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
     this.dataSource = new MatTableDataSource<any>(Initiatives);
     this.length = Initiatives.length;
-
-    // this.pageSize =  this.dataSource.meta.itemsPerPage;
-    // this.totalItems =  this.dataSource.meta.totalItems;
   }
   ngOnDestroy() {
     if (this.navigationSubscription) {
@@ -121,34 +121,10 @@ export class RiskManagementTableComponent {
     return column;
   }
 
-  // loadContent() {
-  //   this.loading = true;
-  //   const subs$: Subscription = interval(50).subscribe((res) => {
-  //     this.value = this.value + 10;
-  //     if (this.value === 120) {
-  //       subs$.unsubscribe();
-  //       this.loading = false;
-  //       this.value = 0;
-  //       console.log('Ha terminado');
-  //     }
-  //   });
-  // }
-
   user_info: any;
   loading = true;
   isadmin = false;
   async ngOnInit() {
-    // this.router.events.subscribe((e) => {
-    //   if (this.headerService.background == '#04030f') this.isadmin = true;
-    //   else this.isadmin = false;
-    //   this.user_info = this.authService.getLogedInUser();
-    // });
-    // this.loadingService.loadingSub.pipe(delay(0)).subscribe((d) => {
-    //   if (this.headerService.background == '#04030f') this.isadmin = true;
-    //   else this.isadmin = false;
-    //   this.loading = d;
-    // });
-
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       this.userRole = jwt_decode(access_token);
@@ -160,7 +136,6 @@ export class RiskManagementTableComponent {
         'Help requested'
       );
     }
-    this.getInitiatives();
-    // this.url1 = this.router.url;
+    this.getInitiatives(this.filters);
   }
 }

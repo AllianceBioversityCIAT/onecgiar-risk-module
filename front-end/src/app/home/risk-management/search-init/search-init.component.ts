@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 import { ROLES } from '../risk-report/team-members/team-members.component';
+import { PhasesService } from 'src/app/services/phases.service';
 
 @Component({
   selector: 'app-search-init',
@@ -13,12 +14,14 @@ export class SearchInitComponent {
   constructor(
     private fb: FormBuilder,
     private riskService: RiskService,
+    private phaseService: PhasesService,
     public initiativeService: InitiativesService
   ) {}
   categories: any;
   filterForm: FormGroup = new FormGroup({});
-
+  phaseSelected: any;
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
+  @Output() activePhaseSelected = new EventEmitter<boolean>();
 
   roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
@@ -33,8 +36,10 @@ export class SearchInitComponent {
     { name: 'Submitted', value: '1' },
     { name: 'Draft', value: '0' },
   ];
-
+  phases: any;
+  activePhase:any;
   myIni: boolean = false;
+  activePhaseSelect: boolean = true;
   myIniChange() {
     this.filterForm.controls['my_ini'].setValue(this.myIni);
   }
@@ -49,6 +54,7 @@ export class SearchInitComponent {
       sort: [null],
       my_ini: [false],
       status: [null],
+      phase_id: [null]
     });
     this.filterForm.valueChanges.subscribe(() => {
       console.log(this.filterForm.value);
@@ -63,12 +69,25 @@ export class SearchInitComponent {
     this.myIni = false;
     this.filterForm.reset();
     this.filterForm.markAsUntouched();
+    this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
+    this.selectedPhase(this.activePhase[0]?.id)
   }
   async export() {
     await this.initiativeService.getExport(this.filterForm.value);
   }
   async ngOnInit() {
     this.setForm();
+    this.phases = await this.phaseService.getPhases({},1,200);
+    this.activePhase = this.phases.result.filter((d: any) => d.status == 'Open')
+    this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
+    const phase_id = this.filterForm.get('phase_id')?.value;
+    this.phaseSelected = this.phases.result.filter((d: any) => d.id == phase_id)[0];
     this.categories = await this.riskService.getInitiativesCategories();
+  }
+
+  selectedPhase(phase_id: any) {
+    this.phaseSelected = this.phases.result.filter((d: any) => d.id == phase_id)[0];
+    this.activePhaseSelect = this.activePhase[0].id == phase_id ? true : false;
+    this.activePhaseSelected.emit(this.activePhaseSelect);
   }
 }

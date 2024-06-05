@@ -1381,6 +1381,15 @@ tr.example-detail-row {
   background-color: #0f212f;
 }
 
+.btn--dark {
+  background-color: #9e553e;
+  color: #ffffff;
+}
+
+.btn--dark::after {
+  background-color: #9e553e;
+}
+
 .btn--white-2 {
   background-image: linear-gradient(to right, #436280, #30455b);
   color: #ffffff;

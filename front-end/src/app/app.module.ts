@@ -84,6 +84,8 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { LicenseComponent } from './footer/license/license.component';
 import { ContactUsDialogComponent } from './footer/contact-us-dialog/contact-us-dialog.component';
 import { FaqPipePipe } from './pipes/faq-pipe.pipe';
+import { LastSubmitionPhaseComponent } from './Admin/admin-module/phases/last-submition-phase/last-submition-phase.component';
+import { PhaseComponent } from './Admin/admin-module/phases/phase/phase.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -142,6 +144,8 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     LicenseComponent,
     ContactUsDialogComponent,
     FaqPipePipe,
+    LastSubmitionPhaseComponent,
+    PhaseComponent,
   ],
   imports: [
     BrowserModule,

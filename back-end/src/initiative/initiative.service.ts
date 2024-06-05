@@ -31,7 +31,7 @@ export class InitiativeService {
     private riskService: RiskService,
     private userService: UsersService,
     private emailsService: EmailsService,
-    private phaseService: PhasesService,
+    public phaseService: PhasesService,
   ) {}
 
   private readonly logger = new Logger(InitiativeService.name);
@@ -170,7 +170,7 @@ export class InitiativeService {
       }
     let date = new Date();
     await this.iniRepository.update(old_init_id, { last_updated_date: date });
-    await this.iniRepository.update(new_init.id, { submit_date: date });
+    await this.iniRepository.update(new_init.id, { submit_date: date, status: true });
     if (old_initiative?.roles)
       old_initiative.roles.forEach((role) => {
         if (

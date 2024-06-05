@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -167,10 +167,16 @@ export class UsersController {
     const file_name = 'All-Users.xlsx';
     var wb = XLSX.utils.book_new();
 
-    const ws = XLSX.utils.json_to_sheet(result);
+    const finaldata  = this.prepareData(result);
+
+    const ws = XLSX.utils.json_to_sheet(finaldata);
+
+    this.appendStyleForXlsx(ws);
+
+    this.autofitColumnsXlsx(finaldata,ws);
 
     XLSX.utils.book_append_sheet(wb, ws, 'Users');
-    await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+    await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name), { cellStyles: true });
     const file = createReadStream(
       join(process.cwd(), 'generated_files', file_name),
     );
@@ -184,5 +190,119 @@ export class UsersController {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       disposition: `attachment; filename="${file_name}"`,
     });
+  }
+
+    getTemplate() {
+    return {
+      ID: null,
+      'First Name': null,
+      'Last Name': null,
+      Email: null,
+      Role: null,
+      'Full Name': null
+    };
+  }
+
+  mapTemplate(template, element) {
+    template.ID = element.id;
+    template['First Name'] = element.first_name;
+    template['Last Name'] = element.last_name;
+    template.Email = element.email;
+    template.Role = element.role;
+    template['Full Name'] = element.full_name;
+
+  }
+
+
+  prepareData(users) {
+    let finaldata = [this.getTemplate()];
+
+    users.forEach((element) => {
+      const template = this.getTemplate();
+      this.mapTemplate(template, element);
+      finaldata.push(template);
+    });
+
+    finaldata = finaldata.filter(d => d.ID != null);
+    
+    return finaldata;
+  }
+
+
+  appendStyleForXlsx(ws: XLSX.WorkSheet) {
+    const range = XLSX.utils.decode_range(ws["!ref"] ?? "");
+    const rowCount = range.e.r;
+    const columnCount = range.e.c;
+
+    for (let row = 0; row <= rowCount; row++) {
+      for (let col = 0; col <= columnCount; col++) {
+        const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+        // Add center alignment to every cell
+        
+        ws[cellRef].s = {
+          alignment: {
+            horizontal: 'center',
+            vertical: 'center',
+            wrapText: true,
+          },
+        };
+
+
+        if (row === 0) {
+          // Format headers and names
+          ws[cellRef].s = {
+            ...ws[cellRef].s,
+            fill: { fgColor: { rgb: '436280' } },
+            font: { color: { rgb: 'ffffff' } ,  bold: true },
+            alignment: {
+              horizontal: 'center',
+              vertical: 'center',
+              wrapText: true,
+            },
+          };
+        }
+      }
+    }
+  }
+
+
+  autofitColumnsXlsx(json: any[], worksheet: XLSX.WorkSheet, header?: string[]) {
+
+    const jsonKeys = header ? header : Object.keys(json[0]);
+
+    let objectMaxLength = []; 
+    for (let i = 0; i < json.length; i++) {
+      let objValue = json[i];
+      for (let j = 0; j < jsonKeys.length; j++) {
+        if (typeof objValue[jsonKeys[j]] == "number") {
+          objectMaxLength[j] = 10;
+        } else {
+
+          const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
+
+          objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j] : l + 5;
+        }
+      }
+
+      let key = jsonKeys;
+      for (let j = 0; j < key.length; j++) {
+        objectMaxLength[j] =
+          objectMaxLength[j] >= key[j].length
+            ? objectMaxLength[j]
+            : key[j].length + 1;
+      }
+    }
+
+    const wscols = objectMaxLength.map(w => { return { width: w} });
+
+    //row height
+    worksheet['!rows'] = [];
+    for(let i = 0 ; i < json.length + 1; i++) {
+       worksheet['!rows'].push({
+        hpt: 100
+       })
+    }
+
+    worksheet["!cols"] = wscols;
   }
 }

@@ -24,7 +24,9 @@ import {
 import { InitiativeRoles } from 'entities/initiative-roles.entity';
 import { Initiative } from 'entities/initiative.entity';
 import { InitiativeService } from './initiative.service';
-import * as XLSX from 'xlsx';
+// import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
+
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { RiskService } from 'src/risk/risk.service';
@@ -108,7 +110,6 @@ export class InitiativeController {
           },
         };
     } else if (query?.my_ini == 'true') {
-      console.log(req.user);
       return { roles: { user_id: req.user.id } };
     } else return {};
   }
@@ -250,9 +251,8 @@ export class InitiativeController {
     description: '',
     type: [getInitiative],
   })
-  getInitiative(@Query() query: any, @Req() req) {
-    console.log(query);
-    return this.iniService.iniRepository.find({
+  async getInitiative(@Query() query: any, @Req() req) { 
+    let data = await this.iniService.iniRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         parent_id: IsNull(),
@@ -260,7 +260,6 @@ export class InitiativeController {
         ...this.roles(query, req),
         risks: { ...this.filterCategory(query, 'For Init') },
         // risks: { category_id: query?.category ? In(query?.category) : null },
-        status: query.status,
       },
       relations: [
         'risks',
@@ -271,7 +270,47 @@ export class InitiativeController {
       ],
       order: { ...this.sort(query), risks: { id: 'DESC', top: 'ASC' } },
     });
-  }
+
+    const activePhase = await this.iniService.phaseService.findActivePhase();
+    if(!query.phase_id)
+      query.phase_id = activePhase.id;
+    if(activePhase) {
+      for(let init of data) {
+        const lastVersion = await this.iniService.iniRepository.findOne({
+          where: { parent_id: init.id, phase_id: query.phase_id },
+          order: { id: 'DESC'},
+        });
+        if(activePhase.id != query.phase_id) {
+          if(lastVersion) {
+            init['status_by_phase'] = 'submitted';
+          } else {
+            init['status_by_phase'] = 'draft';
+          }
+        } else {
+          if(lastVersion) {
+            if(lastVersion.status) {
+              init['status_by_phase'] = 'submitted';
+            } else {
+              init['status_by_phase'] = 'draft';
+            }
+          }
+          if(!lastVersion) {
+            init['status_by_phase'] = 'draft';
+          }
+        }
+      }
+    }
+
+    if(query.status) {
+      if(query.status == '1') {
+        data = data.filter(d => d['status_by_phase'] == 'submitted');
+      } else {
+        data = data.filter(d => d['status_by_phase'] == 'draft');
+      }
+    }
+
+    return data;
+  } 
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
@@ -322,7 +361,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Flagged'] = element.flag;
+    template['Flagged'] = element.flag == true ? 'True' : 'False';
     template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
@@ -392,10 +431,10 @@ export class InitiativeController {
       'Created by': null,
       Flagged: null,
       'Due date': null,
+      'Targets not set': null,
       // Redundant: false,
       'Actions /Controls to manage risks': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
-      'Targets not set': null,
     };
   }
 
@@ -424,7 +463,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Flagged'] = element.flag;
+    template['Flagged'] = element.flag == true ? 'True' : 'False';
     template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
@@ -434,7 +473,7 @@ export class InitiativeController {
     let merges = [
       {
         s: { c: 16, r: 0 },
-        e: { c: 15, r: 0 },
+        e: { c: 17, r: 0 },
       },
     ];
     for (let index = 0; index < 16; index++) {
@@ -449,7 +488,7 @@ export class InitiativeController {
       const template = this.getTemplateAllDataAdmin();
       this.mapTemplateAllDataAdmin(template, element);
       if (element.mitigations.length) {
-        for (let index = 0; index < 16; index++) {
+        for (let index = 0; index < 15; index++) {
           merges.push({
             s: { c: index, r: base },
             e: { c: index, r: base + element.mitigations.length - 1 },
@@ -461,7 +500,6 @@ export class InitiativeController {
         base += 1;
       }
       element.mitigations.forEach((d, index) => {
-        console.log(index);
         if (index == 0) {
           template['Actions /Controls to manage risks'] = d.description;
           template.mitigations_status = d.status.title;
@@ -526,7 +564,7 @@ export class InitiativeController {
       element.due_date === null
         ? 'null'
         : new Date(element.due_date).toLocaleDateString();
-    template['Flagged'] = element.flag;
+    template['Flagged'] = element.flag == true ? 'True' : 'False';
     template['Targets not set'] =
       element.request_assistance == true ? 'Yes' : 'No';
   }
@@ -643,7 +681,6 @@ export class InitiativeController {
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
       });
-      // console.log(merges[0].s);
     }
 
     let base = 2;
@@ -746,7 +783,6 @@ export class InitiativeController {
         s: { c: index, r: 0 },
         e: { c: index, r: 1 },
       });
-      // console.log(merges[0].s);
     }
 
     let base = 2;
@@ -863,31 +899,100 @@ export class InitiativeController {
         official_code: this.offical(query),
         parent_id: IsNull(),
         ...this.roles(query, req),
-        status: query?.status,
         name: query?.name ? ILike(`%${query.name}%`) : null,
-        // risks: { category_id: query?.category ? In(query?.category) : null }
       },
     });
-    const risks = await this.riskService.riskRepository.find({
-      where: {
-        initiative_id: In(ininit.map((d) => d.id)),
-        redundant: false,
-        category: { ...this.filterCategory(query, 'For risk') },
-        // category: { id: query?.category ? In(query?.category) : null },
-      },
-      relations: [
-        'initiative',
-        'category',
-        'created_by',
-        'mitigations',
-        'mitigations.status',
-        'risk_owner',
-        'risk_owner.user',
-        'initiative.roles',
-        'initiative.roles.user',
-      ],
-      order: { initiative: { ...this.sort(query) } },
-    });
+
+
+    const lastVersionsByPhase = [];
+
+    const activePhase = await this.iniService.phaseService.findActivePhase();
+    if(!query.phase_id)
+      query.phase_id = activePhase.id;
+    if(activePhase) {
+      for(let init of ininit) {
+        const lastVersion = await this.iniService.iniRepository.findOne({
+          where: { parent_id: init.id, phase_id: query.phase_id },
+          order: { id: 'DESC'},
+        });
+        if(activePhase.id != query.phase_id) {
+          lastVersionsByPhase.push(lastVersion);
+          if(lastVersion) {
+            init['status_by_phase'] = 'submitted';
+          } else {
+            init['status_by_phase'] = 'draft';
+          }
+        } else {
+          if(lastVersion) {
+            if(lastVersion.status) {
+              init['status_by_phase'] = 'submitted';
+            } else {
+              init['status_by_phase'] = 'draft';
+            }
+          }
+          if(!lastVersion) {
+            init['status_by_phase'] = 'draft';
+          }
+        }
+      }
+    }
+
+
+
+
+    if(query.status) {
+      if(query.status == '1') {
+        ininit = ininit.filter(d => d['status_by_phase'] == 'submitted');
+      } else {
+        ininit = ininit.filter(d => d['status_by_phase'] == 'draft');
+      }
+    }
+
+    let risks = [];
+
+    if(activePhase.id == query.phase_id) {
+      risks = await this.riskService.riskRepository.find({
+        where: {
+          initiative_id: In(ininit.map((d) => d.id)),
+          redundant: false,
+          category: { ...this.filterCategory(query, 'For risk') },
+        },
+        relations: [
+          'initiative',
+          'category',
+          'created_by',
+          'mitigations',
+          'mitigations.status',
+          'risk_owner',
+          'risk_owner.user',
+          'initiative.roles',
+          'initiative.roles.user',
+        ],
+        order: { initiative: { ...this.sort(query) } },
+      });
+    } else {
+      const lastVersionsIdsByPhase = lastVersionsByPhase.filter(d => d).map(d => d.id);
+      risks = await this.riskService.riskRepository.find({
+        where: {
+          initiative_id: In(lastVersionsIdsByPhase),
+          redundant: false,
+          category: { ...this.filterCategory(query, 'For risk') },
+        },
+        relations: [
+          'initiative',
+          'category',
+          'created_by',
+          'mitigations',
+          'mitigations.status',
+          'risk_owner',
+          'risk_owner.user',
+          'initiative.roles',
+          'initiative.roles.user',
+        ],
+        order: { initiative: { ...this.sort(query) } },
+      });
+    }
+
     if (query.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
@@ -895,10 +1000,16 @@ export class InitiativeController {
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
+
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
       await XLSX.writeFile(
         wb,
         join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
       );
       const file = createReadStream(
         join(process.cwd(), 'generated_files', file_name),
@@ -920,10 +1031,15 @@ export class InitiativeController {
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
+
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
       await XLSX.writeFile(
         wb,
         join(process.cwd(), 'generated_files', file_name),
+        { cellStyles: true },
       );
       const file = createReadStream(
         join(process.cwd(), 'generated_files', file_name),
@@ -940,6 +1056,128 @@ export class InitiativeController {
       });
     }
   }
+
+  appendStyleForXlsx(ws: XLSX.WorkSheet) {
+
+    const range = XLSX.utils.decode_range(ws["!ref"] ?? "");
+    const rowCount = range.e.r;
+    const columnCount = range.e.c;
+
+    for (let row = 0; row <= rowCount; row++) {
+      for (let col = 0; col <= columnCount; col++) {
+        const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+        // Add center alignment to every cell
+        
+        ws[cellRef].s = {
+          alignment: {
+            horizontal: 'center',
+            vertical: 'center',
+            wrapText: true,
+          },
+        };
+
+
+        if (row === 0 || row === 1) {
+          // Format headers and names
+          ws[cellRef].s = {
+            ...ws[cellRef].s,
+            fill: { fgColor: { rgb: '436280' } },
+            font: { color: { rgb: 'ffffff' } ,  bold: true },
+            alignment: {
+              horizontal: 'center',
+              vertical: 'center',
+              wrapText: true,
+            },
+          };
+        }
+      }
+    }
+  }
+
+  //#3
+  autofitColumnsXlsx(json: any[], worksheet: XLSX.WorkSheet, header?: string[]) {
+
+    const jsonKeys = header ? header : Object.keys(json[0]);
+
+    let objectMaxLength = []; 
+    for (let i = 0; i < json.length; i++) {
+      let objValue = json[i];
+      for (let j = 0; j < jsonKeys.length; j++) {
+        if (typeof objValue[jsonKeys[j]] == "number") {
+          objectMaxLength[j] = 10;
+        } else {
+          const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
+          if(l > 300) {
+            objectMaxLength[j] = 70;
+          } else {
+            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l / 3;
+          }
+        }
+      }
+
+      let key = jsonKeys;
+      for (let j = 0; j < key.length; j++) {
+        objectMaxLength[j] =
+          objectMaxLength[j] >= key[j].length
+            ? objectMaxLength[j]
+            : key[j].length + 1; //for Flagged column
+      }
+    }
+
+    const wscols = objectMaxLength.map(w => { return { width: w} });
+
+    //row height
+    worksheet['!rows'] = [];
+    worksheet['!rows'].push({ //for header
+      hpt: 40
+     })
+     worksheet['!rows'].push({ //for header
+      hpt: 40
+     })
+    for(let i = 1 ; i <= json.length -1 ; i++) {
+      if(json[i]) {
+        if(json[i]['Actions /Controls to manage risks'] && json[i].Description) {
+          if(json[i]['Actions /Controls to manage risks'].length > 300  || json[i].Description.length > 300) {
+            worksheet['!rows'].push({
+              hpt: json[i]['Actions /Controls to manage risks'].length > json[i].Description.length ?  json[i]['Actions /Controls to manage risks'].length / 3 : json[i].Description.length / 3
+             })
+          } 
+          else {
+            worksheet['!rows'].push({
+              hpt: 100
+             })
+          }
+        } else if(json[i]['Actions /Controls to manage risks'] && json[i].Description == null) {
+          if(json[i]['Actions /Controls to manage risks'].length > 300) {
+            worksheet['!rows'].push({
+              hpt: json[i]['Actions /Controls to manage risks'].length / 3
+            })
+          } else {
+            worksheet['!rows'].push({
+              hpt: 100
+             })
+          }
+        } else if(json[i].Description && json[i]['Actions /Controls to manage risks'] == null) {
+          if(json[i].Description.length > 300) {
+            worksheet['!rows'].push({
+              hpt: json[i].Description.length / 3
+            })
+          }          else {
+            worksheet['!rows'].push({
+              hpt: 100
+             })
+          }
+        }
+      }
+    }
+
+    worksheet["!cols"] = wscols;
+  }
+
+
+
+
+
   @UseGuards(JwtAuthGuard)
   @Get(':id/excel')
   @ApiCreatedResponse({
@@ -990,11 +1228,13 @@ export class InitiativeController {
     const risks = init.risks;
 
     if (req.user == 'admin' && req.version == 'false') {
-      // to be
       const { finaldata, merges } = this.prepareDataExcelAdmin(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1018,9 +1258,12 @@ export class InitiativeController {
       });
     } else if (req.user == 'admin' && req.version == 'true') {
       const { finaldata, merges } = this.prepareDataExcelVersionAdmin(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1044,9 +1287,12 @@ export class InitiativeController {
       });
     } else if (req.user == 'user' && req.version == 'false') {
       const { finaldata, merges } = this.prepareDataExcelUser(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1070,9 +1316,12 @@ export class InitiativeController {
       });
     } else if (req.user == 'user' && req.version == 'true') {
       const { finaldata, merges } = this.prepareDataExcelVersionUser(risks);
-      // console.log({ finaldata, merges });
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
+
+      this.appendStyleForXlsx(ws);
+
+      this.autofitColumnsXlsx(finaldata,ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1191,9 +1440,10 @@ export class InitiativeController {
     description: '',
     type: getAllVersions,
   })
-  getLatestVersons(@Param('id') id: number) {
+  async getLatestVersons(@Param('id') id: number) {
+    const phase = await this.iniService.phaseService.findActivePhase();
     return this.iniService.iniRepository.findOne({
-      where: { parent_id: id },
+      where: { parent_id: id , phase_id: phase.id},
       relations: [
         'risks',
         'risks.category',

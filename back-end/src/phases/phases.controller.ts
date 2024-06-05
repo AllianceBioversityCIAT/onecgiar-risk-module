@@ -92,5 +92,10 @@ export class PhasesController {
   remove(@Param('id') id: string) {
     return this.phasesService.remove(+id);
   }
-
+  @UseGuards(JwtAuthGuard, AdminRolesGuard)
+  @Roles()
+  @Get('lastsubmitionversion/:id')
+  getLastSubmitionVersionByPhase(@Param('id') id: string) {
+    return this.phasesService.getInitVersion(id);
+  }
 }

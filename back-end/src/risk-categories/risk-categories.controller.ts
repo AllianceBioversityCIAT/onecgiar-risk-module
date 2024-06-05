@@ -12,7 +12,8 @@ import { Role } from 'src/auth/role.enum';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { ILike, Repository } from 'typeorm';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
+
 @ApiBearerAuth()
 @ApiTags('Risk Categories')
 @Controller('risk-categories')
@@ -139,15 +140,27 @@ export class RiskCategoriesController {
     type: [createRiskCategoryRes],
   })
   async export() {
-    let categories = await this.riskcatRepository.find();
+    let categories = await this.riskcatRepository.find({
+      relations: ['category_group']
+    });
 
     const file_name = 'All-Users.xlsx';
     var wb = XLSX.utils.book_new();
 
-    const ws = XLSX.utils.json_to_sheet(categories);
+    const finaldata  = this.prepareData(categories);
+
+    const ws = XLSX.utils.json_to_sheet(finaldata);
+
+    this.appendStyleForXlsx(ws);
+
+    this.autofitColumnsXlsx(finaldata,ws);
 
     XLSX.utils.book_append_sheet(wb, ws, 'Users');
-    await XLSX.writeFile(wb, join(process.cwd(), 'generated_files', file_name));
+    await XLSX.writeFile(
+      wb,
+      join(process.cwd(), 'generated_files', file_name),
+      { cellStyles: true },
+    );
     const file = createReadStream(
       join(process.cwd(), 'generated_files', file_name),
     );
@@ -162,4 +175,112 @@ export class RiskCategoriesController {
       disposition: `attachment; filename="${file_name}"`,
     });
   }
+
+  getTemplate() {
+    return {
+      ID: null,
+      Category: null,
+      'Category group': null,
+      Description: null
+    };
+  }
+
+  mapTemplate(template, element) {
+    template.ID = element.id;
+    template.Category = element.title;
+    template['Category group'] = element.category_group.name;
+    template.Description = element.description
+  }
+
+  prepareData(categories) {
+    let finaldata = [this.getTemplate()];
+
+    categories.forEach((element) => {
+      const template = this.getTemplate();
+      this.mapTemplate(template, element);
+      finaldata.push(template);
+    });
+
+    finaldata = finaldata.filter(d => d.ID != null);
+    
+    return finaldata;
+  }
+
+  appendStyleForXlsx(ws: XLSX.WorkSheet) {
+    const range = XLSX.utils.decode_range(ws["!ref"] ?? "");
+    const rowCount = range.e.r;
+    const columnCount = range.e.c;
+
+    for (let row = 0; row <= rowCount; row++) {
+      for (let col = 0; col <= columnCount; col++) {
+        const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
+        // Add center alignment to every cell
+        
+        ws[cellRef].s = {
+          alignment: {
+            horizontal: 'center',
+            vertical: 'center',
+            wrapText: true,
+          },
+        };
+
+
+        if (row === 0) {
+          // Format headers and names
+          ws[cellRef].s = {
+            ...ws[cellRef].s,
+            fill: { fgColor: { rgb: '436280' } },
+            font: { color: { rgb: 'ffffff' } ,  bold: true },
+            alignment: {
+              horizontal: 'center',
+              vertical: 'center',
+              wrapText: true,
+            },
+          };
+        }
+      }
+    }
+  }
+
+
+  autofitColumnsXlsx(json: any[], worksheet: XLSX.WorkSheet, header?: string[]) {
+
+    const jsonKeys = header ? header : Object.keys(json[0]);
+
+    let objectMaxLength = []; 
+    for (let i = 0; i < json.length; i++) {
+      let objValue = json[i];
+      for (let j = 0; j < jsonKeys.length; j++) {
+        if (typeof objValue[jsonKeys[j]] == "number") {
+          objectMaxLength[j] = 10;
+        } else {
+
+          const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
+
+          objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j] : l;
+        }
+      }
+
+      let key = jsonKeys;
+      for (let j = 0; j < key.length; j++) {
+        objectMaxLength[j] =
+          objectMaxLength[j] >= key[j].length
+            ? objectMaxLength[j]
+            : key[j].length + 1; //for Flagged column
+      }
+    }
+
+    const wscols = objectMaxLength.map(w => { return { width: w} });
+
+    //row height
+    worksheet['!rows'] = [];
+    for(let i = 0 ; i < json.length + 1; i++) {
+       worksheet['!rows'].push({
+        hpt: 100
+       })
+    }
+
+    worksheet["!cols"] = wscols;
+  }
+
 }

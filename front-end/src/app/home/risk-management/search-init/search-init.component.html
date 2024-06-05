@@ -111,8 +111,34 @@
         </mat-select>
       </div>
     </div>
-    <!-- //My role----- -->
+
+
     <div class="sec-5">
+      <div class="risk-management-form-field field-3">
+        <mat-label class="risk-management-form-field__label">Phase</mat-label>
+
+        <mat-select
+          (valueChange)="selectedPhase($event)"
+          formControlName="phase_id"
+          class="risk-management-form-field-box__input-3"
+          [placeholder]="'All'"
+          id="select-where"
+        >
+          <mat-option
+          class="phase"
+            *ngFor="let Phase of phases?.result"
+            [value]="Phase.id"
+          >
+            {{ Phase.name }}
+          </mat-option>
+        </mat-select>
+      </div>
+    </div>
+
+
+    <!-- //My role----- -->
+    <!-- <div class="set-flex"> -->
+    <div class="sec-4">
       <div class="risk-management-form-field field-3">
         <mat-label class="risk-management-form-field__label">My role</mat-label>
 
@@ -131,7 +157,7 @@
       </div>
     </div>
     <!-- //Sort----- -->
-    <div class="sec-6">
+    <!-- <div class="sec-6">
       <div class="risk-management-form-field field-3">
         <mat-label class="risk-management-form-field__label">Sort</mat-label>
 
@@ -148,25 +174,23 @@
           </mat-option>
         </mat-select>
       </div>
-    </div>
+    </div> -->
     <!-- //Reset Button----- -->
-    <div class="sec-7">
-      <button
-        class="risk-management-reset-btn"
-        mat-raised-button
-        (click)="resetForm()"
-      >
-        Reset
-      </button>
-    </div>
+
+    <!-- </div> -->
   </form>
 </div>
+
+
+
+
+
 
 <!-- step-3 -->
 
 <!-- start change about reisk-management btn-export-to-excel -->
-<div class="risk-management-export">
-  <div class="risk-management-export-box">
+<div class="footer-sec">
+  <div class="content-1">
     <!-- <form class="risk-management-export-box"> -->
     <div>
       <mat-label class="initiatives-text-checkbox">My initiatives</mat-label>
@@ -178,6 +202,15 @@
       </mat-checkbox>
     </div>
     <!-- //Reset Button----- -->
+    <div class="sec-7">
+      <button
+        class="risk-management-reset-btn"
+        mat-raised-button
+        (click)="resetForm()"
+      >
+        Reset
+      </button>
+    </div>
     <div>
       <button
         class="risk-management-export-btn"
@@ -203,6 +236,9 @@
       </button>
     </div>
     <!-- </form> -->
+  </div>
+  <div class="content-2">
+    <span>Selected Phase:  </span> <span>{{phaseSelected?.name}}</span>
   </div>
 </div>
 
