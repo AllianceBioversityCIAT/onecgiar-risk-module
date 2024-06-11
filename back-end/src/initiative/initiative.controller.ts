@@ -314,8 +314,8 @@ export class InitiativeController {
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -339,10 +339,10 @@ export class InitiativeController {
 
   mapTemplateAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -415,8 +415,8 @@ export class InitiativeController {
   getTemplateAllDataAdmin(width = false) {
     return {
       // 'top': null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -441,10 +441,10 @@ export class InitiativeController {
   mapTemplateAllDataAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
 
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -517,8 +517,8 @@ export class InitiativeController {
   getTemplateVersionAdmin(width = false) {
     return {
       top: null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -542,10 +542,10 @@ export class InitiativeController {
 
   mapTemplateVersionAdmin(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -617,8 +617,8 @@ export class InitiativeController {
 
   getTemplateUser(width = false) {
     return {
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -641,10 +641,10 @@ export class InitiativeController {
   }
 
   mapTemplateUser(template, element) {
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -718,8 +718,8 @@ export class InitiativeController {
   getTemplateVersionUser(width = false) {
     return {
       top: null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -743,10 +743,10 @@ export class InitiativeController {
 
   mapTemplateVersionUser(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -996,7 +996,7 @@ export class InitiativeController {
     if (query.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
-      const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks);
+      const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks); 
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
@@ -1120,7 +1120,7 @@ export class InitiativeController {
         objectMaxLength[j] =
           objectMaxLength[j] >= key[j].length
             ? objectMaxLength[j]
-            : key[j].length + 1; //for Flagged column
+            : key[j].length + 10; //for Flagged column
       }
     }
 
