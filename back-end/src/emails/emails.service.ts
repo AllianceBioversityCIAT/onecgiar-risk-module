@@ -82,6 +82,13 @@ export class EmailsService {
     if (emails.length <= 200) for (let email of emails) await this.send(email);
   }
 
+  @Cron(CronExpression.EVERY_30_SECONDS, {
+    name: 'email-notifications-announcement',
+  })
+  private async sendEmailNotificationsForAnnouncement() {
+    let emails = await this.getEmailsByStatusAndVariableId(false, null);
+    if (emails.length <= 200) for (let email of emails) await this.send(email);
+  }
 
 
   @Cron(CronExpression.EVERY_DAY_AT_10PM, {
