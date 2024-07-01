@@ -75,7 +75,11 @@ export class InitiativeController {
     private dataSource: DataSource,
     private userService: UsersService,
   ) {}
-
+  @Get('import')
+  async import() {
+    await this.iniService.syncFromClarisa();
+    return 'Initiatives imported successfully';
+  }
   offical(query) {
     if (query.initiative_id != null) {
       if (query.initiative_id.charAt(0) == '0') {
