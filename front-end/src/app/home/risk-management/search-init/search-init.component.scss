@@ -19,7 +19,7 @@
     border-radius: 100px;
     width: 99%;
     transition: all 0.2s;
-    margin-right: -3.25rem;
+    // margin-right: -3.25rem;
 
     &:focus {
       outline: none;
@@ -240,7 +240,6 @@
       }
     }
 
-
     .sec-5 {
       position: relative;
       width: 25%;
@@ -308,14 +307,12 @@
   }
 }
 
-.set-flex{
+.set-flex {
   display: flex;
   align-items: center;
   width: 100%;
   gap: 2rem;
   margin-top: 17px;
-
-
 }
 
 .reset-m-btn {
@@ -514,7 +511,6 @@
   align-items: center;
   width: 260px !important;
 }
-
 
 ::ng-deep.cdk-overlay-pane {
   position: absolute;
