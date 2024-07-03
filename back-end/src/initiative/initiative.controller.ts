@@ -148,7 +148,7 @@ export class InitiativeController {
       const sorts = query.sort.split(',');
       obj[sorts[0]] = sorts[1];
       return obj;
-    } else return top ? { top: 'ASC', id: 'ASC' } : { id: 'ASC' };
+    } else return top ? { top: 'ASC', id: 'ASC' } : { official_code: 'ASC' };
   }
   @UseGuards(JwtAuthGuard)
   @Get('import-file')
@@ -282,7 +282,7 @@ export class InitiativeController {
       for(let init of data) {
         const lastVersion = await this.iniService.iniRepository.findOne({
           where: { parent_id: init.id, phase_id: query.phase_id },
-          order: { id: 'DESC'},
+          order: { official_code: 'ASC'},
         });
         if(activePhase.id != query.phase_id) {
           if(lastVersion) {
