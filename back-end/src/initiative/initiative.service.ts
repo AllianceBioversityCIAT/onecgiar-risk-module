@@ -300,7 +300,7 @@ export class InitiativeService {
     try {
       const clarisa_initiatives = await firstValueFrom(
         this.http
-          .get(`${process.env.CLARISA_URL}/api/allInitiatives`, {
+          .get(`${process.env.CLARISA_URL}/api/initiatives`, {
             auth: this.clarisa_auth(),
           })
           .pipe(map((d) => d.data)),

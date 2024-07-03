@@ -75,7 +75,11 @@ export class InitiativeController {
     private dataSource: DataSource,
     private userService: UsersService,
   ) {}
-
+  @Get('import')
+  async import() {
+    await this.iniService.syncFromClarisa();
+    return 'Initiatives imported successfully';
+  }
   offical(query) {
     if (query.initiative_id != null) {
       if (query.initiative_id.charAt(0) == '0') {
@@ -144,7 +148,7 @@ export class InitiativeController {
       const sorts = query.sort.split(',');
       obj[sorts[0]] = sorts[1];
       return obj;
-    } else return top ? { top: 'ASC', id: 'ASC' } : { id: 'ASC' };
+    } else return top ? { top: 'ASC', id: 'ASC' } : { official_code: 'ASC' };
   }
   @UseGuards(JwtAuthGuard)
   @Get('import-file')
@@ -278,7 +282,7 @@ export class InitiativeController {
       for(let init of data) {
         const lastVersion = await this.iniService.iniRepository.findOne({
           where: { parent_id: init.id, phase_id: query.phase_id },
-          order: { id: 'DESC'},
+          order: { official_code: 'ASC'},
         });
         if(activePhase.id != query.phase_id) {
           if(lastVersion) {
@@ -314,8 +318,8 @@ export class InitiativeController {
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -339,10 +343,10 @@ export class InitiativeController {
 
   mapTemplateAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -415,8 +419,8 @@ export class InitiativeController {
   getTemplateAllDataAdmin(width = false) {
     return {
       // 'top': null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -441,10 +445,10 @@ export class InitiativeController {
   mapTemplateAllDataAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
 
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -517,8 +521,8 @@ export class InitiativeController {
   getTemplateVersionAdmin(width = false) {
     return {
       top: null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -542,10 +546,10 @@ export class InitiativeController {
 
   mapTemplateVersionAdmin(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -617,8 +621,8 @@ export class InitiativeController {
 
   getTemplateUser(width = false) {
     return {
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -641,10 +645,10 @@ export class InitiativeController {
   }
 
   mapTemplateUser(template, element) {
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -718,8 +722,8 @@ export class InitiativeController {
   getTemplateVersionUser(width = false) {
     return {
       top: null,
+      'Risk id': null,
       ID: null,
-      Initiative: null,
       Title: null,
       Description: null,
       'Risk owner': null,
@@ -743,10 +747,10 @@ export class InitiativeController {
 
   mapTemplateVersionUser(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template.ID =
+    template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.Initiative = element.initiative.official_code;
+    template.ID = element.initiative.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -996,7 +1000,7 @@ export class InitiativeController {
     if (query.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
-      const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks);
+      const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks); 
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
@@ -1120,7 +1124,7 @@ export class InitiativeController {
         objectMaxLength[j] =
           objectMaxLength[j] >= key[j].length
             ? objectMaxLength[j]
-            : key[j].length + 1; //for Flagged column
+            : key[j].length + 10; //for Flagged column
       }
     }
 
