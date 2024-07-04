@@ -86,7 +86,7 @@ export class EmailsService {
     name: 'email-notifications-announcement',
   })
   private async sendEmailNotificationsForAnnouncement() {
-    let emails = await this.getEmailsByStatusAndVariableId(false, null);
+    let emails = await this.getAnnouncementEmails();
     if (emails.length <= 200) for (let email of emails) await this.send(email);
   }
 
@@ -103,6 +103,16 @@ export class EmailsService {
     if (emails.length <= 200) for (let email of emails) await this.send(email);
   } 
 
+  async getAnnouncementEmails() {
+    let emaillogs = await this.repo
+    .find({
+      where: {
+        status: false,
+        variable_id: IsNull()
+      }
+    });
+    return emaillogs;
+}
   async getEmailsByStatusAndVariableId(status: boolean, variableId) {
       let emaillogs = await this.repo
       .find({
