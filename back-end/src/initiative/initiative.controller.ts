@@ -1222,7 +1222,7 @@ export class InitiativeController {
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { ...this.sort(req, req.version == 'true') } },
+      order: { risks: { ...this.sort(req, true) } },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 
