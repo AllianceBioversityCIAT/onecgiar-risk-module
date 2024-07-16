@@ -260,7 +260,14 @@ export class InitiativeController {
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         parent_id: IsNull(),
-        official_code: this.offical(query),
+        official_code: query.initiative_id ? In([
+                  `INIT-0${query.initiative_id}`,
+                  `INIT-${query.initiative_id}`,
+                  `PLAT-${query.initiative_id}`,
+                  `PLAT-0${query.initiative_id}`,
+                  `SGP-${query.initiative_id}`,
+                  `SGP-0${query.initiative_id}` 
+        ]) : Not(IsNull()),
         ...this.roles(query, req),
         risks: { ...this.filterCategory(query, 'For Init') },
         // risks: { category_id: query?.category ? In(query?.category) : null },
