@@ -280,9 +280,9 @@ export class InitiativeController {
       query.phase_id = activePhase.id;
     if(activePhase) {
       for(let init of data) {
-        const lastVersion = await this.iniService.iniRepository.findOne({
+        const lastVersion: any = await this.iniService.iniRepository.findOne({
           where: { parent_id: init.id, phase_id: query.phase_id },
-          order: { official_code: 'ASC'},
+          order: { id: 'DESC' },
         });
         if(activePhase.id != query.phase_id) {
           if(lastVersion) {
@@ -1222,7 +1222,7 @@ export class InitiativeController {
         'roles.user',
         'risks.initiative',
       ],
-      order: { risks: { ...this.sort(req, req.version == 'true') } },
+      order: { risks: { ...this.sort(req, true) } },
     });
     /// merges  Here s = start, r = row, c=col, e= end
 
