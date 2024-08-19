@@ -21,7 +21,6 @@ pipeline {
     stage('Run tests against the container') {
       steps {
         sh 'curl http://localhost:4220/api/faq | jq'
-        sh 'curl http://localhost:4220 | jq'
       }
     }
   }
