@@ -22,6 +22,9 @@ pipeline {
       steps {
         sh 'curl http://localhost:4220/api/under-maintenance/status | jq'
       }
+      steps {
+        sh 'curl http://localhost:4220/ | jq'
+      }
     }
   }
 }
