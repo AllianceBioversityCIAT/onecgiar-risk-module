@@ -1,0 +1,18 @@
+version: '3'
+services:  
+  risk_api:
+    container_name: risk_api
+    build: back-end
+    restart: always
+    volumes:
+      - ./back-end/generated_files:/back-end/generated_files
+  risk_front_end:
+    depends_on:
+      - risk_api
+    links:
+      - risk_api  
+    container_name: risk_front_end
+    build: front-end
+    restart: always
+    ports:
+      - 127.0.0.1:4220:80
