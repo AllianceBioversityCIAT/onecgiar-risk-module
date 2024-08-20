@@ -24,4 +24,15 @@ pipeline {
       }
     }
   }
+   post {  
+         always {  
+             slackSend color: "black", message: "Risk build process is finished"
+         }  
+         success {  
+             slackSend color: "good", message: "Risk build process is done successfully!"
+         }  
+         failure {
+             slackSend color: "bad", message: "Risk build process is done with failure"  
+         }
+     } 
 }
