@@ -36,6 +36,8 @@ import { PhasesComponent } from './Admin/admin-module/phases/phases.component';
 import { LicenseComponent } from './footer/license/license.component';
 import { LastSubmitionPhaseComponent } from './Admin/admin-module/phases/last-submition-phase/last-submition-phase.component';
 import { PhaseComponent } from './Admin/admin-module/phases/phase/phase.component';
+import { ArchiveComponent } from './archive/archive.component';
+import { ArchiveAdminComponent } from './Admin/admin-module/archive-admin/archive-admin.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -53,6 +55,10 @@ const routes: Routes = [
       {
         path: 'user-management',
         component: UserManagementComponent,
+      },
+      {
+        path: 'archive',
+        component: ArchiveAdminComponent,
       },
       {
         path: 'parameters-settings',
@@ -186,6 +192,10 @@ const routes: Routes = [
   {
     path: 'license',
     component: LicenseComponent,
+  },
+  {
+    path: 'archive',
+    component: ArchiveComponent,
   },
 
   { path: '404', component: PagenotfoundcomponentComponent },
