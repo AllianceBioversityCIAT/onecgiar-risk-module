@@ -78,6 +78,10 @@ export class Initiative {
   @Column({type: 'bool', default: false})
   status: boolean;
 
+  @ApiProperty()
+  @Column({type: 'bool', default: false})
+  archived: boolean;
+
   @Optional()
   @Column({default:null})
   action_area_id:number

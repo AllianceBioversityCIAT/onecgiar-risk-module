@@ -405,4 +405,17 @@ export class InitiativeService {
       this.logger.error('Error in Sync CLARISA initiative Data ', e);
     }
   }
+  async archiveInit(data: any) {
+    for(let id of data.ids) {
+      const submittedVersion = await this.iniRepository.find({
+        where: { parent_id: id },
+        relations: ['risks']
+      });
+      const roles = await this.iniRolesRepository.findOne({
+        where: { initiative_id: id},
+      });
+    }
+    //complete
+  }
+
 }

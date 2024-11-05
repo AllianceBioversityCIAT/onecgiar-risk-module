@@ -8,6 +8,7 @@ import { HeaderService } from 'src/app/header.service';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { UserService } from 'src/app/services/user.service';
 import jwt_decode from 'jwt-decode';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-archive-admin',
@@ -27,6 +28,7 @@ export class ArchiveAdminComponent implements OnInit {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
     this.headerService.backgroundUserNavButton = '#0f212f';
+
   }
   length = 100;
   user_info: any;
@@ -45,7 +47,7 @@ export class ArchiveAdminComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: any;
-
+  initIds: number[] = [];
 
 
 
@@ -59,6 +61,12 @@ export class ArchiveAdminComponent implements OnInit {
     this.title.setTitle('Archive module');
     this.meta.updateTag({ name: 'description', content: 'Archive module' });
   }
+
+  activePhaseSelected: boolean = true;
+  isActiveSelected(element: any) {
+    this.activePhaseSelected = element;
+  }
+
 
   filters: any = {};
   filter(filters: any) {
@@ -109,8 +117,19 @@ export class ArchiveAdminComponent implements OnInit {
     return column;
   }
 
+  checkInit(event: MatCheckboxChange, id: number) {
+    if(event.checked) {
+      this.initIds.push(id)
+    } else {
+      const indexId = this.initIds.indexOf(id);
+      if (indexId !== -1) {
+        this.initIds.splice(indexId, 1);
+      }
+    }
+  }
 
-  syncData() {
 
+  async archiveData() {
+    await this.initiativeService.archiveInit(this.initIds);
   }
 }
