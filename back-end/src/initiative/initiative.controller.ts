@@ -1374,6 +1374,12 @@ export class InitiativeController {
   ): Promise<Initiative> {
     return this.iniService.createINIT(id, req.user, top);
   }
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
+  @Post('archive')
+  async archiveInit(@Body() data: number[]) {
+    return await this.iniService.archiveInit(data)
+  }
   @UseGuards(JwtAuthGuard)
   @Get('all/categories')
   @ApiCreatedResponse({

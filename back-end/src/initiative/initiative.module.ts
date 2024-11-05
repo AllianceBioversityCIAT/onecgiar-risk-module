@@ -20,6 +20,7 @@ import { ActionArea } from 'entities/action-area';
 import { PhasesService } from 'src/phases/phases.service';
 import { Phase } from 'entities/phase.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
+import { Archive } from 'entities/archive.entity';
 @Global()
 @Module({
   controllers: [InitiativeController],
@@ -34,7 +35,8 @@ import { CollectedEmail } from 'entities/collected-emails.entity';
       Variables,
       ActionArea,
       Phase,
-      CollectedEmail
+      CollectedEmail,
+      Archive
     ]),
     SharedModule,
     RiskModule,

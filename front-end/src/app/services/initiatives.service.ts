@@ -47,6 +47,22 @@ export class InitiativesService extends MainService {
         .pipe(map((d: any) => d))
     );
   }
+
+  async archiveInit(initIds: number []) {
+    return await firstValueFrom(
+      this.http
+        .post(
+          this.backend_url + '/initiative/archive',
+          {
+            ids: initIds
+          },
+          {
+            headers: this.headers,
+          }
+        )
+        .pipe(map((d: any) => d))
+    );
+  }
   async getExportByinititave(id: number, official_code = '', versions: boolean, filters: any) {
     const userInfo = this.userService.getLogedInUser();
     let finalFilters: any = {};
