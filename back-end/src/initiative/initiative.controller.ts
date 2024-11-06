@@ -80,6 +80,11 @@ export class InitiativeController {
     await this.iniService.syncFromClarisa();
     return 'Initiatives imported successfully';
   }
+  @UseGuards(JwtAuthGuard)
+  @Get('archived')
+  async getArchiveInit() {
+    return await this.iniService.getArchiveInit()
+  }
   offical(query) {
     if (query.initiative_id != null) {
       if (query.initiative_id.charAt(0) == '0') {
@@ -270,6 +275,7 @@ export class InitiativeController {
         ]) : Not(IsNull()),
         ...this.roles(query, req),
         risks: { ...this.filterCategory(query, 'For Init') },
+        archived: query.archived
         // risks: { category_id: query?.category ? In(query?.category) : null },
       },
       relations: [
@@ -1380,6 +1386,7 @@ export class InitiativeController {
   async archiveInit(@Body() data: number[]) {
     return await this.iniService.archiveInit(data)
   }
+
   @UseGuards(JwtAuthGuard)
   @Get('all/categories')
   @ApiCreatedResponse({

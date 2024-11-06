@@ -27,7 +27,6 @@ export class ArchiveComponent implements OnInit{
     'Risk Category',
     'Number of risks',
     'My Role',
-    'status',
     'Actions',
   ];
   dataSource = new MatTableDataSource<any>([]);
@@ -56,7 +55,7 @@ export class ArchiveComponent implements OnInit{
         'Help requested'
       );
     }
-    this.getInitiatives(this.filters);
+    this.getArchivedInitiatives(this.filters);
   }
 
 
@@ -68,10 +67,10 @@ export class ArchiveComponent implements OnInit{
   filters: any = {};
   filter(filters: any) {
     this.filters = filters
-    this.getInitiatives(filters);
+    this.getArchivedInitiatives(filters);
   }
-  async getInitiatives(filters = null) {
-    let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
+  async getArchivedInitiatives(filters = null) {
+    let Initiatives: any = await this.initiativeService.getArchivedInitiatives(filters);
     this.dataSource = new MatTableDataSource<any>(Initiatives);
     this.length = Initiatives.length;
   }

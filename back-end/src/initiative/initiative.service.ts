@@ -18,6 +18,7 @@ import { RiskService } from 'src/risk/risk.service';
 import { UsersService } from 'src/users/users.service';
 import { In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
+import { Archive } from 'entities/archive.entity';
 @Injectable()
 export class InitiativeService {
   constructor(
@@ -27,6 +28,8 @@ export class InitiativeService {
     public iniRolesRepository: Repository<InitiativeRoles>,
     @InjectRepository(ActionArea)
     public actionAreaRepository: Repository<ActionArea>,
+    @InjectRepository(Archive)
+    public archiveRepository: Repository<Archive>,
     private http: HttpService,
     private riskService: RiskService,
     private userService: UsersService,
@@ -407,15 +410,42 @@ export class InitiativeService {
   }
   async archiveInit(data: any) {
     for(let id of data.ids) {
+      const init = await this.iniRepository.findOne({where: {id: id}});
       const submittedVersion = await this.iniRepository.find({
         where: { parent_id: id },
         relations: ['risks']
       });
-      const roles = await this.iniRolesRepository.findOne({
+      const roles = await this.iniRolesRepository.find({
         where: { initiative_id: id},
+        relations: ['user']
       });
-    }
-    //complete
-  }
 
+      const allData = {
+        version: submittedVersion,
+        roles: roles
+      }
+
+      const archived = this.archiveRepository.create();
+      archived.init_data = JSON.stringify(allData);
+      archived.initiative = init;
+      
+      await this.archiveRepository.save(archived).then(
+        async () => {
+          await this.iniRepository.update(id, {
+            archived: true
+          });
+        }, (error) => {
+          console.log('error => ', error);
+          throw new BadRequestException(
+            `something wrong`,
+          );
+        }
+      )
+    }
+  }
+  async getArchiveInit() {
+   return await this.archiveRepository.find({
+    relations: ['initiative', 'initiative.risks']
+   });
+  }
 }

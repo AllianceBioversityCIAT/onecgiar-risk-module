@@ -110,12 +110,33 @@ export class InitiativesService extends MainService {
         if (typeof filters[element] === 'string')
           filters[element] = filters[element].trim();
 
-        if (filters[element] != null && filters[element] != '')
+        if (filters[element] != null)
           finalFilters[element] = filters[element];
       });
     return await firstValueFrom(
       this.http
         .get(this.backend_url + '/initiative/', {
+          params: finalFilters,
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
+  }
+
+
+  async getArchivedInitiatives(filters: any) {
+    let finalFilters: any = {};
+    if(filters)
+      Object.keys(filters).forEach((element) => {
+        if (typeof filters[element] === 'string')
+          filters[element] = filters[element].trim();
+
+        if (filters[element] != null)
+          finalFilters[element] = filters[element];
+      });
+    return await firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/archived', {
           params: finalFilters,
           headers: this.headers,
         })

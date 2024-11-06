@@ -47,7 +47,7 @@ export class RiskManagementTableComponent {
     });
   }
   length = 100;
-
+  archived: boolean = false;
   userRole: any;
   displayedColumns: string[] = [
     'INIT-ID',
