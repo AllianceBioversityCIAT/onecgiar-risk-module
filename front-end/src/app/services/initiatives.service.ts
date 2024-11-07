@@ -131,13 +131,23 @@ export class InitiativesService extends MainService {
         if (typeof filters[element] === 'string')
           filters[element] = filters[element].trim();
 
-        if (filters[element] != null)
+        if (filters[element] != null && filters[element] != '')
           finalFilters[element] = filters[element];
       });
     return await firstValueFrom(
       this.http
         .get(this.backend_url + '/initiative/archived', {
           params: finalFilters,
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
+  }
+
+  getArchivedById(archivedId: number): Promise<any> {
+    return firstValueFrom(
+      this.http
+        .get(this.backend_url + '/initiative/archived/' + archivedId , {
           headers: this.headers,
         })
         .pipe(map((d: any) => d))

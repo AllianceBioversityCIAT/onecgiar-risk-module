@@ -16,7 +16,7 @@ import { firstValueFrom, map } from 'rxjs';
 import { EmailsService } from 'src/emails/emails.service';
 import { RiskService } from 'src/risk/risk.service';
 import { UsersService } from 'src/users/users.service';
-import { In, IsNull, Not, Repository } from 'typeorm';
+import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
 import { Archive } from 'entities/archive.entity';
 @Injectable()
@@ -36,7 +36,52 @@ export class InitiativeService {
     private emailsService: EmailsService,
     public phaseService: PhasesService,
   ) {}
+  roles(query, req) {
+    if (query?.my_role) {
+      if (Array.isArray(query?.my_role)) {
+        return {
+          roles: {
+            user_id: req.user.id,
+            role: In(query.my_role),
+          },
+        };
+      } else
+        return {
+          roles: {
+            user_id: req.user.id,
+            role: query.my_role,
+          },
+        };
+    } else if (query?.my_ini == 'true') {
+      return { roles: { user_id: req.user.id } };
+    } else return {};
+  }
 
+  filterCategory(query, title) {
+    if (title == 'For Init') {
+      if (query?.category) {
+        if (Array.isArray(query?.category)) {
+          return {
+            category_id: In(query.category),
+          };
+        } else
+          return {
+            category_id: query.category,
+          };
+      } else return {};
+    } else {
+      if (query?.category) {
+        if (Array.isArray(query?.category)) {
+          return {
+            id: In(query.category),
+          };
+        } else
+          return {
+            id: query.category,
+          };
+      } else return {};
+    }
+  }
   private readonly logger = new Logger(InitiativeService.name);
   clarisa_auth() {
     return {
@@ -443,9 +488,33 @@ export class InitiativeService {
       )
     }
   }
-  async getArchiveInit() {
+  async getArchiveInit(query: any, req: any) {
    return await this.archiveRepository.find({
-    relations: ['initiative', 'initiative.risks']
+    relations: ['initiative', 'initiative.roles', 'initiative.roles.user', 'initiative.risks','initiative.risks.category'],
+    where: {
+      initiative: {
+        name: query?.name ? ILike(`%${query.name}%`) : null,
+        official_code: query.initiative_id ? In([
+          `INIT-0${query.initiative_id}`,
+          `INIT-${query.initiative_id}`,
+          `PLAT-${query.initiative_id}`,
+          `PLAT-0${query.initiative_id}`,
+          `SGP-${query.initiative_id}`,
+          `SGP-0${query.initiative_id}` 
+        ]) : Not(IsNull()),
+        ...this.roles(query, req),
+        risks: { ...this.filterCategory(query, 'For Init') }
+      }
+    }
    });
+  }
+
+  async getArchiveInitById(id: number) {
+    return await this.archiveRepository.findOne({
+      where: {
+        id: id
+      },
+      relations: ['initiative']
+    })
   }
 }

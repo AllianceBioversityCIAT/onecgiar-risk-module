@@ -202,7 +202,7 @@
           <span>Admin Module</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="user_info">
         <a
           routerLink="archive"
           class="main-nav-link cool-link"
