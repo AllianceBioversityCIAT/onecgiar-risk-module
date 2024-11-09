@@ -40,6 +40,7 @@ import { ArchiveComponent } from './archive/archive.component';
 import { ArchiveAdminComponent } from './Admin/admin-module/archive-admin/archive-admin.component';
 import { ArchivedTeamMemberComponent } from './archive/archived-team-member/archived-team-member.component';
 import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
+import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -209,7 +210,16 @@ const routes: Routes = [
       },
       {
         path: ':id/versions',
-        component: ArchivedVersionComponent,
+        children: [
+          {
+            path: '',
+            component: ArchivedVersionsComponent,
+          },
+          {
+            path: ':id',
+            component: ArchivedVersionComponent,
+          }
+        ]
       }
     ]
   },

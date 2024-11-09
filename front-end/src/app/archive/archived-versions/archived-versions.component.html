@@ -1,0 +1,143 @@
+<div class="published-versions-container">
+  <nav class="risk-nav-main">
+    <ul class="risk-nav-list">
+      <li>
+        <a class="risk-nav-link" routerLink="/archive">Archive</a>
+      </li>
+      <li>
+        <a routerLink="''" class="risk-nav-link">></a>
+      </li>
+      <li>
+        <a
+          class="risk-nav-link"
+          >{{
+            officalCode
+          }}</a
+        >
+      </li>
+      <li>
+        <a routerLink="''" class="risk-nav-link">></a>
+      </li>
+      <li>
+        <a
+          class="risk-nav-link"
+          >Submitted versions</a
+        >
+      </li>
+    </ul>
+  </nav>
+  <div class="published-versions-content">
+    <div class="published-versions-title-box">
+      <h1 class="published-versions-title-box__title">Submitted versions</h1>
+    </div>
+
+    <!-- step-3 -->
+
+    <div class="table-box example-container mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
+        <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Version ID Column -->
+        <ng-container matColumnDef="Version">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="mtable">Version ID</div>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="mtable">{{ element.id }}</div>
+          </td>
+        </ng-container>
+
+        <!-- Creation date Column -->
+        <ng-container matColumnDef="Creation Date">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="th-3">Creation date</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="td-3-h">{{
+              element.submit_date | date : "short"
+            }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Creation by Column -->
+        <ng-container matColumnDef="Creation By">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h3">Created by</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <span class="td-h"> {{ element?.created_by?.full_name }} </span>
+          </td>
+        </ng-container>
+
+           <!-- Creation by Column -->
+           <ng-container matColumnDef="phase name">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h3">Phase name</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="td-h"> {{ element?.phase?.name || '-' }} </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Targets not set">
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="h4">Targets not set</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ filterReqAssistance(element.risks) }}
+            </td>
+          </ng-container>
+
+        <!-- Actions Name Column -->
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="h5">Actions</span>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="m">
+              <button
+                routerLink="./{{ element.id }}"
+                class="table-icon-version"
+              >
+                <mat-icon class="user-management-table__icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="30"
+                    viewBox="0 0 30 30"
+                    fill="none"
+                  >
+                    <path
+                      d="M0.299805 14.9982C1.68159 12.2877 3.78587 10.0121 6.38009 8.4227C8.9743 6.83335 11.9574 5.99219 14.9998 5.99219C18.0422 5.99219 21.0253 6.83335 23.6195 8.4227C26.2137 10.0121 28.318 12.2877 29.6998 14.9982C28.318 17.7087 26.2137 19.9843 23.6195 21.5737C21.0253 23.163 18.0422 24.0042 14.9998 24.0042C11.9574 24.0042 8.9743 23.163 6.38009 21.5737C3.78587 19.9843 1.68159 17.7087 0.299805 14.9982ZM14.9998 20.9982C16.5911 20.9982 18.1172 20.366 19.2424 19.2408C20.3677 18.1156 20.9998 16.5895 20.9998 14.9982C20.9998 13.4069 20.3677 11.8808 19.2424 10.7555C18.1172 9.63033 16.5911 8.99819 14.9998 8.99819C13.4085 8.99819 11.8824 9.63033 10.7572 10.7555C9.63195 11.8808 8.99981 13.4069 8.99981 14.9982C8.99981 16.5895 9.63195 18.1156 10.7572 19.2408C11.8824 20.366 13.4085 20.9982 14.9998 20.9982ZM14.9998 17.9982C14.2042 17.9982 13.4411 17.6821 12.8785 17.1195C12.3159 16.5569 11.9998 15.7938 11.9998 14.9982C11.9998 14.2025 12.3159 13.4395 12.8785 12.8769C13.4411 12.3143 14.2042 11.9982 14.9998 11.9982C15.7955 11.9982 16.5585 12.3143 17.1211 12.8769C17.6837 13.4395 17.9998 14.2025 17.9998 14.9982C17.9998 15.7938 17.6837 16.5569 17.1211 17.1195C16.5585 17.6821 15.7955 17.9982 14.9998 17.9982Z"
+                      fill="#436280"
+                    /></svg
+                ></mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr
+          class="table-header"
+          mat-header-row
+          *matHeaderRowDef="displayedColumns"
+        ></tr>
+        <tr
+          class="table-header"
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [ngClass]="{ last: this.dataSource.data[0] == row }"
+        ></tr>
+      </table>
+      <div class="glossary-content-container user-management-paginator-box">
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

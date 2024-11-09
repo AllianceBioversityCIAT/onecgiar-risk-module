@@ -458,7 +458,7 @@ export class InitiativeService {
       const init = await this.iniRepository.findOne({where: {id: id}});
       const submittedVersion = await this.iniRepository.find({
         where: { parent_id: id },
-        relations: ['risks']
+        relations: ['risks', 'risks.mitigations' , 'risks.mitigations.status' , 'risks.category' , 'risks.created_by' , 'risks.risk_owner.user' , 'created_by', 'phase']
       });
       const roles = await this.iniRolesRepository.find({
         where: { initiative_id: id},

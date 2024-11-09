@@ -5,11 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 
 @Component({
-  selector: 'app-archived-version',
-  templateUrl: './archived-version.component.html',
-  styleUrls: ['./archived-version.component.scss']
+  selector: 'app-archived-versions',
+  templateUrl: './archived-versions.component.html',
+  styleUrls: ['./archived-versions.component.scss']
 })
-export class ArchivedVersionComponent {
+export class ArchivedVersionsComponent implements OnInit{
   constructor(
     private initiativeService: InitiativesService,
     public router: Router,
@@ -17,33 +17,48 @@ export class ArchivedVersionComponent {
     private title: Title,
     private meta: Meta
   ) {}
-  
+
+  displayedColumns: string[] = [
+    'Version',
+    'Creation Date',
+    'Creation By',
+    'phase name',
+    'Actions',
+  ];
+
   dataSource = new MatTableDataSource<any>([]);
   archivedId: any;
   officalCode!: string;
-  initiativeName: any;
   initiativeId: any;
-  showReduntent: boolean = false;
-  versionId!: number;
+
   async ngOnInit() {
     const params: any = this.activatedRoute.parent?.snapshot.params;
     this.archivedId = params.id;
     this.getArchivedDataById(this.archivedId)
-    this.title.setTitle('Archived submitted version');
+    this.title.setTitle('Archived submitted versions');
     this.meta.updateTag({
       name: 'description',
-      content: 'Archived submitted version',
+      content: 'Archived submitted versions',
     });
   }
 
   async getArchivedDataById(id: number) {
     const data = await this.initiativeService.getArchivedById(id);
-    const param2: any = this.activatedRoute?.snapshot.params; //version id
-    this.versionId = param2.id;
     this.officalCode = data.initiative.official_code;
-    this.initiativeName = data.initiative.name;
     this.initiativeId = data.initiative.id;
-    const versionData = data.init_data.version.filter((d: any) => d.id == param2.id)[0];
-    this.dataSource = new MatTableDataSource<any>(versionData.risks);
+    this.dataSource = new MatTableDataSource<any>(data.init_data.version);
+  }
+
+  filterReqAssistance(risk: any) {
+    let column = '-';
+    for (let item of risk) {
+      if (item.request_assistance == true) {
+        column = 'Yes';
+        break;
+      } else {
+        column = 'No';
+      }
+    }
+    return column;
   }
 }
