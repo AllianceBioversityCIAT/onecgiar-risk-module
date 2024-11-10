@@ -1,0 +1,58 @@
+<div class="published-versions-container">
+    <nav class="risk-nav-main">
+        <ul class="risk-nav-list">
+          <li>
+            <a class="risk-nav-link" routerLink="/archive">Archive</a>
+          </li>
+          <li>
+            <a routerLink="''" class="risk-nav-link">></a>
+          </li>
+          <li>
+            <a
+              class="risk-nav-link"
+              >{{
+                officalCode
+              }}</a
+            >
+          </li>
+          <li>
+            <a routerLink="''" class="risk-nav-link">></a>
+          </li>
+          <li>
+            <a
+              class="risk-nav-link"
+              >Submitted versions</a
+            >
+          </li>
+          <li>
+            <a routerLink="''" class="risk-nav-link">></a>
+          </li>
+          <li>
+            <a
+              class="risk-nav-link"
+              >Version - {{ versionId }}</a
+            >
+          </li>
+        </ul>
+      </nav>
+  
+    <div class="published-versions-content">
+      <div class="published-versions-title-box">
+        <h1 class="published-versions-title-box__title">
+          {{ initiativeName }} Version - {{ versionId }}
+        </h1>
+      </div>
+  
+ 
+  
+      <!-- step-3 -->
+      <app-risk-report-table
+        [showingVersion]="true"
+        [dataSource]="dataSource"
+        [showReduntent]="showReduntent"
+        [titlePage]="initiativeName + 'Version'"
+      >
+      </app-risk-report-table>
+    </div>
+  </div>
+  

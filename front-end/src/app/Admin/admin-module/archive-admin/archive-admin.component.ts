@@ -9,6 +9,7 @@ import { InitiativesService } from 'src/app/services/initiatives.service';
 import { UserService } from 'src/app/services/user.service';
 import jwt_decode from 'jwt-decode';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @Component({
   selector: 'app-archive-admin',
@@ -35,6 +36,7 @@ export class ArchiveAdminComponent implements OnInit {
   loading = true;
   isadmin = false;
   userRole: any;
+  archived: boolean = false;
   displayedColumns: string[] = [
     'INIT-ID',
     'Initiative Name',
@@ -118,8 +120,23 @@ export class ArchiveAdminComponent implements OnInit {
   }
 
   checkInit(event: MatCheckboxChange, id: number) {
+
     if(event.checked) {
-      this.initIds.push(id)
+      this.dialog
+      .open(DeleteConfirmDialogComponent, {
+        data: {
+          message: `Are you sure you want to archive this program`,
+          svg: '../../../assets/shared-image/archive.png'
+        },
+      })
+      .afterClosed().subscribe(res => {
+        if(res){
+          this.initIds.push(id)
+        } else {
+          event.checked = false;
+          event.source.checked = false
+        }
+      });
     } else {
       const indexId = this.initIds.indexOf(id);
       if (indexId !== -1) {
@@ -130,6 +147,14 @@ export class ArchiveAdminComponent implements OnInit {
 
 
   async archiveData() {
-    await this.initiativeService.archiveInit(this.initIds);
+    await this.initiativeService.archiveInit(this.initIds).then(
+      () => {
+        this.getInitiatives(this.filters);
+        this.toastr.success('Archived successfully');
+
+      }, (error) => {
+        this.toastr.error(error.error.message);
+      }
+    );
   }
 }

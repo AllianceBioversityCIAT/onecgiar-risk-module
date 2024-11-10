@@ -88,6 +88,10 @@ import { LastSubmitionPhaseComponent } from './Admin/admin-module/phases/last-su
 import { PhaseComponent } from './Admin/admin-module/phases/phase/phase.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { ArchiveAdminComponent } from './Admin/admin-module/archive-admin/archive-admin.component';
+import { ArchiveFiltersComponent } from './archive-filters/archive-filters.component';
+import { ArchivedTeamMemberComponent } from './archive/archived-team-member/archived-team-member.component';
+import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
+import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -150,6 +154,10 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     PhaseComponent,
     ArchiveComponent,
     ArchiveAdminComponent,
+    ArchiveFiltersComponent,
+    ArchivedTeamMemberComponent,
+    ArchivedVersionComponent,
+    ArchivedVersionsComponent,
   ],
   imports: [
     BrowserModule,

@@ -80,6 +80,17 @@ export class InitiativeController {
     await this.iniService.syncFromClarisa();
     return 'Initiatives imported successfully';
   }
+  @UseGuards(JwtAuthGuard)
+  @Get('archived')
+  async getArchiveInit(@Query() query: any, @Req() req) {
+    return await this.iniService.getArchiveInit(query, req)
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get('archived/:id')
+  async getArchiveInitById(@Param('id') id: number) {
+    console.log(id)
+    return await this.iniService.getArchiveInitById(id)
+  }
   offical(query) {
     if (query.initiative_id != null) {
       if (query.initiative_id.charAt(0) == '0') {
@@ -96,51 +107,6 @@ export class InitiativeController {
       }
     }
     return query.initiative_id;
-  }
-  roles(query, req) {
-    if (query?.my_role) {
-      if (Array.isArray(query?.my_role)) {
-        return {
-          roles: {
-            user_id: req.user.id,
-            role: In(query.my_role),
-          },
-        };
-      } else
-        return {
-          roles: {
-            user_id: req.user.id,
-            role: query.my_role,
-          },
-        };
-    } else if (query?.my_ini == 'true') {
-      return { roles: { user_id: req.user.id } };
-    } else return {};
-  }
-  filterCategory(query, title) {
-    if (title == 'For Init') {
-      if (query?.category) {
-        if (Array.isArray(query?.category)) {
-          return {
-            category_id: In(query.category),
-          };
-        } else
-          return {
-            category_id: query.category,
-          };
-      } else return {};
-    } else {
-      if (query?.category) {
-        if (Array.isArray(query?.category)) {
-          return {
-            id: In(query.category),
-          };
-        } else
-          return {
-            id: query.category,
-          };
-      } else return {};
-    }
   }
   sort(query, top = false): any {
     if (query?.sort) {
@@ -255,7 +221,7 @@ export class InitiativeController {
     description: '',
     type: [getInitiative],
   })
-  async getInitiative(@Query() query: any, @Req() req) { 
+  async getInitiative(@Query() query: any, @Req() req) {  
     let data = await this.iniService.iniRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
@@ -268,8 +234,9 @@ export class InitiativeController {
                   `SGP-${query.initiative_id}`,
                   `SGP-0${query.initiative_id}` 
         ]) : Not(IsNull()),
-        ...this.roles(query, req),
-        risks: { ...this.filterCategory(query, 'For Init') },
+        ...this.iniService.roles(query, req),
+        risks: { ...this.iniService.filterCategory(query, 'For Init') },
+        archived: query.archived
         // risks: { category_id: query?.category ? In(query?.category) : null },
       },
       relations: [
@@ -321,7 +288,7 @@ export class InitiativeController {
     }
 
     return data;
-  } 
+  }  
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
@@ -909,7 +876,7 @@ export class InitiativeController {
       where: {
         official_code: this.offical(query),
         parent_id: IsNull(),
-        ...this.roles(query, req),
+        ...this.iniService.roles(query, req),
         name: query?.name ? ILike(`%${query.name}%`) : null,
       },
     });
@@ -966,7 +933,7 @@ export class InitiativeController {
         where: {
           initiative_id: In(ininit.map((d) => d.id)),
           redundant: false,
-          category: { ...this.filterCategory(query, 'For risk') },
+          category: { ...this.iniService.filterCategory(query, 'For risk') },
         },
         relations: [
           'initiative',
@@ -987,7 +954,7 @@ export class InitiativeController {
         where: {
           initiative_id: In(lastVersionsIdsByPhase),
           redundant: false,
-          category: { ...this.filterCategory(query, 'For risk') },
+          category: { ...this.iniService.filterCategory(query, 'For risk') },
         },
         relations: [
           'initiative',
@@ -1202,7 +1169,7 @@ export class InitiativeController {
         risks: {
           redundant: req?.redundant == 'true' ? null : false,
           title: req?.title ? ILike(`%${req.title}%`) : null,
-          category: { ...this.filterCategory(req, 'For risk') },
+          category: { ...this.iniService.filterCategory(req, 'For risk') },
           // category: { id: req?.category ? In(req?.category) : null },
           created_by_user_id: req?.created_by
             ? Array.isArray(req?.created_by)
@@ -1380,6 +1347,7 @@ export class InitiativeController {
   async archiveInit(@Body() data: number[]) {
     return await this.iniService.archiveInit(data)
   }
+
   @UseGuards(JwtAuthGuard)
   @Get('all/categories')
   @ApiCreatedResponse({

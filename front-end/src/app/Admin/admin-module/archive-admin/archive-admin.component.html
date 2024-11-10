@@ -17,7 +17,7 @@
   <div class="user-management__container">
 
     <div class="form-container">
-      <app-search-init (activePhaseSelected)="isActiveSelected($event)" (filters)="filter($event)"> </app-search-init>
+      <app-search-init (activePhaseSelected)="isActiveSelected($event)" [archived]="archived" (filters)="filter($event)"> </app-search-init>
 
       <div class="sync">
         <button class="user-management__button-box__btn btn-sync" mat-raised-button (click)="archiveData()">

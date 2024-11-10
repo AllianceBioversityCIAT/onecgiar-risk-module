@@ -38,6 +38,9 @@ import { LastSubmitionPhaseComponent } from './Admin/admin-module/phases/last-su
 import { PhaseComponent } from './Admin/admin-module/phases/phase/phase.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { ArchiveAdminComponent } from './Admin/admin-module/archive-admin/archive-admin.component';
+import { ArchivedTeamMemberComponent } from './archive/archived-team-member/archived-team-member.component';
+import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
+import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -195,7 +198,30 @@ const routes: Routes = [
   },
   {
     path: 'archive',
-    component: ArchiveComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        component: ArchiveComponent,
+      },
+      {
+        path: ':id/team-member',
+        component: ArchivedTeamMemberComponent,
+      },
+      {
+        path: ':id/versions',
+        children: [
+          {
+            path: '',
+            component: ArchivedVersionsComponent,
+          },
+          {
+            path: ':id',
+            component: ArchivedVersionComponent,
+          }
+        ]
+      }
+    ]
   },
 
   { path: '404', component: PagenotfoundcomponentComponent },

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
@@ -22,7 +22,7 @@ export class SearchInitComponent {
   phaseSelected: any;
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
   @Output() activePhaseSelected = new EventEmitter<boolean>();
-
+  @Input() archived!: boolean;
   roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
@@ -54,10 +54,10 @@ export class SearchInitComponent {
       sort: [null],
       my_ini: [false],
       status: [null],
-      phase_id: [null]
+      phase_id: [null],
+      archived: [this.archived],
     });
     this.filterForm.valueChanges.subscribe(() => {
-      console.log(this.filterForm.value);
       if (time) clearTimeout(time);
       time = setTimeout(() => {
         this.filters.emit(this.filterForm.value);
