@@ -1348,6 +1348,12 @@ export class InitiativeController {
     return await this.iniService.archiveInit(data)
   }
 
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
+  @Post('sync-clarisa')
+  async syncInit(@Body() data: number[]) {
+    return await this.iniService.syncInit(data)
+  }
   @UseGuards(JwtAuthGuard)
   @Get('all/categories')
   @ApiCreatedResponse({

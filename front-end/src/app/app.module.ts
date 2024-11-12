@@ -92,6 +92,7 @@ import { ArchiveFiltersComponent } from './archive-filters/archive-filters.compo
 import { ArchivedTeamMemberComponent } from './archive/archived-team-member/archived-team-member.component';
 import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
 import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
+import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-clarisa.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -158,6 +159,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     ArchivedTeamMemberComponent,
     ArchivedVersionComponent,
     ArchivedVersionsComponent,
+    SyncClarisaComponent,
   ],
   imports: [
     BrowserModule,
