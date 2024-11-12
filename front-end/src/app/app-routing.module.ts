@@ -41,6 +41,7 @@ import { ArchiveAdminComponent } from './Admin/admin-module/archive-admin/archiv
 import { ArchivedTeamMemberComponent } from './archive/archived-team-member/archived-team-member.component';
 import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
 import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
+import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-clarisa.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -62,6 +63,10 @@ const routes: Routes = [
       {
         path: 'archive',
         component: ArchiveAdminComponent,
+      },
+      {
+        path: 'sync-clarisa',
+        component: SyncClarisaComponent,
       },
       {
         path: 'parameters-settings',

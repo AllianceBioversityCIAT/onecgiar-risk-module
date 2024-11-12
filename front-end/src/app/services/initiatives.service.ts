@@ -63,6 +63,22 @@ export class InitiativesService extends MainService {
         .pipe(map((d: any) => d))
     );
   }
+
+  async syncInit(initIds: number []) {
+    return await firstValueFrom(
+      this.http
+        .post(
+          this.backend_url + '/initiative/sync-clarisa',
+          {
+            ids: initIds
+          },
+          {
+            headers: this.headers,
+          }
+        )
+        .pipe(map((d: any) => d))
+    );
+  }
   async getExportByinititave(id: number, official_code = '', versions: boolean, filters: any) {
     const userInfo = this.userService.getLogedInUser();
     let finalFilters: any = {};
