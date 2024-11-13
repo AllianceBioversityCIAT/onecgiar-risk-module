@@ -64,17 +64,9 @@ export class ArchiveAdminComponent implements OnInit {
     this.meta.updateTag({ name: 'description', content: 'Archive module' });
   }
 
-  activePhaseSelected: boolean = true;
-  isActiveSelected(element: any) {
-    this.activePhaseSelected = element;
-  }
 
+  filters: any = { archived: false };
 
-  filters: any = {};
-  filter(filters: any) {
-    this.filters = filters
-    this.getInitiatives(filters);
-  }
   async getInitiatives(filters = null) {
     let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
     this.dataSource = new MatTableDataSource<any>(Initiatives);
@@ -120,23 +112,8 @@ export class ArchiveAdminComponent implements OnInit {
   }
 
   checkInit(event: MatCheckboxChange, id: number) {
-
     if(event.checked) {
-      this.dialog
-      .open(DeleteConfirmDialogComponent, {
-        data: {
-          message: `Are you sure you want to archive this program`,
-          svg: '../../../assets/shared-image/archive.png'
-        },
-      })
-      .afterClosed().subscribe(res => {
-        if(res){
-          this.initIds.push(id)
-        } else {
-          event.checked = false;
-          event.source.checked = false
-        }
-      });
+      this.initIds.push(id);
     } else {
       const indexId = this.initIds.indexOf(id);
       if (indexId !== -1) {
@@ -147,14 +124,29 @@ export class ArchiveAdminComponent implements OnInit {
 
 
   async archiveData() {
-    await this.initiativeService.archiveInit(this.initIds).then(
-      () => {
-        this.getInitiatives(this.filters);
-        this.toastr.success('Archived successfully');
-
-      }, (error) => {
-        this.toastr.error(error.error.message);
-      }
-    );
+    if(this.initIds.length) {
+      this.dialog
+      .open(DeleteConfirmDialogComponent, {
+        data: {
+          message: `Are you sure you want to archive this program`,
+          svg: '../../../assets/shared-image/archive.png'
+        },
+      })
+      .afterClosed().subscribe(async res => {
+        if(res){
+          await this.initiativeService.archiveInit(this.initIds).then(
+            () => {
+              this.getInitiatives(this.filters);
+              this.toastr.success('Archived successfully');
+      
+            }, (error) => {
+              this.toastr.error(error.error.message);
+            }
+          );
+        } 
+      });
+    } else {
+      this.toastr.error('please select programs you want to archive it');
+    }
   }
 }
