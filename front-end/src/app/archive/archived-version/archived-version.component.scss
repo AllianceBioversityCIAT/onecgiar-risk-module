@@ -10,6 +10,18 @@
   position: relative;
 }
 
+.mat-mdc-checkbox.mat-accent {
+  color: #5569dd !important;
+  --mdc-checkbox-selected-checkmark-color: #ffffff;
+  --mdc-checkbox-selected-focus-icon-color: #5569dd !important;
+  --mdc-checkbox-selected-hover-icon-color: #5569dd !important;
+  --mdc-checkbox-selected-icon-color: #5569dd !important;
+  --mdc-checkbox-selected-pressed-icon-color: #5569dd !important;
+}
+:host ::ng-deep .mdc-checkbox__checkmark {
+  display: none !important;
+
+}
 .risk-nav-list {
   list-style: none;
   display: flex;
