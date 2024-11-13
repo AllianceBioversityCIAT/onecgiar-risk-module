@@ -520,7 +520,7 @@ export class InitiativeService {
 
   async syncInit(data: any) {
     try {
-      // let actionAreaIds = [];
+      let actionAreaIds = [];
       const clarisa_initiatives = await firstValueFrom(
         this.http
           .get(`${process.env.CLARISA_URL}/api/initiatives`, {
@@ -540,16 +540,14 @@ export class InitiativeService {
             initiative.name = clarisa_initiative.name;
             initiative.official_code = clarisa_initiative.official_code;
             initiative.action_area_id = clarisa_initiative.action_area_id;
+            initiative.sync_clarisa = true;
             await this.iniRepository.save(initiative);
-            // actionAreaIds.push(initiative.action_area_id);
+            actionAreaIds.push(initiative.action_area_id);
           }
         }
       }
-      // (sync all)
-      this.syncActionAreaFromClarisa();
-      
-      // actionAreaIds = [...new Set(actionAreaIds)];
-      // this.syncActionAreaByIdFromClarisa(actionAreaIds)
+      actionAreaIds = [...new Set(actionAreaIds)];
+      this.syncActionAreaByIdFromClarisa(actionAreaIds)
     } catch (e) {
       throw new BadRequestException(
         `Error sync clarisa`,
@@ -557,30 +555,31 @@ export class InitiativeService {
     }
   }
 
-  // async syncActionAreaByIdFromClarisa(ids: number []) {
-    // try {
-    //   const clarisa_action_area = await firstValueFrom(
-    //     this.http
-    //       .get(`${process.env.CLARISA_URL}/api/action-areas`, {
-    //         auth: this.clarisa_auth(),
-    //       })
-    //       .pipe(map((d) => d.data)),
-    //   );
-    //   for (const action_area of clarisa_action_area) {
-    //     let actionArea;
-    //     actionArea = await this.actionAreaRepository.findOne({
-    //       where: { id: action_area.id },
-    //     });
-    //     if (!actionArea) {
-    //       actionArea = this.actionAreaRepository.create();
-    //       actionArea.id = action_area.id;
-    //     }
-    //     actionArea.name = action_area.name;
-    //     actionArea.description = action_area.description;
-    //     await this.actionAreaRepository.save(actionArea);
-    //   }
-    // } catch (error) {
-    //   this.logger.error('Error in Sync CLARISA initiative Data ', error);
-    // }
-  // }
+  async syncActionAreaByIdFromClarisa(ids: number []) {
+    try {
+      const clarisa_action_area = await firstValueFrom(
+        this.http
+          .get(`${process.env.CLARISA_URL}/api/action-areas`, {
+            auth: this.clarisa_auth(),
+          })
+          .pipe(map((d) => d.data)),
+      );
+      for (const action_area of clarisa_action_area) {
+        for(let id of ids) {
+          let actionArea;
+          actionArea = await this.actionAreaRepository.findOne({
+            where: { id: id },
+          });
+          if (actionArea && id == action_area.id) {
+            actionArea.id = action_area.id;
+            actionArea.name = action_area.name;
+            actionArea.description = action_area.description;
+            await this.actionAreaRepository.save(actionArea);
+          }
+        }
+      }
+    } catch (error) {
+      this.logger.error('Error in Sync CLARISA initiative Data ', error);
+    }
+  }
 }

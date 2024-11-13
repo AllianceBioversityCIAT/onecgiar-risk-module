@@ -54,16 +54,9 @@ export class SyncClarisaComponent {
     this.meta.updateTag({ name: 'description', content: 'Sync clarisa' });
   }
 
-  activePhaseSelected: boolean = true;
-  isActiveSelected(element: any) {
-    this.activePhaseSelected = element;
-  }
 
-  filters: any = {};
-  filter(filters: any) {
-    this.filters = filters
-    this.getInitiatives(filters);
-  }
+  filters: any = { archived: false };
+
   async getInitiatives(filters = null) {
     let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
     this.dataSource = new MatTableDataSource<any>(Initiatives);
@@ -111,21 +104,7 @@ export class SyncClarisaComponent {
 
   checkInit(event: MatCheckboxChange, id: number) {
     if(event.checked) {
-      this.dialog
-      .open(DeleteConfirmDialogComponent, {
-        data: {
-          message: `Are you sure you want to sync this program`,
-          svg: '../../../assets/shared-image/sync.png'
-        },
-      })
-      .afterClosed().subscribe(res => {
-        if(res){
-          this.initIds.push(id)
-        } else {
-          event.checked = false;
-          event.source.checked = false
-        }
-      });
+      this.initIds.push(id);
     } else {
       const indexId = this.initIds.indexOf(id);
       if (indexId !== -1) {
@@ -136,13 +115,28 @@ export class SyncClarisaComponent {
 
 
   async syncData() {
-    await this.initiativeService.syncInit(this.initIds).then(
-      () => {
-        this.getInitiatives(this.filters);
-        this.toastr.success('Sync successfully');
-      }, (error) => {
-        this.toastr.error(error.error.message);
-      }
-    );
+    if(this.initIds.length) {
+      this.dialog
+      .open(DeleteConfirmDialogComponent, {
+        data: {
+          message: `Are you sure you want to sync this program`,
+          svg: '../../../assets/shared-image/sync.png'
+        },
+      })
+      .afterClosed().subscribe(async res => {
+        if(res){
+          await this.initiativeService.syncInit(this.initIds).then(
+            () => {
+              this.getInitiatives(this.filters);
+              this.toastr.success('Sync successfully');
+            }, (error) => {
+              this.toastr.error(error.error.message);
+            }
+          );
+        }
+      });
+    } else {
+      this.toastr.error('please select programs you want to sync it');
+    }
   }
 }
