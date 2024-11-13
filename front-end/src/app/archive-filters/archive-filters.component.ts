@@ -21,7 +21,7 @@ export class ArchiveFiltersComponent {
 
   roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
-;
+
 
   setForm() {
     let time: any = null;
@@ -44,9 +44,6 @@ export class ArchiveFiltersComponent {
     this.filterForm.markAsUntouched();
   }
 
-  async export() {
-    // await this.initiativeService.getExport(this.filterForm.value);
-  }
 
   async ngOnInit() {
     this.setForm();
