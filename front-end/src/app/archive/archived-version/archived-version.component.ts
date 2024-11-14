@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatTableDataSource } from '@angular/material/table';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,6 +26,7 @@ export class ArchivedVersionComponent {
   initiativeId: any;
   showReduntent: boolean = false;
   versionId!: number;
+  versionData: any;
   async ngOnInit() {
     const params: any = this.activatedRoute.parent?.snapshot.params;
     this.archivedId = params.id;
@@ -36,6 +38,27 @@ export class ArchivedVersionComponent {
     });
   }
 
+  request_assistance: boolean = false;
+  async risksNeedHelp(event: MatCheckboxChange) {
+    if(event.checked) {
+      this.request_assistance = true;
+      const filteredRisk = this.versionData.risks.filter((risk: any) => risk.request_assistance == true);
+      this.dataSource = new MatTableDataSource<any>(filteredRisk);
+    } else {
+      this.request_assistance = false;
+      this.getArchivedDataById(this.archivedId)
+    }
+  }
+
+  async export() {
+    const filters = {
+      archivedId: this.archivedId,
+      versionId: this.versionId,
+      request_assistance: this.request_assistance
+    }
+    await this.initiativeService.exportArchivedRisks(filters);
+  }
+
   async getArchivedDataById(id: number) {
     const data = await this.initiativeService.getArchivedById(id);
     const param2: any = this.activatedRoute?.snapshot.params; //version id
@@ -43,7 +66,7 @@ export class ArchivedVersionComponent {
     this.officalCode = data.initiative.official_code;
     this.initiativeName = data.initiative.name;
     this.initiativeId = data.initiative.id;
-    const versionData = data.init_data.version.filter((d: any) => d.id == param2.id)[0];
-    this.dataSource = new MatTableDataSource<any>(versionData.risks);
+    this.versionData = data.init_data.version.filter((d: any) => d.id == param2.id)[0];
+    this.dataSource = new MatTableDataSource<any>(this.versionData.risks);
   }
 }
