@@ -75,6 +75,52 @@ export class InitiativeController {
     private dataSource: DataSource,
     private userService: UsersService,
   ) {}
+  @UseGuards(JwtAuthGuard)
+  @Get('export-archived')
+  async exportArchived(@Query() filters: any) {
+    const archivedData: any = await this.iniService.getArchiveInitById(filters.archivedId);
+    let archivedVersion = archivedData.init_data.version.filter((d: any) => d.id == filters.versionId)[0];
+
+    const file_name = 'Archived-Risks-Version' + filters.versionId + '.xlsx';
+    var wb = XLSX.utils.book_new();
+    let risks;
+    if(filters.request_assistance == 'true') {
+      risks = archivedVersion.risks.filter((risk: any) => risk.request_assistance == true);
+    }
+    else {
+      risks = archivedVersion.risks;
+    }
+
+    const { finaldata, merges } = this.prepareDataExcelVersionAdmin(risks);
+    const ws = XLSX.utils.json_to_sheet(finaldata);
+    ws['!merges'] = merges;
+
+    this.appendStyleForXlsx(ws);
+
+    this.autofitColumnsXlsx(finaldata,ws);
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Risks');
+    await XLSX.writeFile(
+      wb,
+      join(process.cwd(), 'generated_files', file_name),
+      { cellStyles: true },
+    );
+    const file = createReadStream(
+      join(process.cwd(), 'generated_files', file_name),
+    );
+
+    setTimeout(async () => {
+      try {
+        await unlink(join(process.cwd(), 'generated_files', file_name));
+      } catch (e) {}
+    }, 9000);
+
+    return new StreamableFile(file, {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      disposition: `attachment; filename="${file_name}"`,
+    });
+    console.log(archivedVersion)
+  }
   @Get('import')
   async import() {
     await this.iniService.syncFromClarisa();

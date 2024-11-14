@@ -51,8 +51,12 @@ export class ArchivedVersionComponent {
   }
 
   async export() {
-    console.log(this.request_assistance)
-    //continue
+    const filters = {
+      archivedId: this.archivedId,
+      versionId: this.versionId,
+      request_assistance: this.request_assistance
+    }
+    await this.initiativeService.exportArchivedRisks(filters);
   }
 
   async getArchivedDataById(id: number) {

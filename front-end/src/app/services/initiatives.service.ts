@@ -34,6 +34,21 @@ export class InitiativesService extends MainService {
     saveAs(data, 'All-Risks.xlsx');
   }
 
+
+
+  async exportArchivedRisks(filters: any) { 
+    const data = await firstValueFrom(
+      this.http
+        .get(this.backend_url + `/initiative/export-archived`, {
+          params: filters,
+          headers: this.headers,
+          responseType: 'blob',
+        })
+        .pipe(map((d: Blob) => d))
+    );
+    saveAs(data, 'Risks-archived-' + filters.versionId + '.xlsx');
+  }
+
   async Publish(id: number, reason: any) {
     return await firstValueFrom(
       this.http
