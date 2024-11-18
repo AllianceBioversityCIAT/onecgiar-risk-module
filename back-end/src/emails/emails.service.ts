@@ -12,9 +12,9 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
 import { InitiativeService } from 'src/initiative/initiative.service';
-import { Initiative } from 'entities/initiative.entity';
+import { sciencePrograms } from 'entities/initiative.entity';
 import { Risk } from 'entities/risk.entity';
-import { InitiativeRoles } from 'entities/initiative-roles.entity';
+import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 @Injectable()
 export class EmailsService {
@@ -23,12 +23,12 @@ export class EmailsService {
     @InjectRepository(CollectedEmail) public collectedEmails: Repository<CollectedEmail>,
     private variabelService: VariablesService,
     private usersService: UsersService,
-    @InjectRepository(Initiative)
-    public iniRepository: Repository<Initiative>,
+    @InjectRepository(sciencePrograms)
+    public scienceProgramsRepository: Repository<sciencePrograms>,
     @InjectRepository(Risk)
     public riskRepository: Repository<Risk>,
-    @InjectRepository(InitiativeRoles)
-    public initRoleRepository: Repository<InitiativeRoles>,
+    @InjectRepository(scienceProgramsRoles)
+    public scienceProgramsRolesRepository: Repository<scienceProgramsRoles>,
   ) {}
   private readonly logger = new Logger(EmailsService.name);
   async sendEmailWithSendGrid(to, subject, html) {
@@ -185,16 +185,16 @@ export class EmailsService {
     });
 
     for (let risk of risks) {
-      const init = await this.initRoleRepository.find({
+      const init = await this.scienceProgramsRolesRepository.find({
         where: {
-          initiative_id: risk.initiative_id,
+          science_programs_id: risk.science_programs_id,
         },
         relations: ['user'],
       });
 
       init.forEach((init) => {
         if (init.role == 'Leader' || init.role == 'Coordinator') {
-          this.sendEmailTobyVarabel(init.user, 6, init.initiative_id, risk);
+          this.sendEmailTobyVarabel(init.user, 6, init.science_programs_id, risk);
         }
       });
     }
@@ -369,7 +369,7 @@ export class EmailsService {
     risk,
     content_id,
   ) {
-    const init = await this.iniRepository.findOne({
+    const init = await this.scienceProgramsRepository.findOne({
       where: {
         id: init_id,
       },
@@ -399,7 +399,7 @@ export class EmailsService {
           <br>
             `;
         } else {
-          const lastVersion = await this.iniRepository.findOne({
+          const lastVersion = await this.scienceProgramsRepository.findOne({
             where: {
               id: init.last_version_id,
             },

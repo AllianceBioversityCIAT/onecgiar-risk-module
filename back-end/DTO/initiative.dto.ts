@@ -212,7 +212,7 @@ export class createVersion {
 
 export class riskForCreateVersion extends PickType(Risk, [
     'id',
-    'initiative_id',
+    'science_programs_id',
     'title',
     'risk_owner_id',
     'description',

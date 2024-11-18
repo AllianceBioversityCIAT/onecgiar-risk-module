@@ -1,7 +1,7 @@
 import { Global, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InitiativeRoles } from 'entities/initiative-roles.entity';
-import { Initiative } from 'entities/initiative.entity';
+import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
+import { sciencePrograms } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Phase } from 'entities/phase.entity';
 import { Risk } from 'entities/risk.entity';
@@ -17,16 +17,16 @@ export class RiskService {
     public riskRepository: Repository<Risk>,
     @InjectRepository(Mitigation)
     public mitigationRepository: Repository<Mitigation>,
-    @InjectRepository(Initiative)
-    public initativeRepository: Repository<Initiative>,
+    @InjectRepository(sciencePrograms)
+    public scienceProgramsRepository: Repository<sciencePrograms>,
     private emailsService: EmailsService,
-    @InjectRepository(InitiativeRoles)
-    public initativeRolesRepository: Repository<InitiativeRoles>,
+    @InjectRepository(scienceProgramsRoles)
+    public scienceProgramsRolesRepository: Repository<scienceProgramsRoles>,
     @InjectRepository(Phase)
     public PhaseRepository: Repository<Phase>,
   ) {}
   async updateInitiativeUpdateDateToNow(initiative_id) {
-    await this.initativeRepository.update(initiative_id, {
+    await this.scienceProgramsRepository.update(initiative_id, {
       last_updated_date: new Date(),
     });
 
@@ -36,12 +36,12 @@ export class RiskService {
       }
     });
 
-    const lastVersionByPhase = await this.initativeRepository.findOne({
+    const lastVersionByPhase = await this.scienceProgramsRepository.findOne({
       where: { parent_id: initiative_id, phase_id: activePhase.id },
       order: { id: 'DESC' },
     });
     if(lastVersionByPhase)
-      await this.initativeRepository.update(lastVersionByPhase?.id, {
+      await this.scienceProgramsRepository.update(lastVersionByPhase?.id, {
         status: false
       });
   }
@@ -57,7 +57,7 @@ export class RiskService {
     const risk = await this.riskRepository.findOne({
       where: { id },
     });
-    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
+    await this.updateInitiativeUpdateDateToNow(risk.science_programs_id);
     return this.riskRepository.delete(id);
   }
 
@@ -65,7 +65,7 @@ export class RiskService {
     const risk = await this.riskRepository.findOne({
       where: { id },
     });
-    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
+    await this.updateInitiativeUpdateDateToNow(risk.science_programs_id);
   }
 
   async updateRisk(id, risk: Risk, user: User, create_version: boolean) {
@@ -76,7 +76,7 @@ export class RiskService {
       relations : ['risk_owner']
     })
 
-    const newRiskOwner = await this.initativeRolesRepository.findOne({
+    const newRiskOwner = await this.scienceProgramsRolesRepository.findOne({
       where: {
         id: risk.risk_owner_id
       },
@@ -98,30 +98,30 @@ export class RiskService {
         { reload: true },
       );
     }
-    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
-    const initiative: Initiative = await this.initativeRepository.findOne({
-      where: { id: risk.initiative_id },
+    await this.updateInitiativeUpdateDateToNow(risk.science_programs_id);
+    const sciencePrograms: sciencePrograms = await this.scienceProgramsRepository.findOne({
+      where: { id: risk.science_programs_id },
       relations: ['roles', 'roles.user'],
     });
 
     if (
-      initiative.roles
+      sciencePrograms.roles
         .filter((d) => d.id == risk?.risk_owner_id)
         .filter((d) => d.user_id == user.id).length
     )
-      initiative.roles.forEach((role: InitiativeRoles) => {
+      sciencePrograms.roles.forEach((role: scienceProgramsRoles) => {
         if (
           (role.role == 'Leader' || role?.role == 'Coordinator') &&
           role?.user?.id && create_version == false
         )
-          this.emailsService.sendEmailTobyVarabel(role?.user, 1, initiative.id, created_risk);
+          this.emailsService.sendEmailTobyVarabel(role?.user, 1, sciencePrograms.id, created_risk);
       });
 
     if(oldRisk?.risk_owner?.user_id != newRiskOwner.user_id) {
-      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, initiative.id, created_risk);
+      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, sciencePrograms.id, created_risk);
     } 
     else if(!oldRisk.risk_owner) { 
-      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, initiative.id, created_risk);
+      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, sciencePrograms.id, created_risk);
     }
 
     return created_risk;
@@ -142,16 +142,16 @@ export class RiskService {
       );
     }
 
-    await this.updateInitiativeUpdateDateToNow(risk.initiative_id);
+    await this.updateInitiativeUpdateDateToNow(risk.science_programs_id);
 
     if (created_risk?.risk_owner_id && created_risk.original_risk_id == null) {
       //get initiative
-      const init = await this.initativeRepository.findOne({
+      const init = await this.scienceProgramsRepository.findOne({
         where: {
-          id : created_risk.initiative_id
+          id : created_risk.science_programs_id
         }
       })
-      const risk_owner_role = await this.initativeRolesRepository.findOne({
+      const risk_owner_role = await this.scienceProgramsRolesRepository.findOne({
         where: { id: created_risk.risk_owner_id },
         relations: ['user'],
       });

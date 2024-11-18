@@ -12,8 +12,8 @@ import {
   Index,
   CreateDateColumn,
 } from 'typeorm';
-import { InitiativeRoles } from './initiative-roles.entity';
-import { Initiative } from './initiative.entity';
+import { scienceProgramsRoles } from './initiative-roles.entity';
+import { sciencePrograms } from './initiative.entity';
 import { Mitigation } from './mitigation.entity';
 import { RiskCategory } from './risk-category.entity';
 import { User } from './user.entitiy';
@@ -26,11 +26,11 @@ export class Risk {
   id: number;
   @ApiProperty()
   @Column()
-  initiative_id: number;
+  science_programs_id: number;
 
-  @ManyToOne(() => Initiative, (initiative) => initiative.risks)
-  @JoinColumn({ name: 'initiative_id' })
-  initiative: Initiative;
+  @ManyToOne(() => sciencePrograms, (sciencePrograms) => sciencePrograms.risks)
+  @JoinColumn({ name: 'science_programs_id' })
+  science_programs: sciencePrograms;
 
   @Index({ fulltext: true })
   @ApiProperty()
@@ -42,12 +42,12 @@ export class Risk {
   @Column({ default: null })
   risk_owner_id: number;
   @ManyToOne(
-    () => InitiativeRoles,
-    (initiativeRoles) => initiativeRoles.risks,
+    () => scienceProgramsRoles,
+    (scienceProgramsRoles) => scienceProgramsRoles.risks,
     { onUpdate: 'SET NULL', onDelete: 'SET NULL' },
   )
   @JoinColumn({ name: 'risk_owner_id' })
-  risk_owner: InitiativeRoles;
+  risk_owner: scienceProgramsRoles;
   @ApiProperty()
   @Column({ type: 'text' })
   description: string;

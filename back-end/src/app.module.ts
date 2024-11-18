@@ -31,7 +31,7 @@ import { PhasesModule } from './phases/phases.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       type: 'mysql',
-      synchronize: true,
+      synchronize: false,
       entities: [`dist/**/*.entity{.ts,.js}`],
       autoLoadEntities: true,
       namingStrategy: new SnakeNamingStrategy(),

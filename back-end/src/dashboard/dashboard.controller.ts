@@ -2,7 +2,7 @@ import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { getCategoriesLevels, getCategoriesCount, getInitiativeScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
 import { getInitiative } from 'DTO/initiative.dto';
-import { Initiative } from 'entities/initiative.entity';
+import { sciencePrograms } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
@@ -25,7 +25,7 @@ export class DashboardController {
     type: [getInitiative],
   })
   getInitiativeDetails() {
-    return this.iniService.iniRepository.find({
+    return this.iniService.scienceProgramsRepository.find({
         where: {
           parent_id: IsNull(),
         },
@@ -48,29 +48,29 @@ export class DashboardController {
   getInitiativeScore() {
     return this.dataSource
       .createQueryBuilder()
-      .from('initiative', 'initiative')
-      .addSelect('initiative.id', 'id')
-      .addSelect('initiative.status', 'status')
-      .where('initiative.parent_id is null')
-      .addSelect('initiative.official_code', 'official_code')
-      .addSelect('initiative.name', 'name')
-      .innerJoin(Risk,'risk','risk.initiative_id = initiative.id')
+      .from('sciencePrograms', 'sciencePrograms')
+      .addSelect('sciencePrograms.id', 'id')
+      .addSelect('sciencePrograms.status', 'status')
+      .where('sciencePrograms.parent_id is null')
+      .addSelect('sciencePrograms.official_code', 'official_code')
+      .addSelect('sciencePrograms.name', 'name')
+      .innerJoin(Risk,'risk','risk.science_programs_id = sciencePrograms.id')
       .addSelect((subQuery) => {
         return subQuery
           .addSelect(`AVG(risk.target_impact)`, 'target_impact')
-          .where('risk.initiative_id = initiative.id')
+          .where('risk.science_programs_id = sciencePrograms.id')
           .from(Risk, 'risk');
       }, 'target_impact')
       .addSelect((subQuery) => {
         return subQuery
           .addSelect(`AVG(risk.target_likelihood)`, 'target_likelihood')
-          .where('risk.initiative_id = initiative.id')
+          .where('risk.science_programs_id = sciencePrograms.id')
           .from(Risk, 'risk');
       }, 'target_likelihood')
       .addSelect((subQuery) => {
         return subQuery
           .addSelect(`AVG(risk.current_impact)`, 'current_impact')
-          .where('risk.initiative_id = initiative.id')
+          .where('risk.science_programs_id = sciencePrograms.id')
           .from(Risk, 'risk');
       }, 'current_impact')
       .addSelect((subQuery) => {
@@ -79,7 +79,7 @@ export class DashboardController {
             `AVG(risk.current_likelihood)`,
             'current_likelihood',
           )
-          .where('risk.initiative_id = initiative.id')
+          .where('risk.science_programs_id = sciencePrograms.id')
           .from(Risk, 'risk');
       }, 'current_likelihood')
       .execute();
@@ -166,8 +166,8 @@ export class DashboardController {
       .addSelect('action_area.id', 'id')
       .addSelect('action_area.name', 'name')
       .addSelect('COUNT(risk.id)', 'total_count')
-      .leftJoin('initiative','initiative','initiative.action_area_id = action_area.id')
-      .leftJoin('risk','risk','risk.initiative_id = initiative.id')
+      .leftJoin('science_programs','science_programs','science_programs.action_area_id = action_area.id')
+      .leftJoin('risk','risk','risk.science_programs_id = science_programs.id')
       .addGroupBy('action_area.id')
       .execute();
   }
@@ -197,7 +197,7 @@ export class DashboardController {
   risksCharts(@Param('id') id: number) {
     return this.riskService.riskRepository.find(
       {
-        where: { initiative_id: id, redundant: false },
+        where: { science_programs_id: id, redundant: false },
       }
     );
   }

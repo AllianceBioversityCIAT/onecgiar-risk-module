@@ -3,10 +3,10 @@ import { PhasesService } from './phases.service';
 import { PhasesController } from './phases.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Phase } from 'entities/phase.entity';
-import { Initiative } from 'entities/initiative.entity';
+import { sciencePrograms } from 'entities/initiative.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Phase, Initiative])],
+  imports: [TypeOrmModule.forFeature([Phase, sciencePrograms])],
   controllers: [PhasesController],
   providers: [PhasesService],
   exports: [PhasesService],

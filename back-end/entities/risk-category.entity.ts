@@ -18,7 +18,7 @@ export class RiskCategory {
   description: string;
 
   @ApiProperty({ type: () => [Risk] })
-  @OneToMany(() => Risk, (risk) => risk.initiative)
+  @OneToMany(() => Risk, (risk) => risk.science_programs)
   @JoinTable()
   risks: Array<Risk>;
   

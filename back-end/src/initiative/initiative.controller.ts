@@ -21,8 +21,8 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { InitiativeRoles } from 'entities/initiative-roles.entity';
-import { Initiative } from 'entities/initiative.entity';
+import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
+import { sciencePrograms } from 'entities/initiative.entity';
 import { InitiativeService } from './initiative.service';
 // import * as XLSX from 'xlsx';
 import * as XLSX from 'xlsx-js-style';
@@ -201,14 +201,14 @@ export class InitiativeController {
           .execute();
         risk.category_id = risk_category[0].id;
 
-        const initiative = await this.iniService.iniRepository.findOne({
+        const sciencePrograms = await this.iniService.scienceProgramsRepository.findOne({
           where: {
             parent_id: IsNull(),
             official_code:
               row.code <= 9 ? `INIT-0${row.code}` : `INIT-${row.code}`,
           },
         });
-        risk.initiative_id = initiative.id;
+        risk.science_programs_id = sciencePrograms.id;
         await this.riskService.riskRepository.save(risk);
       }
     }
@@ -240,22 +240,22 @@ export class InitiativeController {
         });
       }
 
-      const initiative = await this.iniService.iniRepository.findOne({
+      const sciencePrograms = await this.iniService.scienceProgramsRepository.findOne({
         where: {
           parent_id: IsNull(),
           official_code: code,
         },
       });
-      if (initiative) {
-        const exist_role = await this.iniService.iniRolesRepository.find({
-          where: { user_id: exist_user.id, initiative_id: initiative.id },
+      if (sciencePrograms) {
+        const exist_role = await this.iniService.scienceProgramsRolesRepository.find({
+          where: { user_id: exist_user.id, science_programs_id: sciencePrograms.id },
         });
         if (!exist_role.length) {
-          const new_role = this.iniService.iniRolesRepository.create();
-          new_role.initiative_id = initiative.id;
+          const new_role = this.iniService.scienceProgramsRolesRepository.create();
+          new_role.science_programs_id = sciencePrograms.id;
           new_role.role = row['Initiative role'];
           new_role.user_id = exist_user.id;
-          await this.iniService.iniRolesRepository.save(new_role);
+          await this.iniService.scienceProgramsRolesRepository.save(new_role);
         }
       }
     }
@@ -268,7 +268,7 @@ export class InitiativeController {
     type: [getInitiative],
   })
   async getInitiative(@Query() query: any, @Req() req) {  
-    let data = await this.iniService.iniRepository.find({
+    let data = await this.iniService.scienceProgramsRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         parent_id: IsNull(),
@@ -300,7 +300,7 @@ export class InitiativeController {
       query.phase_id = activePhase.id;
     if(activePhase) {
       for(let init of data) {
-        const lastVersion: any = await this.iniService.iniRepository.findOne({
+        const lastVersion: any = await this.iniService.scienceProgramsRepository.findOne({
           where: { parent_id: init.id, phase_id: query.phase_id },
           order: { id: 'DESC' },
         });
@@ -366,7 +366,7 @@ export class InitiativeController {
     template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.ID = element.initiative.official_code;
+    template.ID = element.science_programs.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -468,7 +468,7 @@ export class InitiativeController {
     template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.ID = element.initiative.official_code;
+    template.ID = element.science_programs.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -569,7 +569,7 @@ export class InitiativeController {
     template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.ID = element.initiative.official_code;
+    template.ID = element.science_programs.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -668,7 +668,7 @@ export class InitiativeController {
     template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.ID = element.initiative.official_code;
+    template.ID = element.science_programs.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -770,7 +770,7 @@ export class InitiativeController {
     template['Risk id'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
-    template.ID = element.initiative.official_code;
+    template.ID = element.science_programs.official_code;
     template.Description = element.description;
     template['Risk owner'] = element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
@@ -847,7 +847,7 @@ export class InitiativeController {
     type: getInitiativeById,
   })
   async getInitiatives(@Param('id') id: number) {
-    let asd = await this.iniService.iniRepository
+    let asd = await this.iniService.scienceProgramsRepository
       .findOneOrFail({
         where: { id },
         relations: [
@@ -879,7 +879,7 @@ export class InitiativeController {
     @Param('id') id: number,
     @Query() filters: any,
   ) {
-    let result = await this.iniService.iniRepository
+    let result = await this.iniService.scienceProgramsRepository
       .findOneOrFail({
         where: {
           id,
@@ -917,7 +917,7 @@ export class InitiativeController {
     type: AllExcel,
   })
   async exportAlltoExcel(@Query() query: any, @Req() req) {
-    let ininit = await this.iniService.iniRepository.find({
+    let ininit = await this.iniService.scienceProgramsRepository.find({
       select: ['id'],
       where: {
         official_code: this.offical(query),
@@ -935,7 +935,7 @@ export class InitiativeController {
       query.phase_id = activePhase.id;
     if(activePhase) {
       for(let init of ininit) {
-        const lastVersion = await this.iniService.iniRepository.findOne({
+        const lastVersion = await this.iniService.scienceProgramsRepository.findOne({
           where: { parent_id: init.id, phase_id: query.phase_id },
           order: { id: 'DESC'},
         });
@@ -977,43 +977,43 @@ export class InitiativeController {
     if(activePhase.id == query.phase_id) {
       risks = await this.riskService.riskRepository.find({
         where: {
-          initiative_id: In(ininit.map((d) => d.id)),
+          science_programs_id: In(ininit.map((d) => d.id)),
           redundant: false,
           category: { ...this.iniService.filterCategory(query, 'For risk') },
         },
         relations: [
-          'initiative',
+          'science_programs',
           'category',
           'created_by',
           'mitigations',
           'mitigations.status',
           'risk_owner',
           'risk_owner.user',
-          'initiative.roles',
-          'initiative.roles.user',
+          'science_programs.roles',
+          'science_programs.roles.user',
         ],
-        order: { initiative: { ...this.sort(query) } },
+        order: { science_programs: { ...this.sort(query) } },
       });
     } else {
       const lastVersionsIdsByPhase = lastVersionsByPhase.filter(d => d).map(d => d.id);
       risks = await this.riskService.riskRepository.find({
         where: {
-          initiative_id: In(lastVersionsIdsByPhase),
+          science_programs_id: In(lastVersionsIdsByPhase),
           redundant: false,
           category: { ...this.iniService.filterCategory(query, 'For risk') },
         },
         relations: [
-          'initiative',
+          'science_programs',
           'category',
           'created_by',
           'mitigations',
           'mitigations.status',
           'risk_owner',
           'risk_owner.user',
-          'initiative.roles',
-          'initiative.roles.user',
+          'science_programs.roles',
+          'science_programs.roles.user',
         ],
-        order: { initiative: { ...this.sort(query) } },
+        order: { science_programs: { ...this.sort(query) } },
       });
     }
 
@@ -1209,7 +1209,7 @@ export class InitiativeController {
     type: getInitiativeById,
   })
   async exportExcel(@Param('id') id: number, @Query() req: any) {
-    let init = await this.iniService.iniRepository.findOne({
+    let init = await this.iniService.scienceProgramsRepository.findOne({
       where: {
         id: id,
         risks: {
@@ -1240,7 +1240,7 @@ export class InitiativeController {
         'risks.risk_owner.user',
         'roles',
         'roles.user',
-        'risks.initiative',
+        'risks.science_programs',
       ],
       order: { risks: { ...this.sort(req, true) } },
     });
@@ -1384,7 +1384,7 @@ export class InitiativeController {
     @Param('initiative_id') id: number,
     @Body('top') top: any,
     @Req() req,
-  ): Promise<Initiative> {
+  ): Promise<sciencePrograms> {
     return this.iniService.createINIT(id, req.user, top);
   }
   @UseGuards(RolesGuard)
@@ -1409,14 +1409,14 @@ export class InitiativeController {
   getAllCategories() {
     return this.dataSource
       .createQueryBuilder()
-      .from('initiative', 'initiative')
-      .where('initiative.parent_id IS NULL')
+      .from('sciencePrograms', 'sciencePrograms')
+      .where('sciencePrograms.parent_id IS NULL')
       .distinct(true)
       .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect('risk_category.description', 'description')
       .addSelect('risk_category.disabled', 'disabled')
-      .innerJoin('risk', 'risk', 'initiative.id = risk.initiative_id')
+      .innerJoin('risk', 'risk', 'sciencePrograms.id = risk.science_programs_id')
       .innerJoin(
         'risk_category',
         'risk_category',
@@ -1434,19 +1434,19 @@ export class InitiativeController {
   getCategories(@Param('id') id: number) {
     return this.dataSource
       .createQueryBuilder()
-      .from('initiative', 'initiative')
+      .from('sciencePrograms', 'sciencePrograms')
       .distinct(true)
       .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect('risk_category.description', 'description')
       .addSelect('risk_category.disabled', 'disabled')
-      .innerJoin('risk', 'risk', 'initiative.id = risk.initiative_id')
+      .innerJoin('risk', 'risk', 'sciencePrograms.id = risk.science_programs_id')
       .innerJoin(
         'risk_category',
         'risk_category',
         'risk_category.id = risk.category_id',
       )
-      .where('initiative.id = :id', { id })
+      .where('sciencePrograms.id = :id', { id })
       .orderBy('risk_category.title', 'ASC')
       .execute();
   }
@@ -1457,7 +1457,7 @@ export class InitiativeController {
     type: [getAllVersions],
   })
   getVersons(@Param('id') id: number) {
-    return this.iniService.iniRepository.find({
+    return this.iniService.scienceProgramsRepository.find({
       where: { parent_id: id, risks: { redundant: false } },
       relations: [
         'risks',
@@ -1479,7 +1479,7 @@ export class InitiativeController {
   })
   async getLatestVersons(@Param('id') id: number) {
     const phase = await this.iniService.phaseService.findActivePhase();
-    return this.iniService.iniRepository.findOne({
+    return this.iniService.scienceProgramsRepository.findOne({
       where: { parent_id: id , phase_id: phase.id},
       relations: [
         'risks',
@@ -1502,7 +1502,7 @@ export class InitiativeController {
     @Param('official_code') official_code: string,
     @Param('phase_id') phase_id: number,
   ) {
-    return this.iniService.iniRepository.findOne({
+    return this.iniService.scienceProgramsRepository.findOne({
       where: { official_code, phase_id },
       relations: [
         'risks',
@@ -1530,9 +1530,9 @@ export class InitiativeController {
     description: '',
     type: [getRoles],
   })
-  getRoles(@Param('id') id: number): Promise<InitiativeRoles[]> {
-    return this.iniService.iniRolesRepository.find({
-      where: { initiative_id: id },
+  getRoles(@Param('id') id: number): Promise<scienceProgramsRoles[]> {
+    return this.iniService.scienceProgramsRolesRepository.find({
+      where: { science_programs_id: id },
       relations: ['user'],
     });
   }
@@ -1554,7 +1554,7 @@ export class InitiativeController {
   })
   setRoles(
     @Param('initiative_id') initiative_id: number,
-    @Body() initiativeRoles: InitiativeRoles,
+    @Body() initiativeRoles: scienceProgramsRoles,
   ) {
     return this.iniService.setRole(initiative_id, initiativeRoles);
   }
@@ -1568,7 +1568,7 @@ export class InitiativeController {
     type: updateRoleReq,
   })
   updateMitigation(
-    @Body() roles: InitiativeRoles,
+    @Body() roles: scienceProgramsRoles,
     @Param('initiative_id') initiative_id: number,
     @Param('initiative_roles_id') initiative_roles_id: number,
   ) {
@@ -1598,7 +1598,7 @@ export class InitiativeController {
   })
   async top(@Param('id') id: number) {
     const top_5 = await this.riskService.riskRepository.find({
-      where: { initiative_id: id, redundant: false },
+      where: { science_programs_id: id, redundant: false },
       order: { current_level: 'DESC' },
       take: 5,
     });
@@ -1608,7 +1608,7 @@ export class InitiativeController {
 
     const similar = await this.riskService.riskRepository.find({
       where: {
-        initiative_id: id,
+        science_programs_id: id,
         current_level: In(current_impact),
         id: Not(In(current_ids)),
         redundant: false,
@@ -1626,7 +1626,7 @@ export class InitiativeController {
 
     const top = await this.riskService.riskRepository.find({
       where: {
-        initiative_id: id,
+        science_programs_id: id,
         id: Not(In(similar1.map((d) => d.id))),
         current_level: MoreThan(similar1[0] ? similar1[0].current_level : 0),
         redundant: false,

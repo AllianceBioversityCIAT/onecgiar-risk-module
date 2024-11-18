@@ -42,10 +42,10 @@ export class RolesGuard implements CanActivate {
       // console.log('body ==> ',request.body)
 
 
-      const user_init_role: any = await this.initService.iniRolesRepository.find({
+      const user_init_role: any = await this.initService.scienceProgramsRolesRepository.find({
         where : {
           user_id: user.id,
-          initiative_id: initiative_id,
+          science_programs_id: initiative_id,
         }
       });
 

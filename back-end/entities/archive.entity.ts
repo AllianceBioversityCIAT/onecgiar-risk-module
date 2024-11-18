@@ -8,7 +8,7 @@ import {
     OneToOne,
     JoinColumn,
   } from 'typeorm';
-import { Initiative } from './initiative.entity';
+import { sciencePrograms } from './initiative.entity';
   @Entity()
   export class Archive {
     @ApiProperty()
@@ -26,8 +26,8 @@ import { Initiative } from './initiative.entity';
     @Column({ type: 'json', nullable: false })
     init_data: string;
 
-    @OneToOne(() => Initiative)
+    @OneToOne(() => sciencePrograms)
     @JoinColumn()
-    initiative: Initiative
+    science_programs: sciencePrograms
 }
   

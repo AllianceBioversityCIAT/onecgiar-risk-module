@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Initiative } from 'entities/initiative.entity';
+import { sciencePrograms } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { InitiativeModule } from 'src/initiative/initiative.module';
@@ -14,7 +14,7 @@ import { Variables } from 'entities/variables.entity';
 import { EmailsService } from 'src/emails/emails.service';
 import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
-import { InitiativeRoles } from 'entities/initiative-roles.entity';
+import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
 import { CollectedEmail } from 'entities/collected-emails.entity';
@@ -27,11 +27,11 @@ import { Phase } from 'entities/phase.entity';
     TypeOrmModule.forFeature([
       Risk,
       Mitigation,
-      Initiative,
+      sciencePrograms,
       Email,
       Variables,
       User,
-      InitiativeRoles,
+      scienceProgramsRoles,
       CollectedEmail,
       Phase
     ]),
