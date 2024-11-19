@@ -25,24 +25,7 @@ import dataSource, { dataSourceOptions } from 'db/data-source';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(dataSourceOptions
-    //   {
-    //   host: process.env.DATABASE_HOST,
-    //   port: Number(process.env.DATABASE_PORT),
-    //   username: process.env.DATABASE_USER,
-    //   password: process.env.DATABASE_PASSWORD,
-    //   database: process.env.DATABASE_NAME,
-    //   type: 'mysql',
-    //   synchronize: false,
-    //   charset   : 'utf8mb4',
-    //   entities: [`dist/**/*.entity{.ts,.js}`],
-    //   migrations: ['migrations/**/*{.ts,.js}'],
-  
-    //   autoLoadEntities: true,
-    //   namingStrategy: new SnakeNamingStrategy(),
-    // }
-    // dataSource.options
-  ),
+    TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     RiskModule,
     InitiativeModule,

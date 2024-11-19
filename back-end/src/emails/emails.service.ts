@@ -234,7 +234,7 @@ export class EmailsService {
       email,
       subject,
       risk_id: risk.id,
-      init_id: init.id,
+      science_programs_id: init.id,
       variable_id: variableId
     });
     return await this.collectedEmails.save(newEmail);

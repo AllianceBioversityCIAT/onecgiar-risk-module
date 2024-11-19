@@ -34,7 +34,7 @@ export class scienceProgramsRoles {
   @Column()
   science_programs_id: number;
 
-  @ManyToOne(() => sciencePrograms, (sciencePrograms) => sciencePrograms,{onUpdate:'CASCADE',onDelete:'CASCADE'})
+  @ManyToOne(() => sciencePrograms, (sciencePrograms) => sciencePrograms.roles)
   @JoinColumn({ name: 'science_programs_id' })
   science_programs: sciencePrograms;
 

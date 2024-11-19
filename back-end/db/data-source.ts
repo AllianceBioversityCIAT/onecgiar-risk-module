@@ -1,6 +1,10 @@
 import { ActionArea } from 'entities/action-area';
+import { Announcement } from 'entities/announcement.entity';
+import { Archive } from 'entities/archive.entity';
 import { CategoryGroup } from 'entities/categories-groups';
 import { CollectedEmail } from 'entities/collected-emails.entity';
+import { FAQ } from 'entities/FAQ.entity';
+import { Glossary } from 'entities/glossary.entity';
 import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
 import { sciencePrograms } from 'entities/initiative.entity';
 import { MitigationStatus } from 'entities/mitigation-status.entity';
@@ -9,17 +13,39 @@ import { Phase } from 'entities/phase.entity';
 import { RiskCategory } from 'entities/risk-category.entity';
 import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
+import { Variables } from 'entities/variables.entity';
+import { Email } from 'src/emails/email.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
-  host: '127.0.0.1',
-  port: 3306,
-  username: 'root',
-  password: 'tareqb00s',
-  database: 'risk3',
+  host: process.env.DATABASE_HOST,
+  port: Number(process.env.DATABASE_PORT),
+  username: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   charset: 'utf8mb4',
-  entities: [CategoryGroup, RiskCategory, Risk, sciencePrograms, scienceProgramsRoles, Mitigation, MitigationStatus, User, CollectedEmail, ActionArea, Phase],
+  entities: [
+    CategoryGroup,
+    RiskCategory,
+    Risk,
+    sciencePrograms,
+    scienceProgramsRoles,
+    Mitigation,
+    MitigationStatus,
+    User,
+    CollectedEmail,
+    ActionArea,
+    Phase,
+    Email,
+    Announcement,
+    Archive,
+    FAQ,
+    Glossary,
+    Variables
+  ],
   migrations: ['dist/db/migrations/**/*{.ts,.js}'],
   synchronize: false,
   logging: false,

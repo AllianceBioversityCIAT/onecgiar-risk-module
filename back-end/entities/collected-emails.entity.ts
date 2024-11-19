@@ -41,12 +41,12 @@ export class CollectedEmail {
 
 
     @ManyToOne(() => sciencePrograms, (sciencePrograms) => sciencePrograms.email)
-    @JoinColumn({ name: 'init_id' })
+    @JoinColumn({ name: 'science_programs_id' })
     science_programs: sciencePrograms;
   
     @ApiProperty()
     @Column()
-    init_id: number;
+    science_programs_id: number;
 
 
     
