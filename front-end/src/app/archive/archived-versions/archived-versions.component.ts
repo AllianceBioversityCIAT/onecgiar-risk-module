@@ -29,7 +29,7 @@ export class ArchivedVersionsComponent implements OnInit{
   dataSource = new MatTableDataSource<any>([]);
   archivedId: any;
   officalCode!: string;
-  initiativeId: any;
+  scienceProgramsId: any;
 
   async ngOnInit() {
     const params: any = this.activatedRoute.parent?.snapshot.params;
@@ -44,8 +44,8 @@ export class ArchivedVersionsComponent implements OnInit{
 
   async getArchivedDataById(id: number) {
     const data = await this.initiativeService.getArchivedById(id);
-    this.officalCode = data.initiative.official_code;
-    this.initiativeId = data.initiative.id;
+    this.officalCode = data.science_programs.official_code;
+    this.scienceProgramsId = data.science_programs.id;
     this.dataSource = new MatTableDataSource<any>(data.init_data.version);
   }
 

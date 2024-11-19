@@ -35,7 +35,7 @@ export class AcceleratedBreedingVersionComponent {
   path: any = '';
   id: any;
   official_code: any;
-  initiative: any;
+  sciencePrograms: any;
 
   paarentRoute: any;
 
@@ -64,15 +64,15 @@ export class AcceleratedBreedingVersionComponent {
     const params: any = this.activatedRoute.snapshot.params;
 
     this.id = params.versionId;
-    this.initiative = await this.initiativesService.getInitiativeForVersion(
+    this.sciencePrograms = await this.initiativesService.getInitiativeForVersion(
       this.id,
       this.filter
     );
-    this.dataSource.data = this.initiative?.risks;
+    this.dataSource.data = this.sciencePrograms?.risks;
 
     const params2: any = this.activatedRoute.parent?.parent?.snapshot.params;
     console.log(params2);
-    console.log(this.initiative?.name);
+    console.log(this.sciencePrograms?.name);
     this.paarentRoute = params2;
     this.official_code = params2.initiativeId;
 
@@ -83,10 +83,10 @@ export class AcceleratedBreedingVersionComponent {
       this.user_info = jwt_decode(access_token);
     }
 
-    this.title.setTitle(`${this.initiative?.name} Version `);
+    this.title.setTitle(`${this.sciencePrograms?.name} Version `);
     this.meta.updateTag({
       name: 'description',
-      content: `${this.initiative?.name} Version  `,
+      content: `${this.sciencePrograms?.name} Version  `,
     });
   }
 

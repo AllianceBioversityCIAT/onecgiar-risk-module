@@ -60,8 +60,8 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
   newRiskForm: any;
   user_info: any;
   riskId!: number;
-  initiative: any = null;
-  initiativeId: any;
+  sciencePrograms: any = null;
+  scienceProgramsId: any;
   //for teamMember
   my_risks: any;
   leader_corleader_risks: any;
@@ -161,8 +161,8 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         this.clicked = false;
         result = await this.riskService.updateRisk(this.riskId, {
           id: Number(this.riskId),
-          initiative_id:
-            +this.initiativeId | this?.checkIfRiskExist[0]?.initiative_id,
+          science_programs_id:
+            +this.scienceProgramsId | this?.checkIfRiskExist[0]?.science_programs_id,
           mitigations: this.proposed.data,
           ...this.newRiskForm.value,
         });
@@ -175,17 +175,16 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
 
           // to refresh table
           await this.riskService.getRisks(this.riskId, null);
-          // this.RiskReportcomponent.loadInitiative();
           setTimeout(() => {
             this.router.navigate([
-              `/home/${this.initiativeId}/${this.officalCode}`,
+              `/home/${this.scienceProgramsId}/${this.officalCode}`,
             ]);
           }, 2000);
         }
       } else {
         this.clicked = false;
         result = await this.riskService.createNewRisk({
-          initiative_id: this.initiativeId,
+          science_programs_id: this.scienceProgramsId,
           mitigations: this.proposed.data,
           ...this.newRiskForm.value,
         });
@@ -197,10 +196,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
 
           // to refresh table
           await this.riskService.getRisks(this.riskId, null);
-          // this.RiskReportcomponent.loadInitiative();
           setTimeout(() => {
             this.router.navigate([
-              `/home/${this.initiativeId}/${this.officalCode}`,
+              `/home/${this.scienceProgramsId}/${this.officalCode}`,
             ]);
           }, 2000);
         }
@@ -400,24 +398,24 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
 
     const parentParams: any = this.activatedRoute.parent?.params.subscribe(
       (val) => {
-        this.initiativeId = +val['id'];
+        this.scienceProgramsId = +val['id'];
         this.officalCode = val['initiativeId'];
       }
     );
 
-    this.initiative = await this.initiativeService.getInitiative(
-      this.initiativeId
+    this.sciencePrograms = await this.initiativeService.getInitiative(
+      this.scienceProgramsId
     );
-    this.leader_corleader_risks = this.initiative?.risks;
+    this.leader_corleader_risks = this.sciencePrograms?.risks;
     this.checkIfRiskExist = await this.riskService.getRisk(this.riskId);
-    this.my_risks = this.initiative.risks
+    this.my_risks = this.sciencePrograms.risks
       .filter(
         (d: any) =>
           d?.risk_owner && d?.risk_owner?.user?.id == this.user_info.id
       )
       .map((d: any) => d);
 
-    this.risksForUser = await this.riskService.getRiskUsers(this.initiativeId);
+    this.risksForUser = await this.riskService.getRiskUsers(this.scienceProgramsId);
     this.my_roles = this.risksForUser
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
@@ -429,7 +427,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           if (this.checkIfRiskExist.length > 0) {
           } else {
             this.router.navigate([
-              `/home/${this.initiativeId}/${this.officalCode}`,
+              `/home/${this.scienceProgramsId}/${this.officalCode}`,
             ]);
           }
         } else if (
@@ -442,7 +440,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           ) {
           } else {
             this.router.navigate([
-              `/home/${this.initiativeId}/${this.officalCode}`,
+              `/home/${this.scienceProgramsId}/${this.officalCode}`,
             ]);
           }
         } else if (this.my_roles?.includes(ROLES.MEMBER)) {
@@ -451,17 +449,17 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           ) {
           } else {
             this.router.navigate([
-              `/home/${this.initiativeId}/${this.officalCode}`,
+              `/home/${this.scienceProgramsId}/${this.officalCode}`,
             ]);
           }
         } else if (this.my_risks.length == 0) {
           this.router.navigate([
-            `/home/${this.initiativeId}/${this.officalCode}`,
+            `/home/${this.scienceProgramsId}/${this.officalCode}`,
           ]);
         }
       } else {
         this.router.navigate([
-          `/home/${this.initiativeId}/${this.officalCode}`,
+          `/home/${this.scienceProgramsId}/${this.officalCode}`,
         ]);
       }
       this.title.setTitle('Edit risk');
@@ -487,14 +485,14 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       !this.my_roles?.includes(ROLES.LEAD) &&
       !this.my_roles?.includes(ROLES.COORDINATOR)
     ) {
-      this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+      this.router.navigate([`/home/${this.scienceProgramsId}/${this.officalCode}`]);
     }
 
     this.populateNewRiskForm();
     this.getMitigationActions();
     this.riskCategories = await this.riskService.getRiskCategories();
-    if (this.initiativeId) {
-      this.riskUsers = await this.riskService.getRiskUsers(this.initiativeId);
+    if (this.scienceProgramsId) {
+      this.riskUsers = await this.riskService.getRiskUsers(this.scienceProgramsId);
     }
     this.haveSameValue();
   }

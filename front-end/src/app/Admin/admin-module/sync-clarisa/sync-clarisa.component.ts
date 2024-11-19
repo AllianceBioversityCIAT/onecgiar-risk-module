@@ -34,7 +34,7 @@ export class SyncClarisaComponent {
   user_info: any;
   displayedColumns: string[] = [
     'INIT-ID',
-    'Initiative Name',
+    'Science programs Name',
     'Risk Category',
     'Number of risks',
     'My Role',
@@ -58,9 +58,9 @@ export class SyncClarisaComponent {
   filters: any = { archived: false };
 
   async getInitiatives(filters = null) {
-    let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
-    this.dataSource = new MatTableDataSource<any>(Initiatives);
-    this.length = Initiatives.length;
+    let sciencePrograms: any = await this.initiativeService.getInitiativesWithFilters(filters);
+    this.dataSource = new MatTableDataSource<any>(sciencePrograms);
+    this.length = sciencePrograms.length;
   }
 
 

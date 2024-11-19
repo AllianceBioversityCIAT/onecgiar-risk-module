@@ -134,7 +134,7 @@ export class EmailsService {
         variable_id: variableId,
         status: false
       },
-      relations: ['initiative', 'risk']
+      relations: ['science_programs', 'risk']
     });
 
     let userEmail = emails.map(d => d.email);
@@ -295,7 +295,7 @@ export class EmailsService {
       <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.id}</td>
       <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.title}</td>
       <td style="border:1px solid gray !important; border-collapse: collapse;">
-          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${d.initiative.id}/${d.initiative.official_code}">${process.env.FRONTEND}/home/${d.initiative.id}/${d.initiative.official_code}</a>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${d.science_programs.id}/${d.science_programs.official_code}">${process.env.FRONTEND}/home/${d.science_programs.id}/${d.science_programs.official_code}</a>
       </td>
       </tr>
       `
@@ -385,8 +385,8 @@ export class EmailsService {
           ${contnet}
           <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
             <tr>
-              <th style="border:1px solid gray !important; border-collapse: collapse;">INIT Code</th>
-              <th style="border:1px solid gray !important; border-collapse: collapse;">Initiative name</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Science programs code</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Science programs name</th>
             </tr>
             <tr>
               <td style="border:1px solid gray !important; border-collapse: collapse;">${init.official_code}</td>
@@ -415,7 +415,7 @@ export class EmailsService {
           <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
             <tr>
               <th style="border:1px solid gray !important; border-collapse: collapse;">INIT Code</th>
-              <th style="border:1px solid gray !important; border-collapse: collapse;">Initiative name</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Science programs name</th>
               <th style="border:1px solid gray !important; border-collapse: collapse;">Version ID</th>
               <th style="border:1px solid gray !important; border-collapse: collapse;">Creation Date</th>
             </tr>

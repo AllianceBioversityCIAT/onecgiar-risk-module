@@ -21,7 +21,7 @@ export class VersionsTableComponent {
     private meta: Meta
   ) {}
 
-  initiative_name: string = '';
+  science_programs_name: string = '';
   displayedColumns: string[] = [
     'Version',
     'Creation Date',
@@ -34,7 +34,7 @@ export class VersionsTableComponent {
   @ViewChild(MatPaginator) paginator: any;
 
   path: any = '';
-  initiativeId: any;
+  scienceProgramsId: any;
   officalCode: any;
   userRole: any;
 
@@ -44,9 +44,9 @@ export class VersionsTableComponent {
     this.officalCode = params.initiativeId;
     const iniitave = await this.initiativeService.getInitiative(params.id);
     const iniitaves = await this.initiativeService.getInitiatives(params.id);
-    this.initiativeId = params.id;
+    this.scienceProgramsId = params.id;
     this.dataSource.paginator = this.paginator;
-    this.initiative_name = iniitave.name;
+    this.science_programs_name = iniitave.name;
     this.dataSource.data = iniitaves;
 
     const access_token = localStorage.getItem('access_token');

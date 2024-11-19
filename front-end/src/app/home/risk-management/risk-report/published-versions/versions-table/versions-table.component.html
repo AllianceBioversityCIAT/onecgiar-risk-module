@@ -2,14 +2,14 @@
   <nav class="risk-nav-main">
     <ul class="risk-nav-list">
       <li>
-        <a class="risk-nav-link" routerLink="/home">Initiatives</a>
+        <a class="risk-nav-link" routerLink="/home">Science Programs</a>
       </li>
       <li>
         <a routerLink="''" class="risk-nav-link">></a>
       </li>
       <li>
         <a
-          routerLink="/home/{{ initiativeId }}/{{ officalCode }}"
+          routerLink="/home/{{ scienceProgramsId }}/{{ officalCode }}"
           class="risk-nav-link"
           >&nbsp;Risk report<span class="line">&nbsp;/</span>&nbsp;{{
             officalCode
@@ -21,7 +21,7 @@
       </li>
       <li>
         <a
-          routerLink="/home/{{ initiativeId }}/{{ officalCode }}/versions"
+          routerLink="/home/{{ scienceProgramsId }}/{{ officalCode }}/versions"
           class="risk-nav-link"
           >Submitted versions</a
         >

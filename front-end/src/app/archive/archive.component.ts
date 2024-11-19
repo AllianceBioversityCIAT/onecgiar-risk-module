@@ -23,7 +23,7 @@ export class ArchiveComponent implements OnInit{
   isadmin = false;
   displayedColumns: string[] = [
     'INIT-ID',
-    'Initiative Name',
+    'science programs Name',
     'Risk Category',
     'Number of risks',
     'My Role',
@@ -70,9 +70,9 @@ export class ArchiveComponent implements OnInit{
     this.getArchivedInitiatives(filters);
   }
   async getArchivedInitiatives(filters = null) {
-    let Initiatives: any = await this.initiativeService.getArchivedInitiatives(filters);
-    this.dataSource = new MatTableDataSource<any>(Initiatives);
-    this.length = Initiatives.length;
+    let sciencePrograms: any = await this.initiativeService.getArchivedInitiatives(filters);
+    this.dataSource = new MatTableDataSource<any>(sciencePrograms);
+    this.length = sciencePrograms.length;
   }
 
 

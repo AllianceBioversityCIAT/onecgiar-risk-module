@@ -39,7 +39,7 @@ export class ArchiveAdminComponent implements OnInit {
   archived: boolean = false;
   displayedColumns: string[] = [
     'INIT-ID',
-    'Initiative Name',
+    'Science Programs name',
     'Risk Category',
     'Number of risks',
     'My Role',
@@ -58,7 +58,7 @@ export class ArchiveAdminComponent implements OnInit {
     if (access_token) {
       this.userRole = jwt_decode(access_token);
     }
-    this.getInitiatives(this.filters);
+    this.getSciencePrograms(this.filters);
 
     this.title.setTitle('Archive module');
     this.meta.updateTag({ name: 'description', content: 'Archive module' });
@@ -67,10 +67,10 @@ export class ArchiveAdminComponent implements OnInit {
 
   filters: any = { archived: false };
 
-  async getInitiatives(filters = null) {
-    let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
-    this.dataSource = new MatTableDataSource<any>(Initiatives);
-    this.length = Initiatives.length;
+  async getSciencePrograms(filters = null) {
+    let sciencePrograms: any = await this.initiativeService.getInitiativesWithFilters(filters);
+    this.dataSource = new MatTableDataSource<any>(sciencePrograms);
+    this.length = sciencePrograms.length;
   }
 
   listOfCategories: any[] = [];
@@ -136,7 +136,7 @@ export class ArchiveAdminComponent implements OnInit {
         if(res){
           await this.initiativeService.archiveInit(this.initIds).then(
             () => {
-              this.getInitiatives(this.filters);
+              this.getSciencePrograms(this.filters);
               this.toastr.success('Archived successfully');
       
             }, (error) => {
