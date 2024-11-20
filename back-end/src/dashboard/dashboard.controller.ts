@@ -1,7 +1,7 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { getCategoriesLevels, getCategoriesCount, getInitiativeScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
-import { getInitiative } from 'DTO/initiative.dto';
+import { getCategoriesLevels, getCategoriesCount, getScienceProgramsScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
+import { getSciencePrograms } from 'DTO/initiative.dto';
 import { sciencePrograms } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
@@ -22,7 +22,7 @@ export class DashboardController {
   @Get('science-programs/details')
   @ApiCreatedResponse({
     description: '',
-    type: [getInitiative],
+    type: [getSciencePrograms],
   })
   getInitiativeDetails() {
     return this.iniService.scienceProgramsRepository.find({
@@ -43,7 +43,7 @@ export class DashboardController {
   @Get('science-programs/score')
   @ApiCreatedResponse({
     description: '',
-    type: [getInitiativeScor],
+    type: [getScienceProgramsScor],
   })
   getInitiativeScore() {
     return this.dataSource

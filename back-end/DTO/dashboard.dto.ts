@@ -1,4 +1,4 @@
-export class getInitiativeScor {
+export class getScienceProgramsScor {
     id: number;
     official_code: string;
     name: string;

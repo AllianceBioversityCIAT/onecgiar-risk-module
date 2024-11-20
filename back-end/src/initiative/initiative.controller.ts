@@ -53,8 +53,8 @@ import {
   deleteRoleRes,
   getAllCategories,
   getAllVersions,
-  getInitiative,
-  getInitiativeById,
+  getSciencePrograms,
+  getScienceProgramsById,
   getRoles,
   reqBodyCreateVersion,
   updateRoleReq,
@@ -265,7 +265,7 @@ export class InitiativeController {
   @Get()
   @ApiCreatedResponse({
     description: '',
-    type: [getInitiative],
+    type: [getSciencePrograms],
   })
   async getInitiative(@Query() query: any, @Req() req) {  
     let data = await this.iniService.scienceProgramsRepository.find({
@@ -844,7 +844,7 @@ export class InitiativeController {
   @Get(':id')
   @ApiCreatedResponse({
     description: '',
-    type: getInitiativeById,
+    type: getScienceProgramsById,
   })
   async getInitiatives(@Param('id') id: number) {
     let asd = await this.iniService.scienceProgramsRepository
@@ -873,7 +873,7 @@ export class InitiativeController {
   @Get('version/:id')
   @ApiCreatedResponse({
     description: '',
-    type: getInitiativeById,
+    type: getScienceProgramsById,
   })
   async getInitiativesForVersion(
     @Param('id') id: number,
@@ -1206,7 +1206,7 @@ export class InitiativeController {
   @Get(':id/excel')
   @ApiCreatedResponse({
     description: '',
-    type: getInitiativeById,
+    type: getScienceProgramsById,
   })
   async exportExcel(@Param('id') id: number, @Query() req: any) {
     let init = await this.iniService.scienceProgramsRepository.findOne({
