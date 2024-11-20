@@ -66,8 +66,8 @@ import { Role } from 'src/auth/role.enum';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { OpenGuard } from 'src/auth/open.guard';
 import { UsersService } from 'src/users/users.service';
-@ApiTags('Initiative')
-@Controller('initiative')
+@ApiTags('science-programs')
+@Controller('science-programs')
 export class InitiativeController {
   constructor(
     private iniService: InitiativeService,
@@ -124,7 +124,7 @@ export class InitiativeController {
   @Get('import')
   async import() {
     await this.iniService.syncFromClarisa();
-    return 'Initiatives imported successfully';
+    return 'science programs imported successfully';
   }
   @UseGuards(JwtAuthGuard)
   @Get('archived')
@@ -166,7 +166,7 @@ export class InitiativeController {
   @Get('import-file')
   async importFile() {
     const workbook = XLSX.readFile(
-      join(process.cwd(), 'Initiatives all risks.xlsx'),
+      join(process.cwd(), 'Science Programs all risks.xlsx'),
     );
 
     const data: any = XLSX.utils.sheet_to_json(workbook.Sheets['2023 Update']);

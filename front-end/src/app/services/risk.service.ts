@@ -137,21 +137,21 @@ export class RiskService extends MainService {
   getInitiativeCategories(id:number) {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/initiative/'+id+'/categories', { headers: this.headers })
+        .get(this.backend_url + '/science-programs/'+id+'/categories', { headers: this.headers })
         .pipe(map((d) => d))
     );
   }
   getInitiativesCategories() {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/initiative/all/categories', { headers: this.headers })
+        .get(this.backend_url + '/science-programs/all/categories', { headers: this.headers })
         .pipe(map((d) => d))
     );
   }
   getRiskUsers(id: number) {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + `/initiative/${id}/roles`, {
+        .get(this.backend_url + `/science-programs/${id}/roles`, {
           headers: this.headers,
         })
         .pipe(map((d) => d))

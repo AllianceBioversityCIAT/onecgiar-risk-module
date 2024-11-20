@@ -75,20 +75,10 @@ export class RiskReportOverviewComponent implements OnInit {
     });
   }
 
-  // openNewRiskDialog() {
-  //   const dialogRef = this.dialog.open(NewRiskComponent, {
-  //     height: '90vh',
-  //     maxWidth: '1300px',
-  //     data: { initiative_id: this.id },
-  //   });
-  //   dialogRef.afterClosed().subscribe((result) => {
-  //     this.loadInitiative();
-  //   });
-  // }
 
   dataSource: any = new MatTableDataSource<any>([]);
   dataSourceForPdf: any = new MatTableDataSource<any>([]);
-  initiative: any = null;
+  sciencePrograms: any = null;
   @ViewChild(MatPaginator) paginator: any;
 
   ngAfterViewInit() {
@@ -115,7 +105,7 @@ export class RiskReportOverviewComponent implements OnInit {
           await this.initiativeService.Publish(id, dialogResult);
 
           this.toastr.success(
-            `Risks for ${this.initiative.name} has been submitted successfully`
+            `Risks for ${this.sciencePrograms.name} has been submitted successfully`
           );
           this.loadInitiative();
         }
@@ -126,17 +116,16 @@ export class RiskReportOverviewComponent implements OnInit {
   }
   my_risks: any = null;
   async loadInitiative() {
-    this.initiative = await this.initiativeService.getInitiative(this.id);
+    this.sciencePrograms = await this.initiativeService.getInitiative(this.id);
     this.latest_version =
       await this.initiativeService.getInitiativeLatestVersion(this.id);
-    this.my_risks = this.initiative.risks
+    this.my_risks = this.sciencePrograms.risks
       .filter(
         (d: any) =>
           d?.risk_owner && d?.risk_owner?.user?.id == this.user_info.id
       )
       .map((d: any) => d);
 
-    console.log('initiative  this.riskOwners', this.my_risks);
     this.AllRisk = await this.riskService.getRisks(this.id, this.filters);
     this.dataSource = new MatTableDataSource<any>(this.AllRisk.risks);
     this.NumberOfRisks = this.dataSource._renderData._value.length;
@@ -168,7 +157,7 @@ export class RiskReportOverviewComponent implements OnInit {
   AllRisk: any;
   NumberOfRisks: any;
   versionId: any;
-  initiativeId: any;
+  scienceProgramsId: any;
   user_info: any;
   my_roles: string[] = [];
   riskUsers: any;
@@ -186,7 +175,7 @@ export class RiskReportOverviewComponent implements OnInit {
     const params: any = this.activatedRoute?.snapshot.params;
 
     this.id = +params.id;
-    this.initiativeId = params.initiativeId;
+    this.scienceProgramsId = params.initiativeId;
     this.riskUsers = await this.riskService.getRiskUsers(this.id);
     this.latest_version =
       await this.initiativeService.getInitiativeLatestVersion(this.id);

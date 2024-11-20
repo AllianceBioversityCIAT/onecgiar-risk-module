@@ -19,7 +19,7 @@ export class DashboardController {
   constructor(private dataSource: DataSource,private iniService: InitiativeService,private riskService: RiskService) {}
 
   @Roles()
-  @Get('initiative/details')
+  @Get('science-programs/details')
   @ApiCreatedResponse({
     description: '',
     type: [getInitiative],
@@ -40,7 +40,7 @@ export class DashboardController {
       });
   }
   @Roles()
-  @Get('initiative/score')
+  @Get('science-programs/score')
   @ApiCreatedResponse({
     description: '',
     type: [getInitiativeScor],
