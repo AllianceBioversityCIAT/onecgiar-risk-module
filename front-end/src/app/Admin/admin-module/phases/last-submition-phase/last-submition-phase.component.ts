@@ -46,11 +46,11 @@ export class LastSubmitionPhaseComponent implements OnInit {
     this.data = await this.phasesService.getLastSubmitionVersionByPhase(this.phaseId);
     if(this.data.status == "Open") this.router.navigate(['/admin/phases']);
 
-    this.dataSource = this.data.science_programs.sort((a: any, b: any) => a.official_code.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, '').toLowerCase().localeCompare(b.official_code.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, '').toLowerCase()));
-    const science_programs = await this.initiativesService.getInitiativesWithFilters({});
+    this.dataSource = this.data.program.sort((a: any, b: any) => a.official_code.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, '').toLowerCase().localeCompare(b.official_code.replace(/[\s~`!@#$%^&*(){}\[\];:"'<,.>?\/\\|_+=-]/g, '').toLowerCase()));
+    const program = await this.initiativesService.getInitiativesWithFilters({});
 
     //append original init id to object
-    science_programs.forEach(( d : any ) => 
+    program.forEach(( d : any ) => 
       this.dataSource.forEach(( x : any ) => {
         if(d.official_code == x.official_code && d.clarisa_id == x.clarisa_id) {
           return x['original_init_id'] = d.id

@@ -11,12 +11,12 @@ import {
   OneToMany,
   JoinTable,
 } from 'typeorm';
-import { sciencePrograms } from './initiative.entity';
+import { Program } from './initiative.entity';
 import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 
 @Entity()
-export class scienceProgramsRoles {
+export class ProgramRoles {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id;
@@ -32,11 +32,11 @@ export class scienceProgramsRoles {
   user: User;
   @ApiProperty()
   @Column()
-  science_programs_id: number;
+  program_id: number;
 
-  @ManyToOne(() => sciencePrograms, (sciencePrograms) => sciencePrograms.roles)
-  @JoinColumn({ name: 'science_programs_id' })
-  science_programs: sciencePrograms;
+  @ManyToOne(() => Program, (program) => program.roles)
+  @JoinColumn({ name: 'program_id' })
+  program: Program;
 
   @ApiProperty()
   @Column()

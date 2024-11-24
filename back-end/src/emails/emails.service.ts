@@ -12,9 +12,9 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
 import { InitiativeService } from 'src/initiative/initiative.service';
-import { sciencePrograms } from 'entities/initiative.entity';
+import { Program } from 'entities/initiative.entity';
 import { Risk } from 'entities/risk.entity';
-import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
+import { ProgramRoles } from 'entities/initiative-roles.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 @Injectable()
 export class EmailsService {
@@ -23,12 +23,12 @@ export class EmailsService {
     @InjectRepository(CollectedEmail) public collectedEmails: Repository<CollectedEmail>,
     private variabelService: VariablesService,
     private usersService: UsersService,
-    @InjectRepository(sciencePrograms)
-    public scienceProgramsRepository: Repository<sciencePrograms>,
+    @InjectRepository(Program)
+    public programRepository: Repository<Program>,
     @InjectRepository(Risk)
     public riskRepository: Repository<Risk>,
-    @InjectRepository(scienceProgramsRoles)
-    public scienceProgramsRolesRepository: Repository<scienceProgramsRoles>,
+    @InjectRepository(ProgramRoles)
+    public programRolesRepository: Repository<ProgramRoles>,
   ) {}
   private readonly logger = new Logger(EmailsService.name);
   async sendEmailWithSendGrid(to, subject, html) {
@@ -134,7 +134,7 @@ export class EmailsService {
         variable_id: variableId,
         status: false
       },
-      relations: ['science_programs', 'risk']
+      relations: ['program', 'risk']
     });
 
     let userEmail = emails.map(d => d.email);
@@ -185,16 +185,16 @@ export class EmailsService {
     });
 
     for (let risk of risks) {
-      const init = await this.scienceProgramsRolesRepository.find({
+      const init = await this.programRolesRepository.find({
         where: {
-          science_programs_id: risk.science_programs_id,
+          program_id: risk.program_id,
         },
         relations: ['user'],
       });
 
       init.forEach((init) => {
         if (init.role == 'Leader' || init.role == 'Coordinator') {
-          this.sendEmailTobyVarabel(init.user, 6, init.science_programs_id, risk);
+          this.sendEmailTobyVarabel(init.user, 6, init.program_id, risk);
         }
       });
     }
@@ -234,7 +234,7 @@ export class EmailsService {
       email,
       subject,
       risk_id: risk.id,
-      science_programs_id: init.id,
+      program_id: init.id,
       variable_id: variableId
     });
     return await this.collectedEmails.save(newEmail);
@@ -295,7 +295,7 @@ export class EmailsService {
       <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.id}</td>
       <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.title}</td>
       <td style="border:1px solid gray !important; border-collapse: collapse;">
-          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${d.science_programs.id}/${d.science_programs.official_code}">${process.env.FRONTEND}/home/${d.science_programs.id}/${d.science_programs.official_code}</a>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${d.program.id}/${d.program.official_code}">${process.env.FRONTEND}/home/${d.program.id}/${d.program.official_code}</a>
       </td>
       </tr>
       `
@@ -369,7 +369,7 @@ export class EmailsService {
     risk,
     content_id,
   ) {
-    const init = await this.scienceProgramsRepository.findOne({
+    const init = await this.programRepository.findOne({
       where: {
         id: init_id,
       },
@@ -399,7 +399,7 @@ export class EmailsService {
           <br>
             `;
         } else {
-          const lastVersion = await this.scienceProgramsRepository.findOne({
+          const lastVersion = await this.programRepository.findOne({
             where: {
               id: init.last_version_id,
             },

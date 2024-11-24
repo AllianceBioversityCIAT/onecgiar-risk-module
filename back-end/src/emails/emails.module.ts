@@ -7,9 +7,9 @@ import { VariablesModule } from 'src/variables/variables.module';
 import { Variables } from 'entities/variables.entity';
 import { User } from 'entities/user.entitiy';
 import { UsersModule } from 'src/users/users.module';
-import { sciencePrograms } from 'entities/initiative.entity';
+import { Program } from 'entities/initiative.entity';
 import { Risk } from 'entities/risk.entity';
-import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
+import { ProgramRoles } from 'entities/initiative-roles.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 
@@ -23,9 +23,9 @@ import { CollectedEmail } from 'entities/collected-emails.entity';
       Email,
       Variables,
       User,
-      sciencePrograms,
+      Program,
       Risk,
-      scienceProgramsRoles,
+      ProgramRoles,
       CollectedEmail
     ]),
     AuthModule,

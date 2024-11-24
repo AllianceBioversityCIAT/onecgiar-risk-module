@@ -12,14 +12,14 @@ import {
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { scienceProgramsRoles } from './initiative-roles.entity';
+import { ProgramRoles } from './initiative-roles.entity';
 import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 import { ActionArea } from './action-area';
 import { Phase } from './phase.entity';
 import { CollectedEmail } from './collected-emails.entity';
 @Entity()
-export class sciencePrograms {
+export class Program {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -36,17 +36,17 @@ export class sciencePrograms {
   name: string;
 
   @ApiProperty({ type: () => [Risk] })
-  @OneToMany(() => Risk, (risk) => risk.science_programs)
+  @OneToMany(() => Risk, (risk) => risk.program)
   @JoinTable()
   risks: Array<Risk>;
 
-  @ApiProperty({ type: () => [scienceProgramsRoles] })
+  @ApiProperty({ type: () => [ProgramRoles] })
   @OneToMany(
-    () => scienceProgramsRoles,
-    (scienceProgramsRoles) => scienceProgramsRoles.science_programs,{onUpdate:'RESTRICT',onDelete:'RESTRICT'}
+    () => ProgramRoles,
+    (programRoles) => programRoles.program,{onUpdate:'RESTRICT',onDelete:'RESTRICT'}
   )
   @JoinTable()
-  roles: Array<scienceProgramsRoles>;
+  roles: Array<ProgramRoles>;
 
   @ApiProperty()
   @Optional()
@@ -66,7 +66,7 @@ export class sciencePrograms {
   @UpdateDateColumn()
   last_updated_date: Date;
 
-  @ManyToOne(() => User, (user) => user.science_programs)
+  @ManyToOne(() => User, (user) => user.program)
   @JoinColumn({ name: 'created_by_user_id' })
   created_by: User;
   @Optional()
@@ -90,7 +90,7 @@ export class sciencePrograms {
   @Column({default:null})
   action_area_id:number
 
-  @ManyToOne(() => ActionArea, (action_area) => action_area.science_programs)
+  @ManyToOne(() => ActionArea, (action_area) => action_area.program)
   @JoinColumn({ name: 'action_area_id' })
   action_area: ActionArea;
 
@@ -98,12 +98,12 @@ export class sciencePrograms {
   @Column({default:null})
   phase_id:number
 
-  @ManyToOne(() => Phase, (phase) => phase.science_programs)
+  @ManyToOne(() => Phase, (phase) => phase.program)
   @JoinColumn({ name: 'phase_id' })
   phase: Phase;
 
 
   @ApiProperty()
-  @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.science_programs)
+  @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.program)
   email: any;
 }

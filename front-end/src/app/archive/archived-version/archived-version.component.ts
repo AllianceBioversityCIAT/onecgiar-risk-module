@@ -63,9 +63,9 @@ export class ArchivedVersionComponent {
     const data = await this.initiativeService.getArchivedById(id);
     const param2: any = this.activatedRoute?.snapshot.params; //version id
     this.versionId = param2.id;
-    this.officalCode = data.science_programs.official_code;
-    this.scienceProgramsName = data.science_programs.name;
-    this.scienceProgramsId = data.science_programs.id;
+    this.officalCode = data.program.official_code;
+    this.scienceProgramsName = data.program.name;
+    this.scienceProgramsId = data.program.id;
     this.versionData = data.init_data.version.filter((d: any) => d.id == param2.id)[0];
     this.dataSource = new MatTableDataSource<any>(this.versionData.risks);
   }

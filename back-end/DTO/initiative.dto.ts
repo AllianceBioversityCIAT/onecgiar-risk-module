@@ -4,7 +4,7 @@ import { Risk } from "entities/risk.entity";
 import { RiskCategory } from "entities/risk-category.entity";
 
 //////////////////////////////////////////////////
-export class getSciencePrograms{
+export class getProgram{
     id: number;
     official_code: string;
     clarisa_id: number;
@@ -16,15 +16,15 @@ export class getSciencePrograms{
     created_by_user_id: number;
     status: boolean;
     action_area_id: number;
-    risks: Array<riskGetSciencePrograms>;
+    risks: Array<riskGetProgram>;
     roles: Array<roles>;
 }
 
 
 
-export class riskGetSciencePrograms {
+export class riskGetProgram {
     id: number;
-    science_programs_id: number;
+    program_id: number;
     title: string;
     risk_owner_id: number;
     description: string;
@@ -51,7 +51,7 @@ export class riskGetSciencePrograms {
         id: number;
         email: string;
         user_id: number;
-        science_programs_id:  number;
+        program_id:  number;
         role: string;
         createdAt: Date;
         updatedAt: Date;
@@ -62,7 +62,7 @@ export class roles {
     id: number;
     email: string;
     user_id: number;
-    science_programs_id: number;
+    program_id: number;
     role: string;
     createdAt:  Date;
     updatedAt:  Date;
@@ -89,7 +89,7 @@ export class roles {
 
 
 
-export class getScienceProgramsById{
+export class getProgramById{
     id: number;
     official_code: string;
     clarisa_id: number;
@@ -101,16 +101,16 @@ export class getScienceProgramsById{
     created_by_user_id: number;
     status: boolean;
     action_area_id: number;
-    risks: Array<riskGetScienceProgramsById>;
+    risks: Array<riskGetProgramById>;
     created_by: user;
     roles: Array<roles>;
 }
 
 
 
-export class riskGetScienceProgramsById {
+export class riskGetProgramById {
     id: number;
-    science_programs_id: number;
+    program_id: number;
     title: string;
     risk_owner_id: number;
     description: string;
@@ -139,7 +139,7 @@ export class riskGetScienceProgramsById {
         id: number;
         email: string;
         user_id: number;
-        science_programs_id:  number;
+        program_id:  number;
         role: string;
         createdAt: Date;
         updatedAt: Date;
@@ -170,12 +170,12 @@ export class user extends getUsers{}
 
 /////////////////////////////////////////////////
 
-export class  AllExcel extends riskGetScienceProgramsById{
-    sciencePrograms: sciencePrograms;
+export class  AllExcel extends riskGetProgramById{
+    Program: Program;
 }
 
 
-export class sciencePrograms {
+export class Program {
     id: number;
     official_code: string;
     clarisa_id:  string;
@@ -212,7 +212,7 @@ export class createVersion {
 
 export class riskForCreateVersion extends PickType(Risk, [
     'id',
-    'science_programs_id',
+    'program_id',
     'title',
     'risk_owner_id',
     'description',
@@ -233,7 +233,7 @@ export class riskForCreateVersion extends PickType(Risk, [
 
 //req create version
 export class reqBodyCreateVersion {
-    science_programs_id: number;
+    program_id: number;
     top: Array<riskForCreateVersion>
 }
 ///////////////////////////////////////////////
@@ -247,7 +247,7 @@ export class getAllCategories extends PickType(RiskCategory,['id','title','descr
 
 
 ///////////////////////////////////////////////
-export class getAllVersions extends getSciencePrograms {
+export class getAllVersions extends getProgram {
     created_by: user;
 }
 ///////////////////////////////////////////////
@@ -258,7 +258,7 @@ export class getRoles {
     id: number;
     email: string;
     user_id: number;
-    science_programs_id:  number;
+    program_id:  number;
     role: string;
     createdAt: Date;
     updatedAt: Date;
@@ -268,7 +268,7 @@ export class getRoles {
 
 ///////////////////////////////////////////////
 export class createRoleReq{
-    science_programs_id: number;
+    program_id: number;
     email: string;
     user_id: number;
     role: string;
@@ -276,7 +276,7 @@ export class createRoleReq{
 
 export class createRoleRes{
     id: number;
-    science_programs_id: number;
+    program_id: number;
     email: string;
     user_id: number;
     role: string;
@@ -307,7 +307,7 @@ export class TopSimilar {
     top: Array<top>
     similar: Array<similar>
 }
-export class top extends OmitType(riskGetSciencePrograms,['category','risk_owner']){}
-export class similar extends OmitType(riskGetSciencePrograms,['category','risk_owner']){}
+export class top extends OmitType(riskGetProgram,['category','risk_owner']){}
+export class similar extends OmitType(riskGetProgram,['category','risk_owner']){}
 
 ///////////////////////////////////////////////

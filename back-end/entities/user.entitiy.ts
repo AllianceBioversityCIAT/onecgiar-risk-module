@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinTable } from 'typeorm';
-import { sciencePrograms } from './initiative.entity';
+import { Program } from './initiative.entity';
 import { Risk } from './risk.entity';
 @Entity()
 export class User {
@@ -22,13 +22,13 @@ export class User {
   role: 'user' | 'admin';
 
 
-  @ApiProperty({ type: () => [sciencePrograms] })
-  @OneToMany(() => sciencePrograms, (sciencePrograms) => sciencePrograms.created_by)
+  @ApiProperty({ type: () => [Program] })
+  @OneToMany(() => Program, (program) => program.created_by)
   @JoinTable()
-  science_programs: Array<sciencePrograms>;
+  program: Array<Program>;
 
   @ApiProperty({ type: () => [Risk] })
-  @OneToMany(() => Risk, (risk) => risk.science_programs)
+  @OneToMany(() => Risk, (risk) => risk.program)
   @JoinTable()
   risks: Array<Risk>;
 

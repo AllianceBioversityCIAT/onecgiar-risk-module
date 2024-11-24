@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinTable } from 'typeorm';
-import { sciencePrograms } from './initiative.entity';
+import { Program } from './initiative.entity';
 
 @Entity()
 export class ActionArea {
@@ -14,7 +14,7 @@ export class ActionArea {
   @Column()
   description: string;
 
-  @OneToMany(() => sciencePrograms, (sciencePrograms) => sciencePrograms.action_area)
+  @OneToMany(() => Program, (program) => program.action_area)
   @JoinTable()
-  science_programs
+  program
 }

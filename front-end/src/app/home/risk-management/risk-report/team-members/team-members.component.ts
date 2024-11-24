@@ -71,7 +71,7 @@ export class TeamMembersComponent {
   }
 
   async deleteMember(role: any) {
-    this.assignedRiskOwner = await this.riskService.getRisksOwner(role.science_programs_id,role.user_id);
+    this.assignedRiskOwner = await this.riskService.getRisksOwner(role.program_id,role.user_id);
     this.dialog
       .open(DeleteConfirmDialogComponent, {
         data: {

@@ -142,7 +142,7 @@
     <app-search-risk
       class="btn--animated"
       *ngIf="sciencePrograms?.id"
-      [science_programs_id]="sciencePrograms.id"
+      [program_id]="sciencePrograms.id"
       [AllRisk]="AllRisk"
       (filters)="filter($event)"
       (exportPdf)="exportPdf()"

@@ -43,8 +43,8 @@ export class ArchivedTeamMemberComponent implements OnInit {
 
   async getArchivedDataById(id: number) {
     const data = await this.initiativeService.getArchivedById(id);
-    this.officalCode = data.science_programs.official_code;
-    this.scienceProgramsId = data.science_programs.id;
+    this.officalCode = data.program.official_code;
+    this.scienceProgramsId = data.program.id;
     this.dataSource = new MatTableDataSource<any>(data.init_data.roles);
   }
 }

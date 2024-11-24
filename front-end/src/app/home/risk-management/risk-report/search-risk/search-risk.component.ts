@@ -21,7 +21,7 @@ export class SearchRiskComponent {
   filterForm: any;
   @Input() AllRisk: any;
 
-  @Input() science_programs_id: number | null = null;
+  @Input() program_id: number | null = null;
 
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
 
@@ -97,7 +97,7 @@ export class SearchRiskComponent {
   async ngOnInit() {
     let time: any = null;
     const ini = await this.initiativeService.getInitiative(
-      this.science_programs_id as number
+      this.program_id as number
     );
     this.riskRaiser = [
       ...new Map(
@@ -107,7 +107,7 @@ export class SearchRiskComponent {
       ).values(),
     ];
     this.riskUsers = await this.riskService.getRiskUsers(
-      this.science_programs_id as number
+      this.program_id as number
     );
 
     this.risksOwners = ini.risks
@@ -123,7 +123,7 @@ export class SearchRiskComponent {
 
     this.setForm();
     this.categories = await this.riskService.getInitiativeCategories(
-      this.science_programs_id as number
+      this.program_id as number
     );
     this.filterForm.valueChanges.subscribe(() => {
       console.log(this.filterForm.value);

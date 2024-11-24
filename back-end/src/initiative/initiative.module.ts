@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
-import { sciencePrograms } from 'entities/initiative.entity';
+import { ProgramRoles } from 'entities/initiative-roles.entity';
+import { Program } from 'entities/initiative.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { AuthModule } from 'src/auth/auth.module';
@@ -26,8 +26,8 @@ import { Archive } from 'entities/archive.entity';
   controllers: [InitiativeController],
   imports: [
     TypeOrmModule.forFeature([
-      sciencePrograms,
-      scienceProgramsRoles,
+      Program,
+      ProgramRoles,
       Risk,
       Mitigation,
       Email,

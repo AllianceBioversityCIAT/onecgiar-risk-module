@@ -21,7 +21,7 @@ export class VersionsTableComponent {
     private meta: Meta
   ) {}
 
-  science_programs_name: string = '';
+  program_name: string = '';
   displayedColumns: string[] = [
     'Version',
     'Creation Date',
@@ -46,7 +46,7 @@ export class VersionsTableComponent {
     const iniitaves = await this.initiativeService.getInitiatives(params.id);
     this.scienceProgramsId = params.id;
     this.dataSource.paginator = this.paginator;
-    this.science_programs_name = iniitave.name;
+    this.program_name = iniitave.name;
     this.dataSource.data = iniitaves;
 
     const access_token = localStorage.getItem('access_token');

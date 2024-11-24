@@ -5,8 +5,8 @@ import { CategoryGroup } from 'entities/categories-groups';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 import { FAQ } from 'entities/FAQ.entity';
 import { Glossary } from 'entities/glossary.entity';
-import { scienceProgramsRoles } from 'entities/initiative-roles.entity';
-import { sciencePrograms } from 'entities/initiative.entity';
+import { ProgramRoles } from 'entities/initiative-roles.entity';
+import { Program } from 'entities/initiative.entity';
 import { MitigationStatus } from 'entities/mitigation-status.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Phase } from 'entities/phase.entity';
@@ -31,8 +31,8 @@ export const dataSourceOptions: DataSourceOptions = {
     CategoryGroup,
     RiskCategory,
     Risk,
-    sciencePrograms,
-    scienceProgramsRoles,
+    Program,
+    ProgramRoles,
     Mitigation,
     MitigationStatus,
     User,

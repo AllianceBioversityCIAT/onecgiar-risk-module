@@ -161,8 +161,8 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         this.clicked = false;
         result = await this.riskService.updateRisk(this.riskId, {
           id: Number(this.riskId),
-          science_programs_id:
-            +this.scienceProgramsId | this?.checkIfRiskExist[0]?.science_programs_id,
+          program_id:
+            +this.scienceProgramsId | this?.checkIfRiskExist[0]?.program_id,
           mitigations: this.proposed.data,
           ...this.newRiskForm.value,
         });
@@ -184,7 +184,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       } else {
         this.clicked = false;
         result = await this.riskService.createNewRisk({
-          science_programs_id: this.scienceProgramsId,
+          program_id: this.scienceProgramsId,
           mitigations: this.proposed.data,
           ...this.newRiskForm.value,
         });

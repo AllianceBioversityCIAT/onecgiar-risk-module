@@ -60,7 +60,7 @@ export class RiskController {
   async getRisksOwner(@Query('initiative_id') initId: number, @Query('user_id') user_id: number) {
     const risks = await this.riskService.riskRepository.find({
       where : {
-        science_programs_id: initId,
+        program_id: initId,
         risk_owner: {
           user_id: user_id
         }
@@ -78,12 +78,12 @@ export class RiskController {
   
     const redundentRisk = await this.riskService.riskRepository.find({
       where: {
-        science_programs_id: query.initiative_id,
+        program_id: query.initiative_id,
         redundant: true
       },
       relations: [
         'category',
-        'science_programs',
+        'program',
         'mitigations',
         'mitigations.status',
         'created_by',
@@ -93,12 +93,12 @@ export class RiskController {
     });
     const notredundentRisk = await this.riskService.riskRepository.find({
       where: {
-        science_programs_id: query.initiative_id,
+        program_id: query.initiative_id,
         redundant: false
       },
       relations: [
         'category',
-        'science_programs',
+        'program',
         'mitigations',
         'mitigations.status',
         'created_by',
@@ -109,7 +109,7 @@ export class RiskController {
     const risks = await this.riskService.riskRepository.find({
       where: {
         title:query?.title ?  ILike(`%${query.title}%`) : null, 
-        science_programs_id: query.initiative_id,
+        program_id: query.initiative_id,
         category : { ...this.filterCategory(query) },
         // category_id: query?.category ? In(query?.category)  : null,
         created_by_user_id: query?.created_by ? Array.isArray(query?.created_by) ?  In( query?.created_by) : query?.created_by : null,
@@ -119,7 +119,7 @@ export class RiskController {
       },
       relations: [
         'category',
-        'science_programs',
+        'program',
         'mitigations',
         'mitigations.status',
         'created_by',
@@ -146,7 +146,7 @@ export class RiskController {
       where: { id },
       relations: [
         'category',
-        'science_programs',
+        'program',
         'mitigations',
         'mitigations.status',
         'created_by',

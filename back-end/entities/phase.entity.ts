@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   VirtualColumn,
 } from 'typeorm';
-import { sciencePrograms } from './initiative.entity';
+import { Program } from './initiative.entity';
 
 export enum phaseStatus {
   OPEN = 'Open',
@@ -49,7 +49,7 @@ export class Phase {
   active: boolean;
 
 
-  @OneToMany(() => sciencePrograms, (sciencePrograms) => sciencePrograms.phase)
+  @OneToMany(() => Program, (program) => program.phase)
   @JoinTable()
-  science_programs
+  program
 }
