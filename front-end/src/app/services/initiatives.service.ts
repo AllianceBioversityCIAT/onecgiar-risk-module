@@ -24,7 +24,7 @@ export class InitiativesService extends MainService {
 
     const data = await firstValueFrom(
       this.http
-        .get(this.backend_url + `/science-programs/all/excel?user=${userInfo.role}`, {
+        .get(this.backend_url + `/program/all/excel?user=${userInfo.role}`, {
           params: finalFilters,
           headers: this.headers,
           responseType: 'blob',
@@ -39,7 +39,7 @@ export class InitiativesService extends MainService {
   async exportArchivedRisks(filters: any) { 
     const data = await firstValueFrom(
       this.http
-        .get(this.backend_url + `/science-programs/export-archived`, {
+        .get(this.backend_url + `/program/export-archived`, {
           params: filters,
           headers: this.headers,
           responseType: 'blob',
@@ -53,7 +53,7 @@ export class InitiativesService extends MainService {
     return await firstValueFrom(
       this.http
         .post(
-          this.backend_url + '/science-programs/' + id + '/create_version',
+          this.backend_url + '/program/' + id + '/create_version',
           reason,
           {
             headers: this.headers,
@@ -67,7 +67,7 @@ export class InitiativesService extends MainService {
     return await firstValueFrom(
       this.http
         .post(
-          this.backend_url + '/science-programs/archive',
+          this.backend_url + '/program/archive',
           {
             ids: initIds
           },
@@ -83,7 +83,7 @@ export class InitiativesService extends MainService {
     return await firstValueFrom(
       this.http
         .post(
-          this.backend_url + '/science-programs/sync-clarisa',
+          this.backend_url + '/program/sync-clarisa',
           {
             ids: initIds
           },
@@ -106,7 +106,7 @@ export class InitiativesService extends MainService {
 
     const data = await firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/' + id + `/excel?user=${userInfo.role}&version=${versions}`, {
+        .get(this.backend_url + '/program/' + id + `/excel?user=${userInfo.role}&version=${versions}`, {
           params: finalFilters,
           headers: this.headers,
           responseType: 'blob',
@@ -119,7 +119,7 @@ export class InitiativesService extends MainService {
     if (id)
       return await firstValueFrom(
         this.http
-          .get(this.backend_url + '/science-programs/' + id + '/versions', {
+          .get(this.backend_url + '/program/' + id + '/versions', {
             headers: this.headers,
           })
           .pipe(map((d: any) => d))
@@ -127,7 +127,7 @@ export class InitiativesService extends MainService {
     else
       return await firstValueFrom(
         this.http
-          .get(this.backend_url + '/science-programs', {
+          .get(this.backend_url + '/program', {
             headers: this.headers,
           })
           .pipe(map((d: any) => d))
@@ -146,7 +146,7 @@ export class InitiativesService extends MainService {
       });
     return await firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/', {
+        .get(this.backend_url + '/program/', {
           params: finalFilters,
           headers: this.headers,
         })
@@ -167,7 +167,7 @@ export class InitiativesService extends MainService {
       });
     return await firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/archived', {
+        .get(this.backend_url + '/program/archived', {
           params: finalFilters,
           headers: this.headers,
         })
@@ -178,7 +178,7 @@ export class InitiativesService extends MainService {
   getArchivedById(archivedId: number): Promise<any> {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/archived/' + archivedId , {
+        .get(this.backend_url + '/program/archived/' + archivedId , {
           headers: this.headers,
         })
         .pipe(map((d: any) => d))
@@ -188,7 +188,7 @@ export class InitiativesService extends MainService {
   getInitiativeLatestVersion(initiativeId: number): Promise<any> {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/' + initiativeId+'/versions/latest', {
+        .get(this.backend_url + '/program/' + initiativeId+'/versions/latest', {
           headers: this.headers,
         })
         .pipe(map((d: any) => d))
@@ -199,7 +199,7 @@ export class InitiativesService extends MainService {
   getTopRisks(initiativeId: number): Promise<any> {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/' + initiativeId+'/top', {
+        .get(this.backend_url + '/program/' + initiativeId+'/top', {
           headers: this.headers,
         })
         .pipe(map((d: any) => d))
@@ -209,7 +209,7 @@ export class InitiativesService extends MainService {
   getInitiative(initiativeId: number): Promise<any> {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/' + initiativeId, {
+        .get(this.backend_url + '/program/' + initiativeId, {
           headers: this.headers,
         })
         .pipe(map((d: any) => d))
@@ -219,7 +219,7 @@ export class InitiativesService extends MainService {
   getInitiativeForVersion(initiativeId: number, filter: any): Promise<any> {
     return firstValueFrom(
       this.http
-        .get(this.backend_url + '/science-programs/version/' + initiativeId, {
+        .get(this.backend_url + '/program/version/' + initiativeId, {
           params: filter,
           headers: this.headers,
         })
@@ -229,7 +229,7 @@ export class InitiativesService extends MainService {
   // roles
   getInitiativeRoles(initiativeId: number) {
     return this.http
-      .get(this.backend_url + '/science-programs/' + initiativeId + '/roles', {
+      .get(this.backend_url + '/program/' + initiativeId + '/roles', {
         headers: this.headers,
       })
       .toPromise();
@@ -238,7 +238,7 @@ export class InitiativesService extends MainService {
   createNewInitiativeRole(initiativeId: number, role: any): Observable<any>{
     return this.http
       .post<any>(
-        this.backend_url + '/science-programs/' + initiativeId + '/roles',
+        this.backend_url + '/program/' + initiativeId + '/roles',
         {
           initiative_id: role.initiative_id,
           email: role.email,
@@ -252,7 +252,7 @@ export class InitiativesService extends MainService {
   updateInitiativeRole(initiativeId: number, roleId: number, role: any) {
     return this.http
       .put(
-        this.backend_url + '/science-programs/' + initiativeId + '/roles/' + roleId,
+        this.backend_url + '/program/' + initiativeId + '/roles/' + roleId,
         {
           initiative_id: role.initiative_id,
           id: role.id,
@@ -267,7 +267,7 @@ export class InitiativesService extends MainService {
   deleteInitiativeRole(initiativeId: number, roleId: number) {
     return this.http
       .delete(
-        this.backend_url + '/science-programs/' + initiativeId + '/roles/' + roleId,
+        this.backend_url + '/program/' + initiativeId + '/roles/' + roleId,
         { headers: this.headers }
       )
       .toPromise();

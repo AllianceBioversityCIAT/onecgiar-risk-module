@@ -26,8 +26,14 @@ import { Program } from './initiative.entity';
     @Column({ type: 'json', nullable: false })
     init_data: string;
 
+    @ApiProperty()
+    @Column()
+    program_id: number;
+    
     @OneToOne(() => Program)
-    @JoinColumn()
-    program: Program
+    @JoinColumn({ name: 'program_id' })
+    program: Program;
+
+   
 }
   
