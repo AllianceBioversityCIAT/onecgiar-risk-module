@@ -11,7 +11,7 @@ import {
   OneToMany,
   JoinTable,
 } from 'typeorm';
-import { Program } from './initiative.entity';
+import { Program } from './program.entity';
 import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 

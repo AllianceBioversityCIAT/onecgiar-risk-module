@@ -21,9 +21,9 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { ProgramRoles } from 'entities/initiative-roles.entity';
-import { Program } from 'entities/initiative.entity';
-import { InitiativeService } from './initiative.service';
+import { ProgramRoles } from 'entities/program-roles.entity';
+import { Program } from 'entities/program.entity';
+import { ProgramService } from './program.service';
 // import * as XLSX from 'xlsx';
 import * as XLSX from 'xlsx-js-style';
 
@@ -68,9 +68,9 @@ import { OpenGuard } from 'src/auth/open.guard';
 import { UsersService } from 'src/users/users.service';
 @ApiTags('program')
 @Controller('program')
-export class InitiativeController {
+export class ProgramController {
   constructor(
-    private iniService: InitiativeService,
+    private iniService: ProgramService,
     private riskService: RiskService,
     private dataSource: DataSource,
     private userService: UsersService,

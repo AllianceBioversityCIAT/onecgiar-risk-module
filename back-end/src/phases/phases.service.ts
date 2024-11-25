@@ -4,7 +4,7 @@ import { UpdatePhaseDto } from './dto/update-phase.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { Phase, phaseStatus } from 'entities/phase.entity';
-import { Program } from 'entities/initiative.entity';
+import { Program } from 'entities/program.entity';
 
 @Injectable()
 export class PhasesService {

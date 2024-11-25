@@ -12,8 +12,8 @@ import {
   Index,
   CreateDateColumn,
 } from 'typeorm';
-import { ProgramRoles } from './initiative-roles.entity';
-import { Program } from './initiative.entity';
+import { ProgramRoles } from './program-roles.entity';
+import { Program } from './program.entity';
 import { Mitigation } from './mitigation.entity';
 import { RiskCategory } from './risk-category.entity';
 import { User } from './user.entitiy';

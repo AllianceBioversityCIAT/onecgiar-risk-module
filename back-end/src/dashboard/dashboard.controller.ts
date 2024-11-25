@@ -2,13 +2,13 @@ import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { getCategoriesLevels, getCategoriesCount, getProgramScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
 import { getProgram } from 'DTO/initiative.dto';
-import { Program } from 'entities/initiative.entity';
+import { Program } from 'entities/program.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
-import { InitiativeService } from 'src/initiative/initiative.service';
+import { ProgramService } from 'src/program/program.service';
 import { RiskService } from 'src/risk/risk.service';
 import { DataSource, ILike, IsNull } from 'typeorm';
 @ApiBearerAuth()
@@ -16,7 +16,7 @@ import { DataSource, ILike, IsNull } from 'typeorm';
 @Controller('Dashboard')
 @UseGuards(JwtAuthGuard, AdminRolesGuard)
 export class DashboardController {
-  constructor(private dataSource: DataSource,private iniService: InitiativeService,private riskService: RiskService) {}
+  constructor(private dataSource: DataSource,private iniService: ProgramService,private riskService: RiskService) {}
 
   @Roles()
   @Get('program/details')

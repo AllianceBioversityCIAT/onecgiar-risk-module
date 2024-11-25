@@ -8,7 +8,7 @@ import {
     OneToOne,
     JoinColumn,
   } from 'typeorm';
-import { Program } from './initiative.entity';
+import { Program } from './program.entity';
   @Entity()
   export class Archive {
     @ApiProperty()

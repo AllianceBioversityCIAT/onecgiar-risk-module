@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   VirtualColumn,
 } from 'typeorm';
-import { Program } from './initiative.entity';
+import { Program } from './program.entity';
 
 export enum phaseStatus {
   OPEN = 'Open',

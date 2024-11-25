@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { InitiativeModule } from './initiative/initiative.module';
+import { ProgramModule } from './program/program.module';
 import { RiskModule } from './risk/risk.module';
 import { RiskCategoriesModule } from './risk-categories/risk-categories.module';
 import { AuthModule } from './auth/auth.module';
@@ -28,7 +28,7 @@ import dataSource, { dataSourceOptions } from 'db/data-source';
     TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     RiskModule,
-    InitiativeModule,
+    ProgramModule,
     ScheduleModule.forRoot(),
     EmailsModule,
     RiskCategoriesModule,

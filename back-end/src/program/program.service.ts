@@ -8,8 +8,8 @@ import {
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActionArea } from 'entities/action-area';
-import { ProgramRoles } from 'entities/initiative-roles.entity';
-import { Program } from 'entities/initiative.entity';
+import { ProgramRoles } from 'entities/program-roles.entity';
+import { Program } from 'entities/program.entity';
 import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
 import { firstValueFrom, map } from 'rxjs';
@@ -20,7 +20,7 @@ import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
 import { Archive } from 'entities/archive.entity';
 @Injectable()
-export class InitiativeService {
+export class ProgramService {
   constructor(
     @InjectRepository(Program)
     public programRepository: Repository<Program>,
@@ -82,7 +82,7 @@ export class InitiativeService {
       } else return {};
     }
   }
-  private readonly logger = new Logger(InitiativeService.name);
+  private readonly logger = new Logger(ProgramService.name);
   clarisa_auth() {
     return {
       username: process.env.CLARISA_USERNAME,

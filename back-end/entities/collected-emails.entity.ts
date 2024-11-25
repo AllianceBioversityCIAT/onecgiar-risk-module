@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Risk } from "./risk.entity";
-import { Program } from "./initiative.entity";
+import { Program } from "./program.entity";
 
 @Entity()
 export class CollectedEmail {

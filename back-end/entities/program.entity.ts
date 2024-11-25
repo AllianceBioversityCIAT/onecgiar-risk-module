@@ -12,7 +12,7 @@ import {
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { ProgramRoles } from './initiative-roles.entity';
+import { ProgramRoles } from './program-roles.entity';
 import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 import { ActionArea } from './action-area';

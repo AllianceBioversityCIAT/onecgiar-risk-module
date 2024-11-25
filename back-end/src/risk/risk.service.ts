@@ -1,7 +1,7 @@
 import { Global, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProgramRoles } from 'entities/initiative-roles.entity';
-import { Program } from 'entities/initiative.entity';
+import { ProgramRoles } from 'entities/program-roles.entity';
+import { Program } from 'entities/program.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Phase } from 'entities/phase.entity';
 import { Risk } from 'entities/risk.entity';

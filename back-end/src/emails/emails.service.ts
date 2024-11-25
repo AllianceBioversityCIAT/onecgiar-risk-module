@@ -11,10 +11,10 @@ import * as sgMail from '@sendgrid/mail';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
-import { InitiativeService } from 'src/initiative/initiative.service';
-import { Program } from 'entities/initiative.entity';
+import { ProgramService } from 'src/program/program.service';
+import { Program } from 'entities/program.entity';
 import { Risk } from 'entities/risk.entity';
-import { ProgramRoles } from 'entities/initiative-roles.entity';
+import { ProgramRoles } from 'entities/program-roles.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 @Injectable()
 export class EmailsService {

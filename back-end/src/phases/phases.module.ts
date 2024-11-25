@@ -3,7 +3,7 @@ import { PhasesService } from './phases.service';
 import { PhasesController } from './phases.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Phase } from 'entities/phase.entity';
-import { Program } from 'entities/initiative.entity';
+import { Program } from 'entities/program.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Phase, Program])],
