@@ -28,6 +28,7 @@ export class DashboardController {
     return this.iniService.programRepository.find({
         where: {
           parent_id: IsNull(),
+          archived: false
         },
         relations: [
           'risks',
@@ -52,6 +53,7 @@ export class DashboardController {
       .addSelect('Program.id', 'id')
       .addSelect('Program.status', 'status')
       .where('Program.parent_id is null')
+      .andWhere("Program.archived = :archived", { archived: false })
       .addSelect('Program.official_code', 'official_code')
       .addSelect('Program.name', 'name')
       .innerJoin(Risk,'risk','risk.program_id = Program.id')
@@ -94,6 +96,11 @@ export class DashboardController {
     return this.dataSource
       .createQueryBuilder()
       .from('risk_category', 'risk_category')
+      .leftJoin('risk', 'risk', 'risk.category_id = risk_category.id')
+      .leftJoin('program', 'program', 'program.id = risk.program_id')
+      .where('risk.original_risk_id is null')
+      .andWhere('program.archived = :archived', { archived: false })
+
       .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect((subQuery) => {
@@ -108,6 +115,7 @@ export class DashboardController {
           .where('risk.category_id = risk_category.id')
           .from(Risk, 'risk');
       }, 'current_level')
+      .groupBy('risk_category.id')
 
       .execute();
   }
@@ -121,6 +129,11 @@ export class DashboardController {
     return this.dataSource
       .createQueryBuilder()
       .from('risk_category', 'risk_category')
+      .leftJoin('risk', 'risk', 'risk.category_id = risk_category.id')
+      .leftJoin('program', 'program', 'program.id = risk.program_id')
+      .where('risk.original_risk_id is null')
+      .andWhere('program.archived = :archived', { archived: false })
+
       .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect((subQuery) => {
@@ -129,6 +142,8 @@ export class DashboardController {
           .where('risk.category_id = risk_category.id')
           .from(Risk, 'risk');
       }, 'total_count')
+      .groupBy('risk_category.id')
+
       .execute();
   }
   @Roles()
@@ -144,6 +159,10 @@ export class DashboardController {
       .addSelect('category_group.id', 'id')
       .addSelect('category_group.name', 'name')
       .leftJoin('risk_category','risk_category','risk_category.category_group_id = category_group.id ')
+      .leftJoin('risk', 'risk', 'risk.category_id = risk_category.id')
+      .leftJoin('program', 'program', 'program.id = risk.program_id')
+      .where('risk.original_risk_id is null')
+      .andWhere('program.archived = :archived', { archived: false })
       .addSelect((subQuery) => {
         return subQuery
           .addSelect(`COUNT(risk.id)`, 'total_count')
@@ -167,6 +186,7 @@ export class DashboardController {
       .addSelect('action_area.name', 'name')
       .addSelect('COUNT(risk.id)', 'total_count')
       .leftJoin('program','program','program.action_area_id = action_area.id')
+      .where('program.archived = :archived', { archived: false })
       .leftJoin('risk','risk','risk.program_id = program.id')
       .addGroupBy('action_area.id')
       .execute();
@@ -181,6 +201,13 @@ export class DashboardController {
     return this.dataSource
       .createQueryBuilder()
       .from('mitigation_status', 'mitigation_status')
+
+      .leftJoin('mitigation', 'mitigation', 'mitigation.mitigation_status_id = mitigation_status.id')
+      .leftJoin('risk', 'risk', 'risk.id = mitigation.risk_id')
+      .leftJoin('program', 'program', 'program.id = risk.program_id')
+      .where('risk.original_risk_id is null')
+      .andWhere('program.archived = :archived', { archived: false })
+
       .addSelect('mitigation_status.id', 'id')
       .addSelect('mitigation_status.title', 'title')
       .addSelect((subQuery) => {
@@ -189,6 +216,7 @@ export class DashboardController {
           .where('mitigation_status.id = mitigation.mitigation_status_id')
           .from(Mitigation, 'mitigation');
       }, 'total_actions')
+      .addGroupBy('mitigation_status.id')
 
       .execute();
   }
