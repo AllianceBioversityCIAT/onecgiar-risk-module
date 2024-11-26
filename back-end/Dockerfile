@@ -8,6 +8,7 @@ RUN mkdir /back-end
 COPY src /back-end/src
 COPY entities  /back-end/entities
 COPY DTO  /back-end/DTO
+COPY db  /back-end/db
 COPY .env nest-cli.json   *.json  /back-end/
 WORKDIR /back-end
 RUN npm i
