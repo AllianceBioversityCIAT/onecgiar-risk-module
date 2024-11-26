@@ -20,17 +20,16 @@
                 <div class="mtable">ID</div>
               </th>
               <td mat-cell *matCellDef="let element">
-                <div class="mtable">{{ element.initiative["official_code"] }}</div>
+                <div class="mtable">{{ element.program["official_code"] }}</div>
               </td>
             </ng-container>
 
-            <!-- initiativeName Column -->
-            <ng-container matColumnDef="Initiative Name">
+            <ng-container matColumnDef="science programs Name">
               <th mat-header-cell *matHeaderCellDef>
                 <span class="h1">Name</span>
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ element.initiative["name"] }}
+                {{ element.program["name"] }}
               </td>
             </ng-container>
 
@@ -41,7 +40,7 @@
               </th>
               <td mat-cell *matCellDef="let element">
                 <span class="td-3-h">{{
-                  filterCategories(element.initiative["risks"])
+                  filterCategories(element.program["risks"])
                   }}</span>
               </td>
             </ng-container>
@@ -52,7 +51,7 @@
                 <span class="h3">Num of risks</span>
               </th>
               <td mat-cell *matCellDef="let element">
-                <span class="td-h">{{ element.initiative["risks"].length }}</span>
+                <span class="td-h">{{ element.program["risks"].length }}</span>
               </td>
             </ng-container>
 
@@ -73,7 +72,7 @@
                 <span class="h4">Targets not set</span>
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ filterReqAssistance(element.initiative.risks) }}
+                {{ filterReqAssistance(element.program.risks) }}
               </td>
             </ng-container>
 

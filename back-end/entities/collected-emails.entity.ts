@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Risk } from "./risk.entity";
-import { Initiative } from "./initiative.entity";
+import { Program } from "./program.entity";
 
 @Entity()
 export class CollectedEmail {
@@ -40,13 +40,13 @@ export class CollectedEmail {
     risk_id: number;
 
 
-    @ManyToOne(() => Initiative, (initiative) => initiative.email)
-    @JoinColumn({ name: 'init_id' })
-    initiative: Initiative;
+    @ManyToOne(() => Program, (program) => program.email)
+    @JoinColumn({ name: 'program_id' })
+    program: Program;
   
     @ApiProperty()
     @Column()
-    init_id: number;
+    program_id: number;
 
 
     

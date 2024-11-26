@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { InitiativeModule } from './initiative/initiative.module';
+import { ProgramModule } from './program/program.module';
 import { RiskModule } from './risk/risk.module';
 import { RiskCategoriesModule } from './risk-categories/risk-categories.module';
 import { AuthModule } from './auth/auth.module';
@@ -20,25 +20,15 @@ import { CategoriesGroupsModule } from './categories-groups/categories-groups.mo
 import { GlossaryModule } from './glossary/glossary.module';
 import { FaqModule } from './faq/faq.module';
 import { PhasesModule } from './phases/phases.module';
+import dataSource, { dataSourceOptions } from 'db/data-source';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      host: process.env.DATABASE_HOST,
-      port: Number(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      type: 'mysql',
-      synchronize: true,
-      entities: [`dist/**/*.entity{.ts,.js}`],
-      autoLoadEntities: true,
-      namingStrategy: new SnakeNamingStrategy(),
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
     RiskModule,
-    InitiativeModule,
+    ProgramModule,
     ScheduleModule.forRoot(),
     EmailsModule,
     RiskCategoriesModule,

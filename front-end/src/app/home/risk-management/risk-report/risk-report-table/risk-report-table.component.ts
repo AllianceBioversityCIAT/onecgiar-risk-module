@@ -141,7 +141,7 @@ export class RiskReportTableComponent {
       });
       doc.html(content.innerHTML, {
         callback: (doc) => {
-          doc.save('Risks-' + this.initiativeId + '.pdf');
+          doc.save('Risks-' + this.scienceProgramsId + '.pdf');
           this.toPdf = false;
         },
       });
@@ -163,12 +163,12 @@ export class RiskReportTableComponent {
 
   user_info: any;
   id: any;
-  initiativeId: any;
+  scienceProgramsId: any;
   riskUsers: any;
   my_roles: any;
   locked: any = {};
   connection = true;
-  initiative:any;
+  sciencePrograms:any;
   async ngOnInit() {
     this.socket.on('locked', (data: any) => {
       this.locked = data;
@@ -191,10 +191,10 @@ export class RiskReportTableComponent {
     const params: any = this.activatedRoute?.snapshot.params;
 
     this.id = +params.id;
-    this.initiativeId = params.initiativeId;
+    this.scienceProgramsId = params.initiativeId;
     this.riskUsers = await this.riskService.getRiskUsers(this.id);
-    this.initiative = await this.initiativeService.getInitiative(this.id);
-    this.my_risks = this.initiative.risks
+    this.sciencePrograms = await this.initiativeService.getInitiative(this.id);
+    this.my_risks = this.sciencePrograms.risks
     .filter(
       (d: any) =>
         d?.risk_owner && d?.risk_owner?.user?.id == this.user_info.id

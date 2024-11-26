@@ -3,19 +3,19 @@
     <nav class="risk-nav-main">
       <ul class="risk-nav-list">
         <li>
-          <a class="risk-nav-link" routerLink="/home">Initiatives</a>
+          <a class="risk-nav-link" routerLink="/home">Science Programs</a>
         </li>
         <li>
           <a routerLink="''" class="risk-nav-link">></a>
         </li>
         <li>
           <a
-            routerLink="/home/{{ initiative?.id }}/{{
-              initiative?.official_code
+            routerLink="/home/{{ sciencePrograms?.id }}/{{
+              sciencePrograms?.official_code
             }}"
             class="risk-nav-link"
             >&nbsp;Risk report<span class="line">&nbsp;/</span>&nbsp;{{
-              initiative?.official_code
+              sciencePrograms?.official_code
             }}</a
           >
         </li>
@@ -72,7 +72,7 @@
               this.isTrue
             "
             class="risk-report-button-box__btn--5 btn--animated btn--dark btn"
-            (click)="publish(initiative.id)"
+            (click)="publish(sciencePrograms.id)"
             [ngClass]="{
               disabled:
                 !canPublish() ||
@@ -123,14 +123,14 @@
         *ngIf="latest_version?.status == false || !latest_version"
       >
         This is a draft version until it get submitted. last update at
-        {{ initiative?.last_updated_date | date : "short" }}
+        {{ sciencePrograms?.last_updated_date | date : "short" }}
       </p>
       <p
         class="zzz btn--animated"
         *ngIf="latest_version?.status == true"
         style="float: right; margin: 0 !important"
       >
-        This initiative risks submitted on
+        This Science Programs risks submitted on
         {{ latest_version?.submit_date | date : "short" }}
         <mat-icon
           matTooltip="Any changes to the submitted version will  convert it into the draft mode."
@@ -141,8 +141,8 @@
 
     <app-search-risk
       class="btn--animated"
-      *ngIf="initiative?.id"
-      [initiative_id]="initiative.id"
+      *ngIf="sciencePrograms?.id"
+      [program_id]="sciencePrograms.id"
       [AllRisk]="AllRisk"
       (filters)="filter($event)"
       (exportPdf)="exportPdf()"

@@ -12,7 +12,7 @@ import { InitiativesService } from 'src/app/services/initiatives.service';
 export class ArchivedTeamMemberComponent implements OnInit {
   archivedId: any;
   officalCode!: string;
-  initiativeId: any;
+  scienceProgramsId: any;
   displayedColumns: string[] = [
     'Email',
     'User',
@@ -43,8 +43,8 @@ export class ArchivedTeamMemberComponent implements OnInit {
 
   async getArchivedDataById(id: number) {
     const data = await this.initiativeService.getArchivedById(id);
-    this.officalCode = data.initiative.official_code;
-    this.initiativeId = data.initiative.id;
+    this.officalCode = data.program.official_code;
+    this.scienceProgramsId = data.program.id;
     this.dataSource = new MatTableDataSource<any>(data.init_data.roles);
   }
 }

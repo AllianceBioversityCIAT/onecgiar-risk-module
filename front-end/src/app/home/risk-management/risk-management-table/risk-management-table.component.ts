@@ -51,7 +51,7 @@ export class RiskManagementTableComponent {
   userRole: any;
   displayedColumns: string[] = [
     'INIT-ID',
-    'Initiative Name',
+    'Science programs name',
     'Risk Category',
     'Number of risks',
     'My Role',
@@ -76,9 +76,9 @@ export class RiskManagementTableComponent {
     this.getInitiatives(filters);
   }
   async getInitiatives(filters = null) {
-    let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
-    this.dataSource = new MatTableDataSource<any>(Initiatives);
-    this.length = Initiatives.length;
+    let sciencePrograms: any = await this.initiativeService.getInitiativesWithFilters(filters);
+    this.dataSource = new MatTableDataSource<any>(sciencePrograms);
+    this.length = sciencePrograms.length;
   }
   ngOnDestroy() {
     if (this.navigationSubscription) {

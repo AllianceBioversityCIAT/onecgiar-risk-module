@@ -15,7 +15,7 @@ export class Mitigations {
   
   export class  GetRiskDto {
     id: number;
-    initiative_id: number;
+    program_id: number;
     title: string;
     risk_owner_id: number;
     description: string;
@@ -38,7 +38,7 @@ export class Mitigations {
       category_group_id: number,
       disabled: boolean
     };
-    initiative: {
+    program: {
       id: number,
       official_code: string,
       clarisa_id: number,
@@ -64,7 +64,7 @@ export class Mitigations {
         id: number,
         email: string,
         user_id: number,
-        initiative_id: number,
+        program_id: number,
         role: string,
         createdAt: Date,
         updatedAt: Date,
@@ -88,7 +88,7 @@ export class Mitigations {
   
   
   export class CreateRiskRequestDto {
-    initiative_id: number;
+    program_id: number;
     mitigations: Array<MitigationCreateRiskRequestDto>;
     title:  string;
     risk_raiser: string
@@ -103,7 +103,7 @@ export class Mitigations {
   }
   
   export class CreateRiskResponseDto {
-      initiative_id: number;
+      program_id: number;
       title:  string;
       risk_owner_id:  number;
       description:  string;
@@ -138,7 +138,7 @@ export class Mitigations {
   
   export class UpdateRiskRequestDto {
     id: number;
-    initiative_id: number;
+    program_id: number;
     mitigations: Array<MitigationUpdateRiskRequestDto>;
     title:  string;
     risk_raiser: string
@@ -155,7 +155,7 @@ export class Mitigations {
   
   export class UpdateRiskResponseDto {
     id: number;
-    initiative_id: number;
+    program_id: number;
     mitigations: Array<MitigationUpdateRiskRequestDto>;
     created_by_user_id: number;
     title:  string;
@@ -178,7 +178,7 @@ export class Mitigations {
   
   export class PatchRiskResponseDto {
     id: number;
-    initiative_id: number;
+    program_id: number;
     created_by_user_id: number;
     title:  string;
     risk_owner_id:  number;

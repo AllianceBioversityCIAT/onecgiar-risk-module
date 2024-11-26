@@ -12,14 +12,14 @@ import {
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { InitiativeRoles } from './initiative-roles.entity';
+import { ProgramRoles } from './program-roles.entity';
 import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 import { ActionArea } from './action-area';
 import { Phase } from './phase.entity';
 import { CollectedEmail } from './collected-emails.entity';
 @Entity()
-export class Initiative {
+export class Program {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -36,17 +36,17 @@ export class Initiative {
   name: string;
 
   @ApiProperty({ type: () => [Risk] })
-  @OneToMany(() => Risk, (risk) => risk.initiative)
+  @OneToMany(() => Risk, (risk) => risk.program)
   @JoinTable()
   risks: Array<Risk>;
 
-  @ApiProperty({ type: () => [InitiativeRoles] })
+  @ApiProperty({ type: () => [ProgramRoles] })
   @OneToMany(
-    () => InitiativeRoles,
-    (initiative_roles) => initiative_roles.initiative,{onUpdate:'RESTRICT',onDelete:'RESTRICT'}
+    () => ProgramRoles,
+    (programRoles) => programRoles.program,{onUpdate:'RESTRICT',onDelete:'RESTRICT'}
   )
   @JoinTable()
-  roles: Array<InitiativeRoles>;
+  roles: Array<ProgramRoles>;
 
   @ApiProperty()
   @Optional()
@@ -66,7 +66,7 @@ export class Initiative {
   @UpdateDateColumn()
   last_updated_date: Date;
 
-  @ManyToOne(() => User, (user) => user.initiatives)
+  @ManyToOne(() => User, (user) => user.program)
   @JoinColumn({ name: 'created_by_user_id' })
   created_by: User;
   @Optional()
@@ -90,7 +90,7 @@ export class Initiative {
   @Column({default:null})
   action_area_id:number
 
-  @ManyToOne(() => ActionArea, (action_area) => action_area.initiatives)
+  @ManyToOne(() => ActionArea, (action_area) => action_area.program)
   @JoinColumn({ name: 'action_area_id' })
   action_area: ActionArea;
 
@@ -98,12 +98,12 @@ export class Initiative {
   @Column({default:null})
   phase_id:number
 
-  @ManyToOne(() => Phase, (phase) => phase.initiatives)
+  @ManyToOne(() => Phase, (phase) => phase.program)
   @JoinColumn({ name: 'phase_id' })
   phase: Phase;
 
 
   @ApiProperty()
-  @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.initiative)
+  @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.program)
   email: any;
 }

@@ -26,10 +26,10 @@ export class SearchInitComponent {
   roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
-    { name: 'Initiative ID (lowest first)', value: 'id,ASC' },
-    { name: 'Initiative ID (highest first)', value: 'id,DESC' },
-    { name: 'Initiative Name (A to Z)', value: 'name,ASC' },
-    { name: 'Initiative Name (Z to A)', value: 'name,DESC' },
+    { name: 'Science Programs ID (lowest first)', value: 'id,ASC' },
+    { name: 'Science Programs ID (highest first)', value: 'id,DESC' },
+    { name: 'Science Programs Name (A to Z)', value: 'name,ASC' },
+    { name: 'Science Programs Name (Z to A)', value: 'name,DESC' },
   ];
 
   status = [

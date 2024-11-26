@@ -8,8 +8,8 @@ import {
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActionArea } from 'entities/action-area';
-import { InitiativeRoles } from 'entities/initiative-roles.entity';
-import { Initiative } from 'entities/initiative.entity';
+import { ProgramRoles } from 'entities/program-roles.entity';
+import { Program } from 'entities/program.entity';
 import { Risk } from 'entities/risk.entity';
 import { User } from 'entities/user.entitiy';
 import { firstValueFrom, map } from 'rxjs';
@@ -20,12 +20,12 @@ import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
 import { Archive } from 'entities/archive.entity';
 @Injectable()
-export class InitiativeService {
+export class ProgramService {
   constructor(
-    @InjectRepository(Initiative)
-    public iniRepository: Repository<Initiative>,
-    @InjectRepository(InitiativeRoles)
-    public iniRolesRepository: Repository<InitiativeRoles>,
+    @InjectRepository(Program)
+    public programRepository: Repository<Program>,
+    @InjectRepository(ProgramRoles)
+    public programRolesRepository: Repository<ProgramRoles>,
     @InjectRepository(ActionArea)
     public actionAreaRepository: Repository<ActionArea>,
     @InjectRepository(Archive)
@@ -82,45 +82,45 @@ export class InitiativeService {
       } else return {};
     }
   }
-  private readonly logger = new Logger(InitiativeService.name);
+  private readonly logger = new Logger(ProgramService.name);
   clarisa_auth() {
     return {
       username: process.env.CLARISA_USERNAME,
       password: process.env.CLARISA_PASSWORD,
     };
   }
-  async deleteRole(initiative_id, id) {
-    const roles = await this.iniRolesRepository.findOne({
-      where: { initiative_id, id },
+  async deleteRole(program_id, id) {
+    const roles = await this.programRolesRepository.findOne({
+      where: { program_id, id },
     });
-    if (roles) return await this.iniRolesRepository.remove(roles);
+    if (roles) return await this.programRolesRepository.remove(roles);
     else throw new NotFoundException();
   }
 
   async updateInitiativeUpdateDateToNow(initiative_id) {
-    await this.iniRepository.update(initiative_id, {
+    await this.programRepository.update(initiative_id, {
       last_updated_date: new Date(),
     });
   }
-  async updateRoles(initiative_id, id, initiativeRoles: any) {
+  async updateRoles(program_id, id, initiativeRoles: any) {
     let userInInit: any;
     let emailIsInUsersEmail: any;
 
-    const countOfleaders = await this.iniRolesRepository.findAndCount({
+    const countOfleaders = await this.programRolesRepository.findAndCount({
       where: {
-        initiative_id: initiative_id,
+        program_id: program_id,
         role: 'Leader',
         id: Not(initiativeRoles.id)
       },
     });
 
     if(initiativeRoles.user_id == null) {
-      userInInit = await this.iniRolesRepository.findOne({
-        where: { id: Not(initiativeRoles?.id), initiative_id: initiative_id, email: initiativeRoles.email },
+      userInInit = await this.programRolesRepository.findOne({
+        where: { id: Not(initiativeRoles?.id), program_id: program_id, email: initiativeRoles.email },
       });
 
-      emailIsInUsersEmail = await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id, user: { email: initiativeRoles.email } },
+      emailIsInUsersEmail = await this.programRolesRepository.findOne({
+        where: { program_id: program_id, user: { email: initiativeRoles.email } },
         relations: ['user']
       });
 
@@ -130,8 +130,8 @@ export class InitiativeService {
         );
       }
     } else {
-      userInInit = await this.iniRolesRepository.findOne({
-        where: { id: Not(initiativeRoles?.id), initiative_id: initiative_id, user_id: initiativeRoles?.user_id?.id ? initiativeRoles?.user_id?.id : initiativeRoles?.user_id,},
+      userInInit = await this.programRolesRepository.findOne({
+        where: { id: Not(initiativeRoles?.id), program_id: program_id, user_id: initiativeRoles?.user_id?.id ? initiativeRoles?.user_id?.id : initiativeRoles?.user_id,},
       });
       if(userInInit != null) {
         throw new BadRequestException(
@@ -146,20 +146,20 @@ export class InitiativeService {
         `You can't add more than two leaders to the Initiative`,
       );
 
-    const found_roles = await this.iniRolesRepository.findOne({
-      where: { initiative_id, id },
+    const found_roles = await this.programRolesRepository.findOne({
+      where: { program_id, id },
     });
-    if (found_roles) return await this.iniRolesRepository.save(initiativeRoles);
+    if (found_roles) return await this.programRolesRepository.save(initiativeRoles);
     else throw new NotFoundException();
   }
 
   async createINIT(old_init_id: number, user, top: Risk[]) {
-    const old_initiative = await this.iniRepository.findOne({
+    const old_program = await this.programRepository.findOne({
       where: { id: old_init_id },
       relations: ['roles', 'roles.user'],
     });
     const allRisks = await this.riskService.riskRepository.find({
-      where: { initiative_id: old_init_id },
+      where: { program_id: old_init_id },
     });
     //set default value
     for (const risks of allRisks) {
@@ -175,29 +175,29 @@ export class InitiativeService {
 
     const phase = await this.phaseService.findActivePhase();
 
-    const initiative = this.iniRepository.create();
-    initiative.clarisa_id = old_initiative.clarisa_id;
-    initiative.name = old_initiative.name;
-    initiative.official_code = old_initiative.official_code;
-    initiative.parent_id = old_init_id;
-    initiative.created_by_user_id = user.id;
-    initiative.phase_id = phase?.id;
-    const new_init = await this.iniRepository.save(initiative, {
+    const programs = this.programRepository.create();
+    programs.clarisa_id = old_program.clarisa_id;
+    programs.name = old_program.name;
+    programs.official_code = old_program.official_code;
+    programs.parent_id = old_init_id;
+    programs.created_by_user_id = user.id;
+    programs.phase_id = phase?.id;
+    const new_init = await this.programRepository.save(programs, {
       reload: true,
     });
 
-    await this.iniRepository
+    await this.programRepository
       .createQueryBuilder()
-      .update(Initiative)
+      .update(Program)
       .set({
         last_version_id: new_init.id,
-        last_updated_date: old_initiative.last_updated_date,
+        last_updated_date: old_program.last_updated_date,
       })
-      .where(`id = ${old_initiative.id}`)
+      .where(`id = ${old_program.id}`)
       .execute();
 
     const old_Risks = await this.riskService.riskRepository.find({
-      where: { initiative_id: old_init_id },
+      where: { program_id: old_init_id },
       relations: ['mitigations', 'mitigations.status'],
     });
     if (old_Risks.length)
@@ -213,14 +213,14 @@ export class InitiativeService {
             delete mitigation.id;
           });
 
-        risk.initiative_id = new_init.id;
+        risk.program_id = new_init.id;
         await this.riskService.createRisk(risk);
       }
     let date = new Date();
-    await this.iniRepository.update(old_init_id, { last_updated_date: date });
-    await this.iniRepository.update(new_init.id, { submit_date: date, status: true });
-    if (old_initiative?.roles)
-      old_initiative.roles.forEach((role) => {
+    await this.programRepository.update(old_init_id, { last_updated_date: date });
+    await this.programRepository.update(new_init.id, { submit_date: date, status: true });
+    if (old_program?.roles)
+      old_program.roles.forEach((role) => {
         if (
           role?.user &&
           (role.role == 'Leader' || role.role == 'Coordinator')
@@ -233,15 +233,15 @@ export class InitiativeService {
     admins.forEach((user: User) => {
       this.emailsService.sendEmailTobyVarabel(user, 3, old_init_id, null);
     });
-    return await this.iniRepository.findOne({
+    return await this.programRepository.findOne({
       where: { id: new_init.id },
       relations: ['risks'],
     });
   }
 
-  async setRole(initiative_id, role: InitiativeRoles) {
-    const countOfleaders = await this.iniRolesRepository.findAndCount({
-      where: { initiative_id: initiative_id, role: 'Leader' },
+  async setRole(program_id, role: ProgramRoles) {
+    const countOfleaders = await this.programRolesRepository.findAndCount({
+      where: { program_id: program_id, role: 'Leader' },
     });
     if (countOfleaders[1] >= 2 && role.role == 'Leader')
       throw new BadRequestException(
@@ -252,27 +252,27 @@ export class InitiativeService {
     let isExistsUser: any;
     let emailIsInUsersEmail: any;
     if (role.email == '') {
-      userInInit = await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id, user_id: role.user_id },
+      userInInit = await this.programRolesRepository.findOne({
+        where: { program_id: program_id, user_id: role.user_id },
       });
     } else {
       //invite by email
-      userInInit = await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id, email: role.email },
+      userInInit = await this.programRolesRepository.findOne({
+        where: { program_id: program_id, email: role.email },
       });
-      emailIsInUsersEmail = await this.iniRolesRepository.findOne({
-        where: { initiative_id: initiative_id, user: { email: role.email } },
+      emailIsInUsersEmail = await this.programRolesRepository.findOne({
+        where: { program_id: program_id, user: { email: role.email } },
       });
       isExistsUser = await this.userService.findByEmail(role.email);
     }
     if (userInInit == null && role.email == '') {
-      let init = await this.iniRepository.findOne({
-        where: { id: initiative_id },
+      let init = await this.programRepository.findOne({
+        where: { id: program_id },
         relations: ['roles'],
       });
       if (!init) throw new NotFoundException();
       const newRole = {
-        initiative_id: initiative_id,
+        program_id: program_id,
         user_id: +role?.user_id ? role?.user_id : null,
         email: role.email.toLowerCase(),
         role: role.role,
@@ -282,21 +282,21 @@ export class InitiativeService {
         const user = await this.userService.userRepository.findOne({
           where: { id: role?.user_id },
         });
-        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, initiative_id, null);
+        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, program_id, null);
       }
-      return await this.iniRolesRepository.save(newRole, { reload: true });
+      return await this.programRolesRepository.save(newRole, { reload: true });
     } else if (
       userInInit == null &&
       emailIsInUsersEmail == null &&
       role.email != ''
     ) {
-      let init = await this.iniRepository.findOne({
-        where: { id: initiative_id },
+      let init = await this.programRepository.findOne({
+        where: { id: program_id },
         relations: ['roles'],
       });
       if (!init) throw new NotFoundException();
       const newRole = {
-        initiative_id: initiative_id,
+        program_id: program_id,
         user_id: +role?.user_id ? role?.user_id : null,
         email: role.email.toLowerCase(),
         role: role.role,
@@ -306,11 +306,11 @@ export class InitiativeService {
       this.emailsService.sendEmailTobyVarabel(
         { full_name: '', email: newRole.email },
         10,
-        initiative_id,
+        program_id,
         null
       );
 
-      return await this.iniRolesRepository.save(newRole, { reload: true });
+      return await this.programRolesRepository.save(newRole, { reload: true });
     } else {
       throw new BadRequestException(
         'the user already has already the role in this initiative',
@@ -355,18 +355,18 @@ export class InitiativeService {
       );
 
       for (const clarisa_initiative of clarisa_initiatives) {
-        let initiative;
-        initiative = await this.iniRepository.findOne({
+        let program;
+        program = await this.programRepository.findOne({
           where: { clarisa_id: clarisa_initiative.id },
         });
-        if (!initiative) {
-          initiative = this.iniRepository.create();
-          initiative.clarisa_id = clarisa_initiative.id;
+        if (!program) {
+          program = this.programRepository.create();
+          program.clarisa_id = clarisa_initiative.id;
         }
-        initiative.name = clarisa_initiative.name;
-        initiative.official_code = clarisa_initiative.official_code;
-        initiative.action_area_id = clarisa_initiative.action_area_id;
-        await this.iniRepository.save(initiative);
+        program.name = clarisa_initiative.name;
+        program.official_code = clarisa_initiative.official_code;
+        program.action_area_id = clarisa_initiative.action_area_id;
+        await this.programRepository.save(program);
       }
       this.logger.log('Sync CLARISA initiative Data ');
     } catch (e) {
@@ -386,13 +386,13 @@ export class InitiativeService {
   @Cron(CronExpression.EVERY_10_SECONDS)
   async filterStatus() {
     this.logger.log('filterStatus is runing');
-    const allInit = await this.iniRepository.find({
+    const allInit = await this.programRepository.find({
       where: { parent_id: IsNull() },
       order: { id: 'DESC' },
     });
 
     for (let init of allInit) {
-      const lastVersion = await this.iniRepository.findOne({
+      const lastVersion = await this.programRepository.findOne({
         where: { parent_id: init.id },
         relations: ['risks'],
         order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
@@ -402,9 +402,9 @@ export class InitiativeService {
           new Date(init.last_updated_date).valueOf() ==
           new Date(lastVersion.submit_date).valueOf()
         ) {
-          this.iniRepository
+          this.programRepository
             .createQueryBuilder()
-            .update(Initiative)
+            .update(Program)
             .set({
               status: true,
               last_updated_date: init.last_updated_date,
@@ -416,9 +416,9 @@ export class InitiativeService {
             new Date(init.last_updated_date).valueOf() !=
             new Date(lastVersion.submit_date).valueOf()
           ) {
-            this.iniRepository
+            this.programRepository
               .createQueryBuilder()
-              .update(Initiative)
+              .update(Program)
               .set({
                 status: false,
                 last_updated_date: new Date(),
@@ -434,7 +434,7 @@ export class InitiativeService {
 
   async syncUserRoles() {
     try {
-      const user_roles = await this.iniRolesRepository.find({
+      const user_roles = await this.programRolesRepository.find({
         where: { user_id: IsNull() },
       });
       const users = await this.userService.userRepository.find();
@@ -445,7 +445,7 @@ export class InitiativeService {
           // To the user that was added by the Admin or Leader/Coordinator
           //this.emailsService.sendEmailTobyVarabel(found_users[0], 7);
 
-          await this.iniRolesRepository.save(user_role);
+          await this.programRolesRepository.save(user_role);
         }
       }
       this.logger.log('Sync Users Roles');
@@ -455,18 +455,18 @@ export class InitiativeService {
   }
   async archiveInit(data: any) {
     for(let id of data.ids) {
-      const init = await this.iniRepository.findOne({where: {id: id}});
-      const submittedVersion = await this.iniRepository.find({
+      const init = await this.programRepository.findOne({where: {id: id}});
+      const submittedVersion = await this.programRepository.find({
         where: { parent_id: id },
         order: {
           risks: {
             top: 'ASC'
           }
         },
-        relations: ['risks', 'risks.initiative', 'risks.mitigations' , 'risks.mitigations.status' , 'risks.category' , 'risks.created_by' , 'risks.risk_owner.user' , 'created_by', 'phase']
+        relations: ['risks', 'risks.program', 'risks.mitigations' , 'risks.mitigations.status' , 'risks.category' , 'risks.created_by' , 'risks.risk_owner.user' , 'created_by', 'phase']
       });
-      const roles = await this.iniRolesRepository.find({
-        where: { initiative_id: id},
+      const roles = await this.programRolesRepository.find({
+        where: { program_id: id},
         relations: ['user']
       });
 
@@ -477,11 +477,11 @@ export class InitiativeService {
 
       const archived = this.archiveRepository.create();
       archived.init_data = JSON.stringify(allData);
-      archived.initiative = init;
+      archived.program = init;
       
       await this.archiveRepository.save(archived).then(
         async () => {
-          await this.iniRepository.update(id, {
+          await this.programRepository.update(id, {
             archived: true
           });
         }, (error) => {
@@ -495,9 +495,9 @@ export class InitiativeService {
   }
   async getArchiveInit(query: any, req: any) {
    return await this.archiveRepository.find({
-    relations: ['initiative', 'initiative.roles', 'initiative.roles.user', 'initiative.risks','initiative.risks.category'],
+    relations: ['program', 'program.roles', 'program.roles.user', 'program.risks','program.risks.category'],
     where: {
-      initiative: {
+      program: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         official_code: query.initiative_id ? In([
           `INIT-0${query.initiative_id}`,
@@ -519,7 +519,7 @@ export class InitiativeService {
       where: {
         id: id
       },
-      relations: ['initiative']
+      relations: ['program']
     })
   }
 
@@ -536,18 +536,18 @@ export class InitiativeService {
 
       for (const clarisa_initiative of clarisa_initiatives) {
         for(let id of data.ids) {
-          let initiative;
-          initiative = await this.iniRepository.findOne({
+          let program;
+          program = await this.programRepository.findOne({
             where: { id: id, clarisa_id: clarisa_initiative.id },
           });
-          if (initiative) {
-            initiative.clarisa_id = clarisa_initiative.id;
-            initiative.name = clarisa_initiative.name;
-            initiative.official_code = clarisa_initiative.official_code;
-            initiative.action_area_id = clarisa_initiative.action_area_id;
-            initiative.sync_clarisa = true;
-            await this.iniRepository.save(initiative);
-            actionAreaIds.push(initiative.action_area_id);
+          if (program) {
+            program.clarisa_id = clarisa_initiative.id;
+            program.name = clarisa_initiative.name;
+            program.official_code = clarisa_initiative.official_code;
+            program.action_area_id = clarisa_initiative.action_area_id;
+            program.sync_clarisa = true;
+            await this.programRepository.save(program);
+            actionAreaIds.push(program.action_area_id);
           }
         }
       }

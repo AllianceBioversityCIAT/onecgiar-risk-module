@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { DashboardService } from 'src/app/services/dashboard.service';
-import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 import { ROLES } from '../team-members/team-members.component';
 import { Meta, Title } from '@angular/platform-browser';
@@ -26,8 +25,8 @@ export class RiskDashboardComponent {
   newRiskForm: any;
   user_info: any;
   riskId!: number;
-  initiative: any = null;
-  initiativeId: any;
+  sciencePrograms: any = null;
+  scienceProgramsId: any;
   my_risks: any;
   officalCode: any;
   checkIfRiskExist: any;
@@ -35,7 +34,6 @@ export class RiskDashboardComponent {
   constructor(
     private dashboardService: DashboardService,
     private activatedRoute: ActivatedRoute,
-    private initiativeService: InitiativesService,
     private riskService: RiskService,
     private router: Router,
     private title: Title,
@@ -57,7 +55,7 @@ export class RiskDashboardComponent {
 
     const parentParams: any = this.activatedRoute.parent?.params.subscribe(
       (val) => {
-        this.initiativeId = +val['id'];
+        this.scienceProgramsId = +val['id'];
         this.officalCode = val['initiativeId'];
       }
     );
@@ -66,7 +64,7 @@ export class RiskDashboardComponent {
     let url: any = '';
     url = this.router.url.split('/').at(-1);
     if (this.my_roles?.includes(ROLES.MEMBER) && url == 'risk-dashboard') {
-      this.router.navigate([`/home/${this.initiativeId}/${this.officalCode}`]);
+      this.router.navigate([`/home/${this.scienceProgramsId}/${this.officalCode}`]);
     }
     this.title.setTitle('Risk dashboard');
     this.meta.updateTag({

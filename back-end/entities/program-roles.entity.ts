@@ -11,12 +11,12 @@ import {
   OneToMany,
   JoinTable,
 } from 'typeorm';
-import { Initiative } from './initiative.entity';
+import { Program } from './program.entity';
 import { Risk } from './risk.entity';
 import { User } from './user.entitiy';
 
 @Entity()
-export class InitiativeRoles {
+export class ProgramRoles {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id;
@@ -32,11 +32,11 @@ export class InitiativeRoles {
   user: User;
   @ApiProperty()
   @Column()
-  initiative_id: number;
+  program_id: number;
 
-  @ManyToOne(() => Initiative, (initiative) => initiative,{onUpdate:'CASCADE',onDelete:'CASCADE'})
-  @JoinColumn({ name: 'initiative_id' })
-  initiative: Initiative;
+  @ManyToOne(() => Program, (program) => program.roles)
+  @JoinColumn({ name: 'program_id' })
+  program: Program;
 
   @ApiProperty()
   @Column()

@@ -23,7 +23,7 @@ export enum ROLES {
   styleUrls: ['./team-members.component.scss'],
 })
 export class TeamMembersComponent {
-  initiativeId: any;
+  scienceProgramsId: any;
   constructor(
     public router: Router,
     public dialog: MatDialog,
@@ -44,7 +44,7 @@ export class TeamMembersComponent {
   officalCode!: string;
   async ngOnInit() {
     const params: any = this.activatedRoute.parent?.snapshot.params;
-    this.initiativeId = params.id;
+    this.scienceProgramsId = params.id;
     this.id = params.id;
     this.officalCode = params.initiativeId;
     this.loadInitiativeRoles();
@@ -71,7 +71,7 @@ export class TeamMembersComponent {
   }
 
   async deleteMember(role: any) {
-    this.assignedRiskOwner = await this.riskService.getRisksOwner(role.initiative_id,role.user_id);
+    this.assignedRiskOwner = await this.riskService.getRisksOwner(role.program_id,role.user_id);
     this.dialog
       .open(DeleteConfirmDialogComponent, {
         data: {
@@ -84,7 +84,7 @@ export class TeamMembersComponent {
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.initiativeService.deleteInitiativeRole(
-            this.initiativeId,
+            this.scienceProgramsId,
             role.id
           );
           this.loadInitiativeRoles();
@@ -107,8 +107,8 @@ export class TeamMembersComponent {
         console.log({ email, userRole });
         // handel add memeber API service
         this.initiativeService
-          .createNewInitiativeRole(this.initiativeId, {
-            initiative_id: this.initiativeId,
+          .createNewInitiativeRole(this.scienceProgramsId, {
+            initiative_id: this.scienceProgramsId,
             email: result.formValue.email,
             role: result.formValue.userRole,
             user_id: result.formValue.user_id,
@@ -139,10 +139,10 @@ export class TeamMembersComponent {
         console.log('edit');
         // access edited data => result.formValue
         await this.initiativeService.updateInitiativeRole(
-          this.initiativeId,
+          this.scienceProgramsId,
           roleId,
           {
-            initiative_id: this.initiativeId,
+            initiative_id: this.scienceProgramsId,
             id: roleId,
             user_id: result.formValue.user_id,
             email: result.formValue.email,
@@ -181,7 +181,7 @@ export class TeamMembersComponent {
 
   async loadInitiativeRoles() {
     var data: any = await this.initiativeService.getInitiativeRoles(
-      this.initiativeId
+      this.scienceProgramsId
     );
     this.dataSource = new MatTableDataSource<any>(data);
   }
