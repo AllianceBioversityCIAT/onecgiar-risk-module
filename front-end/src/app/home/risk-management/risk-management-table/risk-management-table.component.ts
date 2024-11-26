@@ -136,6 +136,9 @@ export class RiskManagementTableComponent {
         'Help requested'
       );
     }
-    this.getInitiatives(this.filters);
+    setTimeout(() => {
+      this.getInitiatives(this.filters);
+    }, 1000);
+
   }
 }
