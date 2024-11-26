@@ -55,7 +55,6 @@ export class DashboardComponent {
     this.groups = await this.dashboardService.category_groups();
     this.action_areas = await this.dashboardService.actionAreas();
 
-    console.log(this.groups, this.action_areas);
     this.status = await this.dashboardService.status();
     this.risk_profile_target_chartOptions = this.riskProfile(
       this.data,
