@@ -72,7 +72,7 @@ export class RiskManagementTableComponent {
 
   filters: any = {};
   filter(filters: any) {
-    this.filters = filters
+    this.filters = filters;
     this.getInitiatives(filters);
   }
   async getInitiatives(filters = null) {
@@ -136,9 +136,5 @@ export class RiskManagementTableComponent {
         'Help requested'
       );
     }
-    setTimeout(() => {
-      this.getInitiatives(this.filters);
-    }, 1000);
-
   }
 }
