@@ -35,11 +35,9 @@ export class SyncClarisaComponent {
   displayedColumns: string[] = [
     'INIT-ID',
     'Science programs Name',
-    'Risk Category',
-    'Number of risks',
-    'My Role',
+    'description',
+    'active',
     'status',
-    'Help requested',
     'Actions',
   ];
   dataSource = new MatTableDataSource<any>([]);
@@ -48,59 +46,21 @@ export class SyncClarisaComponent {
 
 
   async ngOnInit() {
-    this.getInitiatives(this.filters);
+    this.getInitiatives();
 
     this.title.setTitle('Sync clarisa');
     this.meta.updateTag({ name: 'description', content: 'Sync clarisa' });
   }
 
 
-  filters: any = { archived: false };
 
-  async getInitiatives(filters = null) {
-    let sciencePrograms: any = await this.initiativeService.getInitiativesWithFilters(filters);
+  async getInitiatives() {
+    let sciencePrograms: any = await this.initiativeService.getClarisaPrograms();
     this.dataSource = new MatTableDataSource<any>(sciencePrograms);
     this.length = sciencePrograms.length;
   }
 
 
-  listOfCategories: any[] = [];
-  filterCategories(categories: any) {
-    this.listOfCategories = [];
-    for (let item of categories) {
-      this.listOfCategories.push(item?.category?.title);
-    }
-    const result = this.listOfCategories
-      .filter((item, index) => this.listOfCategories.indexOf(item) === index)
-      .join(', ');
-    return result;
-  }
-
-
-  filterRoles(roles: any) {
-    const user_info = this.userService.getLogedInUser();
-    var list = '';
-
-    list = roles
-      .filter((d: any) => d.user_id == user_info.id)
-      .map((d: any) => d.role)
-      .join(', ');
-    if (list == '') list = 'Guest';
-    return list;
-  }
-
-  filterReqAssistance(risk: any) {
-    let column = '-';
-    for (let item of risk) {
-      if (item.request_assistance == true) {
-        column = 'Yes';
-        break;
-      } else {
-        column = 'No';
-      }
-    }
-    return column;
-  }
 
   checkInit(event: MatCheckboxChange, id: number) {
     if(event.checked) {
@@ -127,7 +87,7 @@ export class SyncClarisaComponent {
         if(res){
           await this.initiativeService.syncInit(this.initIds).then(
             () => {
-              this.getInitiatives(this.filters);
+              this.getInitiatives();
               this.toastr.success('Sync successfully');
             }, (error) => {
               this.toastr.error(error.error.message);

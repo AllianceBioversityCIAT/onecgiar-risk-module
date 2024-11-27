@@ -131,6 +131,13 @@ export class ProgramController {
   async getArchiveInit(@Query() query: any, @Req() req) {
     return await this.iniService.getArchiveInit(query, req)
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('clarisa-programs')
+  async getclarisaPrograms() {
+    return await this.iniService.clarisaPrograms()
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('archived/:id')
   async getArchiveInitById(@Param('id') id: number) {
