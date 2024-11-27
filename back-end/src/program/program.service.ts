@@ -523,7 +523,7 @@ export class ProgramService {
     })
   }
 
-  async syncInit(data: any) {
+  async syncInit(data: any) { 
     try {
       let actionAreaIds = [];
       const clarisa_initiatives = await firstValueFrom(
@@ -533,22 +533,22 @@ export class ProgramService {
           })
           .pipe(map((d) => d.data)),
       );
+      const filtered_clarisa_initiatives = clarisa_initiatives.filter(d => data.ids.includes(d.id))
 
-      for (const clarisa_initiative of clarisa_initiatives) {
-        for(let id of data.ids) {
-          let program;
-          program = await this.programRepository.findOne({
-            where: { id: id, clarisa_id: clarisa_initiative.id },
-          });
-          if (program) {
-            program.clarisa_id = clarisa_initiative.id;
-            program.name = clarisa_initiative.name;
-            program.official_code = clarisa_initiative.official_code;
-            program.action_area_id = clarisa_initiative.action_area_id;
-            program.sync_clarisa = true;
-            await this.programRepository.save(program);
-            actionAreaIds.push(program.action_area_id);
-          }
+      for (const clarisa_initiative of filtered_clarisa_initiatives) {
+        let program;
+        program = await this.programRepository.findOne({
+          where: { clarisa_id: clarisa_initiative.id, parent_id: IsNull() },
+        });
+        if (!program) {
+          program = this.programRepository.create();
+          program.clarisa_id = clarisa_initiative.id;
+          program.name = clarisa_initiative.name;
+          program.official_code = clarisa_initiative.official_code;
+          program.action_area_id = clarisa_initiative.action_area_id;
+          program.sync_clarisa = true;
+          await this.programRepository.save(program);
+          actionAreaIds.push(program.action_area_id);
         }
       }
       actionAreaIds = [...new Set(actionAreaIds)];
@@ -558,7 +558,7 @@ export class ProgramService {
         `Error sync clarisa`,
       );
     }
-  }
+  } 
 
   async syncActionAreaByIdFromClarisa(ids: number []) {
     try {
@@ -585,6 +585,31 @@ export class ProgramService {
       }
     } catch (error) {
       this.logger.error('Error in Sync CLARISA initiative Data ', error);
+    }
+  }
+
+  async clarisaPrograms() {
+    try {
+      const clarisa_initiatives = await firstValueFrom(
+        this.http
+          .get(`${process.env.CLARISA_URL}/api/initiatives`, {
+            auth: this.clarisa_auth(),
+          })
+          .pipe(map((d) => d.data)),
+      );
+
+      const programs = await this.programRepository.find({
+        where: {
+          parent_id : IsNull()
+        }
+      });
+
+      const clarisaExistIds = programs.map(d => Number(d.clarisa_id));
+
+      return clarisa_initiatives.filter(d => !clarisaExistIds.includes(d.id));
+
+    } catch (e) {
+      this.logger.error('Error in CLARISA (clarisaPrograms) ', e);
     }
   }
 }

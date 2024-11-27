@@ -154,6 +154,16 @@ export class InitiativesService extends MainService {
     );
   }
 
+  async getClarisaPrograms() {
+    return await firstValueFrom(
+      this.http
+        .get(this.backend_url + '/program/clarisa-programs', {
+          headers: this.headers,
+        })
+        .pipe(map((d: any) => d))
+    );
+  }
+
 
   async getArchivedInitiatives(filters: any) {
     let finalFilters: any = {};
