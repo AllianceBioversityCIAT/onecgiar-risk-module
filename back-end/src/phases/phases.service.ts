@@ -14,7 +14,7 @@ export class PhasesService {
   ) {}
 
   create(createPhaseDto: CreatePhaseDto) {
-    const newPhase = this.phaseRepository.create({ ...createPhaseDto });
+    const newPhase = this.phaseRepository.create({ ...createPhaseDto, show_in_home: true });
     return this.phaseRepository.save(newPhase);
   }
 
@@ -54,7 +54,7 @@ export class PhasesService {
 
   async activate(id: number) {
     await this.phaseRepository.update({}, { active: false , status: phaseStatus.CLOSED });
-    return await this.phaseRepository.update({ id }, { active: true, status: phaseStatus.OPEN });
+    return await this.phaseRepository.update({ id }, { active: true, status: phaseStatus.OPEN, show_in_home: true });
   }
 
   async deactivate(id: number) {
