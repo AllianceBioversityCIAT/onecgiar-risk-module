@@ -19,7 +19,7 @@ export class PhaseDialogComponent implements OnInit {
   phaseForm: FormGroup = new FormGroup('');
   phases: any[] = [];
   tocPhases: any = [];
-
+  phase: any;
   constructor(
     private dialogRef: MatDialogRef<PhaseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: DialogData,
@@ -42,9 +42,11 @@ export class PhaseDialogComponent implements OnInit {
       end_date: [null, Validators.required],
       previous_phase: [null],
       status: ['Closed'],
+      show_in_home: [null],
     });
     this.phases = await this.phasesService.getPhases(null, null, null);
     if (this.phaseId) {
+      this.phase = await this.phasesService.getPhase(this.phaseId);
       let currentPhase = this.phases.map(x => {
         return x.id;
       }).indexOf(this.phaseId);

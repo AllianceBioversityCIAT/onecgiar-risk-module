@@ -23,7 +23,7 @@ export class PhasesComponent implements OnInit {
     'end_date',
     'previous_phase',
     'status',
-    // 'active',
+    'show_in_home',
     'actions',
   ];
   filters: any = null;

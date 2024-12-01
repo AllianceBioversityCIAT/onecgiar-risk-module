@@ -78,6 +78,7 @@ export class SearchInitComponent {
   async ngOnInit() {
     this.setForm();
     this.phases = await this.phaseService.getPhases({},1,200);
+    this.phases.result = this.phases.result.filter((phase: any) => phase?.show_in_home)
     this.activePhase = this.phases.result.filter((d: any) => d.status == 'Open')
     this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
     const phase_id = this.filterForm.get('phase_id')?.value;

@@ -49,6 +49,10 @@ export class Phase {
   active: boolean;
 
 
+  @Column({ default: true })
+  show_in_home: boolean;
+
+
   @OneToMany(() => Program, (program) => program.phase)
   @JoinTable()
   program
