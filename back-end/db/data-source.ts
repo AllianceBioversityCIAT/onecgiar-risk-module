@@ -47,7 +47,7 @@ export const dataSourceOptions: DataSourceOptions = {
     Variables
   ],
   migrations: ['dist/db/migrations/**/*{.ts,.js}'],
-  synchronize: false,
+  synchronize: true,
   logging: false,
 };
 
