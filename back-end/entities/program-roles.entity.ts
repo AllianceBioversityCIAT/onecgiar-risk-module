@@ -27,14 +27,14 @@ export class ProgramRoles {
   @Column({ nullable: true })
   user_id: number;
 
-  @ManyToOne(() => User, (user) => user)
+  @ManyToOne(() => User, (user) => user, {onUpdate:'CASCADE',onDelete: 'CASCADE'})
   @JoinColumn({ name: 'user_id' })
   user: User;
   @ApiProperty()
   @Column()
   program_id: number;
 
-  @ManyToOne(() => Program, (program) => program.roles)
+  @ManyToOne(() => Program, (program) => program.roles, {onUpdate:'CASCADE',onDelete: 'CASCADE'})
   @JoinColumn({ name: 'program_id' })
   program: Program;
 

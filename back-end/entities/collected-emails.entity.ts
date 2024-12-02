@@ -31,7 +31,7 @@ export class CollectedEmail {
 
 
 
-    @ManyToOne(() => Risk, (risk) => risk.email)
+    @ManyToOne(() => Risk, (risk) => risk.email, {onUpdate:'CASCADE',onDelete: 'CASCADE'})
     @JoinColumn({ name: 'risk_id' })
     risk: Risk;
   
@@ -40,7 +40,7 @@ export class CollectedEmail {
     risk_id: number;
 
 
-    @ManyToOne(() => Program, (program) => program.email)
+    @ManyToOne(() => Program, (program) => program.email , {onUpdate:'CASCADE',onDelete: 'CASCADE'})
     @JoinColumn({ name: 'program_id' })
     program: Program;
   

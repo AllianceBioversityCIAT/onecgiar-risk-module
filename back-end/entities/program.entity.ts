@@ -66,7 +66,7 @@ export class Program {
   @UpdateDateColumn()
   last_updated_date: Date;
 
-  @ManyToOne(() => User, (user) => user.program)
+  @ManyToOne(() => User, (user) => user.program , {onUpdate:'CASCADE',onDelete: 'CASCADE'})
   @JoinColumn({ name: 'created_by_user_id' })
   created_by: User;
   @Optional()
@@ -90,7 +90,7 @@ export class Program {
   @Column({default:null})
   action_area_id:number
 
-  @ManyToOne(() => ActionArea, (action_area) => action_area.program)
+  @ManyToOne(() => ActionArea, (action_area) => action_area.program, {onUpdate:'CASCADE',onDelete: 'CASCADE'})
   @JoinColumn({ name: 'action_area_id' })
   action_area: ActionArea;
 
@@ -98,7 +98,7 @@ export class Program {
   @Column({default:null})
   phase_id:number
 
-  @ManyToOne(() => Phase, (phase) => phase.program)
+  @ManyToOne(() => Phase, (phase) => phase.program, {onUpdate:'CASCADE',onDelete: 'CASCADE'})
   @JoinColumn({ name: 'phase_id' })
   phase: Phase;
 
