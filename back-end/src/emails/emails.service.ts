@@ -181,6 +181,9 @@ export class EmailsService {
       where: {
         due_date: currentDate,
         original_risk_id: IsNull(),
+        program: {
+          archived: false
+        }
       },
     });
 
