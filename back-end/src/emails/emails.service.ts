@@ -11,10 +11,10 @@ import * as sgMail from '@sendgrid/mail';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { VariablesService } from 'src/variables/variables.service';
 import { UsersService } from 'src/users/users.service';
-import { InitiativeService } from 'src/initiative/initiative.service';
-import { Initiative } from 'entities/initiative.entity';
+import { ProgramService } from 'src/program/program.service';
+import { Program } from 'entities/program.entity';
 import { Risk } from 'entities/risk.entity';
-import { InitiativeRoles } from 'entities/initiative-roles.entity';
+import { ProgramRoles } from 'entities/program-roles.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 @Injectable()
 export class EmailsService {
@@ -23,12 +23,12 @@ export class EmailsService {
     @InjectRepository(CollectedEmail) public collectedEmails: Repository<CollectedEmail>,
     private variabelService: VariablesService,
     private usersService: UsersService,
-    @InjectRepository(Initiative)
-    public iniRepository: Repository<Initiative>,
+    @InjectRepository(Program)
+    public programRepository: Repository<Program>,
     @InjectRepository(Risk)
     public riskRepository: Repository<Risk>,
-    @InjectRepository(InitiativeRoles)
-    public initRoleRepository: Repository<InitiativeRoles>,
+    @InjectRepository(ProgramRoles)
+    public programRolesRepository: Repository<ProgramRoles>,
   ) {}
   private readonly logger = new Logger(EmailsService.name);
   async sendEmailWithSendGrid(to, subject, html) {
@@ -134,7 +134,7 @@ export class EmailsService {
         variable_id: variableId,
         status: false
       },
-      relations: ['initiative', 'risk']
+      relations: ['program', 'risk']
     });
 
     let userEmail = emails.map(d => d.email);
@@ -181,20 +181,23 @@ export class EmailsService {
       where: {
         due_date: currentDate,
         original_risk_id: IsNull(),
+        program: {
+          archived: false
+        }
       },
     });
 
     for (let risk of risks) {
-      const init = await this.initRoleRepository.find({
+      const init = await this.programRolesRepository.find({
         where: {
-          initiative_id: risk.initiative_id,
+          program_id: risk.program_id,
         },
         relations: ['user'],
       });
 
       init.forEach((init) => {
         if (init.role == 'Leader' || init.role == 'Coordinator') {
-          this.sendEmailTobyVarabel(init.user, 6, init.initiative_id, risk);
+          this.sendEmailTobyVarabel(init.user, 6, init.program_id, risk);
         }
       });
     }
@@ -234,7 +237,7 @@ export class EmailsService {
       email,
       subject,
       risk_id: risk.id,
-      init_id: init.id,
+      program_id: init.id,
       variable_id: variableId
     });
     return await this.collectedEmails.save(newEmail);
@@ -295,7 +298,7 @@ export class EmailsService {
       <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.id}</td>
       <td style="border:1px solid gray !important; border-collapse: collapse;">${d.risk.title}</td>
       <td style="border:1px solid gray !important; border-collapse: collapse;">
-          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${d.initiative.id}/${d.initiative.official_code}">${process.env.FRONTEND}/home/${d.initiative.id}/${d.initiative.official_code}</a>
+          <a style="color: rgb(67, 98, 128); text-align: left;" traget="_blank" href="${process.env.FRONTEND}/home/${d.program.id}/${d.program.official_code}">${process.env.FRONTEND}/home/${d.program.id}/${d.program.official_code}</a>
       </td>
       </tr>
       `
@@ -369,7 +372,7 @@ export class EmailsService {
     risk,
     content_id,
   ) {
-    const init = await this.iniRepository.findOne({
+    const init = await this.programRepository.findOne({
       where: {
         id: init_id,
       },
@@ -385,8 +388,8 @@ export class EmailsService {
           ${contnet}
           <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
             <tr>
-              <th style="border:1px solid gray !important; border-collapse: collapse;">INIT Code</th>
-              <th style="border:1px solid gray !important; border-collapse: collapse;">Initiative name</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Science programs code</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Science programs name</th>
             </tr>
             <tr>
               <td style="border:1px solid gray !important; border-collapse: collapse;">${init.official_code}</td>
@@ -399,7 +402,7 @@ export class EmailsService {
           <br>
             `;
         } else {
-          const lastVersion = await this.iniRepository.findOne({
+          const lastVersion = await this.programRepository.findOne({
             where: {
               id: init.last_version_id,
             },
@@ -415,7 +418,7 @@ export class EmailsService {
           <table style="width:100% ; border:1px solid gray !important; text-align: center; border-collapse: collapse;">
             <tr>
               <th style="border:1px solid gray !important; border-collapse: collapse;">INIT Code</th>
-              <th style="border:1px solid gray !important; border-collapse: collapse;">Initiative name</th>
+              <th style="border:1px solid gray !important; border-collapse: collapse;">Science programs name</th>
               <th style="border:1px solid gray !important; border-collapse: collapse;">Version ID</th>
               <th style="border:1px solid gray !important; border-collapse: collapse;">Creation Date</th>
             </tr>

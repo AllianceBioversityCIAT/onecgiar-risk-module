@@ -4,17 +4,17 @@ import { UpdatePhaseDto } from './dto/update-phase.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { Phase, phaseStatus } from 'entities/phase.entity';
-import { Initiative } from 'entities/initiative.entity';
+import { Program } from 'entities/program.entity';
 
 @Injectable()
 export class PhasesService {
   constructor(
     @InjectRepository(Phase) public phaseRepository: Repository<Phase>,
-    @InjectRepository(Initiative) public initRepository: Repository<Initiative>,
+    @InjectRepository(Program) public programRepository: Repository<Program>,
   ) {}
 
   create(createPhaseDto: CreatePhaseDto) {
-    const newPhase = this.phaseRepository.create({ ...createPhaseDto });
+    const newPhase = this.phaseRepository.create({ ...createPhaseDto, show_in_home: true });
     return this.phaseRepository.save(newPhase);
   }
 
@@ -41,7 +41,7 @@ export class PhasesService {
   }
 
   async remove(id: number) { 
-    const phaseHaveData = await this.initRepository.find({where : {
+    const phaseHaveData = await this.programRepository.find({where : {
       phase_id: id
     }})
     if(phaseHaveData.length != 0) {
@@ -54,7 +54,7 @@ export class PhasesService {
 
   async activate(id: number) {
     await this.phaseRepository.update({}, { active: false , status: phaseStatus.CLOSED });
-    return await this.phaseRepository.update({ id }, { active: true, status: phaseStatus.OPEN });
+    return await this.phaseRepository.update({ id }, { active: true, status: phaseStatus.OPEN, show_in_home: true });
   }
 
   async deactivate(id: number) {
@@ -65,17 +65,17 @@ export class PhasesService {
     const data = await this.phaseRepository.findOne({
       where: {
         id: phaseId,
-        initiatives: {
+        program: {
           last_version_id: IsNull(),
         }
       },
-      relations: ['initiatives', 'initiatives.created_by', 'initiatives.risks']
+      relations: ['program', 'program.created_by', 'program.risks']
     });
 
 
     //filter last version
     const newData = new Map<string, any>()
-    data.initiatives.forEach(value => {
+    data.program.forEach(value => {
       if (newData.has(value.official_code)) {
         const v1 = +newData.get(value.official_code).id;
         const v2 = + value.id;
@@ -83,7 +83,7 @@ export class PhasesService {
       } else newData.set(value.official_code, value);
     });
 
-    data.initiatives = [...newData.values()]
+    data.program = [...newData.values()]
 
     return data
   }

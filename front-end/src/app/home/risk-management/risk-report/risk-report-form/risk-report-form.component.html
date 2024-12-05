@@ -7,15 +7,15 @@
   <nav class="risk-nav-main">
     <ul class="risk-nav-list">
       <li>
-        <a class="risk-nav-link" routerLink="/home">Initiatives</a>
+        <a class="risk-nav-link" routerLink="/home">Programs</a>
       </li>
       <li>
         <a routerLink="''" class="risk-nav-link">></a>
       </li>
       <li>
         <a
-          routerLink="/home/{{ initiative?.id }}/{{
-            initiative?.official_code
+          routerLink="/home/{{ sciencePrograms?.id }}/{{
+            sciencePrograms?.official_code
           }}"
           class="risk-nav-link"
           >&nbsp;Risk report<span class="line">&nbsp;/</span>&nbsp;{{
@@ -28,16 +28,16 @@
       </li>
       <li>
         <a
-          routerLink="/home/{{ initiative?.id }}/{{
-            initiative?.official_code
+          routerLink="/home/{{ sciencePrograms?.id }}/{{
+            sciencePrograms?.official_code
           }}/create-risk"
           class="risk-nav-link"
           *ngIf="!riskId"
           >Create risk</a
         >
         <a
-          routerLink="/home/{{ initiative?.id }}/{{
-            initiative?.official_code
+          routerLink="/home/{{ sciencePrograms?.id }}/{{
+            sciencePrograms?.official_code
           }}/edit-risk/{{ riskId }}"
           class="risk-nav-link"
           *ngIf="riskId"

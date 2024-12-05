@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
@@ -22,14 +22,14 @@ export class SearchInitComponent {
   phaseSelected: any;
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
   @Output() activePhaseSelected = new EventEmitter<boolean>();
-
+  @Input() archived!: boolean;
   roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
-    { name: 'Initiative ID (lowest first)', value: 'id,ASC' },
-    { name: 'Initiative ID (highest first)', value: 'id,DESC' },
-    { name: 'Initiative Name (A to Z)', value: 'name,ASC' },
-    { name: 'Initiative Name (Z to A)', value: 'name,DESC' },
+    { name: 'Science Programs ID (lowest first)', value: 'id,ASC' },
+    { name: 'Science Programs ID (highest first)', value: 'id,DESC' },
+    { name: 'Science Programs Name (A to Z)', value: 'name,ASC' },
+    { name: 'Science Programs Name (Z to A)', value: 'name,DESC' },
   ];
 
   status = [
@@ -54,10 +54,10 @@ export class SearchInitComponent {
       sort: [null],
       my_ini: [false],
       status: [null],
-      phase_id: [null]
+      phase_id: [null],
+      archived: [this.archived],
     });
     this.filterForm.valueChanges.subscribe(() => {
-      console.log(this.filterForm.value);
       if (time) clearTimeout(time);
       time = setTimeout(() => {
         this.filters.emit(this.filterForm.value);
@@ -78,6 +78,7 @@ export class SearchInitComponent {
   async ngOnInit() {
     this.setForm();
     this.phases = await this.phaseService.getPhases({},1,200);
+    this.phases.result = this.phases.result.filter((phase: any) => phase?.show_in_home)
     this.activePhase = this.phases.result.filter((d: any) => d.status == 'Open')
     this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
     const phase_id = this.filterForm.get('phase_id')?.value;

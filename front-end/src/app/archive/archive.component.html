@@ -1,0 +1,107 @@
+<section class="section-risk-management-component">
+  <div class="risk-management-container">
+    <div class="risk-management-content">
+      <!-- step-1 -->
+      <div class="risk-management-title-box">
+        <h1 class="risk-management-title-box__title">Archive</h1>
+      </div>
+
+      <app-archive-filters (filters)="filter($event)"></app-archive-filters>
+      <!-- step-3 -->
+      <div class="table-box">
+        <div class="table-box mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 risk-managment-table" matSort>
+            <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- iNITCode Column -->
+            <ng-container matColumnDef="INIT-ID">
+              <th mat-header-cell *matHeaderCellDef>
+                <div class="mtable">ID</div>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="mtable">{{ element.program["official_code"] }}</div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="science programs Name">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h1">Name</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.program["name"] }}
+              </td>
+            </ng-container>
+
+            <!-- riskCategory Column -->
+            <ng-container matColumnDef="Risk Category">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="th-3">Risk category</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="td-3-h">{{
+                  filterCategories(element.program["risks"])
+                  }}</span>
+              </td>
+            </ng-container>
+
+            <!-- numOfRisks Column -->
+            <ng-container matColumnDef="Number of risks">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h3">Num of risks</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <span class="td-h">{{ element.program["risks"].length }}</span>
+              </td>
+            </ng-container>
+
+            <!-- myRole Column -->
+            <ng-container matColumnDef="My Role">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">My role</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ filterRoles(element.init_data["roles"]) }}
+              </td>
+            </ng-container>
+
+
+            <!-- Help Requested Column -->
+            <ng-container matColumnDef="Help requested">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h4">Targets not set</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ filterReqAssistance(element.program.risks) }}
+              </td>
+            </ng-container>
+
+            <!-- Actions Name Column -->
+            <ng-container matColumnDef="Actions">
+              <th mat-header-cell *matHeaderCellDef>
+                <span class="h5">Actions</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="m">
+                  <button class="risk-management-table-icon">
+                    <mat-icon routerLink="./{{ element['id'] }}/versions" class="version-icon">
+                      archive
+                    </mat-icon>
+                  </button>
+                  <button class="risk-management-table-icon">
+                    <mat-icon routerLink="./{{ element['id'] }}/team-member" class="version-icon">
+                      people
+                    </mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr class="table-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr class="table-header" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

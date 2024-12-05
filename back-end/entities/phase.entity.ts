@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   VirtualColumn,
 } from 'typeorm';
-import { Initiative } from './initiative.entity';
+import { Program } from './program.entity';
 
 export enum phaseStatus {
   OPEN = 'Open',
@@ -49,7 +49,11 @@ export class Phase {
   active: boolean;
 
 
-  @OneToMany(() => Initiative, (initiative) => initiative.phase)
+  @Column({ default: true })
+  show_in_home: boolean;
+
+
+  @OneToMany(() => Program, (program) => program.phase)
   @JoinTable()
-  initiatives
+  program
 }

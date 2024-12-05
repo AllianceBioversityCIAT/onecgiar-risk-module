@@ -47,11 +47,11 @@ export class RiskManagementTableComponent {
     });
   }
   length = 100;
-
+  archived: boolean = false;
   userRole: any;
   displayedColumns: string[] = [
     'INIT-ID',
-    'Initiative Name',
+    'Science programs name',
     'Risk Category',
     'Number of risks',
     'My Role',
@@ -72,13 +72,13 @@ export class RiskManagementTableComponent {
 
   filters: any = {};
   filter(filters: any) {
-    this.filters = filters
+    this.filters = filters;
     this.getInitiatives(filters);
   }
   async getInitiatives(filters = null) {
-    let Initiatives: any = await this.initiativeService.getInitiativesWithFilters(filters);
-    this.dataSource = new MatTableDataSource<any>(Initiatives);
-    this.length = Initiatives.length;
+    let sciencePrograms: any = await this.initiativeService.getInitiativesWithFilters(filters);
+    this.dataSource = new MatTableDataSource<any>(sciencePrograms);
+    this.length = sciencePrograms.length;
   }
   ngOnDestroy() {
     if (this.navigationSubscription) {
@@ -136,6 +136,5 @@ export class RiskManagementTableComponent {
         'Help requested'
       );
     }
-    this.getInitiatives(this.filters);
   }
 }

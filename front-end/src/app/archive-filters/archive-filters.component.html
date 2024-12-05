@@ -1,0 +1,84 @@
+<div class="form-container">
+    <form [formGroup]="filterForm" class="search">
+        <div class="sec-1">
+            <div class="risk-management-form-field field-3">
+                <mat-label class="risk-management-form-field__label">ID</mat-label>
+
+                <input formControlName="initiative_id" hideToggle="true" class="search__input" matInput placeholder="ID"
+                    #input />
+
+                <button style="border: none; cursor: pointer; background-color: #ffffff12" class="search__button">
+                    <mat-icon class="search__icon">
+                        <img class="search__icon" src="../../assets/shared-image/Vector-search.svg"
+                            alt="~/Frontend/images/icon _ search-icon" /></mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="sec-2">
+            <div class="risk-management-form-field field-3">
+                <mat-label class="risk-management-form-field__label">Name</mat-label>
+
+                <input formControlName="name" hideToggle="true" class="search__input" matInput placeholder="Search"
+                    #input />
+
+                <button style="border: none; cursor: pointer; background-color: #ffffff12" class="search__button">
+                    <mat-icon class="search__icon">
+                        <img class="search__icon" src="../../assets/shared-image/Vector-search.svg"
+                            alt="~/Frontend/images/icon _ search-icon" /></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="sec-3">
+            <div class="risk-management-form-field field-3">
+                <mat-label class="risk-management-form-field__label">Risk category</mat-label>
+
+                <mat-select [multiple]="true" formControlName="category" panelClass="x"
+                    class="risk-management-form-field-box__input-3 aa" [placeholder]="'All'" id="select-where" required>
+                    <ng-container *ngFor="let riskCat of categories">
+                        <mat-option *ngIf="riskCat.disabled == 0" [value]="riskCat.id">
+                            {{ riskCat.title }}
+
+                            <mat-icon [matTooltip]="riskCat.description" matSuffix>help_outline</mat-icon>
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="sec-4">
+            <div class="risk-management-form-field field-3">
+                <mat-label class="risk-management-form-field__label">My role</mat-label>
+
+                <mat-select [multiple]="true" formControlName="my_role" class="risk-management-form-field-box__input-3"
+                    [placeholder]="'All'" id="select-where" required>
+                    <mat-option *ngFor="let item of roles" [value]="item">
+                        {{ item }}
+                    </mat-option>
+                </mat-select>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+<div class="footer-sec">
+    <div class="content-1">
+        <div class="sec-7">
+            <button class="risk-management-reset-btn" mat-raised-button (click)="resetForm()">
+                Reset
+            </button>
+        </div>
+        <div>
+        </div>
+    </div>
+</div>

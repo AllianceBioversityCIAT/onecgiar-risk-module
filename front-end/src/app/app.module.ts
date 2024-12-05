@@ -86,6 +86,13 @@ import { ContactUsDialogComponent } from './footer/contact-us-dialog/contact-us-
 import { FaqPipePipe } from './pipes/faq-pipe.pipe';
 import { LastSubmitionPhaseComponent } from './Admin/admin-module/phases/last-submition-phase/last-submition-phase.component';
 import { PhaseComponent } from './Admin/admin-module/phases/phase/phase.component';
+import { ArchiveComponent } from './archive/archive.component';
+import { ArchiveAdminComponent } from './Admin/admin-module/archive-admin/archive-admin.component';
+import { ArchiveFiltersComponent } from './archive-filters/archive-filters.component';
+import { ArchivedTeamMemberComponent } from './archive/archived-team-member/archived-team-member.component';
+import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
+import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
+import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-clarisa.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -146,6 +153,13 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     FaqPipePipe,
     LastSubmitionPhaseComponent,
     PhaseComponent,
+    ArchiveComponent,
+    ArchiveAdminComponent,
+    ArchiveFiltersComponent,
+    ArchivedTeamMemberComponent,
+    ArchivedVersionComponent,
+    ArchivedVersionsComponent,
+    SyncClarisaComponent,
   ],
   imports: [
     BrowserModule,

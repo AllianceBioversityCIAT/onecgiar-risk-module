@@ -2,14 +2,14 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role } from './role.enum';
 import { ROLES_KEY } from './roles.decorator';
-import { InitiativeService } from 'src/initiative/initiative.service';
+import { ProgramService } from 'src/program/program.service';
 import { RiskService } from 'src/risk/risk.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   dataSource: any;
   constructor(private reflector: Reflector,
-     private initService: InitiativeService,
+     private initService: ProgramService,
      private riskService: RiskService
      ) {}
 
@@ -42,10 +42,10 @@ export class RolesGuard implements CanActivate {
       // console.log('body ==> ',request.body)
 
 
-      const user_init_role: any = await this.initService.iniRolesRepository.find({
+      const user_init_role: any = await this.initService.programRolesRepository.find({
         where : {
           user_id: user.id,
-          initiative_id: initiative_id,
+          program_id: initiative_id,
         }
       });
 

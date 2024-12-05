@@ -143,7 +143,7 @@ export class UserManagementComponent implements OnInit {
             this.toastr.success('Success deleted');
           } else {
             this.toastr.error(
-              'The user can not be deleted since he/she has responsibilities within the Initiative(s)'
+              'The user can not be deleted since he/she has responsibilities within the Science Programs'
             );
           }
         }

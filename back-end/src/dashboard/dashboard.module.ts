@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { DashboardController } from './dashboard.controller';
-import { InitiativeModule } from 'src/initiative/initiative.module';
+import { ProgramModule } from 'src/program/program.module';
 @Module({
   controllers: [DashboardController],
-  imports: [InitiativeModule],
+  imports: [ProgramModule],
 })
 export class DashboardModule {}

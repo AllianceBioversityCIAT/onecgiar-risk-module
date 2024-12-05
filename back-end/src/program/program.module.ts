@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { InitiativeRoles } from 'entities/initiative-roles.entity';
-import { Initiative } from 'entities/initiative.entity';
+import { ProgramRoles } from 'entities/program-roles.entity';
+import { Program } from 'entities/program.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
 import { AuthModule } from 'src/auth/auth.module';
@@ -9,8 +9,8 @@ import { RiskModule } from 'src/risk/risk.module';
 import { RiskService } from 'src/risk/risk.service';
 import { SharedModule } from 'src/shared/shared.module';
 import { UsersModule } from 'src/users/users.module';
-import { InitiativeController } from './initiative.controller';
-import { InitiativeService } from './initiative.service';
+import { ProgramController } from './program.controller';
+import { ProgramService } from './program.service';
 import { EmailsService } from 'src/emails/emails.service';
 import { Email } from 'src/emails/email.entity';
 import { User } from 'entities/user.entitiy';
@@ -20,13 +20,14 @@ import { ActionArea } from 'entities/action-area';
 import { PhasesService } from 'src/phases/phases.service';
 import { Phase } from 'entities/phase.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
+import { Archive } from 'entities/archive.entity';
 @Global()
 @Module({
-  controllers: [InitiativeController],
+  controllers: [ProgramController],
   imports: [
     TypeOrmModule.forFeature([
-      Initiative,
-      InitiativeRoles,
+      Program,
+      ProgramRoles,
       Risk,
       Mitigation,
       Email,
@@ -34,14 +35,15 @@ import { CollectedEmail } from 'entities/collected-emails.entity';
       Variables,
       ActionArea,
       Phase,
-      CollectedEmail
+      CollectedEmail,
+      Archive
     ]),
     SharedModule,
     RiskModule,
     UsersModule,
     AuthModule
   ],
-  providers: [InitiativeService, RiskService, EmailsService, VariablesService, PhasesService],
-  exports:[InitiativeService,RiskService]
+  providers: [ProgramService, RiskService, EmailsService, VariablesService, PhasesService],
+  exports:[ProgramService,RiskService]
 })
-export class InitiativeModule {}
+export class ProgramModule {}
