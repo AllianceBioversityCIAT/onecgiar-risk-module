@@ -27,7 +27,7 @@ export class Program {
   @Column({ nullable: true, default: null })
   official_code: string;
   @ApiProperty()
-  @Column()
+  @Column({default:null})
   clarisa_id: string;
 
   @Index({ fulltext: true })
