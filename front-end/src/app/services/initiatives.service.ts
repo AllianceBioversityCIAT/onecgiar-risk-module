@@ -79,7 +79,7 @@ export class InitiativesService extends MainService {
     );
   }
 
-  async syncInit(initIds: number []) {
+  async syncInit(initIds: string []) {
     return await firstValueFrom(
       this.http
         .post(

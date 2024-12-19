@@ -35,14 +35,11 @@ export class SyncClarisaComponent {
   displayedColumns: string[] = [
     'INIT-ID',
     'Science programs Name',
-    'description',
-    'active',
-    'status',
     'Actions',
   ];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: any;
-  initIds: number[] = [];
+  initCodes: string[] = [];
 
 
   async ngOnInit() {
@@ -62,20 +59,20 @@ export class SyncClarisaComponent {
 
 
 
-  checkInit(event: MatCheckboxChange, id: number) {
+  checkInit(event: MatCheckboxChange, code: string) {
     if(event.checked) {
-      this.initIds.push(id);
+      this.initCodes.push(code);
     } else {
-      const indexId = this.initIds.indexOf(id);
-      if (indexId !== -1) {
-        this.initIds.splice(indexId, 1);
+      const indexCode = this.initCodes.indexOf(code);
+      if (indexCode !== -1) {
+        this.initCodes.splice(indexCode, 1);
       }
     }
   }
 
 
   async syncData() {
-    if(this.initIds.length) {
+    if(this.initCodes.length) {
       this.dialog
       .open(DeleteConfirmDialogComponent, {
         data: {
@@ -85,7 +82,7 @@ export class SyncClarisaComponent {
       })
       .afterClosed().subscribe(async res => {
         if(res){
-          await this.initiativeService.syncInit(this.initIds).then(
+          await this.initiativeService.syncInit(this.initCodes).then(
             () => {
               this.getInitiatives();
               this.toastr.success('Sync successfully');

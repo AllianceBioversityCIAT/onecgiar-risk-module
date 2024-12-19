@@ -121,11 +121,11 @@ export class ProgramController {
     });
     console.log(archivedVersion)
   }
-  @Get('import')
-  async import() {
-    await this.iniService.syncFromClarisa();
-    return 'science programs imported successfully';
-  }
+  // @Get('import')
+  // async import() {
+  //   await this.iniService.syncFromClarisa();
+  //   return 'science programs imported successfully';
+  // }
   @UseGuards(JwtAuthGuard)
   @Get('archived')
   async getArchiveInit(@Query() query: any, @Req() req) {
