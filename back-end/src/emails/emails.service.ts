@@ -480,14 +480,30 @@ export class EmailsService {
       where: { id: subject_varabel_id },
     });
 
-    return await this.createEmailBy(
-      user.full_name,
-      user.email,
-      content.label,
-      content.value,
-      initiative_id,
-      risk,
-      content.id,
-    );
+    if(!user.id) {
+
+      return await this.createEmailBy(
+        user,
+        user,
+        content.label,
+        content.value,
+        initiative_id,
+        risk,
+        content.id,
+      );
+
+
+    } else {
+      return await this.createEmailBy(
+        user.full_name,
+        user.email,
+        content.label,
+        content.value,
+        initiative_id,
+        risk,
+        content.id,
+      );
+    }
+ 
   }
 }
