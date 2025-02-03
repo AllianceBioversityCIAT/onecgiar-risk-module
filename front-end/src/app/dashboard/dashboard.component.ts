@@ -47,6 +47,7 @@ export class DashboardComponent {
   details: any = null;
   groups: any = null;
   action_areas: any = null;
+  totalStatus: any = null;
   async ngOnInit() {
     this.data = await this.dashboardService.current();
     this.details = await this.dashboardService.details();
@@ -56,6 +57,9 @@ export class DashboardComponent {
     this.action_areas = await this.dashboardService.actionAreas();
 
     this.status = await this.dashboardService.status();
+    console.log(this.status)
+    this.totalStatus = this.status.reduce((sum: any, item: any) => sum + parseInt(item.total_actions, 10), 0);
+
     this.risk_profile_target_chartOptions = this.riskProfile(
       this.data,
       'Target'
@@ -126,25 +130,35 @@ export class DashboardComponent {
         },
       ],
     };
-    this.status_of_action_chartOptions = {
+    this.status_of_action_chartOptions = { 
       chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie',
+        type: 'column'
       },
-      credits: {
+         credits: {
         enabled: false,
       },
-      // title: {
-      //   text: 'Status of action',
-      //   align: 'center',
-      // },
+      subtitle: {
+        text: 'Status of action',
+        align: 'center',
+      },
+      xAxis: {
+        categories: this.status.map((item: any) => item.title)
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Percentage (%)'
+        },
+        labels: {
+          format: '{value}%'
+        }
+      },
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
         shadow: false,
         useHTML: true,
+        pointFormat: '<b>{point.y}%</b>' ,
         style: {
           textAlign: 'left',
           color: '#04030f',
@@ -161,57 +175,20 @@ export class DashboardComponent {
           left: '0 !important',
           top: '0 !important',
         },
-        headerFormat: '<table>',
-        pointFormat:
-          '<tr><th colspan="2"><span class="chart-bubble-title"><b class="title-tooltip">{point.name}</b></span></th></tr>' +
-          '<tr><th>' +
-          '</th><td>{series.name}: <b>{point.percentage:.1f}%</b></td></tr>',
-        footerFormat: '</table>',
-        followPointer: true,
-      },
-      accessibility: {
-        point: {
-          valueSuffix: '%',
-        },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            style: {
-              textAlign: 'left',
-              color: '#04030f',
-              fontFamily: '"Poppins", sans-serif !important',
-              fontSize: '1.6rem',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              backgroundColor: '#fff',
-              border: '1px solid #172f8f !important',
-              borderRadius: '5px',
-              opacity: '1',
-              zIndex: '9999 !important',
-              padding: '0.8em',
-              left: '0 !important',
-              top: '0 !important',
-            },
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          },
-        },
       },
       series: [
         {
-          name: 'Usage',
-          colorByPoint: true,
-          data: this.status
-            .filter((d: any) => d.total_actions)
-            .map((d: any) => {
-              return { name: d.title, y: +d.total_actions };
-            }),
-        },
-      ],
-    };
+          type: 'column',
+          name: 'Total Actions',
+          data: this.status.map((item: any) => {
+            const count = parseInt(item.total_actions, 10);
+            return parseFloat(((count / this.totalStatus) * 100).toFixed(1));
+          }),
+          colorByPoint: true 
+        }
+      ]
+    
+    }
     this.categories_count_chartOptions = {
       chart: {
         plotBackgroundColor: null,
@@ -297,90 +274,6 @@ export class DashboardComponent {
       ],
     };
 
-    this.action_areas_chartOptions = {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie',
-      },
-      credits: {
-        enabled: false,
-      },
-      // title: {
-      //   text: 'Action Areas',
-      //   align: 'center',
-      // },
-      tooltip: {
-        borderWidth: 0,
-        backgroundColor: 'rgba(255,255,255,0)',
-        shadow: false,
-        useHTML: true,
-        style: {
-          textAlign: 'left',
-          color: '#04030f',
-          fontFamily: '"Poppins", sans-serif !important',
-          fontSize: '1.6rem',
-          fontStyle: 'normal',
-          fontWeight: '400',
-          backgroundColor: '#fff',
-          border: '1px solid #172f8f !important',
-          borderRadius: '5px',
-          opacity: '1',
-          zIndex: '9999 !important',
-          padding: '0.8em',
-          left: '0 !important',
-          top: '0 !important',
-        },
-        headerFormat: '<table>',
-        pointFormat:
-          '<tr><th colspan="2"><span class="chart-bubble-title"><b class="title-tooltip">{point.name}</b></span></th></tr>' +
-          '<tr><th>' +
-          '</th><td>{series.name}: <b>{point.percentage:.1f}%</b></td></tr>',
-        footerFormat: '</table>',
-        followPointer: true,
-      },
-      accessibility: {
-        point: {
-          valueSuffix: '%',
-        },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            style: {
-              textAlign: 'left',
-              color: '#04030f',
-              fontFamily: '"Poppins", sans-serif !important',
-              fontSize: '1.6rem',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              backgroundColor: '#fff',
-              border: '1px solid #172f8f !important',
-              borderRadius: '5px',
-              opacity: '1',
-              zIndex: '9999 !important',
-              padding: '0.8em',
-              left: '0 !important',
-              top: '0 !important',
-            },
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          },
-        },
-      },
-      series: [
-        {
-          name: 'Usage',
-          colorByPoint: true,
-          data: this.action_areas.map((d: any) => {
-            return { name: d.name, y: +d.total_count };
-          }),
-        },
-      ],
-    };
     this.category_group_chartOptions = {
       chart: {
         plotBackgroundColor: null,
