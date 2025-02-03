@@ -931,6 +931,7 @@ export class ProgramController {
         parent_id: IsNull(),
         ...this.iniService.roles(query, req),
         name: query?.name ? ILike(`%${query.name}%`) : null,
+        archived: false
       },
     });
 
