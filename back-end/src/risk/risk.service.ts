@@ -117,11 +117,13 @@ export class RiskService {
           this.emailsService.sendEmailTobyVarabel(role?.user, 1, program.id, created_risk);
       });
 
-    if(oldRisk?.risk_owner?.user_id != newRiskOwner.user_id) {
-      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, program.id, created_risk);
+    if((oldRisk?.risk_owner?.user_id != newRiskOwner.user_id) || (oldRisk?.risk_owner?.email != newRiskOwner.email)) {
+      const user = !newRiskOwner.user ? newRiskOwner.email : newRiskOwner.user;
+      this.emailsService.sendEmailTobyVarabel(user, 5, program.id, created_risk);
     } 
     else if(!oldRisk.risk_owner) { 
-      this.emailsService.sendEmailTobyVarabel(newRiskOwner?.user, 5, program.id, created_risk);
+      const user = !newRiskOwner.user ? newRiskOwner.email : newRiskOwner.user;
+      this.emailsService.sendEmailTobyVarabel(user, 5, program.id, created_risk);
     }
 
     return created_risk;
@@ -155,7 +157,9 @@ export class RiskService {
         where: { id: created_risk.risk_owner_id },
         relations: ['user'],
       });
-      if (risk_owner_role?.user)
+      if (!risk_owner_role.user)
+        this.emailsService.sendEmailTobyVarabel(risk_owner_role?.email, 5, init.id, created_risk);
+      else
         this.emailsService.sendEmailTobyVarabel(risk_owner_role?.user, 5, init.id, created_risk);
     }
 
