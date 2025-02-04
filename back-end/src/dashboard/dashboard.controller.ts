@@ -199,26 +199,32 @@ export class DashboardController {
   })
   getstatus() {
     return this.dataSource
-      .createQueryBuilder()
-      .from('mitigation_status', 'mitigation_status')
+    .createQueryBuilder()
+    .from('mitigation_status', 'mitigation_status')
 
-      .leftJoin('mitigation', 'mitigation', 'mitigation.mitigation_status_id = mitigation_status.id')
-      .leftJoin('risk', 'risk', 'risk.id = mitigation.risk_id')
-      .leftJoin('program', 'program', 'program.id = risk.program_id')
-      .where('risk.original_risk_id is null')
-      .andWhere('program.archived = :archived', { archived: false })
+    .leftJoin('mitigation', 'mitigation', 'mitigation.mitigation_status_id = mitigation_status.id')
+    .leftJoin('risk', 'risk', 'risk.id = mitigation.risk_id')
+    .leftJoin('program', 'program', 'program.id = risk.program_id')
+    .where('risk.original_risk_id IS NULL')
+    .andWhere('program.archived = :archived', { archived: false })
 
-      .addSelect('mitigation_status.id', 'id')
-      .addSelect('mitigation_status.title', 'title')
-      .addSelect((subQuery) => {
-        return subQuery
-          .addSelect(`COUNT(mitigation.id)`, 'total_actions')
-          .where('mitigation_status.id = mitigation.mitigation_status_id')
-          .from(Mitigation, 'mitigation');
-      }, 'total_actions')
-      .addGroupBy('mitigation_status.id')
+    .addSelect('mitigation_status.id', 'id')
+    .addSelect('mitigation_status.title', 'title')
+    .addSelect((subQuery) => {
+      return subQuery
+        .from(Mitigation, 'mitigation')
+        .leftJoin('risk', 'risk', 'risk.id = mitigation.risk_id')
+        .where('risk.original_risk_id IS NULL')
+        .leftJoin('program', 'program', 'program.id = risk.program_id')
+        .andWhere('program.archived = :archived', { archived: false })
 
-      .execute();
+        .select('COUNT(mitigation.id)', 'total_actions')
+
+        .andWhere('mitigation_status.id = mitigation.mitigation_status_id')
+    }, 'total_actions')
+    .groupBy('mitigation_status.id')
+
+    .execute();
   }
 
   @Get('risks/:id')
