@@ -138,9 +138,12 @@ export class DashboardController {
       .addSelect('risk_category.title', 'title')
       .addSelect((subQuery) => {
         return subQuery
+          .from(Risk, 'risk')
+          .where('risk.original_risk_id is null')
+          .leftJoin('program', 'program', 'program.id = risk.program_id')
+          .andWhere('program.archived = :archived', { archived: false })
           .addSelect(`COUNT(risk.id)`, 'total_count')
-          .where('risk.category_id = risk_category.id')
-          .from(Risk, 'risk');
+          .andWhere('risk.category_id = risk_category.id')          
       }, 'total_count')
       .groupBy('risk_category.id')
 
