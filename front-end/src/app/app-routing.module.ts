@@ -42,6 +42,7 @@ import { ArchivedTeamMemberComponent } from './archive/archived-team-member/arch
 import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
 import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
 import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-clarisa.component';
+import { OrganizationComponent } from './Admin/admin-module/organization/organization.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -67,6 +68,10 @@ const routes: Routes = [
       {
         path: 'sync-clarisa',
         component: SyncClarisaComponent,
+      },
+      {
+        path: 'organization',
+        component: OrganizationComponent,
       },
       {
         path: 'parameters-settings',

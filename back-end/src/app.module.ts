@@ -21,6 +21,7 @@ import { GlossaryModule } from './glossary/glossary.module';
 import { FaqModule } from './faq/faq.module';
 import { PhasesModule } from './phases/phases.module';
 import dataSource, { dataSourceOptions } from 'db/data-source';
+import { OrganizationsModule } from './organizations/organizations.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import dataSource, { dataSourceOptions } from 'db/data-source';
     GlossaryModule,
     FaqModule,
     PhasesModule,
+    OrganizationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

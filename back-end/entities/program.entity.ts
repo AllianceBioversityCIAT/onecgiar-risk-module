@@ -11,6 +11,7 @@ import {
   JoinColumn,
   UpdateDateColumn,
   Index,
+  ManyToMany,
 } from 'typeorm';
 import { ProgramRoles } from './program-roles.entity';
 import { Risk } from './risk.entity';
@@ -18,6 +19,7 @@ import { User } from './user.entitiy';
 import { ActionArea } from './action-area';
 import { Phase } from './phase.entity';
 import { CollectedEmail } from './collected-emails.entity';
+import { Organization } from './organization.entity';
 @Entity()
 export class Program {
   @ApiProperty()
@@ -106,4 +108,9 @@ export class Program {
   @ApiProperty()
   @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.program)
   email: any;
+
+  @ApiProperty()
+  @ManyToMany(() => Organization, (organization) => organization)
+  @JoinTable()
+  organizations: Organization[];
 }
