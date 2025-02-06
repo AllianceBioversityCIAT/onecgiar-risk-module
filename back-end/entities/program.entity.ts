@@ -110,7 +110,7 @@ export class Program {
   email: any;
 
   @ApiProperty()
-  @ManyToMany(() => Organization, (organization) => organization)
+  @ManyToMany(() => Organization, (organization) => organization.program)
   @JoinTable()
   organizations: Organization[];
 }

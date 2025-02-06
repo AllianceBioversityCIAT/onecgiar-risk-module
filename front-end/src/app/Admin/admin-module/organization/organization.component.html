@@ -62,7 +62,7 @@
               class="user-management__button-box__btn btn-primary-size"
               mat-raised-button
               color="primary"
-              (click)="openDialog()"
+              (click)="openDialog(null)"
             >
               Add new
             </button>
@@ -118,7 +118,7 @@
                 <button
                   class="user-management-table-icon"
                   matTooltip="Edit"
-                  (click)="openDialog(organization.code)"
+                  (click)="openDialog(organization)"
                 >
                   <mat-icon class="user-management-table__icon">
                     <svg

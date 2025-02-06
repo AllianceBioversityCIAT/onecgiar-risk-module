@@ -28,6 +28,11 @@
   border-radius: 1rem;
   color: #ffffff;
 }
+::ng-deep{
+.mat-sort-header-container {
+  justify-content: center !important;
+}
+}
 
 // .add_new_btn {
 //   margin-bottom: 10px;

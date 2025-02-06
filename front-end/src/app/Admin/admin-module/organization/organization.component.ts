@@ -80,9 +80,9 @@ export class OrganizationComponent implements OnInit {
     this.initTable();
   }
 
-  openDialog(id: number = 0): void {
+  openDialog(item: any): void {
     const dialogRef = this.dialog.open(OrganizationDialogComponent, {
-      data: { id: id },
+      data: { item: item },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
