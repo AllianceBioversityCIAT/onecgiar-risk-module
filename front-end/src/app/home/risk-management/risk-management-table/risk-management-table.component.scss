@@ -752,7 +752,14 @@
 .m {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 1rem;
+}
+
+.organization-icon {
+  position: relative;
+  bottom: -2px;
+  color: #9e553e !important;
 }
 
 .risk-management-table-icon {

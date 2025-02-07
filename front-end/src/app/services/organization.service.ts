@@ -54,4 +54,18 @@ export class OrganizationService extends MainService {
       this.http.delete(this.backend_url+"/organizations/" + id, {headers: this.headers}).pipe(map((d: any) => d))
     );
   }
+
+  getOrganizationsByProgramId(programId: number, phaseId: number) {
+    return firstValueFrom(
+      this.http.get(this.backend_url+"/organizations/program/" + programId + "/" + phaseId, {headers: this.headers}).pipe(map((d: any) => d))
+    ).catch((e) => false);
+  }
+
+
+  assignOrgs(data: any) {
+    return firstValueFrom(
+      this.http.post(this.backend_url+"/organizations/assign-org/", data, {headers: this.headers}).pipe(map((d: any) => d))
+    ).catch((e) => false);
+  }
+
 }

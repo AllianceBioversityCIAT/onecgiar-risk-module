@@ -1,0 +1,75 @@
+<div class="form-dialog-header">
+    <div class="form-dialog-header__text-box">
+      <p class="form-dialog-header__text-box__text">Assign Organizations</p>
+    </div>
+  
+    <div class="form-dialog-header__icon-box">
+        <mat-icon class="x-icon" (click)="onCloseDialog()">
+            close
+        </mat-icon>
+    </div>
+  </div>
+  
+  <div class="form-dialog-conten-box-1">
+    <mat-dialog-content>
+      <form [formGroup]="assignOrgsForm" class="form-dialog-content">
+        <div>
+          <div class="form-dialog-conten-button-box">
+            <div class="form-dialog-conten__button-box" align="end">
+              <!-- <button mat-button mat-dialog-close>Cancel</button> -->
+              <div class="risk-report-button-box">
+                <button
+                  class="risk-report-button-box__btn btn--chestnut"
+                  type="submit"
+                  mat-raised-button
+                  mat-button
+                  color="primary"
+                  mat-button
+                  color="primary"
+                  (click)="submit()"
+                >
+                  <mat-icon class="create-risk">
+                    <span class="material-symbols-outlined"> data_saver_on </span>
+                  </mat-icon>
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- //Organizations  filed----- -->
+  
+        <div class="form-dialog-content__field--grid-column">
+          <div class="form-dialog-content__title-box">
+            <mat-label class="form-dialog-content__title-box__title"
+              >Organizations<span class="star">*</span></mat-label
+            >
+          </div>
+          <div class="kk">
+            <ng-select
+              [appendTo]="'.kk'"
+              [items]="organizations"
+              bindValue="code"
+              appearance="outline"
+              bindLabel="name"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              formControlName="organizations"
+              placeholder="Organizations"
+            >
+              <ng-template ng-optgroup-tmp ng-label-tmp let-item="item">
+                <span>{{ item.acronym }}</span> -
+                <span>{{ item.name }}</span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <span>{{ item.acronym }}</span> -
+                <span>{{ item.name }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+  
+      </form>
+    </mat-dialog-content>
+  </div>

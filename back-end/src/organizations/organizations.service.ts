@@ -4,12 +4,15 @@ import { Organization } from 'entities/organization.entity';
 import { ILike, Repository } from 'typeorm';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { PhaseProgramOrganization } from 'entities/phase-program-organization.entity';
 
 @Injectable()
 export class OrganizationsService {
     constructor(
         @InjectRepository(Organization)
         private organizationRepository: Repository<Organization>,
+        @InjectRepository(PhaseProgramOrganization)
+        private phaseProgramOrganizationRepository: Repository<PhaseProgramOrganization>,
     ) { }
 
 
@@ -76,5 +79,35 @@ export class OrganizationsService {
         } else {
             return this.organizationRepository.delete({ code });
         }
+    }
+
+    async getOrganizationsProgram(program_id: number, phase_id: number) {
+        const data = await this.phaseProgramOrganizationRepository.find({
+            where: {
+                phase_id: phase_id,
+                program_id: program_id
+            },
+            relations: ['organization']
+        });
+        return data.map((d: any) => d.organization);
+    }
+
+
+    async assignOrgs(data: any) {
+        const { organizations, program_id, phase_id } = data;
+
+        await this.phaseProgramOrganizationRepository.delete({
+            phase_id,
+            program_id,
+        });
+        for (const code of organizations) {
+            const newPhaseProgOrg = this.phaseProgramOrganizationRepository.create({
+                phase_id,
+                program_id,
+                organization_code: code,
+            });
+            await this.phaseProgramOrganizationRepository.save(newPhaseProgOrg);
+        }
+        return true;
     }
 }
