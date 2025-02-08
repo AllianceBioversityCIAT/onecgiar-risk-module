@@ -285,11 +285,14 @@ export class ProgramController {
                   `PLAT-${query.initiative_id}`,
                   `PLAT-0${query.initiative_id}`,
                   `SGP-${query.initiative_id}`,
-                  `SGP-0${query.initiative_id}` 
+                  `SGP-0${query.initiative_id}`,
+                  `SP${query.initiative_id}` ,
+                  `SP0${query.initiative_id}` 
+
         ]) : Not(IsNull()),
         ...this.iniService.roles(query, req),
         risks: { ...this.iniService.filterCategory(query, 'For Init') },
-        archived: query.archived
+        archived: false
         // risks: { category_id: query?.category ? In(query?.category) : null },
       },
       relations: [

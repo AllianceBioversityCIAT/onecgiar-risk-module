@@ -93,6 +93,9 @@ import { ArchivedTeamMemberComponent } from './archive/archived-team-member/arch
 import { ArchivedVersionComponent } from './archive/archived-version/archived-version.component';
 import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
 import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-clarisa.component';
+import { OrganizationComponent } from './Admin/admin-module/organization/organization.component';
+import { OrganizationDialogComponent } from './Admin/admin-module/organization/organization-dialog/organization-dialog.component';
+import { AssignOrganizationsComponent } from './home/risk-management/risk-management-table/assign-organizations/assign-organizations.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -160,6 +163,9 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     ArchivedVersionComponent,
     ArchivedVersionsComponent,
     SyncClarisaComponent,
+    OrganizationComponent,
+    OrganizationDialogComponent,
+    AssignOrganizationsComponent,
   ],
   imports: [
     BrowserModule,

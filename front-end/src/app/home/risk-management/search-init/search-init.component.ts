@@ -22,7 +22,6 @@ export class SearchInitComponent {
   phaseSelected: any;
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
   @Output() activePhaseSelected = new EventEmitter<boolean>();
-  @Input() archived!: boolean;
   roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
@@ -55,7 +54,6 @@ export class SearchInitComponent {
       my_ini: [false],
       status: [null],
       phase_id: [null],
-      archived: [this.archived],
     });
     this.filterForm.valueChanges.subscribe(() => {
       if (time) clearTimeout(time);

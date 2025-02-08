@@ -17,6 +17,8 @@ import { Variables } from 'entities/variables.entity';
 import { Email } from 'src/emails/email.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
+import { Organization } from 'entities/organization.entity';
+import { PhaseProgramOrganization } from 'entities/phase-program-organization.entity';
 
 dotenv.config();
 export const dataSourceOptions: DataSourceOptions = {
@@ -44,7 +46,9 @@ export const dataSourceOptions: DataSourceOptions = {
     Archive,
     FAQ,
     Glossary,
-    Variables
+    Variables,
+    Organization,
+    PhaseProgramOrganization
   ],
   migrations: ['dist/db/migrations/**/*{.ts,.js}'],
   synchronize: true,
