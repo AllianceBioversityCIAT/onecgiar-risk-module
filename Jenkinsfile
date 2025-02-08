@@ -16,7 +16,7 @@ pipeline {
     stage('Copy Env') {
       steps {
         sh '''
-         cp /var/lib/jenkins/workspace/Environments/risk/back-end/.env backend/
+         cp /var/lib/jenkins/workspace/Environments/risk/back-end/.env back-end/
         '''
       }
     }
