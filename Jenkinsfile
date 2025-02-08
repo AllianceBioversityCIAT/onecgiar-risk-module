@@ -13,6 +13,13 @@ pipeline {
         '''
       }
     }
+    stage('Copy Env') {
+      steps {
+        sh '''
+         cp /var/lib/jenkins/workspace/Environments/risk/back-end/.env backend/
+        '''
+      }
+    }
     stage('Clean up') {
       steps {
         sh 'docker system prune -a -f'
