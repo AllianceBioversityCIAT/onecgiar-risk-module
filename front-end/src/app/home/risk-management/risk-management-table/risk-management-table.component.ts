@@ -129,15 +129,14 @@ export class RiskManagementTableComponent {
   user_info: any;
   loading = true;
   isadmin = false;
-  phase!: any;
+  activePhase: any;
 
   async ngOnInit() {
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
       this.userRole = jwt_decode(access_token);
     }
-    this.phase = await this.phaseService.getPhases(null, 1, 100);
-    this.phase = this.phase.result.filter((phase: any) => phase.active == true)[0];
+    this.activePhase = await this.phaseService.getActivePhase();
     if (this.userRole.role == 'admin') {
       this.displayedColumns.splice(
         this.displayedColumns.length - 1,
@@ -151,7 +150,7 @@ export class RiskManagementTableComponent {
     this.dialog.open(AssignOrganizationsComponent, {
       autoFocus: false,
       disableClose: true,
-      data: { programId: id, phase : this.phase},
+      data: { programId: id, phase : this.activePhase},
     });
   }
 }

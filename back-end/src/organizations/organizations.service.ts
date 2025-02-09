@@ -68,13 +68,12 @@ export class OrganizationsService {
     }
 
     async remove(code: any) {
-        const orgUsed = await this.organizationRepository.findOne({
+        const orgUsed = await this.phaseProgramOrganizationRepository.find({
             where: {
-                code: code
+                organization_code: code
             },
-            relations: ['program']
         });
-        if (orgUsed.program.length != 0) {
+        if (orgUsed.length != 0) {
             throw new BadRequestException('Organization cannot be deleted, This organization is assigned for an Program(s)')
         } else {
             return this.organizationRepository.delete({ code });
