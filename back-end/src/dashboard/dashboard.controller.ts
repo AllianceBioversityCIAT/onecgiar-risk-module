@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { getCategoriesLevels, getCategoriesCount, getProgramScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
 import { getProgram } from 'DTO/initiative.dto';
@@ -240,5 +240,45 @@ export class DashboardController {
         where: { program_id: id, redundant: false },
       }
     );
+  }
+
+
+  @Get('organizations/:phaseId')
+  async getSunburstData(@Param('phaseId') phaseId: number) {
+    const organizations = await this.iniService.organizationRepo.find();
+
+    const allData = await this.iniService.phaseProgramOrganizationRepo.find({
+      where: {
+        phase_id: phaseId
+      },
+      relations: ['program', 'program.risks'],
+    });
+
+
+    const finalData = organizations.map((org) => ({
+      code: org.code,
+      name: org.name,
+      acronym: org.acronym,
+      programs: allData
+        .filter((data) => data.organization_code === org.code)
+        .reduce((acc, ppo) => {
+          let programNode = acc.find((node) => node.id === ppo.program_id);
+          if (!programNode) {
+            programNode = {
+              id: ppo.program_id,
+              official_code: ppo.program.official_code,
+              name: ppo.program.name,
+              risks: ppo.program.risks.map((risk) => ({
+                id: risk.id,
+                name: risk.title,
+              })),
+            };
+            acc.push(programNode);
+          }
+          return acc;
+        }, []),
+    }));
+
+    return finalData
   }
 }

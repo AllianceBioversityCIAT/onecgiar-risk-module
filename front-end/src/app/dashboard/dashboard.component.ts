@@ -1,24 +1,30 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
 import * as Highcharts from 'highcharts';
 import { DashboardService } from '../services/dashboard.service';
 import { HeaderService } from '../header.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { PhasesService } from '../services/phases.service';
 declare var require: any;
-require('highcharts/highcharts-more.js')(Highcharts);
+import HighchartsMore from 'highcharts/highcharts-more';
+import SunburstModule from 'highcharts/modules/sunburst'; 
+HighchartsMore(Highcharts);
 
+SunburstModule(Highcharts);
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   public riskUrl = {
     home: '/home/risk-management',
   };
+  Highcharts = Highcharts;
 
   constructor(
+    private phasesService: PhasesService,
     private apiRiskDetailsService: ApiRiskDetailsService,
     private dashboardService: DashboardService,
     private headerService: HeaderService,
@@ -32,6 +38,9 @@ export class DashboardComponent {
     this.headerService.backgroundUserNavButton =
       'linear-gradient(to right, #436280, #30455B)';
   }
+  activePhase: any;
+  organizationData: any = null;
+  organizationChart: any = null;
 
   data: any = null;
   status: any = null;
@@ -55,7 +64,11 @@ export class DashboardComponent {
     this.categoriesCount = await this.dashboardService.categoriesCount();
     this.groups = await this.dashboardService.category_groups();
     this.action_areas = await this.dashboardService.actionAreas();
+    this.activePhase = await this.phasesService.getActivePhase();
+    this.organizationData = await this.dashboardService.getOrgProgRisk(this.activePhase.id);
+    this.organizationChart = this.generateOrgData(this.organizationData);
 
+ 
     this.status = await this.dashboardService.status();
     console.log(this.status)
     this.totalStatus = this.status.reduce((sum: any, item: any) => sum + parseInt(item.total_actions, 10), 0);
@@ -362,8 +375,58 @@ export class DashboardComponent {
     this.title.setTitle('Risk dashboard');
     this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
   }
-  Highcharts: typeof Highcharts = Highcharts;
 
+
+  generateOrgData(data: any): any {
+    const flattenedData = this.flattenData(data);
+
+    return {
+      chart: { 
+        height: '100%' 
+      },
+      title: {
+        text: 'Organization-Program-Risk Sunburst Chart'
+      },
+      series: [{
+        type: 'sunburst',
+        data: flattenedData,
+        name: 'Root',
+        allowTraversingTree: true,
+        allowDrillToNode: true,
+        cursor: 'pointer',
+        dataLabels: { format: '{point.name}' },
+      }]
+    };
+  }
+
+  flattenData(data: any): any[] {
+    let result: any[] = [];
+  
+    data.forEach((org: any) => {
+      if (org.code && org.name) {
+        result.push({ id: org.code.toString(), name: org.name, parent: '' });
+  
+        if (org.programs && org.programs.length > 0) {
+          org.programs.forEach((program: any) => {
+            if (program.id && program.name) {
+              result.push({ id: program.id.toString(), name: program.name, parent: org.code.toString(), value: Math.random() });
+  
+              if (program.risks && program.risks.length > 0) {
+                program.risks.forEach((risk: any) => {
+                  if (risk.id && risk.name) {
+                    result.push({ id: risk.id.toString(), name: risk.name, parent: program.id.toString(), value: Math.random() });
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  
+    return result;
+  }
+ 
   riskProfile(data: any, type: string) {
     return {
       chart: {

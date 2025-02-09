@@ -19,6 +19,8 @@ import { UsersService } from 'src/users/users.service';
 import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
 import { Archive } from 'entities/archive.entity';
+import { Organization } from 'entities/organization.entity';
+import { PhaseProgramOrganization } from 'entities/phase-program-organization.entity';
 @Injectable()
 export class ProgramService {
   constructor(
@@ -30,6 +32,10 @@ export class ProgramService {
     public actionAreaRepository: Repository<ActionArea>,
     @InjectRepository(Archive)
     public archiveRepository: Repository<Archive>,
+    @InjectRepository(Organization)
+    public organizationRepo: Repository<Organization>,
+    @InjectRepository(PhaseProgramOrganization)
+    public phaseProgramOrganizationRepo: Repository<PhaseProgramOrganization>,
     private http: HttpService,
     private riskService: RiskService,
     private userService: UsersService,

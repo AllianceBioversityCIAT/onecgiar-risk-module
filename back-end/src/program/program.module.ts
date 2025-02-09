@@ -21,6 +21,8 @@ import { PhasesService } from 'src/phases/phases.service';
 import { Phase } from 'entities/phase.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 import { Archive } from 'entities/archive.entity';
+import { Organization } from 'entities/organization.entity';
+import { PhaseProgramOrganization } from 'entities/phase-program-organization.entity';
 @Global()
 @Module({
   controllers: [ProgramController],
@@ -36,7 +38,9 @@ import { Archive } from 'entities/archive.entity';
       ActionArea,
       Phase,
       CollectedEmail,
-      Archive
+      Archive,
+      Organization,
+      PhaseProgramOrganization
     ]),
     SharedModule,
     RiskModule,
