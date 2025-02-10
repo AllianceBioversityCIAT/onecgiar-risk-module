@@ -67,4 +67,10 @@ export class PhasesService extends MainService {
       this.http.get(this.backend_url+'/phases/lastsubmitionversion/' + id, {headers: this.headers}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
+
+  getActivePhase() {
+    return firstValueFrom(
+      this.http.get(this.backend_url+'/phases/active', {headers: this.headers}).pipe(map((d: any) => d))
+    ).catch((e) => false);
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { getCategoriesLevels, getCategoriesCount, getProgramScor, getCategoriesGroupsCount, getDashboardStatus } from 'DTO/dashboard.dto';
 import { getProgram } from 'DTO/initiative.dto';
@@ -240,5 +240,36 @@ export class DashboardController {
         where: { program_id: id, redundant: false },
       }
     );
+  }
+
+
+  @Get('organizations')
+  async getSunburstData() {
+    const organizations = await this.iniService.organizationRepo.find();
+
+    const programs = await this.iniService.programRepository.find({
+      relations: ['risks', 'organizations'],
+    });
+
+
+    const finalData = organizations.map((mainOrg) => ({
+      code: mainOrg.code,
+      name: mainOrg.name,
+      acronym: mainOrg.acronym,
+      programs: programs
+        .filter((program) => program.organizations.some((org) => org.code === mainOrg.code)) 
+        .map((program) => ({
+          id: program.id,
+          official_code: program.official_code,
+          name: program.name,
+          risks: program.risks.map((risk) => ({
+            id: risk.id,
+            name: risk.title,
+          })),
+        })),
+    }));
+  
+
+    return finalData
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
 import * as Highcharts from 'highcharts';
@@ -6,17 +6,21 @@ import { DashboardService } from '../services/dashboard.service';
 import { HeaderService } from '../header.service';
 import { Meta, Title } from '@angular/platform-browser';
 declare var require: any;
-require('highcharts/highcharts-more.js')(Highcharts);
+import HighchartsMore from 'highcharts/highcharts-more';
+import SunburstModule from 'highcharts/modules/sunburst'; 
+HighchartsMore(Highcharts);
 
+SunburstModule(Highcharts);
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   public riskUrl = {
     home: '/home/risk-management',
   };
+  Highcharts = Highcharts;
 
   constructor(
     private apiRiskDetailsService: ApiRiskDetailsService,
@@ -32,7 +36,9 @@ export class DashboardComponent {
     this.headerService.backgroundUserNavButton =
       'linear-gradient(to right, #436280, #30455B)';
   }
-
+  organizationData: any = null;
+  organizationChart: any = null;
+  organizationDataHaveProg: boolean = false;
   data: any = null;
   status: any = null;
   categoriesCount: any = null;
@@ -55,7 +61,12 @@ export class DashboardComponent {
     this.categoriesCount = await this.dashboardService.categoriesCount();
     this.groups = await this.dashboardService.category_groups();
     this.action_areas = await this.dashboardService.actionAreas();
+    this.organizationData = await this.dashboardService.getOrgProgRisk();
+    this.organizationDataHaveProg = this.organizationData.some((d: any) => d.programs.length);
+    console.log(this.organizationDataHaveProg)
+    this.organizationChart = this.generateOrgData(this.organizationData);
 
+ 
     this.status = await this.dashboardService.status();
     console.log(this.status)
     this.totalStatus = this.status.reduce((sum: any, item: any) => sum + parseInt(item.total_actions, 10), 0);
@@ -362,8 +373,104 @@ export class DashboardComponent {
     this.title.setTitle('Risk dashboard');
     this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
   }
-  Highcharts: typeof Highcharts = Highcharts;
 
+
+  generateOrgData(data: any): any {
+    const flattenedData = this.flattenData(data);
+
+    return {
+      chart: { 
+        height: '100%' 
+      },
+      title: {
+        text: 'Organization-Program-Risk Sunburst Chart'
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        type: 'sunburst',
+        data: flattenedData,
+        name: 'Organization',
+        allowTraversingTree: true,
+        allowDrillToNode: true,
+        cursor: 'pointer',
+        colorByPoint: true, 
+        dataLabels: {
+          enabled: true,
+          style: {
+            textAlign: 'left',
+            color: '#04030f',
+            fontFamily: '"Poppins", sans-serif !important',
+            fontSize: '1rem',
+            fontStyle: 'normal',
+            fontWeight: '400',
+            backgroundColor: '#fff',
+            border: '1px solid #172f8f !important',
+            borderRadius: '5px',
+            opacity: '1',
+            zIndex: '9999 !important',
+            padding: '0.8em',
+            left: '0 !important',
+            top: '0 !important',
+          }, 
+          format: '{point.name}'
+        },
+      }],
+      tooltip: {
+        borderWidth: 0,
+        backgroundColor: 'rgba(255,255,255,0)',
+        shadow: false,
+        useHTML: true,
+        style: {
+          textAlign: 'left',
+          color: '#04030f',
+          fontFamily: '"Poppins", sans-serif !important',
+          fontSize: '1.6rem',
+          fontStyle: 'normal',
+          fontWeight: '400',
+          backgroundColor: '#fff',
+          border: '1px solid #172f8f !important',
+          borderRadius: '5px',
+          opacity: '1',
+          zIndex: '9999 !important',
+          padding: '0.8em',
+          left: '0 !important',
+          top: '0 !important',
+        },
+        pointFormat: '{point.name}',
+      }
+    };
+  }
+
+  flattenData(data: any): any[] {
+    let result: any[] = [];
+  
+    data.forEach((org: any) => {
+      if (org.code && org.name) {
+        result.push({ id: org.code.toString(), name: org.acronym, parent: '' });
+  
+        if (org.programs && org.programs.length > 0) {
+          org.programs.forEach((program: any) => {
+            if (program.id && program.name) {
+              result.push({ id: `org-${org.code}/prog-${program.id}`, name: program.name, parent: org.code.toString(), value: program.id });
+  
+              if (program.risks && program.risks.length > 0) {
+                program.risks.forEach((risk: any) => {
+                  if (risk.id && risk.name) {
+                    result.push({ id: risk.id.toString(), name: risk.name, parent: `org-${org.code}/prog-${program.id}`, value: risk.id });
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  
+    return result;
+  }
+ 
   riskProfile(data: any, type: string) {
     return {
       chart: {

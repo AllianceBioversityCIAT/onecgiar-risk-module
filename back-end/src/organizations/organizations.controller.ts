@@ -35,9 +35,9 @@ export class OrganizationsController {
         return this.organizationsService.findAll(query);
     }
 
-    @Get('program/:program_id/:phase_id')
-    getOrganizationsByProgramId(@Param('program_id') program_id: number, @Param('phase_id') phase_id: number) {
-        return this.organizationsService.getOrganizationsProgram(program_id, phase_id);
+    @Get('program/:program_id')
+    getOrganizationsByProgramId(@Param('program_id') program_id: number) {
+        return this.organizationsService.getOrganizationsProgram(program_id);
     }
 
     @Post('assign-org')

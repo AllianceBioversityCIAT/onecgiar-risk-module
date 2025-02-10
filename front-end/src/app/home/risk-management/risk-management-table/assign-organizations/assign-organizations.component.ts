@@ -14,7 +14,6 @@ export class AssignOrganizationsComponent implements OnInit{
   programId!: number;
   assignOrgsForm!: FormGroup;
   organizations: any = [];
-  phaseId!: number;
   constructor(
     private dialogRef: MatDialogRef<AssignOrganizationsComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -24,7 +23,6 @@ export class AssignOrganizationsComponent implements OnInit{
 
   ) {
     this.programId = this.data.programId;
-    this.phaseId = this.data.phase.id;
   }
 
   ngOnInit(): void {
@@ -40,7 +38,6 @@ export class AssignOrganizationsComponent implements OnInit{
 
     let AssignedOrganizations: any = await this.organizationsService.getOrganizationsByProgramId(
       this.programId,
-      this.phaseId
     );
 
     let AssignedOrganizationsCodes = AssignedOrganizations.map((organization: any) => organization.code);
@@ -59,8 +56,7 @@ export class AssignOrganizationsComponent implements OnInit{
 
       const data = {
         program_id: this.programId,
-        phase_id: this.phaseId,
-        organizations: organizations,
+        organizationsIds: organizations,
       };
 
       await this.organizationsService.assignOrgs(data).then(
