@@ -72,7 +72,7 @@
                 </highcharts-chart>
               </div>
             </div>
-            <div class="content">
+            <div class="content" *ngIf="organizationDataHaveProg">
               <div class="chart-container">
               <highcharts-chart
                 [Highcharts]="Highcharts"

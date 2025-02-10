@@ -1,18 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Organization } from 'entities/organization.entity';
-import { ILike, Repository } from 'typeorm';
+import { ILike, In, Repository } from 'typeorm';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
-import { PhaseProgramOrganization } from 'entities/phase-program-organization.entity';
+import { Program } from 'entities/program.entity';
 
 @Injectable()
 export class OrganizationsService {
     constructor(
         @InjectRepository(Organization)
         private organizationRepository: Repository<Organization>,
-        @InjectRepository(PhaseProgramOrganization)
-        private phaseProgramOrganizationRepository: Repository<PhaseProgramOrganization>,
+        @InjectRepository(Program)
+        private programRepository: Repository<Program>,
     ) { }
 
 
@@ -68,45 +68,49 @@ export class OrganizationsService {
     }
 
     async remove(code: any) {
-        const orgUsed = await this.phaseProgramOrganizationRepository.find({
+        const orgUsed = await this.organizationRepository.findOne({
             where: {
-                organization_code: code
+                code: code
             },
+            relations: ['program']
         });
-        if (orgUsed.length != 0) {
+        if (orgUsed.program.length != 0) {
             throw new BadRequestException('Organization cannot be deleted, This organization is assigned for an Program(s)')
         } else {
             return this.organizationRepository.delete({ code });
         }
     }
 
-    async getOrganizationsProgram(program_id: number, phase_id: number) {
-        const data = await this.phaseProgramOrganizationRepository.find({
+    async getOrganizationsProgram(program_id: number) {
+        const data = await this.organizationRepository.find({
             where: {
-                phase_id: phase_id,
-                program_id: program_id
+                program: {
+                    id: program_id
+                }
             },
-            relations: ['organization']
         });
-        return data.map((d: any) => d.organization);
+        return data;
     }
 
 
     async assignOrgs(data: any) {
-        const { organizations, program_id, phase_id } = data;
+        const { organizationsIds, program_id } = data;
 
-        await this.phaseProgramOrganizationRepository.delete({
-            phase_id,
-            program_id,
+        const program = await this.programRepository.findOne({
+            where: {
+                id: program_id
+            },
+            relations: ['organizations']
         });
-        for (const code of organizations) {
-            const newPhaseProgOrg = this.phaseProgramOrganizationRepository.create({
-                phase_id,
-                program_id,
-                organization_code: code,
-            });
-            await this.phaseProgramOrganizationRepository.save(newPhaseProgOrg);
-        }
-        return true;
+
+        const organizations = await this.organizationRepository.find({
+            where: {
+                code: In(organizationsIds)
+            }
+        });
+
+        program.organizations = organizations;
+
+        return this.programRepository.save(program);
     }
 }

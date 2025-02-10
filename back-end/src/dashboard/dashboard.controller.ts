@@ -243,41 +243,32 @@ export class DashboardController {
   }
 
 
-  @Get('organizations/:phaseId')
-  async getSunburstData(@Param('phaseId') phaseId: number) {
+  @Get('organizations')
+  async getSunburstData() {
     const organizations = await this.iniService.organizationRepo.find();
 
-    const allData = await this.iniService.phaseProgramOrganizationRepo.find({
-      where: {
-        phase_id: phaseId
-      },
-      relations: ['program', 'program.risks'],
+    const programs = await this.iniService.programRepository.find({
+      relations: ['risks', 'organizations'],
     });
 
 
-    const finalData = organizations.map((org) => ({
-      code: org.code,
-      name: org.name,
-      acronym: org.acronym,
-      programs: allData
-        .filter((data) => data.organization_code === org.code)
-        .reduce((acc, ppo) => {
-          let programNode = acc.find((node) => node.id === ppo.program_id);
-          if (!programNode) {
-            programNode = {
-              id: ppo.program_id,
-              official_code: ppo.program.official_code,
-              name: ppo.program.name,
-              risks: ppo.program.risks.map((risk) => ({
-                id: risk.id,
-                name: risk.title,
-              })),
-            };
-            acc.push(programNode);
-          }
-          return acc;
-        }, []),
+    const finalData = organizations.map((mainOrg) => ({
+      code: mainOrg.code,
+      name: mainOrg.name,
+      acronym: mainOrg.acronym,
+      programs: programs
+        .filter((program) => program.organizations.some((org) => org.code === mainOrg.code)) 
+        .map((program) => ({
+          id: program.id,
+          official_code: program.official_code,
+          name: program.name,
+          risks: program.risks.map((risk) => ({
+            id: risk.id,
+            name: risk.title,
+          })),
+        })),
     }));
+  
 
     return finalData
   }

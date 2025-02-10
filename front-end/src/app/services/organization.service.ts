@@ -55,9 +55,9 @@ export class OrganizationService extends MainService {
     );
   }
 
-  getOrganizationsByProgramId(programId: number, phaseId: number) {
+  getOrganizationsByProgramId(programId: number) {
     return firstValueFrom(
-      this.http.get(this.backend_url+"/organizations/program/" + programId + "/" + phaseId, {headers: this.headers}).pipe(map((d: any) => d))
+      this.http.get(this.backend_url+"/organizations/program/" + programId , {headers: this.headers}).pipe(map((d: any) => d))
     ).catch((e) => false);
   }
 

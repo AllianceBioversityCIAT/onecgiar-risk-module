@@ -184,7 +184,7 @@ export class RiskReportOverviewComponent implements OnInit {
     this.scienceProgramsId = params.initiativeId;
 
     this.activePhase = await this.phaseService.getActivePhase();
-    this.assignOrg = await this.organizationService.getOrganizationsByProgramId(this.id, this.activePhase.id);
+    this.assignOrg = await this.organizationService.getOrganizationsByProgramId(this.id);
     this.riskUsers = await this.riskService.getRiskUsers(this.id);
     this.latest_version =
       await this.initiativeService.getInitiativeLatestVersion(this.id);

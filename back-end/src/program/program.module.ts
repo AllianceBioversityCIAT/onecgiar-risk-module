@@ -22,7 +22,6 @@ import { Phase } from 'entities/phase.entity';
 import { CollectedEmail } from 'entities/collected-emails.entity';
 import { Archive } from 'entities/archive.entity';
 import { Organization } from 'entities/organization.entity';
-import { PhaseProgramOrganization } from 'entities/phase-program-organization.entity';
 @Global()
 @Module({
   controllers: [ProgramController],
@@ -40,7 +39,6 @@ import { PhaseProgramOrganization } from 'entities/phase-program-organization.en
       CollectedEmail,
       Archive,
       Organization,
-      PhaseProgramOrganization
     ]),
     SharedModule,
     RiskModule,

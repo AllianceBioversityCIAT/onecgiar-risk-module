@@ -5,7 +5,6 @@ import * as Highcharts from 'highcharts';
 import { DashboardService } from '../services/dashboard.service';
 import { HeaderService } from '../header.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { PhasesService } from '../services/phases.service';
 declare var require: any;
 import HighchartsMore from 'highcharts/highcharts-more';
 import SunburstModule from 'highcharts/modules/sunburst'; 
@@ -24,7 +23,6 @@ export class DashboardComponent implements OnInit {
   Highcharts = Highcharts;
 
   constructor(
-    private phasesService: PhasesService,
     private apiRiskDetailsService: ApiRiskDetailsService,
     private dashboardService: DashboardService,
     private headerService: HeaderService,
@@ -38,10 +36,9 @@ export class DashboardComponent implements OnInit {
     this.headerService.backgroundUserNavButton =
       'linear-gradient(to right, #436280, #30455B)';
   }
-  activePhase: any;
   organizationData: any = null;
   organizationChart: any = null;
-
+  organizationDataHaveProg: boolean = false;
   data: any = null;
   status: any = null;
   categoriesCount: any = null;
@@ -64,8 +61,9 @@ export class DashboardComponent implements OnInit {
     this.categoriesCount = await this.dashboardService.categoriesCount();
     this.groups = await this.dashboardService.category_groups();
     this.action_areas = await this.dashboardService.actionAreas();
-    this.activePhase = await this.phasesService.getActivePhase();
-    this.organizationData = await this.dashboardService.getOrgProgRisk(this.activePhase.id);
+    this.organizationData = await this.dashboardService.getOrgProgRisk();
+    this.organizationDataHaveProg = this.organizationData.some((d: any) => d.programs.length);
+    console.log(this.organizationDataHaveProg)
     this.organizationChart = this.generateOrgData(this.organizationData);
 
  
@@ -450,7 +448,7 @@ export class DashboardComponent implements OnInit {
   
     data.forEach((org: any) => {
       if (org.code && org.name) {
-        result.push({ id: org.code.toString(), name: org.name, parent: '' });
+        result.push({ id: org.code.toString(), name: org.acronym, parent: '' });
   
         if (org.programs && org.programs.length > 0) {
           org.programs.forEach((program: any) => {
