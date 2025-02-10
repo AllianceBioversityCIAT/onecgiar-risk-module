@@ -387,15 +387,61 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Organization-Program-Risk Sunburst Chart'
       },
+      credits: {
+        enabled: false
+      },
       series: [{
         type: 'sunburst',
         data: flattenedData,
-        name: 'Root',
+        name: 'Organization',
         allowTraversingTree: true,
         allowDrillToNode: true,
         cursor: 'pointer',
-        dataLabels: { format: '{point.name}' },
-      }]
+        colorByPoint: true, 
+        dataLabels: {
+          enabled: true,
+          style: {
+            textAlign: 'left',
+            color: '#04030f',
+            fontFamily: '"Poppins", sans-serif !important',
+            fontSize: '1rem',
+            fontStyle: 'normal',
+            fontWeight: '400',
+            backgroundColor: '#fff',
+            border: '1px solid #172f8f !important',
+            borderRadius: '5px',
+            opacity: '1',
+            zIndex: '9999 !important',
+            padding: '0.8em',
+            left: '0 !important',
+            top: '0 !important',
+          }, 
+          format: '{point.name}'
+        },
+      }],
+      tooltip: {
+        borderWidth: 0,
+        backgroundColor: 'rgba(255,255,255,0)',
+        shadow: false,
+        useHTML: true,
+        style: {
+          textAlign: 'left',
+          color: '#04030f',
+          fontFamily: '"Poppins", sans-serif !important',
+          fontSize: '1.6rem',
+          fontStyle: 'normal',
+          fontWeight: '400',
+          backgroundColor: '#fff',
+          border: '1px solid #172f8f !important',
+          borderRadius: '5px',
+          opacity: '1',
+          zIndex: '9999 !important',
+          padding: '0.8em',
+          left: '0 !important',
+          top: '0 !important',
+        },
+        pointFormat: '{point.name}',
+      }
     };
   }
 
@@ -409,12 +455,12 @@ export class DashboardComponent implements OnInit {
         if (org.programs && org.programs.length > 0) {
           org.programs.forEach((program: any) => {
             if (program.id && program.name) {
-              result.push({ id: program.id.toString(), name: program.name, parent: org.code.toString(), value: Math.random() });
+              result.push({ id: `org-${org.code}/prog-${program.id}`, name: program.name, parent: org.code.toString(), value: program.id });
   
               if (program.risks && program.risks.length > 0) {
                 program.risks.forEach((risk: any) => {
                   if (risk.id && risk.name) {
-                    result.push({ id: risk.id.toString(), name: risk.name, parent: program.id.toString(), value: Math.random() });
+                    result.push({ id: risk.id.toString(), name: risk.name, parent: `org-${org.code}/prog-${program.id}`, value: risk.id });
                   }
                 });
               }
