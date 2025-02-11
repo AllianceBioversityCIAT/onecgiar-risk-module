@@ -248,6 +248,10 @@ export class DashboardController {
     const organizations = await this.iniService.organizationRepo.find();
 
     const programs = await this.iniService.programRepository.find({
+      where: {
+        parent_id: IsNull(),
+        archived: false,
+      },
       relations: ['risks', 'organizations'],
     });
 
