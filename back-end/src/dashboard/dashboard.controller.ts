@@ -241,39 +241,4 @@ export class DashboardController {
       }
     );
   }
-
-
-  @Get('organizations')
-  async getSunburstData() {
-    const organizations = await this.iniService.organizationRepo.find();
-
-    const programs = await this.iniService.programRepository.find({
-      where: {
-        parent_id: IsNull(),
-        archived: false,
-      },
-      relations: ['risks', 'organizations'],
-    });
-
-
-    const finalData = organizations.map((mainOrg) => ({
-      code: mainOrg.code,
-      name: mainOrg.name,
-      acronym: mainOrg.acronym,
-      programs: programs
-        .filter((program) => program.organizations.some((org) => org.code === mainOrg.code)) 
-        .map((program) => ({
-          id: program.id,
-          official_code: program.official_code,
-          name: program.name,
-          risks: program.risks.map((risk) => ({
-            id: risk.id,
-            name: risk.title,
-          })),
-        })),
-    }));
-  
-
-    return finalData
-  }
 }
