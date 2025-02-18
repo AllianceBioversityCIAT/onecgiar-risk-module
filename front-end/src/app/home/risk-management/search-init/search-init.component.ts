@@ -4,6 +4,7 @@ import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
 import { ROLES } from '../risk-report/team-members/team-members.component';
 import { PhasesService } from 'src/app/services/phases.service';
+import { OrganizationService } from 'src/app/services/organization.service';
 
 @Component({
   selector: 'app-search-init',
@@ -15,9 +16,11 @@ export class SearchInitComponent {
     private fb: FormBuilder,
     private riskService: RiskService,
     private phaseService: PhasesService,
-    public initiativeService: InitiativesService
+    public initiativeService: InitiativesService,
+    private organizationsService: OrganizationService,
   ) {}
   categories: any;
+  organizations: any;
   filterForm: FormGroup = new FormGroup({});
   phaseSelected: any;
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
@@ -48,6 +51,7 @@ export class SearchInitComponent {
       initiative_id: [null],
       name: [null],
       category: [null],
+      orgCodes: [null],
       created_by: [null],
       my_role: [null],
       sort: [null],
@@ -82,6 +86,7 @@ export class SearchInitComponent {
     const phase_id = this.filterForm.get('phase_id')?.value;
     this.phaseSelected = this.phases.result.filter((d: any) => d.id == phase_id)[0];
     this.categories = await this.riskService.getInitiativesCategories();
+    this.organizations = await this.organizationsService.getOrganizations(null, 1, 1000);
   }
 
   selectedPhase(phase_id: any) {
