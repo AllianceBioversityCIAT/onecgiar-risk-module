@@ -274,7 +274,7 @@ export class ProgramController {
     description: '',
     type: [getProgram],
   })
-  async getInitiative(@Query() query: any, @Req() req) {  
+  async getInitiative(@Query() query: any, @Req() req) {
     let data = await this.iniService.programRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
@@ -292,7 +292,10 @@ export class ProgramController {
         ]) : Not(IsNull()),
         ...this.iniService.roles(query, req),
         risks: { ...this.iniService.filterCategory(query, 'For Init') },
-        archived: false
+        archived: false,
+        organizations: {
+          code: Array.isArray(query?.orgCodes) ? In(query?.orgCodes) : query?.orgCodes,
+        }
         // risks: { category_id: query?.category ? In(query?.category) : null },
       },
       relations: [
@@ -344,7 +347,7 @@ export class ProgramController {
     }
 
     return data;
-  }  
+  }
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
@@ -934,7 +937,10 @@ export class ProgramController {
         parent_id: IsNull(),
         ...this.iniService.roles(query, req),
         name: query?.name ? ILike(`%${query.name}%`) : null,
-        archived: false
+        archived: false,
+        organizations: {
+          code: Array.isArray(query?.orgCodes) ? In(query?.orgCodes) : query?.orgCodes,
+        }
       },
     });
 
