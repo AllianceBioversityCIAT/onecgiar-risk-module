@@ -23,6 +23,8 @@ import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/dele
 import { Meta, Title } from '@angular/platform-browser';
 import { SubmitRiskDialogComponent } from '../submit-risk-dialog/submit-risk-dialog.component';
 import { ROLES } from '../team-members/team-members.component';
+import { PhasesService } from 'src/app/services/phases.service';
+import { OrganizationService } from 'src/app/services/organization.service';
 
 @Component({
   selector: 'app-risk-report-overview',
@@ -39,6 +41,8 @@ export class RiskReportOverviewComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private variableService: VariableService,
+    private phaseService: PhasesService,
+    private organizationService: OrganizationService,
     private socket: AppSocket,
     private title: Title,
     private meta: Meta
@@ -167,6 +171,8 @@ export class RiskReportOverviewComponent implements OnInit {
   publishStatus!: any;
   publishLocalStoreg!: any;
   toolTipMessage: any;
+  activePhase: any;
+  assignOrg: any;
   async ngOnInit() {
     this.publishStatus = await this.variableService.getPublishStatus();
     this.user_info = this.userService.getLogedInUser();
@@ -176,13 +182,15 @@ export class RiskReportOverviewComponent implements OnInit {
 
     this.id = +params.id;
     this.scienceProgramsId = params.initiativeId;
+
+    this.activePhase = await this.phaseService.getActivePhase();
+    this.assignOrg = await this.organizationService.getOrganizationsByProgramId(this.id);
     this.riskUsers = await this.riskService.getRiskUsers(this.id);
     this.latest_version =
       await this.initiativeService.getInitiativeLatestVersion(this.id);
     this.my_roles = this.riskUsers
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
-    console.log(this.my_roles);
     this.loadInitiative();
 
     if (this.publishStatus.value == '0') {

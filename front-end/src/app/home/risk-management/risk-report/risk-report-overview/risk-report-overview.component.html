@@ -25,6 +25,11 @@
     <div class="risk-report-box">
       <div class="risk-report-title-box">
         <h1 class="risk-report-title-box__title">Risk report</h1>
+        <div class="assign-org">
+          <span *ngFor="let org of assignOrg; let last = last">
+            {{ org.acronym }}<span *ngIf="!last">/</span><br />
+          </span>          
+        </div>
       </div>
 
       <div class="risk-report-btn-box">

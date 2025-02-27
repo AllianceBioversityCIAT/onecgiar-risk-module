@@ -87,4 +87,12 @@ export class PhasesService {
 
     return data
   }
+
+  getActivePhase() {
+    return this.phaseRepository.findOne({
+      where: {
+        active: true
+      }
+    });
+  }
 }

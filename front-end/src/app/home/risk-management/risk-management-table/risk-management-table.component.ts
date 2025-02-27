@@ -10,6 +10,8 @@ import { Subscription, delay, interval } from 'rxjs';
 import { HeaderService } from 'src/app/header.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { AssignOrganizationsComponent } from './assign-organizations/assign-organizations.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-risk-management-table',
@@ -30,9 +32,11 @@ export class RiskManagementTableComponent {
     private userService: UserService,
     private title: Title,
     private meta: Meta,
+    private dialog: MatDialog,
     public headerService: HeaderService,
     private loadingService: LoadingService,
-    private authService: AuthService
+    private authService: AuthService,
+
   ) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
@@ -47,7 +51,6 @@ export class RiskManagementTableComponent {
     });
   }
   length = 100;
-  archived: boolean = false;
   userRole: any;
   displayedColumns: string[] = [
     'INIT-ID',
@@ -124,6 +127,7 @@ export class RiskManagementTableComponent {
   user_info: any;
   loading = true;
   isadmin = false;
+
   async ngOnInit() {
     const access_token = localStorage.getItem('access_token');
     if (access_token) {
@@ -136,5 +140,13 @@ export class RiskManagementTableComponent {
         'Help requested'
       );
     }
+  }
+
+  async openDialog(id: number) {
+    this.dialog.open(AssignOrganizationsComponent, {
+      autoFocus: false,
+      disableClose: true,
+      data: { programId: id },
+    });
   }
 }

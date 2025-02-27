@@ -55,16 +55,27 @@
   left: 0.5rem;
 }
 .risk-report-title-box {
-  text-align: center;
   padding: 4.8rem 0;
+  width: 35%;
+
   &__title {
     color: #0f212f;
-    text-align: center;
     font-family: "Poppins", sans-serif !important;
     font-size: 4.2rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+  }
+
+  .assign-org {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+    font-weight: 600;
+    span {
+      margin-left: 5px;
+    }
   }
 }
 

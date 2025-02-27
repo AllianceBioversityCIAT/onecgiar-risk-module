@@ -274,7 +274,7 @@ export class ProgramController {
     description: '',
     type: [getProgram],
   })
-  async getInitiative(@Query() query: any, @Req() req) {  
+  async getInitiative(@Query() query: any, @Req() req) {
     let data = await this.iniService.programRepository.find({
       where: {
         name: query?.name ? ILike(`%${query.name}%`) : null,
@@ -285,11 +285,17 @@ export class ProgramController {
                   `PLAT-${query.initiative_id}`,
                   `PLAT-0${query.initiative_id}`,
                   `SGP-${query.initiative_id}`,
-                  `SGP-0${query.initiative_id}` 
+                  `SGP-0${query.initiative_id}`,
+                  `SP${query.initiative_id}` ,
+                  `SP0${query.initiative_id}` 
+
         ]) : Not(IsNull()),
         ...this.iniService.roles(query, req),
         risks: { ...this.iniService.filterCategory(query, 'For Init') },
-        archived: query.archived
+        archived: false,
+        organizations: {
+          code: Array.isArray(query?.orgCodes) ? In(query?.orgCodes) : query?.orgCodes,
+        }
         // risks: { category_id: query?.category ? In(query?.category) : null },
       },
       relations: [
@@ -341,7 +347,7 @@ export class ProgramController {
     }
 
     return data;
-  }  
+  }
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
@@ -375,7 +381,7 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -477,7 +483,7 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -578,7 +584,7 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -677,7 +683,7 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -779,7 +785,7 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -931,6 +937,10 @@ export class ProgramController {
         parent_id: IsNull(),
         ...this.iniService.roles(query, req),
         name: query?.name ? ILike(`%${query.name}%`) : null,
+        archived: false,
+        organizations: {
+          code: Array.isArray(query?.orgCodes) ? In(query?.orgCodes) : query?.orgCodes,
+        }
       },
     });
 
@@ -1216,6 +1226,7 @@ export class ProgramController {
     type: getProgramById,
   })
   async exportExcel(@Param('id') id: number, @Query() req: any) {
+    console.log('soso')
     let init = await this.iniService.programRepository.findOne({
       where: {
         id: id,

@@ -1,0 +1,293 @@
+@import "../../../sass/layout/admin-module/user-management";
+@import "../../../sass/pages/admin-module/user-management";
+@import "../../../sass/pages/admin-module/parameters-settings";
+@import "../../../sass/pages/admin-module/mitigation-status";
+@import "../../../sass/components/table-phases";
+@import "../../../sass/components/button";
+
+.user-management__container-1 {
+  width: 100%;
+  padding: 7rem 3rem 0 3rem;
+  margin: 0 auto;
+}
+
+.closed {
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background-color: #eb5b47;
+  border-radius: 1rem;
+  color: #ffffff;
+}
+
+.open {
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background-color: #3ec674;
+  border-radius: 1rem;
+  color: #ffffff;
+}
+::ng-deep{
+.mat-sort-header-container {
+  justify-content: center !important;
+}
+}
+
+// .add_new_btn {
+//   margin-bottom: 10px;
+// }
+
+.btn-primary-size {
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+}
+
+.user-management__button-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  &__btn {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2.1rem;
+    letter-spacing: 0em;
+    text-align: center;
+
+    color: #fafafa !important;
+    border-radius: 5px;
+    background-color: $color-button-primary !important;
+    box-shadow: 4px 4px 4px 0px #00000040;
+  }
+
+  &__icon {
+    width: 1.7rem !important;
+    height: 2.3rem !important;
+    margin: 0.7rem 0.7rem 0 0;
+  }
+
+  &__icon--1 {
+    width: 1.8rem;
+    height: 1.6rem;
+    margin-right: 1rem;
+  }
+
+  &__title {
+    width: 8.2rem;
+    height: 1.6rem;
+  }
+}
+
+.user-management-paginator-box {
+  display: flex !important;
+  justify-content: end !important;
+}
+
+.search {
+  flex: 0 0 40%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 54.8rem;
+  height: 3rem;
+  margin-left: -5rem;
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    // background-color: var(--color-Grey-light-2);
+    border: 1px solid #808080;
+    padding: 0.7rem 2rem;
+    border-radius: 100px;
+    width: 99%;
+    transition: all 0.2s;
+    margin-right: -3.25rem;
+
+    &:focus {
+      outline: none;
+      // width: 100%;
+      border: 1px solid #b9b9b9;
+    }
+
+    &::-webkit-input-placeholder {
+      font-family: "Poppins", sans-serif;
+      font-size: 1.4rem;
+      font-weight: 300;
+      line-height: 2.1rem;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #808080;
+    }
+  }
+
+  // &__input:focus + &__button {
+  // }
+
+  &__button {
+    border: none;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+  }
+
+  &__icon {
+    height: 2.8rem;
+
+    width: 2rem;
+    position: relative;
+    top: 0.2rem;
+  }
+}
+
+.form-container {
+  padding: 24px 0;
+  position: relative;
+  margin-top: -2rem;
+  .search {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    height: fit-content;
+    .sec-1 {
+      width: 50%;
+      position: relative;
+
+      .search__button {
+        right: 14px;
+        position: absolute;
+        .search__icon {
+          width: 2rem;
+        }
+      }
+
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 9rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
+    }
+
+    .sec-6 {
+      position: relative;
+      width: 20%;
+      .risk-management-form-field {
+        position: relative;
+        .risk-management-form-field__label {
+          display: inline-block;
+          color: #808080;
+          font-family: "Poppins", sans-serif;
+          font-size: 1.4rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          margin: 0 2rem 1rem 0;
+        }
+        .risk-management-form-field-box__input-3 {
+          font-family: inherit;
+          font-size: inherit;
+          color: #0f212f;
+          border-radius: 1rem;
+          border: 0.5px solid #808080;
+          background-color: #ffffff;
+          padding: 0.4rem 1rem;
+          width: 100%;
+          transition: all 0.2s;
+          position: relative;
+        }
+      }
+    }
+
+    .sec-7 {
+      position: relative;
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sec-9 {
+      width: 10%;
+      position: relative;
+      margin-top: 3rem;
+    }
+  }
+}
+
+.reset-m-btn {
+  margin: 6rem 0 0 0;
+}
+
+.risk-management-reset-btn {
+  width: 9.1rem;
+  height: 3.2rem;
+
+  color: #ffffff !important;
+  text-align: center;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.4rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  border-radius: 1rem;
+  background-color: #0f212f !important;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+::ng-deep .cdk-overlay-pane {
+  margin: 0.5rem 0rem !important;
+  padding: 0 0.5rem !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item {
+  align-items: center;
+  width: 260px !important;
+}
+
+::ng-deep.cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: inline-table !important;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 1rem 0 0 -1rem !important;
+  padding: 0 1rem !important;
+}
+
+
+.table-box th:nth-child(8) {
+  width: 20rem !important;
+}

@@ -98,4 +98,11 @@ export class PhasesController {
   getLastSubmitionVersionByPhase(@Param('id') id: string) {
     return this.phasesService.getInitVersion(id);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Roles()
+  @Get('active')
+  getActivePhase() {
+    return this.phasesService.getActivePhase();
+  }
 }

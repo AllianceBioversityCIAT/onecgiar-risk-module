@@ -87,6 +87,30 @@
       </div>
     </div>
 
+    <div class="sec-3">
+      <div class="risk-management-form-field field-3">
+        <mat-label class="risk-management-form-field__label"
+          >Organizations</mat-label
+        >
+
+        <mat-select
+          [multiple]="true"
+          formControlName="orgCodes"
+          panelClass="x"
+          class="risk-management-form-field-box__input-3 aa"
+          [placeholder]="'All'"
+          id="select-where"
+          required
+        >
+          <ng-container *ngFor="let organization of organizations">
+            <mat-option [value]="organization.code">
+              {{ organization.acronym }}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+      </div>
+    </div>
+
     <!-- //Status----- -->
     <div class="sec-4">
       <div class="risk-management-form-field field-3">

@@ -3,13 +3,20 @@ pipeline {
   stages {
     stage('verify tooling') {
       steps {
-        slackSend color: 'black', message: 'Barq build process is started'
+        slackSend color: 'black', message: 'Risk build process is started'
         sh '''
           docker version
           docker info
           docker compose version
           curl --version
           jq --version
+        '''
+      }
+    }
+    stage('Copy Env') {
+      steps {
+        sh '''
+         cp /var/lib/jenkins/workspace/Environments/risk/back-end/.env back-end/
         '''
       }
     }
@@ -27,13 +34,13 @@ pipeline {
   }
   post {
     always {
-      slackSend color: 'black', message: 'Barq build process is finished'
+      slackSend color: 'black', message: 'Risk build process is finished'
     }
     success {
-      slackSend color: 'good', message: 'Barq build process is done successfully!'
+      slackSend color: 'good', message: 'Risk build process is done successfully!'
     }
     failure {
-      slackSend color: 'bad', message: 'Barq build process is done with failure'
+      slackSend color: 'bad', message: 'Risk build process is done with failure'
       writeFile file: 'jenkins_console_output.txt', text: currentBuild.rawBuild.logFile.text
       sh 'sed -ri "s/\\x1b\\[8m.*?\\x1b\\[0m//g" jenkins_console_output.txt'
       slackUploadFile filePath: 'jenkins_console_output.txt', initialComment: 'here is the log file '
