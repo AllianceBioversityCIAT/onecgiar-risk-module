@@ -86,7 +86,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       ],
       description: [
         this?.checkIfRiskExist[0]?.description,
-        [Validators.required, WordCountValidators.max(150)],
+        [Validators.required, WordCountValidators.max(3000)],
       ],
       target_likelihood: [
         String(this?.checkIfRiskExist[0]?.target_likelihood || ''),
@@ -415,7 +415,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       )
       .map((d: any) => d);
 
-    this.risksForUser = await this.riskService.getRiskUsers(this.scienceProgramsId);
+    this.risksForUser = await this.riskService.getRiskUsers(
+      this.scienceProgramsId
+    );
     this.my_roles = this.risksForUser
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
@@ -485,14 +487,18 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       !this.my_roles?.includes(ROLES.LEAD) &&
       !this.my_roles?.includes(ROLES.COORDINATOR)
     ) {
-      this.router.navigate([`/home/${this.scienceProgramsId}/${this.officalCode}`]);
+      this.router.navigate([
+        `/home/${this.scienceProgramsId}/${this.officalCode}`,
+      ]);
     }
 
     this.populateNewRiskForm();
     this.getMitigationActions();
     this.riskCategories = await this.riskService.getRiskCategories();
     if (this.scienceProgramsId) {
-      this.riskUsers = await this.riskService.getRiskUsers(this.scienceProgramsId);
+      this.riskUsers = await this.riskService.getRiskUsers(
+        this.scienceProgramsId
+      );
     }
     this.haveSameValue();
   }
