@@ -43,9 +43,15 @@ import { Organization } from 'entities/organization.entity';
     SharedModule,
     RiskModule,
     UsersModule,
-    AuthModule
+    AuthModule,
   ],
-  providers: [ProgramService, RiskService, EmailsService, VariablesService, PhasesService],
-  exports:[ProgramService,RiskService]
+  providers: [
+    ProgramService,
+    RiskService,
+    EmailsService,
+    VariablesService,
+    PhasesService,
+  ],
+  exports: [ProgramService, RiskService],
 })
 export class ProgramModule {}

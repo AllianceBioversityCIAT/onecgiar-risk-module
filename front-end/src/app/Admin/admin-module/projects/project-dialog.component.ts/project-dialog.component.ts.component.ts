@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { ProjectsService } from 'src/app/services/projects.service';
 
 @Component({
   selector: 'app-project-dialog.component.ts',
@@ -11,21 +13,27 @@ export class ProjectDialogComponentTsComponent {
   form = this.fb.group({
     official_code: ['', Validators.required],
     name: ['', Validators.required],
-    isProject: [false],
+    isProject: [false], // checkbox
   });
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<ProjectDialogComponentTsComponent>,
-    @Inject(MAT_DIALOG_DATA) data: any
+    private svc: ProjectsService,
+    public ref: MatDialogRef<ProjectDialogComponentTsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (data) this.form.patchValue(data);
   }
 
-  save() {
-    if (this.form.valid) this.dialogRef.close(this.form.value);
-  }
-  cancel() {
-    this.dialogRef.close();
+  async save() {
+    if (this.form.invalid) return;
+    const body = {
+      ...this.form.value,
+      isProject: this.form.value.isProject ? 1 : 0,
+    };
+    this.data
+      ? await this.svc.update(this.data.id, body)
+      : await this.svc.create(body);
+    this.ref.close(true);
   }
 }

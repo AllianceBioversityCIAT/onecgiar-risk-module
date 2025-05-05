@@ -1,35 +1,88 @@
-<div class="actions">
-  <button mat-raised-button color="primary" (click)="openDialog()">
-    Add Project
+<!-- ░░░ Page title & toolbar ░░░ -->
+
+<span class="title">Projects</span>
+<span class="spacer"></span>
+
+<div class="form-container">
+  <button
+    class="user-management__button-box__btn btn-primary-size"
+    mat-raised-button
+    (click)="openDialog()"
+  >
+    <mat-icon class="me-1">add</mat-icon>
+    New Project
   </button>
 </div>
+<!-- ░░░ Card-wrapped data table ░░░ -->
+<div class="table-box mat-elevation-z8">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z8 projects-table"
+    multiTemplateDataRows
+  >
+    <!-- Name -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+    </ng-container>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <!-- Code -->
-  <ng-container matColumnDef="official_code">
-    <th mat-header-cell *matHeaderCellDef>Code</th>
-    <td mat-cell *matCellDef="let e">{{ e.official_code }}</td>
-  </ng-container>
+    <!-- Code -->
+    <ng-container matColumnDef="official_code">
+      <th mat-header-cell *matHeaderCellDef>Official Code</th>
+      <td style="text-align: center" *matCellDef="let row">
+        {{ row.official_code }}
+      </td>
+    </ng-container>
 
-  <!-- Name -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let e">{{ e.name }}</td>
-  </ng-container>
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="text-end">Actions</th>
+      <td
+        style="text-align: center"
+        mat-cell
+        *matCellDef="let row"
+        class="text-end"
+      >
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Edit"
+          (click)="openDialog(row)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          aria-label="Delete"
+          (click)="confirmDelete(row)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
-  <!-- Actions -->
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>Actions</th>
-    <td mat-cell *matCellDef="let e">
-      <button mat-icon-button (click)="openDialog(e)">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button mat-icon-button color="warn" (click)="delete(e.id)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </td>
-  </ng-container>
+    <!-- Header / rows -->
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns"
+      class="projects-header-row"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="projects-row"
+    ></tr>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+    <!-- Empty state -->
+    <tr class="projects-empty" *ngIf="!dataSource || dataSource.length === 0">
+      <td [attr.colspan]="displayedColumns.length">
+        <div class="empty-wrap">
+          <mat-icon>info</mat-icon>
+          <span>No projects found</span>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>

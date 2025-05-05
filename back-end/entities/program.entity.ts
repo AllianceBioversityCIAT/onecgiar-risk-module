@@ -121,7 +121,10 @@ export class Program {
   @JoinTable()
   organizations: Organization[];
 
-  @ApiProperty()
-  @Column({ type: 'bool', default: false })
-  isProject: boolean;
+  // @ApiProperty()
+  // @Column({ type: 'bool', default: false })
+  // isProject: boolean;
+
+  @Column({ type: 'tinyint', name: 'is_project', default: 0 })
+  isProject!: number; // 0 | 1
 }

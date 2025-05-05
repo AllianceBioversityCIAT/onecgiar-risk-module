@@ -20,6 +20,9 @@ import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
 import { Archive } from 'entities/archive.entity';
 import { Organization } from 'entities/organization.entity';
+import { CreateProgramDto } from './dto/create-program.dto';
+import { UpdateProgramDto } from './dto/update-program.dto';
+
 @Injectable()
 export class ProgramService {
   constructor(
@@ -39,6 +42,57 @@ export class ProgramService {
     private emailsService: EmailsService,
     public phaseService: PhasesService,
   ) {}
+
+  /// NEW CRUD HELPERS (used by ProgramController)
+
+  /** Create a new Program / Project */
+  async createProgram(
+    dto: CreateProgramDto,
+    user?: { id?: number },
+  ): Promise<Program> {
+    // ensure code uniqueness
+    const exists = await this.programRepository.findOne({
+      where: { official_code: dto.official_code },
+    });
+    if (exists) {
+      throw new BadRequestException('official_code already exists');
+    }
+
+    const entity = this.programRepository.create({
+      ...dto,
+      isProject: dto.isProject ?? 0,
+      created_by_user_id: user?.id ?? null,
+    });
+    return this.programRepository.save(entity);
+  }
+
+  /** Update an existing Program / Project */
+  async updateProgram(id: number, dto: UpdateProgramDto): Promise<Program> {
+    const program = await this.programRepository.findOne({ where: { id } });
+    if (!program) throw new NotFoundException('Program not found');
+
+    if (
+      dto.official_code &&
+      dto.official_code !== program.official_code &&
+      (await this.programRepository.findOne({
+        where: { official_code: dto.official_code },
+      }))
+    ) {
+      throw new BadRequestException('official_code already exists');
+    }
+
+    Object.assign(program, dto);
+    return this.programRepository.save(program);
+  }
+
+  /** Delete a Program / Project (hard-delete) */
+  async deleteProgram(id: number): Promise<void> {
+    const program = await this.programRepository.findOne({ where: { id } });
+    if (!program) throw new NotFoundException('Program not found');
+
+    await this.programRepository.remove(program);
+  }
+
   roles(query, req) {
     if (query?.my_role) {
       if (Array.isArray(query?.my_role)) {
@@ -113,30 +167,46 @@ export class ProgramService {
       where: {
         program_id: program_id,
         role: 'Leader',
-        id: Not(initiativeRoles.id)
+        id: Not(initiativeRoles.id),
       },
     });
 
-    if(initiativeRoles.user_id == null) {
+    if (initiativeRoles.user_id == null) {
       userInInit = await this.programRolesRepository.findOne({
-        where: { id: Not(initiativeRoles?.id), program_id: program_id, email: initiativeRoles.email },
+        where: {
+          id: Not(initiativeRoles?.id),
+          program_id: program_id,
+          email: initiativeRoles.email,
+        },
       });
 
       emailIsInUsersEmail = await this.programRolesRepository.findOne({
-        where: { program_id: program_id, user: { email: initiativeRoles.email } },
-        relations: ['user']
+        where: {
+          program_id: program_id,
+          user: { email: initiativeRoles.email },
+        },
+        relations: ['user'],
       });
 
-      if(userInInit?.email == initiativeRoles?.email || initiativeRoles?.email == emailIsInUsersEmail?.user?.email) {
+      if (
+        userInInit?.email == initiativeRoles?.email ||
+        initiativeRoles?.email == emailIsInUsersEmail?.user?.email
+      ) {
         throw new BadRequestException(
           `the user already has already the role in this initiative`,
         );
       }
     } else {
       userInInit = await this.programRolesRepository.findOne({
-        where: { id: Not(initiativeRoles?.id), program_id: program_id, user_id: initiativeRoles?.user_id?.id ? initiativeRoles?.user_id?.id : initiativeRoles?.user_id,},
+        where: {
+          id: Not(initiativeRoles?.id),
+          program_id: program_id,
+          user_id: initiativeRoles?.user_id?.id
+            ? initiativeRoles?.user_id?.id
+            : initiativeRoles?.user_id,
+        },
       });
-      if(userInInit != null) {
+      if (userInInit != null) {
         throw new BadRequestException(
           `the user already has already the role in this initiative`,
         );
@@ -152,7 +222,8 @@ export class ProgramService {
     const found_roles = await this.programRolesRepository.findOne({
       where: { program_id, id },
     });
-    if (found_roles) return await this.programRolesRepository.save(initiativeRoles);
+    if (found_roles)
+      return await this.programRolesRepository.save(initiativeRoles);
     else throw new NotFoundException();
   }
 
@@ -220,15 +291,22 @@ export class ProgramService {
         await this.riskService.createRisk(risk);
       }
     let date = new Date();
-    await this.programRepository.update(old_init_id, { last_updated_date: date });
-    await this.programRepository.update(new_init.id, { submit_date: date, status: true });
+    await this.programRepository.update(old_init_id, {
+      last_updated_date: date,
+    });
+    await this.programRepository.update(new_init.id, {
+      submit_date: date,
+      status: true,
+    });
     if (old_program?.roles)
       old_program.roles.forEach((role) => {
-        if (
-          role?.user &&
-          (role.role == 'Leader' || role.role == 'Coordinator')
-        )
-          this.emailsService.sendEmailTobyVarabel(role?.user, 3, old_init_id, null);
+        if (role?.user && (role.role == 'Leader' || role.role == 'Coordinator'))
+          this.emailsService.sendEmailTobyVarabel(
+            role?.user,
+            3,
+            old_init_id,
+            null,
+          );
       });
     let admins = await this.userService.userRepository.find({
       where: { role: 'admin' },
@@ -285,7 +363,8 @@ export class ProgramService {
         const user = await this.userService.userRepository.findOne({
           where: { id: role?.user_id },
         });
-        if (user) this.emailsService.sendEmailTobyVarabel(user, 10, program_id, null);
+        if (user)
+          this.emailsService.sendEmailTobyVarabel(user, 10, program_id, null);
       }
       return await this.programRolesRepository.save(newRole, { reload: true });
     } else if (
@@ -310,7 +389,7 @@ export class ProgramService {
         { full_name: '', email: newRole.email },
         10,
         program_id,
-        null
+        null,
       );
 
       return await this.programRolesRepository.save(newRole, { reload: true });
@@ -376,12 +455,12 @@ export class ProgramService {
   //     this.logger.error('Error in Sync CLARISA initiative Data ', e);
   //   }
   // }
-  
+
   // @Cron(CronExpression.EVERY_HOUR)
-  // syncClarisa() { 
+  // syncClarisa() {
   //   this.syncFromClarisa();
   //   this.syncActionAreaFromClarisa();
-  // } 
+  // }
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   syncUserRolesTask() {
@@ -458,76 +537,93 @@ export class ProgramService {
     }
   }
   async archiveInit(data: any) {
-    for(let id of data.ids) {
-      const init = await this.programRepository.findOne({where: {id: id}});
+    for (let id of data.ids) {
+      const init = await this.programRepository.findOne({ where: { id: id } });
       const submittedVersion = await this.programRepository.find({
         where: { parent_id: id },
         order: {
           risks: {
-            top: 'ASC'
-          }
+            top: 'ASC',
+          },
         },
-        relations: ['risks', 'risks.program', 'risks.mitigations' , 'risks.mitigations.status' , 'risks.category' , 'risks.created_by' , 'risks.risk_owner.user' , 'created_by', 'phase']
+        relations: [
+          'risks',
+          'risks.program',
+          'risks.mitigations',
+          'risks.mitigations.status',
+          'risks.category',
+          'risks.created_by',
+          'risks.risk_owner.user',
+          'created_by',
+          'phase',
+        ],
       });
       const roles = await this.programRolesRepository.find({
-        where: { program_id: id},
-        relations: ['user']
+        where: { program_id: id },
+        relations: ['user'],
       });
 
       const allData = {
         version: submittedVersion,
-        roles: roles
-      }
+        roles: roles,
+      };
 
       const archived = this.archiveRepository.create();
       archived.init_data = JSON.stringify(allData);
       archived.program = init;
-      
+
       await this.archiveRepository.save(archived).then(
         async () => {
           await this.programRepository.update(id, {
-            archived: true
+            archived: true,
           });
-        }, (error) => {
+        },
+        (error) => {
           console.log('error => ', error);
-          throw new BadRequestException(
-            `something wrong`,
-          );
-        }
-      )
+          throw new BadRequestException(`something wrong`);
+        },
+      );
     }
   }
   async getArchiveInit(query: any, req: any) {
-   return await this.archiveRepository.find({
-    relations: ['program', 'program.roles', 'program.roles.user', 'program.risks','program.risks.category'],
-    where: {
-      program: {
-        name: query?.name ? ILike(`%${query.name}%`) : null,
-        official_code: query.initiative_id ? In([
-          `INIT-0${query.initiative_id}`,
-          `INIT-${query.initiative_id}`,
-          `PLAT-${query.initiative_id}`,
-          `PLAT-0${query.initiative_id}`,
-          `SGP-${query.initiative_id}`,
-          `SGP-0${query.initiative_id}` 
-        ]) : Not(IsNull()),
-        ...this.roles(query, req),
-        risks: { ...this.filterCategory(query, 'For Init') }
-      }
-    }
-   });
+    return await this.archiveRepository.find({
+      relations: [
+        'program',
+        'program.roles',
+        'program.roles.user',
+        'program.risks',
+        'program.risks.category',
+      ],
+      where: {
+        program: {
+          name: query?.name ? ILike(`%${query.name}%`) : null,
+          official_code: query.initiative_id
+            ? In([
+                `INIT-0${query.initiative_id}`,
+                `INIT-${query.initiative_id}`,
+                `PLAT-${query.initiative_id}`,
+                `PLAT-0${query.initiative_id}`,
+                `SGP-${query.initiative_id}`,
+                `SGP-0${query.initiative_id}`,
+              ])
+            : Not(IsNull()),
+          ...this.roles(query, req),
+          risks: { ...this.filterCategory(query, 'For Init') },
+        },
+      },
+    });
   }
 
   async getArchiveInitById(id: number) {
     return await this.archiveRepository.findOne({
       where: {
-        id: id
+        id: id,
       },
-      relations: ['program']
-    })
+      relations: ['program'],
+    });
   }
 
-  async syncInit(data: any) { 
+  async syncInit(data: any) {
     try {
       // let actionAreaIds = [];
       const clarisa_initiatives = await firstValueFrom(
@@ -536,21 +632,31 @@ export class ProgramService {
             auth: this.clarisa_auth(),
           })
           .pipe(
-            map((response: any) => response.data.filter((item: any) => item.level == 1))
+            map((response: any) =>
+              response.data.filter((item: any) => item.level == 1),
+            ),
           ),
       );
 
-      const filtered_clarisa_initiatives = clarisa_initiatives.filter(d => data.ids.includes(d.code))
+      const filtered_clarisa_initiatives = clarisa_initiatives.filter((d) =>
+        data.ids.includes(d.code),
+      );
 
       for (const clarisa_initiative of filtered_clarisa_initiatives) {
         let program;
         program = await this.programRepository.findOne({
-          where: { official_code: clarisa_initiative.code, parent_id: IsNull() },
+          where: {
+            official_code: clarisa_initiative.code,
+            parent_id: IsNull(),
+          },
         });
         if (!program) {
           program = this.programRepository.create();
           // program.clarisa_id = clarisa_initiative.id;
-          program.name = clarisa_initiative.name != null ? clarisa_initiative.name : clarisa_initiative.short_name;
+          program.name =
+            clarisa_initiative.name != null
+              ? clarisa_initiative.name
+              : clarisa_initiative.short_name;
           program.official_code = clarisa_initiative.code;
           // program.action_area_id = clarisa_initiative.action_area_id;
           program.sync_clarisa = true;
@@ -561,13 +667,11 @@ export class ProgramService {
       // actionAreaIds = [...new Set(actionAreaIds)];
       // this.syncActionAreaByIdFromClarisa(actionAreaIds)
     } catch (e) {
-      throw new BadRequestException(
-        `Error sync clarisa`,
-      );
+      throw new BadRequestException(`Error sync clarisa`);
     }
-  } 
+  }
 
-  async syncActionAreaByIdFromClarisa(ids: number []) {
+  async syncActionAreaByIdFromClarisa(ids: number[]) {
     try {
       const clarisa_action_area = await firstValueFrom(
         this.http
@@ -577,7 +681,7 @@ export class ProgramService {
           .pipe(map((d) => d.data)),
       );
       for (const action_area of clarisa_action_area) {
-        for(let id of ids) {
+        for (let id of ids) {
           let actionArea;
           actionArea = await this.actionAreaRepository.findOne({
             where: { id: id },
@@ -603,20 +707,23 @@ export class ProgramService {
             auth: this.clarisa_auth(),
           })
           .pipe(
-            map((response: any) => response.data.filter((item: any) => item.level == 1))
+            map((response: any) =>
+              response.data.filter((item: any) => item.level == 1),
+            ),
           ),
       );
 
       const programs = await this.programRepository.find({
         where: {
-          parent_id : IsNull()
-        }
+          parent_id: IsNull(),
+        },
       });
 
-      const clarisaExistCodes = programs.map(d => d.official_code);
+      const clarisaExistCodes = programs.map((d) => d.official_code);
 
-      return clarisa_initiatives.filter(d => !clarisaExistCodes.includes(d.code));
-
+      return clarisa_initiatives.filter(
+        (d) => !clarisaExistCodes.includes(d.code),
+      );
     } catch (e) {
       this.logger.error('Error in CLARISA (clarisaPrograms) ', e);
     }

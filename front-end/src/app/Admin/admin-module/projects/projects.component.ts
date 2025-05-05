@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { ProjectDialogComponentTsComponent } from './project-dialog.component.ts/project-dialog.component.ts.component';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
@@ -8,45 +7,60 @@ import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/dele
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.scss'],
 })
 export class ProjectsComponent implements OnInit {
-  displayedColumns = ['official_code', 'name', 'actions'];
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource: any[] = [];
 
-  constructor(private svc: ProjectsService, private dialog: MatDialog) {}
+  displayedColumns = ['name', 'official_code', 'actions'];
 
-  ngOnInit() {
-    this.load();
+  constructor(
+    private readonly service: ProjectsService,
+    private readonly dialog: MatDialog
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    await this.reload();
   }
 
-  load() {
-    this.svc.getProjects().then((data) => (this.dataSource.data = data));
+  async reload(): Promise<void> {
+    this.dataSource = await this.service.findAll();
   }
 
-  openDialog(editData: any = null) {
+  /** open create / edit dialog */
+  openDialog(project?: any): void {
     const ref = this.dialog.open(ProjectDialogComponentTsComponent, {
-      width: '400px',
-      data: editData,
+      width: '600px',
+      data: project ?? null,
+      autoFocus: false,
+      disableClose: true,
     });
-    ref.afterClosed().subscribe((result) => {
-      if (!result) return;
-      // create or update
-      if (editData) {
-        this.svc.updateProject(editData.id, result).then(() => this.load());
-      } else {
-        this.svc.createProject(result).then(() => this.load());
+
+    ref.afterClosed().subscribe(async (changed) => {
+      if (changed) {
+        await this.reload();
       }
     });
   }
 
-  delete(id: number) {
-    this.dialog
-      .open(DeleteConfirmDialogComponent, {
-        data: { message: 'Delete this project?' },
-      })
-      .afterClosed()
-      .subscribe((ok) => {
-        if (ok) this.svc.deleteProject(id).then(() => this.load());
-      });
+  /** open confirmation dialog before delete */
+  confirmDelete(project: any): void {
+    const ref = this.dialog.open(DeleteConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Delete Project',
+        message: `Are you sure you want to delete “${project.name}”?`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+      autoFocus: false,
+    });
+
+    ref.afterClosed().subscribe(async (confirmed) => {
+      if (confirmed) {
+        await this.service.remove(project.id);
+        await this.reload();
+      }
+    });
   }
 }
