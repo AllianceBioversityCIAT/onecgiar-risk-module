@@ -16,7 +16,6 @@ export class ProjectsService extends MainService {
     return firstValueFrom(
       this.http
         .get(`${this.backend_url}/program`, {
-          params: { isProject: 1 },
           headers: this.headers,
         })
         .pipe(

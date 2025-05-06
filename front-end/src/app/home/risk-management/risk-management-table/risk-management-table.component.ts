@@ -35,8 +35,7 @@ export class RiskManagementTableComponent {
     private dialog: MatDialog,
     public headerService: HeaderService,
     private loadingService: LoadingService,
-    private authService: AuthService,
-
+    private authService: AuthService
   ) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
@@ -78,11 +77,25 @@ export class RiskManagementTableComponent {
     this.filters = filters;
     this.getInitiatives(filters);
   }
-  async getInitiatives(filters = null) {
-    let sciencePrograms: any = await this.initiativeService.getInitiativesWithFilters(filters);
-    this.dataSource = new MatTableDataSource<any>(sciencePrograms);
-    this.length = sciencePrograms.length;
+  // in risk-management-table.component.ts
+  async getInitiatives(filters: any = {}) {
+    // derive numeric isProject:
+    const params = { ...filters };
+    if (filters.my_proj) {
+      params.isProject = 1;
+    } else if (filters.my_ini) {
+      params.isProject = 0;
+    }
+    delete params.my_proj;
+    delete params.my_ini;
+
+    const list: any[] = await this.initiativeService.getInitiativesWithFilters(
+      params
+    );
+    this.dataSource = new MatTableDataSource(list);
+    this.length = list.length;
   }
+
   ngOnDestroy() {
     if (this.navigationSubscription) {
       this.navigationSubscription.unsubscribe();

@@ -3,9 +3,7 @@
   <form [formGroup]="filterForm" class="search">
     <div class="sec-1">
       <div class="risk-management-form-field field-3">
-        <mat-label class="risk-management-form-field__label"
-          >ID</mat-label
-        >
+        <mat-label class="risk-management-form-field__label">ID</mat-label>
 
         <input
           formControlName="initiative_id"
@@ -31,9 +29,7 @@
     </div>
     <div class="sec-2">
       <div class="risk-management-form-field field-3">
-        <mat-label class="risk-management-form-field__label"
-          >Name</mat-label
-        >
+        <mat-label class="risk-management-form-field__label">Name</mat-label>
 
         <input
           formControlName="name"
@@ -134,7 +130,6 @@
       </div>
     </div>
 
-
     <div class="sec-5">
       <div class="risk-management-form-field field-3">
         <mat-label class="risk-management-form-field__label">Phase</mat-label>
@@ -147,7 +142,7 @@
           id="select-where"
         >
           <mat-option
-          class="phase"
+            class="phase"
             *ngFor="let Phase of phases?.result"
             [value]="Phase.id"
           >
@@ -156,7 +151,6 @@
         </mat-select>
       </div>
     </div>
-
 
     <!-- //My role----- -->
     <!-- <div class="set-flex"> -->
@@ -203,11 +197,6 @@
   </form>
 </div>
 
-
-
-
-
-
 <!-- step-3 -->
 
 <!-- start change about reisk-management btn-export-to-excel -->
@@ -220,6 +209,17 @@
         labelPosition="before"
         [(ngModel)]="myIni"
         (ngModelChange)="myIniChange()"
+      >
+      </mat-checkbox>
+    </div>
+
+    <!-- new My Projects checkbox -->
+    <div style="margin-left: 2rem">
+      <mat-label class="initiatives-text-checkbox">My Projects</mat-label>
+      <mat-checkbox
+        labelPosition="before"
+        [(ngModel)]="myProj"
+        (ngModelChange)="myProjChange()"
       >
       </mat-checkbox>
     </div>
@@ -260,7 +260,7 @@
     <!-- </form> -->
   </div>
   <div class="content-2">
-    <span>Selected Phase:  </span> <span>{{phaseSelected?.name}}</span>
+    <span>Selected Phase: </span> <span>{{ phaseSelected?.name }}</span>
   </div>
 </div>
 
