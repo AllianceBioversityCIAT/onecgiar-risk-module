@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { ProjectDialogComponentTsComponent } from './project-dialog.component.ts/project-dialog.component.ts.component';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
+import { HeaderService } from 'src/app/header.service';
 
 @Component({
   selector: 'app-projects',
@@ -16,8 +17,13 @@ export class ProjectsComponent implements OnInit {
 
   constructor(
     private readonly service: ProjectsService,
+    private headerService: HeaderService,
     private readonly dialog: MatDialog
-  ) {}
+  ) {
+    this.headerService.background = '#04030f';
+    this.headerService.backgroundNavMain = '#0f212f';
+    this.headerService.backgroundUserNavButton = '#0f212f';
+  }
 
   async ngOnInit(): Promise<void> {
     await this.reload();

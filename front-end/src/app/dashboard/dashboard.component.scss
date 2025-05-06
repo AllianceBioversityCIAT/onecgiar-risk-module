@@ -59,6 +59,13 @@
   margin-bottom: 5rem;
 }
 
+.dashboard-filter-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+}
+
 .dashboard-item-box {
   display: flex;
   justify-content: center;
@@ -172,7 +179,7 @@ highcharts-chart {
   width: 200%;
   flex-wrap: wrap;
   .content {
-    width: 100%; 
+    width: 100%;
     margin: auto;
   }
 
@@ -189,6 +196,6 @@ highcharts-chart {
 
 .chart-container {
   width: 100%;
-    max-width: 95%;
-    margin: auto;
+  max-width: 95%;
+  margin: auto;
 }

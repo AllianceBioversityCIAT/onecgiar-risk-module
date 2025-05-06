@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger/dist/type-helpers/partial-type.helper';
 import { CreateProgramDto } from './create-program.dto';
 
 /**

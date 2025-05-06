@@ -6,10 +6,10 @@ import { HeaderService } from '../header.service';
 import { Meta, Title } from '@angular/platform-browser';
 declare var require: any;
 import HighchartsMore from 'highcharts/highcharts-more';
-import SunburstModule from 'highcharts/modules/sunburst'; 
+import SunburstModule from 'highcharts/modules/sunburst';
 HighchartsMore(Highcharts);
-
 SunburstModule(Highcharts);
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -20,6 +20,10 @@ export class DashboardComponent implements OnInit {
     home: '/home/risk-management',
   };
   Highcharts = Highcharts;
+
+  // ─── NEW: filter toggle ─────────────────────────────────────────────
+  /** 0 = Programs, 1 = Projects */
+  isProjectFilter = 0;
 
   constructor(
     private apiRiskDetailsService: ApiRiskDetailsService,
@@ -35,6 +39,7 @@ export class DashboardComponent implements OnInit {
     this.headerService.backgroundUserNavButton =
       'linear-gradient(to right, #436280, #30455B)';
   }
+
   data: any = null;
   status: any = null;
   categoriesCount: any = null;
@@ -50,18 +55,42 @@ export class DashboardComponent implements OnInit {
   groups: any = null;
   action_areas: any = null;
   totalStatus: any = null;
-  async ngOnInit() {
-    this.data = await this.dashboardService.current();
-    this.details = await this.dashboardService.details();
-    this.categoriesLevels = await this.dashboardService.categoriesLevels();
-    this.categoriesCount = await this.dashboardService.categoriesCount();
-    this.groups = await this.dashboardService.category_groups();
-    this.action_areas = await this.dashboardService.actionAreas();
 
- 
-    this.status = await this.dashboardService.status();
-    console.log(this.status)
-    this.totalStatus = this.status.reduce((sum: any, item: any) => sum + parseInt(item.total_actions, 10), 0);
+  // ─── NEW: filter toggle ─────────────────────────────────────────────
+  /** 0 = Programs, 1 = Projects */
+
+  onFilterChange(value: number, event: any) {
+    if (event.target.checked) {
+      this.isProjectFilter = value;
+      this.loadDashboard();
+    }
+  }
+
+  ngOnInit() {
+    this.loadDashboard();
+  }
+  private async loadDashboard() {
+    // ← pass the filter into every call:
+    this.data = await this.dashboardService.current(this.isProjectFilter);
+    this.details = await this.dashboardService.details(this.isProjectFilter);
+    this.categoriesLevels = await this.dashboardService.categoriesLevels(
+      this.isProjectFilter
+    );
+    this.categoriesCount = await this.dashboardService.categoriesCount(
+      this.isProjectFilter
+    );
+    this.groups = await this.dashboardService.category_groups(
+      this.isProjectFilter
+    );
+    this.action_areas = await this.dashboardService.actionAreas(
+      this.isProjectFilter
+    );
+
+    this.status = await this.dashboardService.status(this.isProjectFilter);
+    this.totalStatus = this.status.reduce(
+      (sum: number, item: any) => sum + parseInt(item.total_actions, 10),
+      0
+    );
 
     this.risk_profile_target_chartOptions = this.riskProfile(
       this.data,
@@ -133,11 +162,12 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
-    this.status_of_action_chartOptions = { 
+
+    this.status_of_action_chartOptions = {
       chart: {
-        type: 'column'
+        type: 'column',
       },
-         credits: {
+      credits: {
         enabled: false,
       },
       subtitle: {
@@ -145,23 +175,23 @@ export class DashboardComponent implements OnInit {
         align: 'center',
       },
       xAxis: {
-        categories: this.status.map((item: any) => item.title)
+        categories: this.status.map((item: any) => item.title),
       },
       yAxis: {
         min: 0,
         title: {
-          text: 'Percentage (%)'
+          text: 'Percentage (%)',
         },
         labels: {
-          format: '{value}%'
-        }
+          format: '{value}%',
+        },
       },
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
         shadow: false,
         useHTML: true,
-        pointFormat: '<b>{point.y}%</b>' ,
+        pointFormat: '<b>{point.y}%</b>',
         style: {
           textAlign: 'left',
           color: '#04030f',
@@ -187,11 +217,11 @@ export class DashboardComponent implements OnInit {
             const count = parseInt(item.total_actions, 10);
             return parseFloat(((count / this.totalStatus) * 100).toFixed(1));
           }),
-          colorByPoint: true 
-        }
-      ]
-    
-    }
+          colorByPoint: true,
+        },
+      ],
+    };
+
     this.categories_count_chartOptions = {
       chart: {
         plotBackgroundColor: null,
@@ -202,10 +232,6 @@ export class DashboardComponent implements OnInit {
       credits: {
         enabled: false,
       },
-      // title: {
-      //   text: 'Risk Categories',
-      //   align: 'center',
-      // },
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -270,9 +296,10 @@ export class DashboardComponent implements OnInit {
         {
           name: 'Usage',
           colorByPoint: true,
-          data: this.categoriesCount.map((d: any) => {
-            return { name: d.title, y: +d.total_count };
-          }),
+          data: this.categoriesCount.map((d: any) => ({
+            name: d.title,
+            y: +d.total_count,
+          })),
         },
       ],
     };
@@ -287,10 +314,6 @@ export class DashboardComponent implements OnInit {
       credits: {
         enabled: false,
       },
-      // title: {
-      //   text: 'Categories groups',
-      //   align: 'center',
-      // },
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -355,9 +378,10 @@ export class DashboardComponent implements OnInit {
         {
           name: 'Usage',
           colorByPoint: true,
-          data: this.groups.map((d: any) => {
-            return { name: d.name, y: +d.total_count };
-          }),
+          data: this.groups.map((d: any) => ({
+            name: d.name,
+            y: +d.total_count,
+          })),
         },
       ],
     };
@@ -366,7 +390,6 @@ export class DashboardComponent implements OnInit {
     this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
   }
 
- 
   riskProfile(data: any, type: string) {
     return {
       chart: {
@@ -374,17 +397,12 @@ export class DashboardComponent implements OnInit {
         plotBorderWidth: 1,
         zoomType: 'xy',
       },
-
       legend: {
         enabled: false,
       },
       credits: {
         enabled: false,
       },
-      // title: {
-      //   text: type + ' Risk profile',
-      // },
-
       xAxis: {
         gridLineWidth: 1,
         title: {
@@ -397,7 +415,6 @@ export class DashboardComponent implements OnInit {
           rangeDescription: 'Range: 1 to 5',
         },
       },
-
       yAxis: {
         startOnTick: false,
         endOnTick: false,
@@ -412,7 +429,6 @@ export class DashboardComponent implements OnInit {
           rangeDescription: 'Range: 1 to 5',
         },
       },
-
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -430,7 +446,6 @@ export class DashboardComponent implements OnInit {
         footerFormat: '</table>',
         followPointer: true,
       },
-
       plotOptions: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -448,15 +463,13 @@ export class DashboardComponent implements OnInit {
       },
       series: [
         {
-          data: data.map((d: any) => {
-            return {
-              x: +d[type == 'Target' ? 'target_impact' : 'current_impact'],
-              y: +d[
-                type == 'Target' ? 'target_likelihood' : 'current_likelihood'
-              ],
-              ...d,
-            };
-          }),
+          data: data.map((d: any) => ({
+            x: +d[type == 'Target' ? 'target_impact' : 'current_impact'],
+            y: +d[
+              type == 'Target' ? 'target_likelihood' : 'current_likelihood'
+            ],
+            ...d,
+          })),
         },
       ],
     };
@@ -468,14 +481,12 @@ export class DashboardComponent implements OnInit {
         return ` background-color: #1f6ca6;`;
       case 20:
         return ` background-color: #357AAE;`;
-
       case 16:
         return ` background-color: #257fc2;`;
       case 12:
         return ` background-color: #3090d9;`;
       case 9:
         return ` background-color: #0091ff;`;
-
       default:
         return ` background-color: #6ab8f2;`;
     }

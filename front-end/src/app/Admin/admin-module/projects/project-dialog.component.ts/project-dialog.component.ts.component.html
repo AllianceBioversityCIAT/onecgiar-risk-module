@@ -1,20 +1,92 @@
-<h1 mat-dialog-title>{{ data ? "Edit project" : "Add project" }}</h1>
-
-<form [formGroup]="form" class="dialog-form">
-  <mat-form-field appearance="outline">
-    <mat-label>Official code</mat-label>
-    <input matInput formControlName="official_code" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Name</mat-label>
-    <input matInput formControlName="name" />
-  </mat-form-field>
-
-  <mat-checkbox formControlName="isProject">Is project</mat-checkbox>
-
-  <div class="buttons">
-    <button mat-button (click)="ref.close()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="save()">Save</button>
+<div class="form-dialog-header">
+  <div class="form-dialog-header__text-box">
+    <p class="form-dialog-header__text-box__text">
+      {{ data ? "Edit project" : "Add project" }}
+    </p>
   </div>
-</form>
+
+  <div class="form-dialog-header__icon-box">
+    <button class="form-dialog-header__icon-box__btn" (click)="onCloseDialog()">
+      <mat-icon class="form-dialog-header__icon-box__icon-size">
+        <img
+          class="form-dialog-header__icon-box__icon-size__icon"
+          src="../../../assets/shared-image/Vector-close.svg"
+          alt="~/Frontend/images/icon _ Vector-close"
+        />
+      </mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="form-dialog-conten-box-1">
+  <form [formGroup]="form" class="form-dialog-content">
+    <!-- //Email filed----- -->
+
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Official code</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="official_code" />
+        <mat-error
+          class="error"
+          *ngIf="form.controls?.official_code?.errors?.['required']"
+          >Official code is required</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Name</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="name" />
+        <mat-error
+          class="error"
+          *ngIf="form.controls?.name?.errors?.['required']"
+          >Name is required</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Project</mat-label
+        >
+      </div>
+      <mat-checkbox formControlName="isProject">Is project</mat-checkbox>
+    </div>
+
+    <div>
+      <!-- //Update Button----- -->
+      <div class="form-dialog-conten-button-box">
+        <div class="form-dialog-conten__button-box">
+          <button
+            class="form-dialog-conten__button-box__btn"
+            mat-raised-button
+            color="primary"
+            (click)="save()"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

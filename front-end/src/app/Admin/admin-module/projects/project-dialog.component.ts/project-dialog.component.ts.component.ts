@@ -36,4 +36,9 @@ export class ProjectDialogComponentTsComponent {
       : await this.svc.create(body);
     this.ref.close(true);
   }
+
+  //Close-Dialog
+  onCloseDialog() {
+    this.ref.close();
+  }
 }

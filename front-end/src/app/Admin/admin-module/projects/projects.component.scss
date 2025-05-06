@@ -65,9 +65,11 @@
 }
 
 .form-container {
-  padding: 24px 0;
+  padding: 59px 0 -22px;
+  padding: 13px 0 0;
   position: relative;
-  margin-top: -2rem;
+  margin-top: 0rem;
+  text-align: end;
   .search {
     display: flex;
 
@@ -426,4 +428,11 @@
   max-height: 100%;
   margin: 1rem 0 0 -1rem !important;
   padding: 0 1rem !important;
+}
+
+.table-box td:nth-child(1) {
+  width: 29.5rem !important;
+  height: 3.5rem;
+  padding: 1rem;
+  text-align: center;
 }
