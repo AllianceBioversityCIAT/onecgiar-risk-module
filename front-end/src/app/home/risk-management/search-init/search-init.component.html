@@ -208,7 +208,7 @@
       <mat-checkbox
         labelPosition="before"
         [(ngModel)]="myIni"
-        (ngModelChange)="myIniChange()"
+        (change)="onIniChange($event.checked)"
       >
       </mat-checkbox>
     </div>
@@ -219,7 +219,7 @@
       <mat-checkbox
         labelPosition="before"
         [(ngModel)]="myProj"
-        (ngModelChange)="myProjChange()"
+        (change)="onProjChange($event.checked)"
       >
       </mat-checkbox>
     </div>

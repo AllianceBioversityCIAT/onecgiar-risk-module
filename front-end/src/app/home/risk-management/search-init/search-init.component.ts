@@ -43,23 +43,55 @@ export class SearchInitComponent {
   myIni = true; // default to “My Programs”
   myProj = false; // “My Projects” off by default
   activePhaseSelect: boolean = true;
-  myIniChange() {
-    // if user checks “My Programs”, uncheck “My Projects”
-    if (this.myIni) {
-      this.myProj = false;
-      this.filterForm.patchValue({ my_proj: false }, { emitEvent: false });
+  // component.ts
+  // onIniChange(checked: boolean) {
+  //   if (checked) {
+  //     this.myProj = false;
+  //     this.filterForm.patchValue({ my_proj: false }, { emitEvent: false });
+  //   }
+  //   this.filterForm.patchValue({ my_ini: checked });
+  // }
+
+  // onProjChange(checked: boolean) {
+  //   if (checked) {
+  //     this.myIni = false;
+  //     this.filterForm.patchValue({ my_ini: false }, { emitEvent: false });
+  //   }
+  //   this.filterForm.patchValue({ my_proj: checked });
+  // }
+
+  onIniChange(checked: boolean) {
+    // disallow “both off”
+    if (!checked && !this.myProj) {
+      this.myIni = true; // put the tick straight back
+      return;
     }
-    this.filterForm.patchValue({ my_ini: this.myIni });
+
+    if (checked) {
+      // exclusive behaviour
+      this.myProj = false;
+    }
+    this.filterForm.patchValue({
+      my_ini: this.myIni,
+      my_proj: this.myProj,
+    });
   }
 
-  myProjChange() {
-    // if user checks “My Projects”, uncheck “My Programs”
-    if (this.myProj) {
-      this.myIni = false;
-      this.filterForm.patchValue({ my_ini: false }, { emitEvent: false });
+  onProjChange(checked: boolean) {
+    if (!checked && !this.myIni) {
+      this.myProj = true;
+      return;
     }
-    this.filterForm.patchValue({ my_proj: this.myProj });
+
+    if (checked) {
+      this.myIni = false;
+    }
+    this.filterForm.patchValue({
+      my_ini: this.myIni,
+      my_proj: this.myProj,
+    });
   }
+
   setForm() {
     let time: any = null;
     this.filterForm = this.fb.group({
@@ -84,7 +116,8 @@ export class SearchInitComponent {
   }
 
   resetForm() {
-    this.myIni = false;
+    this.myIni = true;
+    this.myProj = false;
     this.filterForm.reset();
     this.filterForm.markAsUntouched();
     this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);

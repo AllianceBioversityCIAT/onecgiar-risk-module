@@ -7,17 +7,17 @@
 
     <!-- ─── Filter Toggle: Programs vs Projects ─────────────────────────────────── -->
     <div class="dashboard-filter-box">
-      <label>
+      <label style="display: flex; align-items: center; gap: 1rem">
         <input
-          type="checkbox"
+          type="radio"
           [checked]="isProjectFilter === 0"
           (change)="onFilterChange(0, $event)"
         />
         My Programs
       </label>
-      <label>
+      <label style="display: flex; align-items: center; gap: 1rem">
         <input
-          type="checkbox"
+          type="radio"
           [checked]="isProjectFilter === 1"
           (change)="onFilterChange(1, $event)"
         />
