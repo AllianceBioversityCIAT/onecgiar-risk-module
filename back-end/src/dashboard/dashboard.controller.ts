@@ -4,7 +4,7 @@ import {
   Param,
   Query,
   UseGuards,
-  OnModuleInit,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -23,38 +23,34 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { ProgramService } from 'src/program/program.service';
 import { RiskService } from 'src/risk/risk.service';
-import { DataSource, IsNull } from 'typeorm';
+import { DataSource, ILike, IsNull } from 'typeorm';
 
 @ApiBearerAuth()
 @ApiTags('Dashboard')
 @Controller('Dashboard')
 @UseGuards(JwtAuthGuard, AdminRolesGuard)
-export class DashboardController implements OnModuleInit {
+export class DashboardController {
   constructor(
     private dataSource: DataSource,
     private iniService: ProgramService,
     private riskService: RiskService,
   ) {}
 
-  /** Remove ONLY_FULL_GROUP_BY so GROUP BY works as expected */
-  async onModuleInit() {
-    await this.dataSource.query(
-      `SET SESSION sql_mode = (
-         SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', '')
-       )`,
-    );
-  }
-
   @Roles()
   @Get('program/details')
-  @ApiCreatedResponse({ type: [getProgram] })
-  async getInitiativeDetails(@Query('isProject') isProject?: string) {
-    const where: any = { parent_id: IsNull(), archived: false };
-    if (isProject !== undefined) {
-      where.isProject = isProject === '1';
-    }
+  @ApiCreatedResponse({
+    description: 'List programs/projects with their risks',
+    type: [getProgram],
+  })
+  async getInitiativeDetails(
+    @Query('isProject', ParseIntPipe) isProject: number = 0,
+  ) {
     return this.iniService.programRepository.find({
-      where,
+      where: {
+        parent_id: IsNull(),
+        archived: false,
+        isProject, // <-- filter programs vs projects
+      },
       relations: [
         'risks',
         'risks.category',
@@ -68,22 +64,23 @@ export class DashboardController implements OnModuleInit {
 
   @Roles()
   @Get('program/score')
-  @ApiCreatedResponse({ type: [getProgramScor] })
-  async getInitiativeScore(@Query('isProject') isProject?: string) {
-    const qb = this.dataSource
+  @ApiCreatedResponse({
+    description: 'Average scores for programs/projects',
+    type: [getProgramScor],
+  })
+  async getInitiativeScore(
+    @Query('isProject', ParseIntPipe) isProject: number = 0,
+  ) {
+    return this.dataSource
       .createQueryBuilder()
       .from('Program', 'Program')
       .addSelect('Program.id', 'id')
       .addSelect('Program.status', 'status')
-      .where('Program.parent_id IS NULL')
-      .andWhere('Program.archived = :archived', { archived: false });
-
-    if (isProject !== undefined) {
-      qb.andWhere('Program.isProject = :proj', { proj: isProject === '1' });
-    }
-
-    qb.addSelect('Program.official_code', 'official_code')
+      .addSelect('Program.official_code', 'official_code')
       .addSelect('Program.name', 'name')
+      .where('Program.parent_id IS NULL')
+      .andWhere('Program.archived = :archived', { archived: false })
+      .andWhere('Program.isProject = :isProject', { isProject })
       .innerJoin(Risk, 'risk', 'risk.program_id = Program.id')
       .addSelect(
         (sub) =>
@@ -116,28 +113,28 @@ export class DashboardController implements OnModuleInit {
             .from(Risk, 'risk')
             .where('risk.program_id = Program.id'),
         'current_likelihood',
-      );
-
-    return qb.execute();
+      )
+      .execute();
   }
 
   @Roles()
   @Get('categories/levels')
-  @ApiCreatedResponse({ type: [getCategoriesLevels] })
-  async getCategories(@Query('isProject') isProject?: string) {
-    const qb = this.dataSource
+  @ApiCreatedResponse({
+    description: 'Average risk levels by category',
+    type: [getCategoriesLevels],
+  })
+  async getCategoriesLevels(
+    @Query('isProject', ParseIntPipe) isProject: number = 0,
+  ) {
+    return this.dataSource
       .createQueryBuilder()
       .from('risk_category', 'risk_category')
       .leftJoin('risk', 'risk', 'risk.category_id = risk_category.id')
       .leftJoin('program', 'program', 'program.id = risk.program_id')
       .where('risk.original_risk_id IS NULL')
-      .andWhere('program.archived = :archived', { archived: false });
-
-    if (isProject !== undefined) {
-      qb.andWhere('program.isProject = :proj', { proj: isProject === '1' });
-    }
-
-    qb.addSelect('risk_category.id', 'id')
+      .andWhere('program.archived = :archived', { archived: false })
+      .andWhere('program.isProject = :isProject', { isProject })
+      .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect(
         (sub) =>
@@ -155,54 +152,57 @@ export class DashboardController implements OnModuleInit {
             .where('risk.category_id = risk_category.id'),
         'current_level',
       )
-      .groupBy('risk_category.id, risk_category.title');
-
-    return qb.execute();
+      .groupBy('risk_category.id')
+      .execute();
   }
 
   @Roles()
   @Get('categories/count')
-  @ApiCreatedResponse({ type: [getCategoriesCount] })
-  async getcategoeis(@Query('isProject') isProject?: string) {
-    const qb = this.dataSource
+  @ApiCreatedResponse({
+    description: 'Count of risks per category',
+    type: [getCategoriesCount],
+  })
+  async getCategoriesCount(
+    @Query('isProject', ParseIntPipe) isProject: number = 0,
+  ) {
+    return this.dataSource
       .createQueryBuilder()
       .from('risk_category', 'risk_category')
       .leftJoin('risk', 'risk', 'risk.category_id = risk_category.id')
       .leftJoin('program', 'program', 'program.id = risk.program_id')
       .where('risk.original_risk_id IS NULL')
-      .andWhere('program.archived = :archived', { archived: false });
-
-    if (isProject !== undefined) {
-      qb.andWhere('program.isProject = :proj', { proj: isProject === '1' });
-    }
-
-    qb.addSelect('risk_category.id', 'id')
+      .andWhere('program.archived = :archived', { archived: false })
+      .andWhere('program.isProject = :isProject', { isProject })
+      .addSelect('risk_category.id', 'id')
       .addSelect('risk_category.title', 'title')
       .addSelect(
         (sub) =>
           sub
-            .from(Risk, 'risk')
             .select('COUNT(risk.id)', 'total_count')
-            .where('risk.original_risk_id IS NULL')
-            .andWhere('risk.category_id = risk_category.id')
+            .from(Risk, 'risk')
             .leftJoin('program', 'program', 'program.id = risk.program_id')
-            .andWhere('program.archived = :archived', { archived: false }),
+            .where('risk.original_risk_id IS NULL')
+            .andWhere('program.archived = :archived', { archived: false })
+            .andWhere('program.isProject = :isProject', { isProject })
+            .andWhere('risk.category_id = risk_category.id'),
         'total_count',
       )
-      .groupBy('risk_category.id, risk_category.title');
-
-    return qb.execute();
+      .groupBy('risk_category.id')
+      .execute();
   }
 
   @Roles()
   @Get('categories/groups/count')
-  @ApiCreatedResponse({ type: [getCategoriesGroupsCount] })
-  async getCategoriesGroups(@Query('isProject') isProject?: string) {
-    const qb = this.dataSource
+  @ApiCreatedResponse({
+    description: 'Count of risks per category group',
+    type: [getCategoriesGroupsCount],
+  })
+  async getCategoriesGroupsCount(
+    @Query('isProject', ParseIntPipe) isProject: number = 0,
+  ) {
+    return this.dataSource
       .createQueryBuilder()
       .from('category_group', 'category_group')
-      .addSelect('category_group.id', 'id')
-      .addSelect('category_group.name', 'name')
       .leftJoin(
         'risk_category',
         'risk_category',
@@ -211,55 +211,57 @@ export class DashboardController implements OnModuleInit {
       .leftJoin('risk', 'risk', 'risk.category_id = risk_category.id')
       .leftJoin('program', 'program', 'program.id = risk.program_id')
       .where('risk.original_risk_id IS NULL')
-      .andWhere('program.archived = :archived', { archived: false });
-
-    if (isProject !== undefined) {
-      qb.andWhere('program.isProject = :proj', { proj: isProject === '1' });
-    }
-
-    qb.addSelect(
-      (sub) =>
-        sub
-          .from(Risk, 'risk')
-          .select('COUNT(risk.id)', 'total_count')
-          .where('risk.original_risk_id IS NULL')
-          .andWhere('risk.category_id = risk_category.id')
-          .leftJoin('program', 'program', 'program.id = risk.program_id')
-          .andWhere('program.archived = :archived', { archived: false }),
-      'total_count',
-    ).groupBy('category_group.id, category_group.name');
-
-    return qb.execute();
+      .andWhere('program.archived = :archived', { archived: false })
+      .andWhere('program.isProject = :isProject', { isProject })
+      .addSelect('category_group.id', 'id')
+      .addSelect('category_group.name', 'name')
+      .addSelect(
+        (sub) =>
+          sub
+            .select('COUNT(risk.id)', 'total_count')
+            .from(Risk, 'risk')
+            .leftJoin('program', 'program', 'program.id = risk.program_id')
+            .where('risk.original_risk_id IS NULL')
+            .andWhere('program.archived = :archived', { archived: false })
+            .andWhere('program.isProject = :isProject', { isProject })
+            .andWhere('risk.category_id = risk_category.id'),
+        'total_count',
+      )
+      .groupBy('category_group.id')
+      .execute();
   }
 
   @Roles()
   @Get('action_areas/count')
-  @ApiCreatedResponse({ type: [getCategoriesGroupsCount] })
-  async getActionAreasCount(@Query('isProject') isProject?: string) {
-    const qb = this.dataSource
+  @ApiCreatedResponse({
+    description: 'Count of risks per action area',
+    type: [getCategoriesGroupsCount],
+  })
+  async getActionAreasCount(
+    @Query('isProject', ParseIntPipe) isProject: number = 0,
+  ) {
+    return this.dataSource
       .createQueryBuilder()
       .from('action_area', 'action_area')
+      .leftJoin('program', 'program', 'program.action_area_id = action_area.id')
+      .leftJoin('risk', 'risk', 'risk.program_id = program.id')
+      .where('program.archived = :archived', { archived: false })
+      .andWhere('program.isProject = :isProject', { isProject })
       .addSelect('action_area.id', 'id')
       .addSelect('action_area.name', 'name')
-      .leftJoin('program', 'program', 'program.action_area_id = action_area.id')
-      .where('program.archived = :archived', { archived: false });
-
-    if (isProject !== undefined) {
-      qb.andWhere('program.isProject = :proj', { proj: isProject === '1' });
-    }
-
-    qb.addSelect('COUNT(risk.id)', 'total_count')
-      .leftJoin('risk', 'risk', 'risk.program_id = program.id')
-      .groupBy('action_area.id, action_area.name');
-
-    return qb.execute();
+      .addSelect('COUNT(risk.id)', 'total_count')
+      .groupBy('action_area.id')
+      .execute();
   }
 
   @Roles()
   @Get('status')
-  @ApiCreatedResponse({ type: [getDashboardStatus] })
-  async getstatus(@Query('isProject') isProject?: string) {
-    const qb = this.dataSource
+  @ApiCreatedResponse({
+    description: 'Count of mitigations by status',
+    type: [getDashboardStatus],
+  })
+  async getStatus(@Query('isProject', ParseIntPipe) isProject: number = 0) {
+    return this.dataSource
       .createQueryBuilder()
       .from('mitigation_status', 'mitigation_status')
       .leftJoin(
@@ -270,33 +272,34 @@ export class DashboardController implements OnModuleInit {
       .leftJoin('risk', 'risk', 'risk.id = mitigation.risk_id')
       .leftJoin('program', 'program', 'program.id = risk.program_id')
       .where('risk.original_risk_id IS NULL')
-      .andWhere('program.archived = :archived', { archived: false });
-
-    if (isProject !== undefined) {
-      qb.andWhere('program.isProject = :proj', { proj: isProject === '1' });
-    }
-
-    qb.addSelect('mitigation_status.id', 'id')
+      .andWhere('program.archived = :archived', { archived: false })
+      .andWhere('program.isProject = :isProject', { isProject })
+      .addSelect('mitigation_status.id', 'id')
       .addSelect('mitigation_status.title', 'title')
       .addSelect(
         (sub) =>
           sub
-            .from(Mitigation, 'mitigation')
             .select('COUNT(mitigation.id)', 'total_actions')
+            .from(Mitigation, 'mitigation')
             .leftJoin('risk', 'risk', 'risk.id = mitigation.risk_id')
-            .where('risk.original_risk_id IS NULL')
             .leftJoin('program', 'program', 'program.id = risk.program_id')
+            .where('risk.original_risk_id IS NULL')
             .andWhere('program.archived = :archived', { archived: false })
+            .andWhere('program.isProject = :isProject', { isProject })
             .andWhere('mitigation_status.id = mitigation.mitigation_status_id'),
         'total_actions',
       )
-      .groupBy('mitigation_status.id, mitigation_status.title');
-
-    return qb.execute();
+      .groupBy('mitigation_status.id')
+      .execute();
   }
 
+  @Roles()
   @Get('risks/:id')
-  risksCharts(@Param('id') id: number) {
+  @ApiCreatedResponse({
+    description: 'List risks for one program/project',
+    type: Risk,
+  })
+  risksCharts(@Param('id', ParseIntPipe) id: number) {
     return this.riskService.riskRepository.find({
       where: { program_id: id, redundant: false },
     });

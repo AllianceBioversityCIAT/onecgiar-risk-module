@@ -1,7 +1,35 @@
+<!-- 
+<h2 mat-dialog-title>{{ data.program ? "Edit" : "Add" }} Project</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Official Code</mat-label>
+    <input matInput formControlName="official_code" />
+    <mat-error *ngIf="form.get('official_code')?.hasError('required')">
+      Official code is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" />
+    <mat-error *ngIf="form.get('name')?.hasError('required')">
+      Name is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-checkbox formControlName="isProject"> Is Project? </mat-checkbox>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions> -->
+
 <div class="form-dialog-header">
   <div class="form-dialog-header__text-box">
     <p class="form-dialog-header__text-box__text">
-      {{ data ? "Edit project" : "Add project" }}
+      {{ data.program ? "Edit" : "Add" }} Project
     </p>
   </div>
 
@@ -25,7 +53,7 @@
     <div class="form-dialog-content__field--grid-column">
       <div class="form-dialog-content__title-box">
         <mat-label class="form-dialog-content__title-box__title"
-          >Official code</mat-label
+          >Official Code</mat-label
         >
       </div>
       <mat-form-field
@@ -35,11 +63,9 @@
         appearance="outline"
       >
         <input matInput formControlName="official_code" />
-        <mat-error
-          class="error"
-          *ngIf="form.controls?.official_code?.errors?.['required']"
-          >Official code is required</mat-error
-        >
+        <mat-error *ngIf="form.get('official_code')?.hasError('required')">
+          Official code is required
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -56,11 +82,9 @@
         appearance="outline"
       >
         <input matInput formControlName="name" />
-        <mat-error
-          class="error"
-          *ngIf="form.controls?.name?.errors?.['required']"
-          >Name is required</mat-error
-        >
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          Name is required
+        </mat-error>
       </mat-form-field>
     </div>
 

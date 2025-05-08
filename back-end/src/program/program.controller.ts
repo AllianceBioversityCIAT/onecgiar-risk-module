@@ -21,6 +21,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { ProgramRoles } from 'entities/program-roles.entity';
@@ -68,8 +69,8 @@ import { Role } from 'src/auth/role.enum';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { OpenGuard } from 'src/auth/open.guard';
 import { UsersService } from 'src/users/users.service';
-import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
+import { CreateProgramDto } from './dto/create-program.dto';
 @ApiTags('program')
 @Controller('program')
 export class ProgramController {
@@ -320,17 +321,18 @@ export class ProgramController {
     }
     return data;
   }
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  @ApiCreatedResponse({
-    description: '',
-    type: [getProgram],
-  })
+  // @UseGuards(JwtAuthGuard)
+  // @Get()
+  // @ApiCreatedResponse({
+  //   description: '',
+  //   type: [getProgram],
+  // })
   // async getInitiative(@Query() query: any, @Req() req) {
   //   let data = await this.iniService.programRepository.find({
   //     where: {
   //       name: query?.name ? ILike(`%${query.name}%`) : null,
   //       parent_id: IsNull(),
+
   //       official_code: query.initiative_id
   //         ? In([
   //             `INIT-0${query.initiative_id}`,
@@ -403,45 +405,55 @@ export class ProgramController {
 
   //   return data;
   // }
-  async getInitiativess(@Query() query: any, @Req() req) {
-    let data = await this.iniService.programRepository.find({
-      where: {
-        name: query?.name ? ILike(`%${query.name}%`) : null,
-
-        parent_id: IsNull(),
-
-        official_code: query.initiative_id
-          ? In([
-              `INIT-0${query.initiative_id}`,
-              `INIT-${query.initiative_id}`,
-              `PLAT-${query.initiative_id}`,
-              `PLAT-0${query.initiative_id}`,
-              `SGP-${query.initiative_id}`,
-              `SGP-0${query.initiative_id}`,
-              `SP${query.initiative_id}`,
-              `SP0${query.initiative_id}`,
-            ])
-          : Not(IsNull()),
-
-        /* ←──────── NEW (only when sent from the Home module) ──────── */
-        ...(query.isProject !== undefined && query.isProject !== null
-          ? { isProject: Number(query.isProject) }
-          : {}),
-
-        ...this.iniService.roles(query, req),
-
-        risks: { ...this.iniService.filterCategory(query, 'For Init') },
-
-        archived: false,
-
-        organizations: {
-          code: Array.isArray(query?.orgCodes)
-            ? In(query?.orgCodes)
-            : query?.orgCodes,
-        },
-        // risks: { category_id: query?.category ? In(query?.category) : null },
+  @ApiQuery({
+    name: 'isProject',
+    required: false,
+    type: Number,
+    enum: [0, 1],
+    description: '0 = programmes only, 1 = projects only',
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  @ApiCreatedResponse({
+    description: '',
+    type: [getProgram],
+  })
+  async getInitiative(@Query() query: any, @Req() req) {
+    // build up your dynamic where clause
+    const where: any = {
+      name: query?.name ? ILike(`%${query.name}%`) : null,
+      parent_id: IsNull(),
+      official_code: query.initiative_id
+        ? In([
+            `INIT-0${query.initiative_id}`,
+            `INIT-${query.initiative_id}`,
+            `PLAT-${query.initiative_id}`,
+            `PLAT-0${query.initiative_id}`,
+            `SGP-${query.initiative_id}`,
+            `SGP-0${query.initiative_id}`,
+            `SP${query.initiative_id}`,
+            `SP0${query.initiative_id}`,
+          ])
+        : Not(IsNull()),
+      ...this.iniService.roles(query, req),
+      risks: { ...this.iniService.filterCategory(query, 'For Init') },
+      archived: false,
+      organizations: {
+        code: Array.isArray(query?.orgCodes)
+          ? In(query?.orgCodes)
+          : query?.orgCodes,
       },
+      // risks: { category_id: query?.category ? In(query?.category) : null },
+    };
 
+    // >>> Inject the new isProject filter if provided
+    if (query.isProject !== undefined && query.isProject !== null) {
+      // coerce to number since query params are strings
+      where.isProject = +query.isProject;
+    }
+
+    let data = await this.iniService.programRepository.find({
+      where,
       relations: [
         'risks',
         'risks.category',
@@ -449,14 +461,11 @@ export class ProgramController {
         'roles',
         'roles.user',
       ],
-
       order: { ...this.sort(query), risks: { id: 'DESC', top: 'ASC' } },
     });
 
     const activePhase = await this.iniService.phaseService.findActivePhase();
-
     if (!query.phase_id) query.phase_id = activePhase.id;
-
     if (activePhase) {
       for (let init of data) {
         const lastVersion: any =
@@ -464,15 +473,21 @@ export class ProgramController {
             where: { parent_id: init.id, phase_id: query.phase_id },
             order: { id: 'DESC' },
           });
-
-        if (activePhase.id !== query.phase_id) {
-          init['status_by_phase'] = lastVersion ? 'submitted' : 'draft';
+        if (activePhase.id != query.phase_id) {
+          if (lastVersion) {
+            init['status_by_phase'] = 'submitted';
+          } else {
+            init['status_by_phase'] = 'draft';
+          }
         } else {
           if (lastVersion) {
-            init['status_by_phase'] = lastVersion.status
-              ? 'submitted'
-              : 'draft';
-          } else {
+            if (lastVersion.status) {
+              init['status_by_phase'] = 'submitted';
+            } else {
+              init['status_by_phase'] = 'draft';
+            }
+          }
+          if (!lastVersion) {
             init['status_by_phase'] = 'draft';
           }
         }
@@ -480,15 +495,16 @@ export class ProgramController {
     }
 
     if (query.status) {
-      if (query.status === '1') {
-        data = data.filter((d) => d['status_by_phase'] === 'submitted');
+      if (query.status == '1') {
+        data = data.filter((d) => d['status_by_phase'] == 'submitted');
       } else {
-        data = data.filter((d) => d['status_by_phase'] === 'draft');
+        data = data.filter((d) => d['status_by_phase'] == 'draft');
       }
     }
 
     return data;
   }
+
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,

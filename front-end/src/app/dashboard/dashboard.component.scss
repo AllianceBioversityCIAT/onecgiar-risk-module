@@ -199,3 +199,29 @@ highcharts-chart {
   max-width: 95%;
   margin: auto;
 }
+
+/* dashboard.component.scss */
+.dashboard-filter {
+  display: flex;
+  // gap: 1rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+.mat-button-toggle-group {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.mat-button-toggle {
+  text-transform: none;
+}
+
+:host::ng-deep.mat-button-toggle-group-appearance-standard
+  .mat-button-toggle
+  + .mat-button-toggle {
+  border-left: solid 1px #e0e0e0;
+}
+
+:host::ng-deep.mat-button-toggle-checked {
+  background: linear-gradient(to right, rgb(15, 33, 47), rgb(14, 30, 43));
+  color: #ffffff;
+}

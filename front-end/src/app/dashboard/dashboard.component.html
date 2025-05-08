@@ -5,32 +5,38 @@
       <p class="dashboard-title-box__title">Risk dashboard</p>
     </div>
 
-    <!-- ─── Filter Toggle: Programs vs Projects ─────────────────────────────────── -->
-    <div class="dashboard-filter-box">
-      <label style="display: flex; align-items: center; gap: 1rem">
-        <input
-          type="radio"
-          [checked]="isProjectFilter === 0"
-          (change)="onFilterChange(0, $event)"
-        />
-        My Programs
-      </label>
-      <label style="display: flex; align-items: center; gap: 1rem">
-        <input
-          type="radio"
-          [checked]="isProjectFilter === 1"
-          (change)="onFilterChange(1, $event)"
-        />
-        My Projects
-      </label>
-    </div>
+    <!-- ── NEW Programs / Projects toggle ── -->
+    <!-- <div
+      class="dashboard-filter"
+      style="display: flex; gap: 1rem; align-items: center; margin: 1rem 0"
+    >
+      <mat-checkbox [checked]="!isProjectFilter" (change)="selectPrograms()">
+        ✅ Programs
+      </mat-checkbox>
+      <mat-checkbox [checked]="isProjectFilter" (change)="selectProjects()">
+        ☐ Projects
+      </mat-checkbox>
+    </div> -->
+
+    <!-- ── NEW Programs / Projects toggle ── -->
+    <mat-button-toggle-group
+      #typeToggle="matButtonToggleGroup"
+      class="dashboard-filter"
+      [value]="isProjectFilter ? 'project' : 'program'"
+      (change)="onTypeToggle($event)"
+      exclusive
+    >
+      <mat-button-toggle value="program">Programs</mat-button-toggle>
+      <mat-button-toggle value="project">Projects</mat-button-toggle>
+    </mat-button-toggle-group>
+    <!-- ──────────────────────────────────── -->
+
+    <!-- ──────────────────────────────────── -->
 
     <!-- step--2 -->
-
     <div class="dashboard-main-content">
       <div class="dashboard-content-container">
         <!-- step-box-1 -->
-
         <div class="dashboard-img-box-grid-container">
           <!-- item-1 -->
           <div class="dashboard-item-box">
@@ -81,7 +87,7 @@
 
             <div class="content-2">
               <!-- item-4 -->
-              <div class="dashboard-item-box content-3">
+              <div class="dashboard-item-box" class="content-3">
                 <div class="dashboard-item-box-title">
                   <p class="dashboard-item-box-title__title">Risk Categories</p>
                 </div>
@@ -95,7 +101,7 @@
               </div>
 
               <!-- item-5 -->
-              <div class="dashboard-item-box content-3">
+              <div class="dashboard-item-box" class="content-3">
                 <div class="dashboard-item-box-title">
                   <p class="dashboard-item-box-title__title">
                     Categories groups

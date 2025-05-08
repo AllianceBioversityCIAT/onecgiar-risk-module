@@ -20,9 +20,8 @@ import { ILike, In, IsNull, Not, Repository } from 'typeorm';
 import { PhasesService } from 'src/phases/phases.service';
 import { Archive } from 'entities/archive.entity';
 import { Organization } from 'entities/organization.entity';
-import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
-
+import { CreateProgramDto } from './dto/create-program.dto';
 @Injectable()
 export class ProgramService {
   constructor(

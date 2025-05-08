@@ -77,25 +77,12 @@ export class RiskManagementTableComponent {
     this.filters = filters;
     this.getInitiatives(filters);
   }
-  // in risk-management-table.component.ts
-  async getInitiatives(filters: any = {}) {
-    // derive numeric isProject:
-    const params = { ...filters };
-    if (filters.my_proj) {
-      params.isProject = 1;
-    } else if (filters.my_ini) {
-      params.isProject = 0;
-    }
-    delete params.my_proj;
-    delete params.my_ini;
-
-    const list: any[] = await this.initiativeService.getInitiativesWithFilters(
-      params
-    );
-    this.dataSource = new MatTableDataSource(list);
-    this.length = list.length;
+  async getInitiatives(filters = null) {
+    let sciencePrograms: any =
+      await this.initiativeService.getInitiativesWithFilters(filters);
+    this.dataSource = new MatTableDataSource<any>(sciencePrograms);
+    this.length = sciencePrograms.length;
   }
-
   ngOnDestroy() {
     if (this.navigationSubscription) {
       this.navigationSubscription.unsubscribe();

@@ -1,88 +1,3 @@
-// import { Injectable } from '@angular/core';
-// import { MainService } from './main.service';
-// import { HttpClient } from '@angular/common/http';
-// import { Observable, firstValueFrom, map } from 'rxjs';
-
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class DashboardService extends MainService {
-//   constructor(private http: HttpClient) {
-//     super();
-//   }
-
-//   async current() {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + '/dashboard/program/score', {
-//           headers: this.headers,
-//         })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-//   async details() {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + '/dashboard/program/details', {
-//           headers: this.headers,
-//         })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-//   async categoriesLevels() {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + '/dashboard/categories/levels', {
-//           headers: this.headers,
-//         })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-//   async categoriesCount() {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + '/dashboard/categories/count', {
-//           headers: this.headers,
-//         })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-//   async category_groups() {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + '/dashboard/categories/groups/count', {
-//           headers: this.headers,
-//         })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-//   async actionAreas() {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + '/dashboard/action_areas/count', {
-//           headers: this.headers,
-//         })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-//   async status() {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + '/dashboard/status', { headers: this.headers })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-//   async riskDashboardData(initiative_id: any) {
-//     return firstValueFrom(
-//       this.http
-//         .get(this.backend_url + `/dashboard/risks/${initiative_id}`, {
-//           headers: this.headers,
-//         })
-//         .pipe(map((d) => d))
-//     ).catch((e) => false);
-//   }
-// }
-
 import { Injectable } from '@angular/core';
 import { MainService } from './main.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -96,105 +11,91 @@ export class DashboardService extends MainService {
     super();
   }
 
-  private buildParams(isProject?: number): HttpParams {
-    let params = new HttpParams();
-    if (isProject !== undefined) {
-      params = params.set('isProject', isProject.toString());
-    }
-    return params;
+  private withProjectParam(isProject: number): {
+    headers: any;
+    params: HttpParams;
+  } {
+    const params = new HttpParams().set('isProject', isProject.toString());
+    return { headers: this.headers, params };
   }
 
-  async current(isProject?: number) {
-    const params = this.buildParams(isProject);
+  /** score chart (current+target) */
+  async current(isProject: number) {
     return firstValueFrom(
-      this.http
-        .get<any[]>(`${this.backend_url}/dashboard/program/score`, {
-          headers: this.headers,
-          params,
-        })
-        .pipe(map((d) => d))
-    ).catch(() => []); // ← return [] instead of false
+      this.http.get<any[]>(
+        this.backend_url + '/dashboard/program/score',
+        this.withProjectParam(isProject)
+      )
+    ).catch(() => []); // <<< return empty array on error
   }
 
-  async details(isProject?: number) {
-    const params = this.buildParams(isProject);
+  /** summary table under “Risk details” */
+  async details(isProject: number) {
     return firstValueFrom(
-      this.http
-        .get<any[]>(`${this.backend_url}/dashboard/program/details`, {
-          headers: this.headers,
-          params,
-        })
-        .pipe(map((d) => d))
+      this.http.get<any[]>(
+        this.backend_url + '/dashboard/program/details',
+        this.withProjectParam(isProject)
+      )
     ).catch(() => []);
   }
 
-  async categoriesLevels(isProject?: number) {
-    const params = this.buildParams(isProject);
+  /** average risk by action area */
+  async categoriesLevels(isProject: number) {
     return firstValueFrom(
-      this.http
-        .get<any[]>(`${this.backend_url}/dashboard/categories/levels`, {
-          headers: this.headers,
-          params,
-        })
-        .pipe(map((d) => d))
+      this.http.get<any[]>(
+        this.backend_url + '/dashboard/categories/levels',
+        this.withProjectParam(isProject)
+      )
     ).catch(() => []);
   }
 
-  async categoriesCount(isProject?: number) {
-    const params = this.buildParams(isProject);
+  /** pie: count per risk category */
+  async categoriesCount(isProject: number) {
     return firstValueFrom(
-      this.http
-        .get<any[]>(`${this.backend_url}/dashboard/categories/count`, {
-          headers: this.headers,
-          params,
-        })
-        .pipe(map((d) => d))
+      this.http.get<any[]>(
+        this.backend_url + '/dashboard/categories/count',
+        this.withProjectParam(isProject)
+      )
     ).catch(() => []);
   }
 
-  async category_groups(isProject?: number): Promise<any[]> {
-    const params = this.buildParams(isProject);
+  /** pie: count per category group */
+  async category_groups(isProject: number) {
     return firstValueFrom(
-      this.http
-        .get<any[]>(this.backend_url + '/dashboard/categories/groups/count', {
-          headers: this.headers,
-          params,
-        })
-        .pipe(map((d) => d))
-    ).catch(() => []); // ← return empty array on error
-  }
-
-  async actionAreas(isProject?: number) {
-    const params = this.buildParams(isProject);
-    return firstValueFrom(
-      this.http
-        .get<any[]>(`${this.backend_url}/dashboard/action_areas/count`, {
-          headers: this.headers,
-          params,
-        })
-        .pipe(map((d) => d))
+      this.http.get<any[]>(
+        this.backend_url + '/dashboard/categories/groups/count',
+        this.withProjectParam(isProject)
+      )
     ).catch(() => []);
   }
 
-  async status(isProject?: number) {
-    const params = this.buildParams(isProject);
+  /** pie/column: actions by status */
+  async actionAreas(isProject: number) {
     return firstValueFrom(
-      this.http
-        .get<any[]>(`${this.backend_url}/dashboard/status`, {
-          headers: this.headers,
-          params,
-        })
-        .pipe(map((d) => d))
+      this.http.get<any[]>(
+        this.backend_url + '/dashboard/action_areas/count',
+        this.withProjectParam(isProject)
+      )
     ).catch(() => []);
   }
 
+  /** pie/column: status of actions */
+  async status(isProject: number) {
+    return firstValueFrom(
+      this.http.get<any[]>(
+        this.backend_url + '/dashboard/status',
+        this.withProjectParam(isProject)
+      )
+    ).catch(() => []);
+  }
+
+  /** legacy: fetch all risks for one initiative */
   async riskDashboardData(initiative_id: any) {
     return firstValueFrom(
-      this.http
-        .get<any>(`${this.backend_url}/dashboard/risks/${initiative_id}`, {
-          headers: this.headers,
-        })
-        .pipe(map((d) => d))
-    ).catch(() => null);
+      this.http.get<any[]>(
+        this.backend_url + `/dashboard/risks/${initiative_id}`,
+        { headers: this.headers }
+      )
+    ).catch(() => []);
   }
 }

@@ -4,6 +4,8 @@ import { ProjectsService } from 'src/app/services/projects.service';
 import { ProjectDialogComponentTsComponent } from './project-dialog.component.ts/project-dialog.component.ts.component';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { HeaderService } from 'src/app/header.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-projects',
@@ -11,62 +13,49 @@ import { HeaderService } from 'src/app/header.service';
   styleUrls: ['./projects.component.scss'],
 })
 export class ProjectsComponent implements OnInit {
-  dataSource: any[] = [];
-
-  displayedColumns = ['name', 'official_code', 'actions'];
+  displayedColumns = ['official_code', 'name', 'actions'];
+  dataSource = new MatTableDataSource<any>([]);
 
   constructor(
-    private readonly service: ProjectsService,
+    private svc: ProjectsService,
+    private dialog: MatDialog,
     private headerService: HeaderService,
-    private readonly dialog: MatDialog
+    private title: Title,
+    private meta: Meta
   ) {
     this.headerService.background = '#04030f';
     this.headerService.backgroundNavMain = '#0f212f';
     this.headerService.backgroundUserNavButton = '#0f212f';
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.reload();
+  ngOnInit() {
+    this.load();
+
+    this.title.setTitle('Projects');
+    this.meta.updateTag({ name: 'description', content: 'Projects' });
   }
 
-  async reload(): Promise<void> {
-    this.dataSource = await this.service.findAll();
+  async load() {
+    const programs = await this.svc.getAll();
+    this.dataSource.data = programs;
   }
 
-  /** open create / edit dialog */
-  openDialog(project?: any): void {
+  openDialog(program?: any) {
     const ref = this.dialog.open(ProjectDialogComponentTsComponent, {
-      width: '600px',
-      data: project ?? null,
-      autoFocus: false,
-      disableClose: true,
+      width: '400px',
+      data: { program },
     });
-
-    ref.afterClosed().subscribe(async (changed) => {
-      if (changed) {
-        await this.reload();
-      }
+    ref.afterClosed().subscribe((ok) => {
+      if (ok) this.load();
     });
   }
 
-  /** open confirmation dialog before delete */
-  confirmDelete(project: any): void {
-    const ref = this.dialog.open(DeleteConfirmDialogComponent, {
-      width: '420px',
-      data: {
-        title: 'Delete Project',
-        message: `Are you sure you want to delete “${project.name}”?`,
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
-      },
-      autoFocus: false,
-    });
-
-    ref.afterClosed().subscribe(async (confirmed) => {
-      if (confirmed) {
-        await this.service.remove(project.id);
-        await this.reload();
-      }
-    });
+  edit(row: any) {
+    this.openDialog(row);
+  }
+  delete(row: any) {
+    if (confirm(`Delete "${row.official_code}"?`)) {
+      this.svc.delete(row.id).then(() => this.load());
+    }
   }
 }
