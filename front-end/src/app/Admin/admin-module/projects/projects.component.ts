@@ -37,7 +37,8 @@ export class ProjectsComponent implements OnInit {
 
   async load() {
     const programs = await this.svc.getAll();
-    this.dataSource.data = programs;
+    // this.dataSource.data = programs;
+    this.dataSource.data = programs.filter((p) => p.isProject === 1);
   }
 
   openDialog(program?: any) {
@@ -53,9 +54,30 @@ export class ProjectsComponent implements OnInit {
   edit(row: any) {
     this.openDialog(row);
   }
-  delete(row: any) {
-    if (confirm(`Delete "${row.official_code}"?`)) {
-      this.svc.delete(row.id).then(() => this.load());
-    }
+  // delete(row: any) {
+  //   if (confirm(`Delete "${row.official_code}"?`)) {
+  //     this.svc.delete(row.id).then(() => this.load());
+  //   }
+  // }
+
+  confirmDelete(project: any): void {
+    const ref = this.dialog.open(DeleteConfirmDialogComponent, {
+      width: 'auto',
+      height: 'auto',
+      data: {
+        title: 'Delete Project',
+        message: `Are you sure you want to delete “${project.official_code}”?`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+      autoFocus: false,
+    });
+
+    ref.afterClosed().subscribe(async (confirmed) => {
+      if (confirmed) {
+        await this.svc.delete(project.id);
+        this.load();
+      }
+    });
   }
 }
