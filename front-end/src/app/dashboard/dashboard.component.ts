@@ -1,15 +1,17 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
+import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import HighchartsMore from 'highcharts/highcharts-more';
+import SunburstModule from 'highcharts/modules/sunburst';
+
+import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
 import { DashboardService } from '../services/dashboard.service';
 import { HeaderService } from '../header.service';
 import { Meta, Title } from '@angular/platform-browser';
-declare var require: any;
-import HighchartsMore from 'highcharts/highcharts-more';
-import SunburstModule from 'highcharts/modules/sunburst'; 
-HighchartsMore(Highcharts);
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
+HighchartsMore(Highcharts);
 SunburstModule(Highcharts);
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -20,6 +22,24 @@ export class DashboardComponent implements OnInit {
     home: '/home/risk-management',
   };
   Highcharts = Highcharts;
+
+  /** false = Programs (isProject=0), true = Projects (isProject=1) */
+  isProjectFilter = false;
+
+  data: any = null;
+  status: any = null;
+  categoriesCount: any = null;
+  risk_profile_current_chartOptions: any = null;
+  risk_profile_target_chartOptions: any = null;
+  avg_level_chartOptions: any = null;
+  categories_count_chartOptions: any = null;
+  status_of_action_chartOptions: any = null;
+  category_group_chartOptions: any = null;
+  categoriesLevels: any = null;
+  details: any = null;
+  groups: any = null;
+  action_areas: any = null;
+  totalStatus: any = null;
 
   constructor(
     private apiRiskDetailsService: ApiRiskDetailsService,
@@ -35,34 +55,58 @@ export class DashboardComponent implements OnInit {
     this.headerService.backgroundUserNavButton =
       'linear-gradient(to right, #436280, #30455B)';
   }
-  data: any = null;
-  status: any = null;
-  categoriesCount: any = null;
-  risk_profile_current_chartOptions: any = null;
-  risk_profile_target_chartOptions: any = null;
-  avg_level_chartOptions: any = null;
-  categories_count_chartOptions: any = null;
-  status_of_action_chartOptions: any = null;
-  action_areas_chartOptions: any = null;
-  category_group_chartOptions: any = null;
-  categoriesLevels: any = null;
-  details: any = null;
-  groups: any = null;
-  action_areas: any = null;
-  totalStatus: any = null;
+
   async ngOnInit() {
-    this.data = await this.dashboardService.current();
-    this.details = await this.dashboardService.details();
-    this.categoriesLevels = await this.dashboardService.categoriesLevels();
-    this.categoriesCount = await this.dashboardService.categoriesCount();
-    this.groups = await this.dashboardService.category_groups();
-    this.action_areas = await this.dashboardService.actionAreas();
+    // initial load (Programs)
+    await this.loadDashboard();
+    this.title.setTitle('Risk dashboard');
+    this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
+  }
 
- 
-    this.status = await this.dashboardService.status();
-    console.log(this.status)
-    this.totalStatus = this.status.reduce((sum: any, item: any) => sum + parseInt(item.total_actions, 10), 0);
+  /** back to Programs (isProject=0) */
+  selectPrograms() {
+    if (this.isProjectFilter) {
+      this.isProjectFilter = false;
+      this.loadDashboard();
+    }
+  }
 
+  /** switch to Projects (isProject=1) */
+  selectProjects() {
+    if (!this.isProjectFilter) {
+      this.isProjectFilter = true;
+      this.loadDashboard();
+    }
+  }
+
+  /** called whenever you click “Programs” or “Projects” */
+  onTypeToggle(event: MatButtonToggleChange) {
+    this.isProjectFilter = event.value === 'project';
+    this.loadDashboard();
+  }
+  /** reload _all_ dashboard data using current isProjectFilter */
+  private async loadDashboard() {
+    const projectFlag = this.isProjectFilter ? 1 : 0;
+
+    // now pass that number to each service call
+    this.data = await this.dashboardService.current(projectFlag);
+    this.details = await this.dashboardService.details(projectFlag);
+    this.categoriesLevels = await this.dashboardService.categoriesLevels(
+      projectFlag
+    );
+    this.categoriesCount = await this.dashboardService.categoriesCount(
+      projectFlag
+    );
+    this.groups = await this.dashboardService.category_groups(projectFlag);
+    this.action_areas = await this.dashboardService.actionAreas(projectFlag);
+    this.status = await this.dashboardService.status(projectFlag);
+
+    this.totalStatus = this.status.reduce(
+      (sum: any, item: any) => sum + parseInt(item.total_actions, 10),
+      0
+    );
+
+    // recreate every chart with fresh data
     this.risk_profile_target_chartOptions = this.riskProfile(
       this.data,
       'Target'
@@ -73,49 +117,31 @@ export class DashboardComponent implements OnInit {
     );
 
     this.avg_level_chartOptions = {
-      chart: {
-        type: 'column',
-      },
-      title: {
-        text: 'Average level of risk by action area',
-        align: 'center',
-      },
+      chart: { type: 'column' },
+      title: { text: 'Average level of risk by action area', align: 'center' },
       xAxis: {
         categories: this.categoriesLevels
           .filter((d: any) => d.current_level)
           .map((d: any) => d.title),
-        title: {
-          text: 'Categories',
-        },
+        title: { text: 'Categories' },
         gridLineWidth: 1,
         lineWidth: 0,
       },
       yAxis: {
         min: 0,
-        title: {
-          text: 'Risk level',
-          align: 'middle',
-        },
-        labels: {
-          overflow: 'justify',
-        },
+        title: { text: 'Risk level', align: 'middle' },
+        labels: { overflow: 'justify' },
         gridLineWidth: 0,
       },
-      tooltip: {
-        valueSuffix: '',
-      },
+      tooltip: { valueSuffix: '' },
       plotOptions: {
         bar: {
           borderRadius: '50%',
-          dataLabels: {
-            enabled: true,
-          },
+          dataLabels: { enabled: true },
           groupPadding: 0.1,
         },
       },
-      credits: {
-        enabled: false,
-      },
+      credits: { enabled: false },
       series: [
         {
           name: 'Current',
@@ -133,35 +159,23 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
-    this.status_of_action_chartOptions = { 
-      chart: {
-        type: 'column'
-      },
-         credits: {
-        enabled: false,
-      },
-      subtitle: {
-        text: 'Status of action',
-        align: 'center',
-      },
-      xAxis: {
-        categories: this.status.map((item: any) => item.title)
-      },
+
+    this.status_of_action_chartOptions = {
+      chart: { type: 'column' },
+      credits: { enabled: false },
+      subtitle: { text: 'Status of action', align: 'center' },
+      xAxis: { categories: this.status.map((item: any) => item.title) },
       yAxis: {
         min: 0,
-        title: {
-          text: 'Percentage (%)'
-        },
-        labels: {
-          format: '{value}%'
-        }
+        title: { text: 'Percentage (%)' },
+        labels: { format: '{value}%' },
       },
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
         shadow: false,
         useHTML: true,
-        pointFormat: '<b>{point.y}%</b>' ,
+        pointFormat: '<b>{point.y}%</b>',
         style: {
           textAlign: 'left',
           color: '#04030f',
@@ -187,11 +201,10 @@ export class DashboardComponent implements OnInit {
             const count = parseInt(item.total_actions, 10);
             return parseFloat(((count / this.totalStatus) * 100).toFixed(1));
           }),
-          colorByPoint: true 
-        }
-      ]
-    
-    }
+          colorByPoint: true,
+        },
+      ],
+    };
     this.categories_count_chartOptions = {
       chart: {
         plotBackgroundColor: null,
@@ -366,53 +379,27 @@ export class DashboardComponent implements OnInit {
     this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
   }
 
- 
   riskProfile(data: any, type: string) {
     return {
-      chart: {
-        type: 'bubble',
-        plotBorderWidth: 1,
-        zoomType: 'xy',
-      },
-
-      legend: {
-        enabled: false,
-      },
-      credits: {
-        enabled: false,
-      },
-      // title: {
-      //   text: type + ' Risk profile',
-      // },
-
+      chart: { type: 'bubble', plotBorderWidth: 1, zoomType: 'xy' },
+      legend: { enabled: false },
+      credits: { enabled: false },
       xAxis: {
         gridLineWidth: 1,
         title: {
-          text: `<span class="chart-title"> ${type} impact`,
+          text: `<span class="chart-title"> ${type} impact</span>`,
         },
-        labels: {
-          format: '{value}',
-        },
-        accessibility: {
-          rangeDescription: 'Range: 1 to 5',
-        },
+        labels: { format: '{value}' },
       },
-
       yAxis: {
         startOnTick: false,
         endOnTick: false,
         title: {
           text: `<span class="chart-title"> ${type} Likelihood</span>`,
         },
-        labels: {
-          format: '{value}',
-        },
-        maxPadding: 0.2,
-        accessibility: {
-          rangeDescription: 'Range: 1 to 5',
-        },
+        labels: { format: '{value}' },
+        accessibility: { rangeDescription: 'Range: 1 to 5' },
       },
-
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
@@ -420,26 +407,17 @@ export class DashboardComponent implements OnInit {
         useHTML: true,
         headerFormat: '<table>',
         pointFormat:
-          '<tr><th colspan="2"><span class="chart-bubble-title">{point.name}</span></th></tr>' +
-          '<tr><th>' +
-          type +
-          ' impact:</th><td>{point.x}</td></tr>' +
-          '<tr><th>' +
-          type +
-          ' likelihood:</th><td>{point.y}</td></tr>',
+          '<tr><th colspan="2">{point.name}</th></tr>' +
+          `<tr><td>${type} impact:</td><td>{point.x}</td></tr>` +
+          `<tr><td>${type} likelihood:</td><td>{point.y}</td></tr>`,
         footerFormat: '</table>',
         followPointer: true,
       },
-
       plotOptions: {
-        borderWidth: 0,
-        backgroundColor: 'rgba(255,255,255,0)',
-        shadow: false,
-        useHTML: true,
         series: {
           dataLabels: {
             enabled: true,
-            format: '<p class ="text">{point.official_code}</p>',
+            format: '<p class="text">{point.official_code}</p>',
           },
         },
         bubble: {
@@ -448,15 +426,13 @@ export class DashboardComponent implements OnInit {
       },
       series: [
         {
-          data: data.map((d: any) => {
-            return {
-              x: +d[type == 'Target' ? 'target_impact' : 'current_impact'],
-              y: +d[
-                type == 'Target' ? 'target_likelihood' : 'current_likelihood'
-              ],
-              ...d,
-            };
-          }),
+          data: data.map((d: any) => ({
+            x: +d[type === 'Target' ? 'target_impact' : 'current_impact'],
+            y: +d[
+              type === 'Target' ? 'target_likelihood' : 'current_likelihood'
+            ],
+            ...d,
+          })),
         },
       ],
     };
@@ -465,19 +441,17 @@ export class DashboardComponent implements OnInit {
   color(level: number) {
     switch (level) {
       case 25:
-        return ` background-color: #1f6ca6;`;
+        return `background-color: #1f6ca6;`;
       case 20:
-        return ` background-color: #357AAE;`;
-
+        return `background-color: #357AAE;`;
       case 16:
-        return ` background-color: #257fc2;`;
+        return `background-color: #257fc2;`;
       case 12:
-        return ` background-color: #3090d9;`;
+        return `background-color: #3090d9;`;
       case 9:
-        return ` background-color: #0091ff;`;
-
+        return `background-color: #0091ff;`;
       default:
-        return ` background-color: #6ab8f2;`;
+        return `background-color: #6ab8f2;`;
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { InitiativesService } from 'src/app/services/initiatives.service';
 import { RiskService } from 'src/app/services/risk.service';
@@ -12,19 +12,14 @@ import { OrganizationService } from 'src/app/services/organization.service';
   styleUrls: ['./search-init.component.scss'],
 })
 export class SearchInitComponent {
-  constructor(
-    private fb: FormBuilder,
-    private riskService: RiskService,
-    private phaseService: PhasesService,
-    public initiativeService: InitiativesService,
-    private organizationsService: OrganizationService,
-  ) {}
   categories: any;
   organizations: any;
   filterForm: FormGroup = new FormGroup({});
   phaseSelected: any;
+
   @Output() filters: EventEmitter<any> = new EventEmitter<any>();
   @Output() activePhaseSelected = new EventEmitter<boolean>();
+
   roles = [ROLES.COORDINATOR, ROLES.LEAD, ROLES.MEMBER];
 
   sort = [
@@ -38,15 +33,53 @@ export class SearchInitComponent {
     { name: 'Submitted', value: '1' },
     { name: 'Draft', value: '0' },
   ];
+
   phases: any;
-  activePhase:any;
+  activePhase: any;
   myIni: boolean = false;
   activePhaseSelect: boolean = true;
+
+  constructor(
+    private fb: FormBuilder,
+    private riskService: RiskService,
+    private phaseService: PhasesService,
+    public initiativeService: InitiativesService,
+    private organizationsService: OrganizationService
+  ) {}
+
+  ngOnInit() {
+    this.setForm();
+    this.loadLookups();
+  }
+
+  private async loadLookups() {
+    // load phases
+    this.phases = await this.phaseService.getPhases({}, 1, 200);
+    this.phases.result = this.phases.result.filter((p: any) => p.show_in_home);
+    this.activePhase = this.phases.result.filter(
+      (p: any) => p.status === 'Open'
+    );
+    // set default phase
+    this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
+    this.selectedPhase(this.activePhase[0]?.id);
+
+    // load risk categories
+    this.categories = await this.riskService.getInitiativesCategories();
+
+    // load organizations
+    this.organizations = await this.organizationsService.getOrganizations(
+      null,
+      1,
+      1000
+    );
+  }
+
   myIniChange() {
     this.filterForm.controls['my_ini'].setValue(this.myIni);
   }
+
   setForm() {
-    let time: any = null;
+    let timer: any = null;
     this.filterForm = this.fb.group({
       initiative_id: [null],
       name: [null],
@@ -58,10 +91,14 @@ export class SearchInitComponent {
       my_ini: [false],
       status: [null],
       phase_id: [null],
+
+      // ← NEW CONTROL
+      isProject: [null],
     });
+
     this.filterForm.valueChanges.subscribe(() => {
-      if (time) clearTimeout(time);
-      time = setTimeout(() => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
         this.filters.emit(this.filterForm.value);
       }, 500);
     });
@@ -72,26 +109,16 @@ export class SearchInitComponent {
     this.filterForm.reset();
     this.filterForm.markAsUntouched();
     this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
-    this.selectedPhase(this.activePhase[0]?.id)
+    this.selectedPhase(this.activePhase[0]?.id);
   }
-  async export() {
-    await this.initiativeService.getExport(this.filterForm.value);
-  }
-  async ngOnInit() {
-    this.setForm();
-    this.phases = await this.phaseService.getPhases({},1,200);
-    this.phases.result = this.phases.result.filter((phase: any) => phase?.show_in_home)
-    this.activePhase = this.phases.result.filter((d: any) => d.status == 'Open')
-    this.filterForm.controls['phase_id'].setValue(this.activePhase[0]?.id);
-    const phase_id = this.filterForm.get('phase_id')?.value;
-    this.phaseSelected = this.phases.result.filter((d: any) => d.id == phase_id)[0];
-    this.categories = await this.riskService.getInitiativesCategories();
-    this.organizations = await this.organizationsService.getOrganizations(null, 1, 1000);
+
+  export() {
+    this.initiativeService.getExport(this.filterForm.value);
   }
 
   selectedPhase(phase_id: any) {
-    this.phaseSelected = this.phases.result.filter((d: any) => d.id == phase_id)[0];
-    this.activePhaseSelect = this.activePhase[0].id == phase_id ? true : false;
+    this.phaseSelected = this.phases.result.find((p: any) => p.id === phase_id);
+    this.activePhaseSelect = this.activePhase[0]?.id === phase_id;
     this.activePhaseSelected.emit(this.activePhaseSelect);
   }
 }

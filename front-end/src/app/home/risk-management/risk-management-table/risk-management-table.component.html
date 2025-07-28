@@ -6,12 +6,21 @@
         <h1 class="risk-management-title-box__title">Risk Management</h1>
       </div>
 
-      <app-search-init (activePhaseSelected)="isActiveSelected($event)" (filters)="filter($event)"> </app-search-init>
+      <app-search-init
+        (activePhaseSelected)="isActiveSelected($event)"
+        (filters)="filter($event)"
+      >
+      </app-search-init>
 
       <!-- step-3 -->
       <div class="table-box">
         <div class="table-box mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 risk-managment-table" matSort>
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            class="mat-elevation-z8 risk-managment-table"
+            matSort
+          >
             <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
 
@@ -42,7 +51,7 @@
               <td mat-cell *matCellDef="let element">
                 <span class="td-3-h">{{
                   filterCategories(element["risks"])
-                  }}</span>
+                }}</span>
               </td>
             </ng-container>
 
@@ -94,44 +103,75 @@
               <td mat-cell *matCellDef="let element">
                 <div class="m">
                   <div *ngIf="userRole.role == 'admin'">
-                    <button class="risk-management-table-icon" (click)="openDialog(element.id)"
-                      matTooltip="Assign Organizations" matTooltipPosition="above">
+                    <button
+                      class="risk-management-table-icon"
+                      (click)="openDialog(element.id)"
+                      matTooltip="Assign Organizations"
+                      matTooltipPosition="above"
+                    >
                       <mat-icon class="organization-icon">dns</mat-icon>
                     </button>
                   </div>
                   <div *ngIf="activePhaseSelected">
                     <button class="risk-management-table-icon">
-                      <mat-icon routerLink="./{{ element['id'] }}/{{
+                      <mat-icon
+                        routerLink="./{{ element['id'] }}/{{
                           element['official_code']
-                        }}" class="user-management-table__icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="16" viewBox="0 0 23 16" fill="none">
+                        }}"
+                        class="user-management-table__icon"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="23"
+                          height="16"
+                          viewBox="0 0 23 16"
+                          fill="none"
+                        >
                           <path
                             d="M11.5 0.5C6.5 0.5 2.23 3.61 0.5 8C2.23 12.39 6.5 15.5 11.5 15.5C16.5 15.5 20.77 12.39 22.5 8C20.77 3.61 16.5 0.5 11.5 0.5ZM11.5 13C8.74 13 6.5 10.76 6.5 8C6.5 5.24 8.74 3 11.5 3C14.26 3 16.5 5.24 16.5 8C16.5 10.76 14.26 13 11.5 13ZM11.5 5C9.84 5 8.5 6.34 8.5 8C8.5 9.66 9.84 11 11.5 11C13.16 11 14.5 9.66 14.5 8C14.5 6.34 13.16 5 11.5 5Z"
-                            fill="#9E553E" />
-                        </svg></mat-icon>
+                            fill="#9E553E"
+                          /></svg
+                      ></mat-icon>
                     </button>
                   </div>
-                  <div *ngIf="!activePhaseSelected && element.status_by_phase == 'draft'">
-                    {{'N/A'}}
+                  <div
+                    *ngIf="
+                      !activePhaseSelected && element.status_by_phase == 'draft'
+                    "
+                  >
+                    {{ "N/A" }}
                   </div>
-                  <div *ngIf="!activePhaseSelected && element.status_by_phase == 'submitted'">
+                  <div
+                    *ngIf="
+                      !activePhaseSelected &&
+                      element.status_by_phase == 'submitted'
+                    "
+                  >
                     <button class="risk-management-table-icon">
-                      <mat-icon routerLink="./{{ element['id'] }}/{{
+                      <mat-icon
+                        routerLink="./{{ element['id'] }}/{{
                           element['official_code']
-                        }}/versions" class="version-icon">
+                        }}/versions"
+                        class="version-icon"
+                      >
                         view_carousel
                       </mat-icon>
                     </button>
                   </div>
                 </div>
-
-
-
               </td>
             </ng-container>
 
-            <tr class="table-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr class="table-header" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr
+              class="table-header"
+              mat-header-row
+              *matHeaderRowDef="displayedColumns"
+            ></tr>
+            <tr
+              class="table-header"
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+            ></tr>
           </table>
         </div>
       </div>

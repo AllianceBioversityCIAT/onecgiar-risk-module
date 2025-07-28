@@ -29,7 +29,7 @@ export class Program {
   @Column({ nullable: true, default: null })
   official_code: string;
   @ApiProperty()
-  @Column({default:null})
+  @Column({ default: null })
   clarisa_id: string;
 
   @Index({ fulltext: true })
@@ -43,21 +43,21 @@ export class Program {
   risks: Array<Risk>;
 
   @ApiProperty({ type: () => [ProgramRoles] })
-  @OneToMany(
-    () => ProgramRoles,
-    (programRoles) => programRoles.program,{onUpdate:'RESTRICT',onDelete:'RESTRICT'}
-  )
+  @OneToMany(() => ProgramRoles, (programRoles) => programRoles.program, {
+    onUpdate: 'RESTRICT',
+    onDelete: 'RESTRICT',
+  })
   @JoinTable()
   roles: Array<ProgramRoles>;
 
   @ApiProperty()
   @Optional()
-  @Column({default:null})
+  @Column({ default: null })
   parent_id: number;
 
   @ApiProperty()
   @Optional()
-  @Column({default:null})
+  @Column({ default: null })
   last_version_id: number;
 
   @ApiProperty()
@@ -68,42 +68,49 @@ export class Program {
   @UpdateDateColumn()
   last_updated_date: Date;
 
-  @ManyToOne(() => User, (user) => user.program , {onUpdate:'CASCADE',onDelete: 'CASCADE'})
+  @ManyToOne(() => User, (user) => user.program, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'created_by_user_id' })
   created_by: User;
   @Optional()
-  @Column({default:null})
-  created_by_user_id:number
-
+  @Column({ default: null })
+  created_by_user_id: number;
 
   @ApiProperty()
-  @Column({type: 'bool', default: false})
+  @Column({ type: 'bool', default: false })
   status: boolean;
 
   @ApiProperty()
-  @Column({type: 'bool', default: false})
+  @Column({ type: 'bool', default: false })
   archived: boolean;
 
   @ApiProperty()
-  @Column({type: 'bool', default: false})
+  @Column({ type: 'bool', default: false })
   sync_clarisa: boolean;
 
   @Optional()
-  @Column({default:null})
-  action_area_id:number
+  @Column({ default: null })
+  action_area_id: number;
 
-  @ManyToOne(() => ActionArea, (action_area) => action_area.program, {onUpdate:'CASCADE',onDelete: 'CASCADE'})
+  @ManyToOne(() => ActionArea, (action_area) => action_area.program, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'action_area_id' })
   action_area: ActionArea;
 
   @Optional()
-  @Column({default:null})
-  phase_id:number
+  @Column({ default: null })
+  phase_id: number;
 
-  @ManyToOne(() => Phase, (phase) => phase.program, {onUpdate:'CASCADE',onDelete: 'CASCADE'})
+  @ManyToOne(() => Phase, (phase) => phase.program, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'phase_id' })
   phase: Phase;
-
 
   @ApiProperty()
   @OneToMany(() => CollectedEmail, (collectedEmail) => collectedEmail.program)
@@ -113,4 +120,11 @@ export class Program {
   @ManyToMany(() => Organization, (organization) => organization.program)
   @JoinTable()
   organizations: Organization[];
+
+  // @ApiProperty()
+  // @Column({ type: 'bool', default: false })
+  // isProject: boolean;
+
+  @Column({ type: 'tinyint', name: 'is_project', default: 0 })
+  isProject!: number; // 0 | 1
 }

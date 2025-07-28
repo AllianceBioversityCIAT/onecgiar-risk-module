@@ -96,6 +96,8 @@ import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-cla
 import { OrganizationComponent } from './Admin/admin-module/organization/organization.component';
 import { OrganizationDialogComponent } from './Admin/admin-module/organization/organization-dialog/organization-dialog.component';
 import { AssignOrganizationsComponent } from './home/risk-management/risk-management-table/assign-organizations/assign-organizations.component';
+import { ProjectsComponent } from './Admin/admin-module/projects/projects.component';
+import { ProjectDialogComponentTsComponent } from './Admin/admin-module/projects/project-dialog.component.ts/project-dialog.component.ts.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -166,6 +168,8 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     OrganizationComponent,
     OrganizationDialogComponent,
     AssignOrganizationsComponent,
+    ProjectsComponent,
+    ProjectDialogComponentTsComponent,
   ],
   imports: [
     BrowserModule,

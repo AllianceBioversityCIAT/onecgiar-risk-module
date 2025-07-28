@@ -49,6 +49,19 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
     private meta: Meta
   ) {}
 
+  requiredMitigationsValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const mitigations = control.value;
+    if (
+      !mitigations ||
+      (Array.isArray(mitigations) && mitigations.length === 0)
+    ) {
+      return { requiredMitigation: true };
+    }
+    return null;
+  }
+
   clicked: boolean | undefined;
   riskApi: any = null;
 
@@ -69,7 +82,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
   checkIfRiskExist: any;
   dueDateRequired: boolean = true;
   populateNewRiskForm() {
-    if (this.riskId) this.socket.emit('risk-lock', this.riskId);
+    if (this.riskId) {
+      this.socket.emit('risk-lock', this.riskId);
+    }
     this.newRiskForm = this.fb.group({
       risk_raiser: [this.user_info.email],
       risk_owner_id: [
@@ -86,7 +101,7 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       ],
       description: [
         this?.checkIfRiskExist[0]?.description,
-        [Validators.required, WordCountValidators.max(150)],
+        [Validators.required, WordCountValidators.max(3000)],
       ],
       target_likelihood: [
         String(this?.checkIfRiskExist[0]?.target_likelihood || ''),
@@ -124,8 +139,14 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           Validators.required,
         ],
       ],
+
+      mitigations: [
+        this?.checkIfRiskExist[0]?.mitigations || [],
+        [this.requiredMitigationsValidator.bind(this)],
+      ],
     });
 
+    // Also update the proposed table data if there are existing mitigations:
     if (this?.checkIfRiskExist[0]?.mitigations) {
       this.proposed = new MatTableDataSource<any>(
         this?.checkIfRiskExist[0]?.mitigations
@@ -341,6 +362,8 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
         const data = this.proposed.data;
         data.push(result.formValue);
         this.proposed = new MatTableDataSource<any>(data);
+        // Update the form control for mitigations.
+        this.newRiskForm.controls['mitigations'].setValue(data);
       }
     });
   }
@@ -360,10 +383,11 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
           let data = this.proposed.data;
           data.splice(data.indexOf(mitigation), 1);
           this.proposed = new MatTableDataSource<any>(data);
+          // Update the form control.
+          this.newRiskForm.controls['mitigations'].setValue(data);
         }
       });
   }
-
   editProposed(mitigation: any) {
     const dialogRef = this.dialog.open(ActionsControlsFormDialogComponent, {
       width: '68rem',
@@ -371,11 +395,12 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       data: { role: 'edit', proposed: mitigation },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
-      console.log(result);
       if (result) {
         let data = this.proposed.data;
         data[data.indexOf(mitigation)] = result.formValue;
         this.proposed = new MatTableDataSource<any>(data);
+        // And update the corresponding form control.
+        this.newRiskForm.controls['mitigations'].setValue(data);
       }
     });
   }
@@ -415,7 +440,9 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       )
       .map((d: any) => d);
 
-    this.risksForUser = await this.riskService.getRiskUsers(this.scienceProgramsId);
+    this.risksForUser = await this.riskService.getRiskUsers(
+      this.scienceProgramsId
+    );
     this.my_roles = this.risksForUser
       .filter((d: any) => d?.user?.id == this?.user_info?.id)
       .map((d: any) => d.role);
@@ -485,14 +512,18 @@ export class RiskReportFormComponent implements OnInit, OnDestroy {
       !this.my_roles?.includes(ROLES.LEAD) &&
       !this.my_roles?.includes(ROLES.COORDINATOR)
     ) {
-      this.router.navigate([`/home/${this.scienceProgramsId}/${this.officalCode}`]);
+      this.router.navigate([
+        `/home/${this.scienceProgramsId}/${this.officalCode}`,
+      ]);
     }
 
     this.populateNewRiskForm();
     this.getMitigationActions();
     this.riskCategories = await this.riskService.getRiskCategories();
     if (this.scienceProgramsId) {
-      this.riskUsers = await this.riskService.getRiskUsers(this.scienceProgramsId);
+      this.riskUsers = await this.riskService.getRiskUsers(
+        this.scienceProgramsId
+      );
     }
     this.haveSameValue();
   }

@@ -5,12 +5,38 @@
       <p class="dashboard-title-box__title">Risk dashboard</p>
     </div>
 
-    <!-- step--2 -->
+    <!-- ── NEW Programs / Projects toggle ── -->
+    <!-- <div
+      class="dashboard-filter"
+      style="display: flex; gap: 1rem; align-items: center; margin: 1rem 0"
+    >
+      <mat-checkbox [checked]="!isProjectFilter" (change)="selectPrograms()">
+        ✅ Programs
+      </mat-checkbox>
+      <mat-checkbox [checked]="isProjectFilter" (change)="selectProjects()">
+        ☐ Projects
+      </mat-checkbox>
+    </div> -->
 
+    <!-- ── NEW Programs / Projects toggle ── -->
+    <mat-button-toggle-group
+      #typeToggle="matButtonToggleGroup"
+      class="dashboard-filter"
+      [value]="isProjectFilter ? 'project' : 'program'"
+      (change)="onTypeToggle($event)"
+      exclusive
+    >
+      <mat-button-toggle value="program">Programs</mat-button-toggle>
+      <mat-button-toggle value="project">Projects</mat-button-toggle>
+    </mat-button-toggle-group>
+    <!-- ──────────────────────────────────── -->
+
+    <!-- ──────────────────────────────────── -->
+
+    <!-- step--2 -->
     <div class="dashboard-main-content">
       <div class="dashboard-content-container">
         <!-- step-box-1 -->
-
         <div class="dashboard-img-box-grid-container">
           <!-- item-1 -->
           <div class="dashboard-item-box">
@@ -20,8 +46,11 @@
               </p>
             </div>
 
-            <highcharts-chart *ngIf="risk_profile_current_chartOptions" [Highcharts]="Highcharts"
-              [options]="risk_profile_current_chartOptions">
+            <highcharts-chart
+              *ngIf="risk_profile_current_chartOptions"
+              [Highcharts]="Highcharts"
+              [options]="risk_profile_current_chartOptions"
+            >
             </highcharts-chart>
           </div>
 
@@ -30,8 +59,11 @@
             <div class="dashboard-item-box-title">
               <p class="dashboard-item-box-title__title">Target Risk profile</p>
             </div>
-            <highcharts-chart *ngIf="risk_profile_target_chartOptions" [Highcharts]="Highcharts"
-              [options]="risk_profile_target_chartOptions">
+            <highcharts-chart
+              *ngIf="risk_profile_target_chartOptions"
+              [Highcharts]="Highcharts"
+              [options]="risk_profile_target_chartOptions"
+            >
             </highcharts-chart>
           </div>
 
@@ -40,40 +72,51 @@
               <!-- item-3 -->
               <div class="dashboard-item-box">
                 <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">Status of action</p>
+                  <p class="dashboard-item-box-title__title">
+                    Status of action
+                  </p>
                 </div>
-                <highcharts-chart *ngIf="status_of_action_chartOptions" [Highcharts]="Highcharts"
-                  [options]="status_of_action_chartOptions">
+                <highcharts-chart
+                  *ngIf="status_of_action_chartOptions"
+                  [Highcharts]="Highcharts"
+                  [options]="status_of_action_chartOptions"
+                >
                 </highcharts-chart>
               </div>
             </div>
 
             <div class="content-2">
-
               <!-- item-4 -->
               <div class="dashboard-item-box" class="content-3">
                 <div class="dashboard-item-box-title">
                   <p class="dashboard-item-box-title__title">Risk Categories</p>
                 </div>
-  
-                <highcharts-chart *ngIf="categories_count_chartOptions" [Highcharts]="Highcharts"
-                  [options]="categories_count_chartOptions">
+
+                <highcharts-chart
+                  *ngIf="categories_count_chartOptions"
+                  [Highcharts]="Highcharts"
+                  [options]="categories_count_chartOptions"
+                >
                 </highcharts-chart>
               </div>
-  
+
               <!-- item-5 -->
               <div class="dashboard-item-box" class="content-3">
                 <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">Categories groups</p>
+                  <p class="dashboard-item-box-title__title">
+                    Categories groups
+                  </p>
                 </div>
-  
-                <highcharts-chart *ngIf="category_group_chartOptions" [Highcharts]="Highcharts"
-                  [options]="category_group_chartOptions">
+
+                <highcharts-chart
+                  *ngIf="category_group_chartOptions"
+                  [Highcharts]="Highcharts"
+                  [options]="category_group_chartOptions"
+                >
                 </highcharts-chart>
               </div>
             </div>
           </div>
-        
         </div>
 
         <div class="dashboard-title-table-box">
@@ -95,10 +138,17 @@
                 </tr>
                 <ng-container *ngFor="let sciencePrograms of details">
                   <tr *ngFor="let risk of sciencePrograms.risks; let i = index">
-                    <td *ngIf="i == 0" [attr.rowspan]="sciencePrograms.risks.length" style="min-width: 60px">
+                    <td
+                      *ngIf="i == 0"
+                      [attr.rowspan]="sciencePrograms.risks.length"
+                      style="min-width: 60px"
+                    >
                       {{ sciencePrograms.official_code }}
                     </td>
-                    <td *ngIf="i == 0" [attr.rowspan]="sciencePrograms.risks.length">
+                    <td
+                      *ngIf="i == 0"
+                      [attr.rowspan]="sciencePrograms.risks.length"
+                    >
                       {{ sciencePrograms.name }}
                     </td>
                     <td>{{ risk.category.title }}</td>

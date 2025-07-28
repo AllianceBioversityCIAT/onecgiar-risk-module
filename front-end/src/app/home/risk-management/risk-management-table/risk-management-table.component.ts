@@ -35,8 +35,7 @@ export class RiskManagementTableComponent {
     private dialog: MatDialog,
     public headerService: HeaderService,
     private loadingService: LoadingService,
-    private authService: AuthService,
-
+    private authService: AuthService
   ) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
@@ -79,7 +78,8 @@ export class RiskManagementTableComponent {
     this.getInitiatives(filters);
   }
   async getInitiatives(filters = null) {
-    let sciencePrograms: any = await this.initiativeService.getInitiativesWithFilters(filters);
+    let sciencePrograms: any =
+      await this.initiativeService.getInitiativesWithFilters(filters);
     this.dataSource = new MatTableDataSource<any>(sciencePrograms);
     this.length = sciencePrograms.length;
   }

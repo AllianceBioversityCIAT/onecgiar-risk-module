@@ -4,8 +4,10 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -19,6 +21,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { ProgramRoles } from 'entities/program-roles.entity';
@@ -66,6 +69,8 @@ import { Role } from 'src/auth/role.enum';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { OpenGuard } from 'src/auth/open.guard';
 import { UsersService } from 'src/users/users.service';
+import { UpdateProgramDto } from './dto/update-program.dto';
+import { CreateProgramDto } from './dto/create-program.dto';
 @ApiTags('program')
 @Controller('program')
 export class ProgramController {
@@ -75,19 +80,67 @@ export class ProgramController {
     private dataSource: DataSource,
     private userService: UsersService,
   ) {}
+
+  ///  NEW CRUD ENDPOINTS FOR PROGRAM / PROJECTS
+
+  @ApiBearerAuth()
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post()
+  @ApiCreatedResponse({
+    description: 'Create a new Program / Project',
+    type: Program,
+  })
+  async createProgram(
+    @Body() dto: CreateProgramDto,
+    @Req() req,
+  ): Promise<Program> {
+    return this.iniService.createProgram(dto, req.user);
+  }
+
+  @ApiBearerAuth()
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Put(':id')
+  @ApiCreatedResponse({
+    description: 'Update an existing Program / Project',
+    type: Program,
+  })
+  async updateProgram(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateProgramDto,
+  ): Promise<Program> {
+    return this.iniService.updateProgram(id, dto);
+  }
+
+  @ApiBearerAuth()
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete(':id')
+  @HttpCode(204)
+  @ApiCreatedResponse({ description: 'Delete a Program / Project' })
+  async deleteProgram(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.iniService.deleteProgram(id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('export-archived')
   async exportArchived(@Query() filters: any) {
-    const archivedData: any = await this.iniService.getArchiveInitById(filters.archivedId);
-    let archivedVersion = archivedData.init_data.version.filter((d: any) => d.id == filters.versionId)[0];
+    const archivedData: any = await this.iniService.getArchiveInitById(
+      filters.archivedId,
+    );
+    let archivedVersion = archivedData.init_data.version.filter(
+      (d: any) => d.id == filters.versionId,
+    )[0];
 
     const file_name = 'Archived-Risks-Version' + filters.versionId + '.xlsx';
     var wb = XLSX.utils.book_new();
     let risks;
-    if(filters.request_assistance == 'true') {
-      risks = archivedVersion.risks.filter((risk: any) => risk.request_assistance == true);
-    }
-    else {
+    if (filters.request_assistance == 'true') {
+      risks = archivedVersion.risks.filter(
+        (risk: any) => risk.request_assistance == true,
+      );
+    } else {
       risks = archivedVersion.risks;
     }
 
@@ -97,7 +150,7 @@ export class ProgramController {
 
     this.appendStyleForXlsx(ws);
 
-    this.autofitColumnsXlsx(finaldata,ws);
+    this.autofitColumnsXlsx(finaldata, ws);
 
     XLSX.utils.book_append_sheet(wb, ws, 'Risks');
     await XLSX.writeFile(
@@ -119,7 +172,7 @@ export class ProgramController {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       disposition: `attachment; filename="${file_name}"`,
     });
-    console.log(archivedVersion)
+    console.log(archivedVersion);
   }
   // @Get('import')
   // async import() {
@@ -129,20 +182,20 @@ export class ProgramController {
   @UseGuards(JwtAuthGuard)
   @Get('archived')
   async getArchiveInit(@Query() query: any, @Req() req) {
-    return await this.iniService.getArchiveInit(query, req)
+    return await this.iniService.getArchiveInit(query, req);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('clarisa-programs')
   async getclarisaPrograms() {
-    return await this.iniService.clarisaPrograms()
+    return await this.iniService.clarisaPrograms();
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('archived/:id')
   async getArchiveInitById(@Param('id') id: number) {
-    console.log(id)
-    return await this.iniService.getArchiveInitById(id)
+    console.log(id);
+    return await this.iniService.getArchiveInitById(id);
   }
   offical(query) {
     if (query.initiative_id != null) {
@@ -195,7 +248,7 @@ export class ProgramController {
         risk.current_likelihood = row['Current Likelihood'];
         risk.target_likelihood = 0;
         risk.target_impact = 0;
-        risk.created_by_user_id=1
+        risk.created_by_user_id = 1;
         risk.title = row['title'];
         if (row['title'].length >= 255) {
           row['title'] = row['title'].trim().substring(0, 254);
@@ -268,6 +321,97 @@ export class ProgramController {
     }
     return data;
   }
+  // @UseGuards(JwtAuthGuard)
+  // @Get()
+  // @ApiCreatedResponse({
+  //   description: '',
+  //   type: [getProgram],
+  // })
+  // async getInitiative(@Query() query: any, @Req() req) {
+  //   let data = await this.iniService.programRepository.find({
+  //     where: {
+  //       name: query?.name ? ILike(`%${query.name}%`) : null,
+  //       parent_id: IsNull(),
+
+  //       official_code: query.initiative_id
+  //         ? In([
+  //             `INIT-0${query.initiative_id}`,
+  //             `INIT-${query.initiative_id}`,
+  //             `PLAT-${query.initiative_id}`,
+  //             `PLAT-0${query.initiative_id}`,
+  //             `SGP-${query.initiative_id}`,
+  //             `SGP-0${query.initiative_id}`,
+  //             `SP${query.initiative_id}`,
+  //             `SP0${query.initiative_id}`,
+  //           ])
+  //         : Not(IsNull()),
+  //       ...this.iniService.roles(query, req),
+  //       risks: { ...this.iniService.filterCategory(query, 'For Init') },
+  //       archived: false,
+  //       organizations: {
+  //         code: Array.isArray(query?.orgCodes)
+  //           ? In(query?.orgCodes)
+  //           : query?.orgCodes,
+  //       },
+  //       // risks: { category_id: query?.category ? In(query?.category) : null },
+  //     },
+  //     relations: [
+  //       'risks',
+  //       'risks.category',
+  //       'risks.risk_owner',
+  //       'roles',
+  //       'roles.user',
+  //     ],
+  //     order: { ...this.sort(query), risks: { id: 'DESC', top: 'ASC' } },
+  //   });
+
+  //   const activePhase = await this.iniService.phaseService.findActivePhase();
+  //   if (!query.phase_id) query.phase_id = activePhase.id;
+  //   if (activePhase) {
+  //     for (let init of data) {
+  //       const lastVersion: any =
+  //         await this.iniService.programRepository.findOne({
+  //           where: { parent_id: init.id, phase_id: query.phase_id },
+  //           order: { id: 'DESC' },
+  //         });
+  //       if (activePhase.id != query.phase_id) {
+  //         if (lastVersion) {
+  //           init['status_by_phase'] = 'submitted';
+  //         } else {
+  //           init['status_by_phase'] = 'draft';
+  //         }
+  //       } else {
+  //         if (lastVersion) {
+  //           if (lastVersion.status) {
+  //             init['status_by_phase'] = 'submitted';
+  //           } else {
+  //             init['status_by_phase'] = 'draft';
+  //           }
+  //         }
+  //         if (!lastVersion) {
+  //           init['status_by_phase'] = 'draft';
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   if (query.status) {
+  //     if (query.status == '1') {
+  //       data = data.filter((d) => d['status_by_phase'] == 'submitted');
+  //     } else {
+  //       data = data.filter((d) => d['status_by_phase'] == 'draft');
+  //     }
+  //   }
+
+  //   return data;
+  // }
+  @ApiQuery({
+    name: 'isProject',
+    required: false,
+    type: Number,
+    enum: [0, 1],
+    description: '0 = programmes only, 1 = projects only',
+  })
   @UseGuards(JwtAuthGuard)
   @Get()
   @ApiCreatedResponse({
@@ -275,29 +419,41 @@ export class ProgramController {
     type: [getProgram],
   })
   async getInitiative(@Query() query: any, @Req() req) {
-    let data = await this.iniService.programRepository.find({
-      where: {
-        name: query?.name ? ILike(`%${query.name}%`) : null,
-        parent_id: IsNull(),
-        official_code: query.initiative_id ? In([
-                  `INIT-0${query.initiative_id}`,
-                  `INIT-${query.initiative_id}`,
-                  `PLAT-${query.initiative_id}`,
-                  `PLAT-0${query.initiative_id}`,
-                  `SGP-${query.initiative_id}`,
-                  `SGP-0${query.initiative_id}`,
-                  `SP${query.initiative_id}` ,
-                  `SP0${query.initiative_id}` 
-
-        ]) : Not(IsNull()),
-        ...this.iniService.roles(query, req),
-        risks: { ...this.iniService.filterCategory(query, 'For Init') },
-        archived: false,
-        organizations: {
-          code: Array.isArray(query?.orgCodes) ? In(query?.orgCodes) : query?.orgCodes,
-        }
-        // risks: { category_id: query?.category ? In(query?.category) : null },
+    // build up your dynamic where clause
+    const where: any = {
+      name: query?.name ? ILike(`%${query.name}%`) : null,
+      parent_id: IsNull(),
+      official_code: query.initiative_id
+        ? In([
+            `INIT-0${query.initiative_id}`,
+            `INIT-${query.initiative_id}`,
+            `PLAT-${query.initiative_id}`,
+            `PLAT-0${query.initiative_id}`,
+            `SGP-${query.initiative_id}`,
+            `SGP-0${query.initiative_id}`,
+            `SP${query.initiative_id}`,
+            `SP0${query.initiative_id}`,
+          ])
+        : Not(IsNull()),
+      ...this.iniService.roles(query, req),
+      risks: { ...this.iniService.filterCategory(query, 'For Init') },
+      archived: false,
+      organizations: {
+        code: Array.isArray(query?.orgCodes)
+          ? In(query?.orgCodes)
+          : query?.orgCodes,
       },
+      // risks: { category_id: query?.category ? In(query?.category) : null },
+    };
+
+    // >>> Inject the new isProject filter if provided
+    if (query.isProject !== undefined && query.isProject !== null) {
+      // coerce to number since query params are strings
+      where.isProject = +query.isProject;
+    }
+
+    let data = await this.iniService.programRepository.find({
+      where,
       relations: [
         'risks',
         'risks.category',
@@ -309,45 +465,46 @@ export class ProgramController {
     });
 
     const activePhase = await this.iniService.phaseService.findActivePhase();
-    if(!query.phase_id)
-      query.phase_id = activePhase.id;
-    if(activePhase) {
-      for(let init of data) {
-        const lastVersion: any = await this.iniService.programRepository.findOne({
-          where: { parent_id: init.id, phase_id: query.phase_id },
-          order: { id: 'DESC' },
-        });
-        if(activePhase.id != query.phase_id) {
-          if(lastVersion) {
+    if (!query.phase_id) query.phase_id = activePhase.id;
+    if (activePhase) {
+      for (let init of data) {
+        const lastVersion: any =
+          await this.iniService.programRepository.findOne({
+            where: { parent_id: init.id, phase_id: query.phase_id },
+            order: { id: 'DESC' },
+          });
+        if (activePhase.id != query.phase_id) {
+          if (lastVersion) {
             init['status_by_phase'] = 'submitted';
           } else {
             init['status_by_phase'] = 'draft';
           }
         } else {
-          if(lastVersion) {
-            if(lastVersion.status) {
+          if (lastVersion) {
+            if (lastVersion.status) {
               init['status_by_phase'] = 'submitted';
             } else {
               init['status_by_phase'] = 'draft';
             }
           }
-          if(!lastVersion) {
+          if (!lastVersion) {
             init['status_by_phase'] = 'draft';
           }
         }
       }
     }
 
-    if(query.status) {
-      if(query.status == '1') {
-        data = data.filter(d => d['status_by_phase'] == 'submitted');
+    if (query.status) {
+      if (query.status == '1') {
+        data = data.filter((d) => d['status_by_phase'] == 'submitted');
       } else {
-        data = data.filter(d => d['status_by_phase'] == 'draft');
+        data = data.filter((d) => d['status_by_phase'] == 'draft');
       }
     }
 
     return data;
   }
+
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
@@ -381,7 +538,9 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name
+      ? element.risk_owner?.email
+      : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -483,7 +642,9 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name
+      ? element.risk_owner?.email
+      : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -584,7 +745,9 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name
+      ? element.risk_owner?.email
+      : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -683,7 +846,9 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name
+      ? element.risk_owner?.email
+      : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -785,7 +950,9 @@ export class ProgramController {
     template.Title = element.title;
     template.ID = element.program.official_code;
     template.Description = element.description;
-    template['Risk owner'] = !element.risk_owner?.user?.full_name ? element.risk_owner?.email : element.risk_owner?.user?.full_name;
+    template['Risk owner'] = !element.risk_owner?.user?.full_name
+      ? element.risk_owner?.email
+      : element.risk_owner?.user?.full_name;
     template['Current likelihood'] = element.current_likelihood;
     template['Current impact'] = element.current_impact;
     template['Current Risk Level'] =
@@ -939,59 +1106,56 @@ export class ProgramController {
         name: query?.name ? ILike(`%${query.name}%`) : null,
         archived: false,
         organizations: {
-          code: Array.isArray(query?.orgCodes) ? In(query?.orgCodes) : query?.orgCodes,
-        }
+          code: Array.isArray(query?.orgCodes)
+            ? In(query?.orgCodes)
+            : query?.orgCodes,
+        },
       },
     });
-
 
     const lastVersionsByPhase = [];
 
     const activePhase = await this.iniService.phaseService.findActivePhase();
-    if(!query.phase_id)
-      query.phase_id = activePhase.id;
-    if(activePhase) {
-      for(let init of ininit) {
+    if (!query.phase_id) query.phase_id = activePhase.id;
+    if (activePhase) {
+      for (let init of ininit) {
         const lastVersion = await this.iniService.programRepository.findOne({
           where: { parent_id: init.id, phase_id: query.phase_id },
-          order: { id: 'DESC'},
+          order: { id: 'DESC' },
         });
-        if(activePhase.id != query.phase_id) {
+        if (activePhase.id != query.phase_id) {
           lastVersionsByPhase.push(lastVersion);
-          if(lastVersion) {
+          if (lastVersion) {
             init['status_by_phase'] = 'submitted';
           } else {
             init['status_by_phase'] = 'draft';
           }
         } else {
-          if(lastVersion) {
-            if(lastVersion.status) {
+          if (lastVersion) {
+            if (lastVersion.status) {
               init['status_by_phase'] = 'submitted';
             } else {
               init['status_by_phase'] = 'draft';
             }
           }
-          if(!lastVersion) {
+          if (!lastVersion) {
             init['status_by_phase'] = 'draft';
           }
         }
       }
     }
 
-
-
-
-    if(query.status) {
-      if(query.status == '1') {
-        ininit = ininit.filter(d => d['status_by_phase'] == 'submitted');
+    if (query.status) {
+      if (query.status == '1') {
+        ininit = ininit.filter((d) => d['status_by_phase'] == 'submitted');
       } else {
-        ininit = ininit.filter(d => d['status_by_phase'] == 'draft');
+        ininit = ininit.filter((d) => d['status_by_phase'] == 'draft');
       }
     }
 
     let risks = [];
 
-    if(activePhase.id == query.phase_id) {
+    if (activePhase.id == query.phase_id) {
       risks = await this.riskService.riskRepository.find({
         where: {
           program_id: In(ininit.map((d) => d.id)),
@@ -1012,7 +1176,9 @@ export class ProgramController {
         order: { program: { ...this.sort(query) } },
       });
     } else {
-      const lastVersionsIdsByPhase = lastVersionsByPhase.filter(d => d).map(d => d.id);
+      const lastVersionsIdsByPhase = lastVersionsByPhase
+        .filter((d) => d)
+        .map((d) => d.id);
       risks = await this.riskService.riskRepository.find({
         where: {
           program_id: In(lastVersionsIdsByPhase),
@@ -1037,14 +1203,13 @@ export class ProgramController {
     if (query.user == 'admin') {
       const file_name = 'All-Risks-.xlsx';
       var wb = XLSX.utils.book_new();
-      const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks); 
+      const { finaldata, merges } = this.prepareAllDataExcelAdmin(risks);
       const ws = XLSX.utils.json_to_sheet(finaldata);
       ws['!merges'] = merges;
 
-
       this.appendStyleForXlsx(ws);
 
-      this.autofitColumnsXlsx(finaldata,ws);
+      this.autofitColumnsXlsx(finaldata, ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
       await XLSX.writeFile(
@@ -1074,7 +1239,7 @@ export class ProgramController {
 
       this.appendStyleForXlsx(ws);
 
-      this.autofitColumnsXlsx(finaldata,ws);
+      this.autofitColumnsXlsx(finaldata, ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks');
       await XLSX.writeFile(
@@ -1099,8 +1264,7 @@ export class ProgramController {
   }
 
   appendStyleForXlsx(ws: XLSX.WorkSheet) {
-
-    const range = XLSX.utils.decode_range(ws["!ref"] ?? "");
+    const range = XLSX.utils.decode_range(ws['!ref'] ?? '');
     const rowCount = range.e.r;
     const columnCount = range.e.c;
 
@@ -1108,7 +1272,7 @@ export class ProgramController {
       for (let col = 0; col <= columnCount; col++) {
         const cellRef = XLSX.utils.encode_cell({ r: row, c: col });
         // Add center alignment to every cell
-        
+
         ws[cellRef].s = {
           alignment: {
             horizontal: 'center',
@@ -1117,13 +1281,12 @@ export class ProgramController {
           },
         };
 
-
         if (row === 0 || row === 1) {
           // Format headers and names
           ws[cellRef].s = {
             ...ws[cellRef].s,
             fill: { fgColor: { rgb: '436280' } },
-            font: { color: { rgb: 'ffffff' } ,  bold: true },
+            font: { color: { rgb: 'ffffff' }, bold: true },
             alignment: {
               horizontal: 'center',
               vertical: 'center',
@@ -1136,22 +1299,26 @@ export class ProgramController {
   }
 
   //#3
-  autofitColumnsXlsx(json: any[], worksheet: XLSX.WorkSheet, header?: string[]) {
-
+  autofitColumnsXlsx(
+    json: any[],
+    worksheet: XLSX.WorkSheet,
+    header?: string[],
+  ) {
     const jsonKeys = header ? header : Object.keys(json[0]);
 
-    let objectMaxLength = []; 
+    let objectMaxLength = [];
     for (let i = 0; i < json.length; i++) {
       let objValue = json[i];
       for (let j = 0; j < jsonKeys.length; j++) {
-        if (typeof objValue[jsonKeys[j]] == "number") {
+        if (typeof objValue[jsonKeys[j]] == 'number') {
           objectMaxLength[j] = 10;
         } else {
           const l = objValue[jsonKeys[j]] ? objValue[jsonKeys[j]].length : 0;
-          if(l > 300) {
+          if (l > 300) {
             objectMaxLength[j] = 70;
           } else {
-            objectMaxLength[j] = objectMaxLength[j] >= l ? objectMaxLength[j]: l / 3;
+            objectMaxLength[j] =
+              objectMaxLength[j] >= l ? objectMaxLength[j] : l / 3;
           }
         }
       }
@@ -1165,59 +1332,74 @@ export class ProgramController {
       }
     }
 
-    const wscols = objectMaxLength.map(w => { return { width: w} });
+    const wscols = objectMaxLength.map((w) => {
+      return { width: w };
+    });
 
     //row height
     worksheet['!rows'] = [];
-    worksheet['!rows'].push({ //for header
-      hpt: 40
-     })
-     worksheet['!rows'].push({ //for header
-      hpt: 40
-     })
-    for(let i = 1 ; i <= json.length -1 ; i++) {
-      if(json[i]) {
-        if(json[i]['Actions /Controls to manage risks'] && json[i].Description) {
-          if(json[i]['Actions /Controls to manage risks'].length > 300  || json[i].Description.length > 300) {
+    worksheet['!rows'].push({
+      //for header
+      hpt: 40,
+    });
+    worksheet['!rows'].push({
+      //for header
+      hpt: 40,
+    });
+    for (let i = 1; i <= json.length - 1; i++) {
+      if (json[i]) {
+        if (
+          json[i]['Actions /Controls to manage risks'] &&
+          json[i].Description
+        ) {
+          if (
+            json[i]['Actions /Controls to manage risks'].length > 300 ||
+            json[i].Description.length > 300
+          ) {
             worksheet['!rows'].push({
-              hpt: json[i]['Actions /Controls to manage risks'].length > json[i].Description.length ?  json[i]['Actions /Controls to manage risks'].length / 3 : json[i].Description.length / 3
-             })
-          } 
-          else {
-            worksheet['!rows'].push({
-              hpt: 100
-             })
-          }
-        } else if(json[i]['Actions /Controls to manage risks'] && json[i].Description == null) {
-          if(json[i]['Actions /Controls to manage risks'].length > 300) {
-            worksheet['!rows'].push({
-              hpt: json[i]['Actions /Controls to manage risks'].length / 3
-            })
+              hpt:
+                json[i]['Actions /Controls to manage risks'].length >
+                json[i].Description.length
+                  ? json[i]['Actions /Controls to manage risks'].length / 3
+                  : json[i].Description.length / 3,
+            });
           } else {
             worksheet['!rows'].push({
-              hpt: 100
-             })
+              hpt: 100,
+            });
           }
-        } else if(json[i].Description && json[i]['Actions /Controls to manage risks'] == null) {
-          if(json[i].Description.length > 300) {
+        } else if (
+          json[i]['Actions /Controls to manage risks'] &&
+          json[i].Description == null
+        ) {
+          if (json[i]['Actions /Controls to manage risks'].length > 300) {
             worksheet['!rows'].push({
-              hpt: json[i].Description.length / 3
-            })
-          }          else {
+              hpt: json[i]['Actions /Controls to manage risks'].length / 3,
+            });
+          } else {
             worksheet['!rows'].push({
-              hpt: 100
-             })
+              hpt: 100,
+            });
+          }
+        } else if (
+          json[i].Description &&
+          json[i]['Actions /Controls to manage risks'] == null
+        ) {
+          if (json[i].Description.length > 300) {
+            worksheet['!rows'].push({
+              hpt: json[i].Description.length / 3,
+            });
+          } else {
+            worksheet['!rows'].push({
+              hpt: 100,
+            });
           }
         }
       }
     }
 
-    worksheet["!cols"] = wscols;
+    worksheet['!cols'] = wscols;
   }
-
-
-
-
 
   @UseGuards(JwtAuthGuard)
   @Get(':id/excel')
@@ -1226,7 +1408,7 @@ export class ProgramController {
     type: getProgramById,
   })
   async exportExcel(@Param('id') id: number, @Query() req: any) {
-    console.log('soso')
+    console.log('soso');
     let init = await this.iniService.programRepository.findOne({
       where: {
         id: id,
@@ -1276,7 +1458,7 @@ export class ProgramController {
 
       this.appendStyleForXlsx(ws);
 
-      this.autofitColumnsXlsx(finaldata,ws);
+      this.autofitColumnsXlsx(finaldata, ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1305,7 +1487,7 @@ export class ProgramController {
 
       this.appendStyleForXlsx(ws);
 
-      this.autofitColumnsXlsx(finaldata,ws);
+      this.autofitColumnsXlsx(finaldata, ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1334,7 +1516,7 @@ export class ProgramController {
 
       this.appendStyleForXlsx(ws);
 
-      this.autofitColumnsXlsx(finaldata,ws);
+      this.autofitColumnsXlsx(finaldata, ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1363,7 +1545,7 @@ export class ProgramController {
 
       this.appendStyleForXlsx(ws);
 
-      this.autofitColumnsXlsx(finaldata,ws);
+      this.autofitColumnsXlsx(finaldata, ws);
 
       XLSX.utils.book_append_sheet(wb, ws, 'Risks2');
       await XLSX.writeFile(
@@ -1409,14 +1591,14 @@ export class ProgramController {
   @UseGuards(JwtAuthGuard)
   @Post('archive')
   async archiveInit(@Body() data: number[]) {
-    return await this.iniService.archiveInit(data)
+    return await this.iniService.archiveInit(data);
   }
 
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
   @Post('sync-clarisa')
   async syncInit(@Body() data: number[]) {
-    return await this.iniService.syncInit(data)
+    return await this.iniService.syncInit(data);
   }
   @UseGuards(JwtAuthGuard)
   @Get('all/categories')
@@ -1498,7 +1680,7 @@ export class ProgramController {
   async getLatestVersons(@Param('id') id: number) {
     const phase = await this.iniService.phaseService.findActivePhase();
     return this.iniService.programRepository.findOne({
-      where: { parent_id: id , phase_id: phase.id},
+      where: { parent_id: id, phase_id: phase.id },
       relations: [
         'risks',
         'risks.category',

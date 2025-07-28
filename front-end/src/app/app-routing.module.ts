@@ -43,6 +43,7 @@ import { ArchivedVersionComponent } from './archive/archived-version/archived-ve
 import { ArchivedVersionsComponent } from './archive/archived-versions/archived-versions.component';
 import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-clarisa.component';
 import { OrganizationComponent } from './Admin/admin-module/organization/organization.component';
+import { ProjectsComponent } from './Admin/admin-module/projects/projects.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -69,6 +70,12 @@ const routes: Routes = [
         path: 'sync-clarisa',
         component: SyncClarisaComponent,
       },
+
+      {
+        path: 'projects',
+        component: ProjectsComponent,
+      },
+
       {
         path: 'organization',
         component: OrganizationComponent,
@@ -110,14 +117,13 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: PhasesComponent
+            component: PhasesComponent,
           },
           {
             path: ':id',
-            component: LastSubmitionPhaseComponent
+            component: LastSubmitionPhaseComponent,
           },
-          
-        ]
+        ],
       },
     ],
   },
@@ -228,10 +234,10 @@ const routes: Routes = [
           {
             path: ':id',
             component: ArchivedVersionComponent,
-          }
-        ]
-      }
-    ]
+          },
+        ],
+      },
+    ],
   },
 
   { path: '404', component: PagenotfoundcomponentComponent },

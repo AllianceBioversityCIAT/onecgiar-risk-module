@@ -1,0 +1,79 @@
+<div class="form-dialog-header">
+  <div class="form-dialog-header__text-box">
+    <p class="form-dialog-header__text-box__text">
+      {{ data.program ? "Edit" : "Add" }} Project
+    </p>
+  </div>
+
+  <div class="form-dialog-header__icon-box">
+    <button class="form-dialog-header__icon-box__btn" (click)="onCloseDialog()">
+      <mat-icon class="form-dialog-header__icon-box__icon-size">
+        <img
+          class="form-dialog-header__icon-box__icon-size__icon"
+          src="../../../assets/shared-image/Vector-close.svg"
+          alt="~/Frontend/images/icon _ Vector-close"
+        />
+      </mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="form-dialog-conten-box-1">
+  <form [formGroup]="form" class="form-dialog-content">
+    <!-- //Email filed----- -->
+
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Official Code</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="official_code" />
+        <mat-error *ngIf="form.get('official_code')?.hasError('required')">
+          Official code is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-dialog-content__field--grid-column">
+      <div class="form-dialog-content__title-box">
+        <mat-label class="form-dialog-content__title-box__title"
+          >Name</mat-label
+        >
+      </div>
+      <mat-form-field
+        class="form-dialog-content__field"
+        floatLabel="always"
+        hideRequiredMarker
+        appearance="outline"
+      >
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <!-- //Update Button----- -->
+      <div class="form-dialog-conten-button-box">
+        <div class="form-dialog-conten__button-box">
+          <button
+            class="form-dialog-conten__button-box__btn"
+            mat-raised-button
+            color="primary"
+            (click)="save()"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

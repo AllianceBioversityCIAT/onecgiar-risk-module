@@ -1101,6 +1101,15 @@
           </button>
         </div>
       </div>
+      <mat-error
+        *ngIf="
+          newRiskForm.controls['mitigations'].errors?.requiredMitigation &&
+          (newRiskForm.controls['mitigations'].touched ||
+            newRiskForm.controls['mitigations'].dirty)
+        "
+      >
+        <p class="errorMessage">At least one action/control is required.</p>
+      </mat-error>
     </div>
 
     <!--  Save-btn -->
