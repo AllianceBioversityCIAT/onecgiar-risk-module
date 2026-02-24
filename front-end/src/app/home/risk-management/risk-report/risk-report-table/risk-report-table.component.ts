@@ -87,65 +87,165 @@ export class RiskReportTableComponent {
 
   toPdf: boolean = false;
 
-  public SavePDF(): void {
-    if (this.user_info.role != 'admin') {
-      this.displayedColumnsPdf = [
-        'ID',
-        'Risk Title',
-        'Risk Description',
-        'Risk Category',
-        'Current Likelihood',
-        'Current Impact',
-        'Current Risk Level',
-        'Target Likelihood',
-        'Target Impact',
-        'Target Risk Level',
-        'due date',
-        'Help requested',
-        'Mitigation Action',
-        'Risk Owner',
-        'created_by',
-      ];
-    } else {
-      this.displayedColumnsPdf = [
-        'ID',
-        'Risk Title',
-        'Risk Description',
-        'Risk Category',
-        'Current Likelihood',
-        'Current Impact',
-        'Current Risk Level',
-        'Target Likelihood',
-        'Target Impact',
-        'Target Risk Level',
-        'due date',
-        'Help requested',
-        'Mitigation Action',
-        'Risk Owner',
-        'created_by',
-        'Flag to SDG',
-      ];
+  public async SavePDF(): Promise<void> {
+    const risks: any[] = this.AllRisk?.risks || this.dataSource?.data || [];
+
+    const top5 = [...risks]
+      .sort(
+        (a: any, b: any) =>
+          b.current_likelihood * b.current_impact -
+          a.current_likelihood * a.current_impact
+      )
+      .slice(0, 5);
+
+    const logoBase64 = await this.getBase64FromUrl(
+      'assets/shared-image/cgiar-logo.png'
+    );
+
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210;
+    const margin = 15;
+    const contentWidth = pageWidth - margin * 2;
+    const themeR = 67, themeG = 98, themeB = 128;
+
+    // Header bar
+    doc.setFillColor(themeR, themeG, themeB);
+    doc.rect(0, 0, pageWidth, 30, 'F');
+
+    // CGIAR logo in header
+    if (logoBase64) {
+      doc.addImage(logoBase64, 'PNG', margin, 5, 40, 20);
     }
 
-    this.toPdf = true;
-    setTimeout(() => {
-      let content = this.pdfcontent.nativeElement;
-      this.pdfcontent.nativeElement.width;
-      let doc = new jsPDF({
-        orientation: 'landscape',
-        unit: 'px',
-        format: [
-          this.pdfcontent.nativeElement.scrollWidth - 63,
-          this.pdfcontent.nativeElement.scrollHeight + 10,
-        ],
-      });
-      doc.html(content.innerHTML, {
-        callback: (doc) => {
-          doc.save('Risks-' + this.scienceProgramsId + '.pdf');
-          this.toPdf = false;
-        },
-      });
-    }, 500);
+    // "PRMS Risk Management" in header
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PRMS Risk Management', pageWidth - margin, 19, { align: 'right' });
+
+    let y = 42;
+
+    // Initiative name
+    doc.setTextColor(themeR, themeG, themeB);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      this.sciencePrograms?.name || this.scienceProgramsId || '',
+      margin,
+      y
+    );
+    y += 9;
+
+    // Subtitle
+    const year = new Date().getFullYear();
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 80);
+    doc.text(
+      `Top 5 Submitted Risks and Mitigating Actions for ${year}`,
+      margin,
+      y
+    );
+    y += 7;
+
+    // Separator line
+    doc.setDrawColor(themeR, themeG, themeB);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 9;
+
+    top5.forEach((risk: any, index: number) => {
+      const title = `${index + 1}. ${risk.title || ''}`;
+      const description = risk.description || '';
+      const ownerName =
+        risk.risk_owner?.user?.full_name || risk.risk_owner?.email || 'N/A';
+      const hasMitigations = risk.mitigations?.length > 0 ? 'Yes' : 'No';
+      const deadline = risk.due_date
+        ? new Date(risk.due_date).toLocaleDateString('en-GB')
+        : null;
+
+      if (y > 247) {
+        doc.addPage();
+        y = 20;
+      }
+
+      // Risk title
+      doc.setTextColor(themeR, themeG, themeB);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      const titleLines = doc.splitTextToSize(title, contentWidth);
+      doc.text(titleLines, margin, y);
+      y += titleLines.length * 6 + 2;
+
+      // Description
+      doc.setTextColor(50, 50, 50);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      const descLines = doc.splitTextToSize(description, contentWidth);
+      if (y + descLines.length * 5 > 267) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.text(descLines, margin, y);
+      y += descLines.length * 5 + 4;
+
+      // Risk Owner
+      if (y > 267) { doc.addPage(); y = 20; }
+      doc.setFont('helvetica', 'bold');
+      doc.text('Risk Owner: ', margin, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(ownerName, margin + doc.getTextWidth('Risk Owner: '), y);
+      y += 6;
+
+      // Mitigating Actions
+      if (y > 267) { doc.addPage(); y = 20; }
+      doc.setFont('helvetica', 'bold');
+      doc.text('Mitigating Actions in place: ', margin, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(
+        hasMitigations,
+        margin + doc.getTextWidth('Mitigating Actions in place: '),
+        y
+      );
+      y += 6;
+
+      // Deadline
+      if (deadline) {
+        if (y > 267) { doc.addPage(); y = 20; }
+        doc.setFont('helvetica', 'bold');
+        doc.text('Deadline: ', margin, y);
+        doc.setFont('helvetica', 'normal');
+        doc.text(deadline, margin + doc.getTextWidth('Deadline: '), y);
+        y += 6;
+      }
+
+      // Divider between risks
+      y += 3;
+      if (y <= 267) {
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.line(margin, y, pageWidth - margin, y);
+      }
+      y += 6;
+    });
+
+    doc.save(`Risk-Report-${this.scienceProgramsId}.pdf`);
+  }
+
+  private getBase64FromUrl(url: string): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        canvas.getContext('2d')?.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = () => resolve('');
+      img.src = url;
+    });
   }
 
   displayedColumns: string[] = [
