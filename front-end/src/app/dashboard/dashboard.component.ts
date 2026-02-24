@@ -37,6 +37,7 @@ export class DashboardComponent implements OnInit {
   category_group_chartOptions: any = null;
   categoriesLevels: any = null;
   details: any = null;
+  reportedActions: any[] = [];
   groups: any = null;
   action_areas: any = null;
   totalStatus: any = null;
@@ -91,6 +92,25 @@ export class DashboardComponent implements OnInit {
     // now pass that number to each service call
     this.data = await this.dashboardService.current(projectFlag);
     this.details = await this.dashboardService.details(projectFlag);
+
+    // Flatten programs → risks → mitigations into a flat row per mitigation
+    this.reportedActions = [];
+    for (const program of this.details) {
+      for (const risk of program.risks || []) {
+        for (const mitigation of risk.mitigations || []) {
+          this.reportedActions.push({
+            risk_id: risk.id,
+            official_code: program.official_code,
+            risk_title: risk.title,
+            risk_description: risk.description,
+            due_date: risk.due_date,
+            action_description: mitigation.description,
+            action_status: mitigation.status?.title || '',
+          });
+        }
+      }
+    }
+
     this.categoriesLevels = await this.dashboardService.categoriesLevels(
       projectFlag
     );
@@ -161,21 +181,18 @@ export class DashboardComponent implements OnInit {
     };
 
     this.status_of_action_chartOptions = {
-      chart: { type: 'column' },
-      credits: { enabled: false },
-      subtitle: { text: 'Status of action', align: 'center' },
-      xAxis: { categories: this.status.map((item: any) => item.title) },
-      yAxis: {
-        min: 0,
-        title: { text: 'Percentage (%)' },
-        labels: { format: '{value}%' },
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
       },
+      credits: { enabled: false },
       tooltip: {
         borderWidth: 0,
         backgroundColor: 'rgba(255,255,255,0)',
         shadow: false,
         useHTML: true,
-        pointFormat: '<b>{point.y}%</b>',
         style: {
           textAlign: 'left',
           color: '#04030f',
@@ -192,16 +209,44 @@ export class DashboardComponent implements OnInit {
           left: '0 !important',
           top: '0 !important',
         },
+        headerFormat: '<table>',
+        pointFormat:
+          '<tr><th colspan="2"><span class="chart-bubble-title"><b class="title-tooltip">{point.name}</b></span></th></tr>' +
+          '<tr><th>' +
+          '</th><td>{series.name}: <b>{point.percentage:.1f}%</b></td></tr>',
+        footerFormat: '</table>',
+        followPointer: true,
+      },
+      accessibility: {
+        point: { valueSuffix: '%' },
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            style: {
+              textAlign: 'left',
+              color: '#04030f',
+              fontFamily: '"Poppins", sans-serif !important',
+              fontSize: '1.6rem',
+              fontStyle: 'normal',
+              fontWeight: '400',
+            },
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          },
+        },
       },
       series: [
         {
-          type: 'column',
-          name: 'Total Actions',
-          data: this.status.map((item: any) => {
-            const count = parseInt(item.total_actions, 10);
-            return parseFloat(((count / this.totalStatus) * 100).toFixed(1));
-          }),
+          name: 'Actions',
           colorByPoint: true,
+          innerSize: '55%',
+          data: this.status.map((item: any) => ({
+            name: item.title,
+            y: parseInt(item.total_actions, 10),
+          })),
         },
       ],
     };
@@ -283,6 +328,7 @@ export class DashboardComponent implements OnInit {
         {
           name: 'Usage',
           colorByPoint: true,
+          innerSize: '55%',
           data: this.categoriesCount.map((d: any) => {
             return { name: d.title, y: +d.total_count };
           }),
@@ -368,6 +414,7 @@ export class DashboardComponent implements OnInit {
         {
           name: 'Usage',
           colorByPoint: true,
+          innerSize: '55%',
           data: this.groups.map((d: any) => {
             return { name: d.name, y: +d.total_count };
           }),

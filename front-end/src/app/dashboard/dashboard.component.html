@@ -67,59 +67,68 @@
             </highcharts-chart>
           </div>
 
-          <div class="collection">
-            <div class="content">
-              <!-- item-3 -->
-              <div class="dashboard-item-box">
-                <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">
-                    Status of action
-                  </p>
-                </div>
-                <highcharts-chart
-                  *ngIf="status_of_action_chartOptions"
-                  [Highcharts]="Highcharts"
-                  [options]="status_of_action_chartOptions"
-                >
-                </highcharts-chart>
-              </div>
+          <!-- item-3 -->
+          <div class="dashboard-item-box">
+            <div class="dashboard-item-box-title">
+              <p class="dashboard-item-box-title__title">
+                Status of action
+              </p>
             </div>
+            <highcharts-chart
+              *ngIf="status_of_action_chartOptions"
+              [Highcharts]="Highcharts"
+              [options]="status_of_action_chartOptions"
+            >
+            </highcharts-chart>
+          </div>
 
-            <div class="content-2">
-              <!-- item-4 -->
-              <div class="dashboard-item-box" class="content-3">
-                <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">Risk Categories</p>
-                </div>
-
-                <highcharts-chart
-                  *ngIf="categories_count_chartOptions"
-                  [Highcharts]="Highcharts"
-                  [options]="categories_count_chartOptions"
-                >
-                </highcharts-chart>
-              </div>
-
-              <!-- item-5 -->
-              <div class="dashboard-item-box" class="content-3">
-                <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">
-                    Categories groups
-                  </p>
-                </div>
-
-                <highcharts-chart
-                  *ngIf="category_group_chartOptions"
-                  [Highcharts]="Highcharts"
-                  [options]="category_group_chartOptions"
-                >
-                </highcharts-chart>
-              </div>
+          <!-- item-4 -->
+          <div class="dashboard-item-box">
+            <div class="dashboard-item-box-title">
+              <p class="dashboard-item-box-title__title">Risk Categories</p>
             </div>
+            <highcharts-chart
+              *ngIf="categories_count_chartOptions"
+              [Highcharts]="Highcharts"
+              [options]="categories_count_chartOptions"
+            >
+            </highcharts-chart>
           </div>
         </div>
 
+        <!-- Reported Actions/Controls table -->
         <div class="dashboard-title-table-box">
+          <p class="dashboard-title-table-box__title">Reported Actions/Controls</p>
+        </div>
+
+        <div class="table-box mat-elevation-z8" *ngIf="reportedActions.length">
+          <mat-card>
+            <mat-card-content>
+              <table>
+                <tr>
+                  <th>Risk id</th>
+                  <th>ID</th>
+                  <th>Risk</th>
+                  <th>Description</th>
+                  <th>Due date</th>
+                  <th>Actions /Controls to manage risks</th>
+                  <th>Status</th>
+                </tr>
+                <tr *ngFor="let row of reportedActions">
+                  <td>{{ row.risk_id }}</td>
+                  <td>{{ row.official_code }}</td>
+                  <td>{{ row.risk_title }}</td>
+                  <td>{{ row.risk_description }}</td>
+                  <td class="due-date-cell">{{ row.due_date | date: 'M/d/yyyy' }}</td>
+                  <td>{{ row.action_description }}</td>
+                  <td>{{ row.action_status }}</td>
+                </tr>
+              </table>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="dashboard-title-table-box" style="margin-top: 3rem;">
           <p class="dashboard-title-table-box__title">Risk details</p>
         </div>
 

@@ -54,6 +54,8 @@ export class DashboardController {
         'risks',
         'risks.category',
         'risks.risk_owner',
+        'risks.mitigations',
+        'risks.mitigations.status',
         'roles',
         'roles.user',
       ],
