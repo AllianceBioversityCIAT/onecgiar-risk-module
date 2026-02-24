@@ -101,20 +101,67 @@
           <p class="dashboard-title-table-box__title">Reported Actions/Controls</p>
         </div>
 
+        <!-- Filter bar -->
+        <div class="actions-filter-bar" *ngIf="reportedActions.length">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Program</mat-label>
+            <mat-select [(ngModel)]="filterProgram" (selectionChange)="applyFilters()">
+              <mat-option value="">All</mat-option>
+              <mat-option *ngFor="let p of programOptions" [value]="p">{{ p }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="filterStatus" (selectionChange)="applyFilters()">
+              <mat-option value="">All</mat-option>
+              <mat-option *ngFor="let s of statusOptions" [value]="s">{{ s }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Due date from</mat-label>
+            <input matInput type="date" [(ngModel)]="filterDueDateFrom" (change)="applyFilters()">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Due date to</mat-label>
+            <input matInput type="date" [(ngModel)]="filterDueDateTo" (change)="applyFilters()">
+          </mat-form-field>
+
+          <button mat-stroked-button class="filter-btn" (click)="resetFilters()">
+            <mat-icon>filter_alt_off</mat-icon> Reset
+          </button>
+
+          <button mat-raised-button color="primary" class="filter-btn" (click)="exportExcel()">
+            <mat-icon>file_download</mat-icon> Export Excel
+          </button>
+        </div>
+
         <div class="table-box mat-elevation-z8" *ngIf="reportedActions.length">
           <mat-card>
             <mat-card-content>
               <table>
                 <tr>
-                  <th>Risk id</th>
+                  <th class="sortable-th" (click)="sortBy('risk_id')">
+                    Risk id
+                    <mat-icon *ngIf="sortField === 'risk_id'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                  </th>
                   <th>ID</th>
                   <th>Risk</th>
                   <th>Description</th>
-                  <th>Due date</th>
+                  <th class="sortable-th" (click)="sortBy('due_date')">
+                    Due date
+                    <mat-icon *ngIf="sortField === 'due_date'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                  </th>
                   <th>Actions /Controls to manage risks</th>
                   <th>Status</th>
                 </tr>
-                <tr *ngFor="let row of reportedActions">
+                <tr *ngFor="let row of displayedActions">
                   <td>{{ row.risk_id }}</td>
                   <td>{{ row.official_code }}</td>
                   <td>{{ row.risk_title }}</td>
@@ -124,8 +171,18 @@
                   <td>{{ row.action_status }}</td>
                 </tr>
               </table>
+
+              <div class="show-more-bar" *ngIf="filteredActions.length > displayLimit">
+                <button mat-button color="primary" (click)="toggleShowAll()">
+                  {{ showAllActions ? 'Show less' : 'Show more (' + filteredActions.length + ' total)' }}
+                </button>
+              </div>
             </mat-card-content>
           </mat-card>
+        </div>
+
+        <div *ngIf="reportedActions.length && filteredActions.length === 0" class="no-results">
+          No actions match the current filters.
         </div>
 
         <div class="dashboard-title-table-box" style="margin-top: 3rem;">

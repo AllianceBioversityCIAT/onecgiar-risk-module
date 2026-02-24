@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HighchartsMore from 'highcharts/highcharts-more';
 import SunburstModule from 'highcharts/modules/sunburst';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
 import { DashboardService } from '../services/dashboard.service';
@@ -38,6 +40,25 @@ export class DashboardComponent implements OnInit {
   categoriesLevels: any = null;
   details: any = null;
   reportedActions: any[] = [];
+  filteredActions: any[] = [];
+  displayedActions: any[] = [];
+  showAllActions = false;
+  displayLimit = 10;
+
+  // Filters
+  filterProgram = '';
+  filterStatus = '';
+  filterDueDateFrom = '';
+  filterDueDateTo = '';
+
+  // Sort
+  sortField = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  // Dropdown options
+  programOptions: string[] = [];
+  statusOptions: string[] = [];
+
   groups: any = null;
   action_areas: any = null;
   totalStatus: any = null;
@@ -110,6 +131,11 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
+
+    // Extract unique filter options and apply filters
+    this.programOptions = [...new Set(this.reportedActions.map(r => r.official_code))].sort();
+    this.statusOptions = [...new Set(this.reportedActions.map(r => r.action_status).filter(Boolean))].sort();
+    this.applyFilters();
 
     this.categoriesLevels = await this.dashboardService.categoriesLevels(
       projectFlag
@@ -424,6 +450,93 @@ export class DashboardComponent implements OnInit {
 
     this.title.setTitle('Risk dashboard');
     this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
+  }
+
+  applyFilters() {
+    let result = [...this.reportedActions];
+
+    if (this.filterProgram) {
+      result = result.filter(r => r.official_code === this.filterProgram);
+    }
+    if (this.filterStatus) {
+      result = result.filter(r => r.action_status === this.filterStatus);
+    }
+    if (this.filterDueDateFrom) {
+      const from = new Date(this.filterDueDateFrom);
+      result = result.filter(r => r.due_date && new Date(r.due_date) >= from);
+    }
+    if (this.filterDueDateTo) {
+      const to = new Date(this.filterDueDateTo);
+      result = result.filter(r => r.due_date && new Date(r.due_date) <= to);
+    }
+
+    // Re-apply current sort
+    if (this.sortField) {
+      result = this.sortArray(result, this.sortField, this.sortDirection);
+    }
+
+    this.filteredActions = result;
+    this.showAllActions = false;
+    this.updateDisplayedActions();
+  }
+
+  updateDisplayedActions() {
+    this.displayedActions = this.showAllActions
+      ? this.filteredActions
+      : this.filteredActions.slice(0, this.displayLimit);
+  }
+
+  toggleShowAll() {
+    this.showAllActions = !this.showAllActions;
+    this.updateDisplayedActions();
+  }
+
+  sortBy(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.filteredActions = this.sortArray(this.filteredActions, field, this.sortDirection);
+    this.updateDisplayedActions();
+  }
+
+  private sortArray(arr: any[], field: string, dir: 'asc' | 'desc'): any[] {
+    return [...arr].sort((a, b) => {
+      const valA = field === 'due_date' ? (a[field] ? new Date(a[field]).getTime() : 0) : a[field];
+      const valB = field === 'due_date' ? (b[field] ? new Date(b[field]).getTime() : 0) : b[field];
+      if (valA < valB) return dir === 'asc' ? -1 : 1;
+      if (valA > valB) return dir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  resetFilters() {
+    this.filterProgram = '';
+    this.filterStatus = '';
+    this.filterDueDateFrom = '';
+    this.filterDueDateTo = '';
+    this.sortField = '';
+    this.sortDirection = 'asc';
+    this.applyFilters();
+  }
+
+  exportExcel() {
+    const data = this.filteredActions.map(row => ({
+      'Risk id': row.risk_id,
+      'ID': row.official_code,
+      'Risk': row.risk_title,
+      'Description': row.risk_description,
+      'Due date': row.due_date,
+      'Actions/Controls': row.action_description,
+      'Status': row.action_status,
+    }));
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Reported Actions');
+    const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    saveAs(new Blob([buf]), 'Reported-Actions-Controls.xlsx');
   }
 
   riskProfile(data: any, type: string) {
