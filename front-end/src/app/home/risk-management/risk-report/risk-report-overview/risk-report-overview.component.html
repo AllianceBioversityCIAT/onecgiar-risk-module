@@ -150,7 +150,7 @@
       [program_id]="sciencePrograms.id"
       [AllRisk]="AllRisk"
       (filters)="filter($event)"
-      (exportPdf)="exportPdf()"
+      (exportPdf)="exportPdf($event)"
     ></app-search-risk>
 
     <app-risk-report-table

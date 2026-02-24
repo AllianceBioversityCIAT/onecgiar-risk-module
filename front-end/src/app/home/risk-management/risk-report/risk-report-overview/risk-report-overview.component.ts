@@ -90,8 +90,8 @@ export class RiskReportOverviewComponent implements OnInit {
   }
 
   savePdf: EventEmitter<any> = new EventEmitter<any>();
-  exportPdf() {
-    this.savePdf.emit();
+  exportPdf(type: string) {
+    this.savePdf.emit(type);
   }
   refresh(data: any = null) {
     this.loadInitiative();

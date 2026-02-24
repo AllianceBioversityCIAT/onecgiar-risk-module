@@ -30,8 +30,8 @@ export class SearchRiskComponent {
 
   @Output() exportPdf = new EventEmitter<string>();
 
-  exportPDF() {
-    this.exportPdf.emit();
+  exportPDF(type: 'technical' | 'full') {
+    this.exportPdf.emit(type);
   }
 
   exportWord() {

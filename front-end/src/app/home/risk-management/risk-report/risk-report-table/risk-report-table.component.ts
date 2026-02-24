@@ -273,6 +273,187 @@ export class RiskReportTableComponent {
     doc.save(`Risk-Report-${this.scienceProgramsId}.pdf`);
   }
 
+  public async SaveFullDetailsPDF(): Promise<void> {
+    const risks: any[] = this.AllRisk?.risks || this.dataSource?.data || [];
+    const allRisks = [...risks].sort(
+      (a: any, b: any) =>
+        b.current_likelihood * b.current_impact -
+        a.current_likelihood * a.current_impact
+    );
+
+    const logoBase64 = await this.getBase64FromUrl('assets/shared-image/cgiar-logo.png');
+
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210;
+    const margin = 15;
+    const contentWidth = pageWidth - margin * 2;
+    const themeR = 67, themeG = 98, themeB = 128;
+    const logoDisplayH = 20;
+    const logoDisplayW = logoDisplayH * (148 / 182);
+    const programName = this.sciencePrograms?.name || this.scienceProgramsId || '';
+
+    const drawHeader = (barH: number = 30) => {
+      doc.setFillColor(themeR, themeG, themeB);
+      doc.rect(0, 0, pageWidth, barH, 'F');
+      if (logoBase64) {
+        doc.addImage(logoBase64, 'PNG', margin, (barH - logoDisplayH) / 2, logoDisplayW, logoDisplayH);
+      }
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      const titleX = margin + logoDisplayW + 5;
+      const titleAvailWidth = pageWidth - margin - titleX;
+      const titleLines = doc.splitTextToSize('PRMS Risk Management', titleAvailWidth) as string[];
+      const lineH = 6;
+      const totalH = titleLines.length * lineH;
+      let titleY = (barH - totalH) / 2 + lineH;
+      for (const line of titleLines) {
+        doc.text(line, titleX, titleY);
+        titleY += lineH;
+      }
+    };
+
+    drawHeader();
+
+    let y = 42;
+
+    // Programme name
+    doc.setTextColor(themeR, themeG, themeB);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text(programName, margin, y);
+    y += 9;
+
+    // Subtitle
+    const year = new Date().getFullYear();
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 80);
+    doc.text(`All Risks – Full Details for ${year}`, margin, y);
+    y += 7;
+
+    doc.setDrawColor(themeR, themeG, themeB);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 9;
+
+    allRisks.forEach((risk: any, index: number) => {
+      const ownerName = risk.risk_owner?.user?.full_name || risk.risk_owner?.email || 'N/A';
+      const deadline = risk.due_date
+        ? new Date(risk.due_date).toLocaleDateString('en-GB')
+        : null;
+
+      // Page break guard
+      if (y > 247) { doc.addPage(); drawHeader(); y = 38; }
+
+      // Risk title
+      doc.setTextColor(themeR, themeG, themeB);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      const titleLines = doc.splitTextToSize(`${index + 1}. ${risk.title || ''}`, contentWidth);
+      doc.text(titleLines, margin, y);
+      y += titleLines.length * 6 + 2;
+
+      // Description
+      if (y > 267) { doc.addPage(); drawHeader(); y = 38; }
+      doc.setTextColor(50, 50, 50);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      const descLines = doc.splitTextToSize(risk.description || '', contentWidth);
+      if (y + descLines.length * 5 > 267) { doc.addPage(); drawHeader(); y = 38; }
+      doc.text(descLines, margin, y);
+      y += descLines.length * 5 + 3;
+
+      // Risk Owner
+      if (y > 267) { doc.addPage(); drawHeader(); y = 38; }
+      doc.setFont('helvetica', 'bold');
+      doc.text('Risk Owner: ', margin, y);
+      const ownerLabelW = doc.getTextWidth('Risk Owner: ');
+      doc.setFont('helvetica', 'normal');
+      doc.text(ownerName, margin + ownerLabelW, y);
+      y += 6;
+
+      // Due date
+      if (deadline) {
+        if (y > 267) { doc.addPage(); drawHeader(); y = 38; }
+        doc.setFont('helvetica', 'bold');
+        doc.text('Due date to reach Target Level: ', margin, y);
+        const dueLabelW = doc.getTextWidth('Due date to reach Target Level: ');
+        doc.setFont('helvetica', 'normal');
+        doc.text(deadline, margin + dueLabelW, y);
+        y += 6;
+      }
+
+      // Mitigations section
+      if (risk.mitigations?.length > 0) {
+        if (y > 267) { doc.addPage(); drawHeader(); y = 38; }
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(themeR, themeG, themeB);
+        doc.text('Actions/Controls to Manage Risks:', margin, y);
+        y += 6;
+
+        risk.mitigations.forEach((m: any) => {
+          const statusText = m.status?.title || 'N/A';
+          const bullet = `\u2022  ${m.description || ''}`;
+          const bulletLines = doc.splitTextToSize(bullet, contentWidth - 4);
+
+          if (y + bulletLines.length * 5 + 6 > 267) { doc.addPage(); drawHeader(); y = 38; }
+
+          doc.setTextColor(50, 50, 50);
+          doc.setFont('helvetica', 'normal');
+          doc.text(bulletLines, margin + 2, y);
+          y += bulletLines.length * 5;
+
+          // Status on the same indentation
+          doc.setFont('helvetica', 'bold');
+          doc.text('Status: ', margin + 4, y);
+          const statusLabelW = doc.getTextWidth('Status: ');
+          doc.setFont('helvetica', 'normal');
+          doc.text(statusText, margin + 4 + statusLabelW, y);
+          y += 6;
+        });
+      }
+
+      // Divider between risks
+      y += 3;
+      if (y <= 267) {
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.line(margin, y, pageWidth - margin, y);
+      }
+      y += 6;
+    });
+
+    // Bar chart — same conditional placement logic
+    const chartSpaceNeeded = 106;
+    let chartY: number;
+
+    if (y + chartSpaceNeeded > 275) {
+      doc.addPage();
+      drawHeader();
+      chartY = 38;
+    } else {
+      y += 5;
+      doc.setDrawColor(themeR, themeG, themeB);
+      doc.setLineWidth(0.5);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 7;
+      chartY = y;
+    }
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 80);
+    doc.text('Risk Level Comparison: Current vs Target', margin, chartY);
+    chartY += 8;
+
+    // Chart uses top-5 same as technical (bar chart stays readable)
+    const top5 = allRisks.slice(0, 5);
+    this.drawBarChart(doc, top5, chartY, margin, themeR, themeG, themeB);
+
+    doc.save(`Risk-Report-Full-${this.scienceProgramsId}.pdf`);
+  }
+
   private drawBarChart(
     doc: jsPDF,
     top5: any[],
@@ -398,8 +579,12 @@ export class RiskReportTableComponent {
       this.dialog.closeAll();
       this.connection = false;
     });
-    this.savePdf.subscribe(() => {
-      this.SavePDF();
+    this.savePdf.subscribe((type: string) => {
+      if (type === 'full') {
+        this.SaveFullDetailsPDF();
+      } else {
+        this.SavePDF();
+      }
     });
     this.user_info = this.userService.getLogedInUser();
     console.log(this.user_info);
