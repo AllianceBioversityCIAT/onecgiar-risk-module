@@ -108,20 +108,38 @@ export class RiskReportTableComponent {
     const contentWidth = pageWidth - margin * 2;
     const themeR = 67, themeG = 98, themeB = 128;
 
-    // Header bar
-    doc.setFillColor(themeR, themeG, themeB);
-    doc.rect(0, 0, pageWidth, 30, 'F');
+    // Logo dimensions — preserve 148×182 px portrait aspect ratio
+    const logoDisplayH = 20;
+    const logoDisplayW = logoDisplayH * (148 / 182); // ≈16.3 mm
+    const programName = this.sciencePrograms?.name || this.scienceProgramsId || '';
 
-    // CGIAR logo in header
-    if (logoBase64) {
-      doc.addImage(logoBase64, 'PNG', margin, 5, 40, 20);
-    }
+    // Reusable header drawer — logo | "PRMS Risk Management" (both left-aligned)
+    const drawHeader = (barH: number = 30) => {
+      doc.setFillColor(themeR, themeG, themeB);
+      doc.rect(0, 0, pageWidth, barH, 'F');
 
-    // "PRMS Risk Management" in header
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('PRMS Risk Management', pageWidth - margin, 19, { align: 'right' });
+      if (logoBase64) {
+        doc.addImage(logoBase64, 'PNG', margin, (barH - logoDisplayH) / 2, logoDisplayW, logoDisplayH);
+      }
+
+      // "PRMS Risk Management" beside the logo on the left
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      const titleX = margin + logoDisplayW + 5;
+      const titleAvailWidth = pageWidth - margin - titleX;
+      const titleLines = doc.splitTextToSize('PRMS Risk Management', titleAvailWidth) as string[];
+      const lineH = 6;
+      const totalH = titleLines.length * lineH;
+      let titleY = (barH - totalH) / 2 + lineH;
+      for (const line of titleLines) {
+        doc.text(line, titleX, titleY);
+        titleY += lineH;
+      }
+    };
+
+    // ── PAGE 1 ──────────────────────────────────────────────────────────────
+    drawHeader();
 
     let y = 42;
 
@@ -129,11 +147,7 @@ export class RiskReportTableComponent {
     doc.setTextColor(themeR, themeG, themeB);
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text(
-      this.sciencePrograms?.name || this.scienceProgramsId || '',
-      margin,
-      y
-    );
+    doc.text(programName, margin, y);
     y += 9;
 
     // Subtitle
@@ -193,20 +207,18 @@ export class RiskReportTableComponent {
       if (y > 267) { doc.addPage(); y = 20; }
       doc.setFont('helvetica', 'bold');
       doc.text('Risk Owner: ', margin, y);
+      const ownerLabelW = doc.getTextWidth('Risk Owner: ');
       doc.setFont('helvetica', 'normal');
-      doc.text(ownerName, margin + doc.getTextWidth('Risk Owner: '), y);
+      doc.text(ownerName, margin + ownerLabelW, y);
       y += 6;
 
       // Mitigating Actions
       if (y > 267) { doc.addPage(); y = 20; }
       doc.setFont('helvetica', 'bold');
       doc.text('Mitigating Actions in place: ', margin, y);
+      const mitigLabelW = doc.getTextWidth('Mitigating Actions in place: ');
       doc.setFont('helvetica', 'normal');
-      doc.text(
-        hasMitigations,
-        margin + doc.getTextWidth('Mitigating Actions in place: '),
-        y
-      );
+      doc.text(hasMitigations, margin + mitigLabelW, y);
       y += 6;
 
       // Deadline
@@ -214,8 +226,9 @@ export class RiskReportTableComponent {
         if (y > 267) { doc.addPage(); y = 20; }
         doc.setFont('helvetica', 'bold');
         doc.text('Deadline: ', margin, y);
+        const deadlineLabelW = doc.getTextWidth('Deadline: ');
         doc.setFont('helvetica', 'normal');
-        doc.text(deadline, margin + doc.getTextWidth('Deadline: '), y);
+        doc.text(deadline, margin + deadlineLabelW, y);
         y += 6;
       }
 
@@ -229,7 +242,111 @@ export class RiskReportTableComponent {
       y += 6;
     });
 
+    // ── Bar Chart — same page if space allows, otherwise new page ────────────
+    // Needs: 5 (gap) + 8 (subtitle) + 70 (plot) + 5 (x-labels) + 18 (legend) ≈ 106 mm
+    const chartSpaceNeeded = 106;
+    let chartY: number;
+
+    if (y + chartSpaceNeeded > 275) {
+      doc.addPage();
+      drawHeader();
+      chartY = 38;
+    } else {
+      // Divider before chart section
+      y += 5;
+      doc.setDrawColor(themeR, themeG, themeB);
+      doc.setLineWidth(0.5);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 7;
+      chartY = y;
+    }
+
+    // Chart subtitle
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 80);
+    doc.text('Risk Level Comparison: Current vs Target', margin, chartY);
+    chartY += 8;
+
+    this.drawBarChart(doc, top5, chartY, margin, themeR, themeG, themeB);
+
     doc.save(`Risk-Report-${this.scienceProgramsId}.pdf`);
+  }
+
+  private drawBarChart(
+    doc: jsPDF,
+    top5: any[],
+    startY: number,
+    margin: number,
+    themeR: number,
+    themeG: number,
+    themeB: number
+  ): void {
+    const leftEdge = margin + 14; // 14 mm for Y-axis labels
+    const plotW = 210 - margin * 2 - 14; // 166 mm
+    const plotH = 70; // mm
+    const bottomY = startY + plotH;
+    const maxVal = 25;
+    const scaleY = plotH / maxVal; // 2.8 mm per unit
+
+    // Y-axis gridlines + labels
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.2);
+    for (let v = 0; v <= maxVal; v += 5) {
+      const lineY = bottomY - v * scaleY;
+      doc.line(leftEdge, lineY, leftEdge + plotW, lineY);
+      doc.setTextColor(120, 120, 120);
+      doc.text(String(v), leftEdge - 2, lineY + 1, { align: 'right' });
+    }
+
+    // Axes
+    doc.setDrawColor(100, 100, 100);
+    doc.setLineWidth(0.4);
+    doc.line(leftEdge, startY, leftEdge, bottomY);   // Y-axis
+    doc.line(leftEdge, bottomY, leftEdge + plotW, bottomY); // X-axis
+
+    // Bars
+    const groupW = plotW / 5;
+    const barW = 12;
+    const barGap = 4;
+    const innerPad = (groupW - 2 * barW - barGap) / 2;
+
+    top5.forEach((risk: any, i: number) => {
+      const currentLevel = (risk.current_likelihood || 0) * (risk.current_impact || 0);
+      const targetLevel = (risk.target_likelihood || 0) * (risk.target_impact || 0);
+      const groupLeft = leftEdge + i * groupW + innerPad;
+
+      // Current bar (theme blue)
+      const currentH = currentLevel * scaleY;
+      doc.setFillColor(themeR, themeG, themeB);
+      doc.rect(groupLeft, bottomY - currentH, barW, currentH, 'F');
+
+      // Target bar (green)
+      const targetH = targetLevel * scaleY;
+      doc.setFillColor(75, 175, 120);
+      doc.rect(groupLeft + barW + barGap, bottomY - targetH, barW, targetH, 'F');
+
+      // X-axis label
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Risk ${i + 1}`, leftEdge + i * groupW + groupW / 2, bottomY + 5, { align: 'center' });
+    });
+
+    // Legend
+    const legendY = bottomY + 13;
+    doc.setFillColor(themeR, themeG, themeB);
+    doc.rect(margin, legendY - 3, 5, 4, 'F');
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    doc.text('Current Risk Level', margin + 7, legendY);
+
+    doc.setFillColor(75, 175, 120);
+    doc.rect(margin + 55, legendY - 3, 5, 4, 'F');
+    doc.text('Target Risk Level', margin + 63, legendY);
   }
 
   private getBase64FromUrl(url: string): Promise<string> {
