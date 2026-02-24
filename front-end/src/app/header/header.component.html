@@ -5,20 +5,96 @@
     [style.background]="headerService.background"
     class="header-risk__content"
   >
-    <div class="header-content-box">
-      <div class="header-content-box--1">
-        <img
-          src="../../assets/shared-image/mask-group.svg"
-          class="header-logo-size"
-          alt="~/Frontend/images/question-circular-button.svg"
-        />
+    <div class="header-branding">
+      <div class="header-content-box">
+        <div class="header-content-box--1">
+          <img
+            src="../../assets/shared-image/mask-group.svg"
+            class="header-logo-size"
+            alt="~/Frontend/images/question-circular-button.svg"
+          />
+        </div>
+        <div class="header-content-box--2">
+          <p class="header-content-box--2__title">
+            <span class="header-content-box--2__title--1">PRMS</span>
+            Risk
+          </p>
+        </div>
       </div>
-      <div class="header-content-box--2">
-        <p class="header-content-box--2__title">
-          <span class="header-content-box--2__title--1">CGIAR</span>
-          Risk Management
-        </p>
-      </div>
+      <nav
+        class="header-risk__main-nav"
+        [style.background]="headerService.backgroundNavMain"
+      >
+        <ul class="main-nav-list">
+          <li>
+            <a
+              (click)="accessHome()"
+              [routerLink]="[homeRoute]"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="about"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>About Risk</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="faq"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>FAQ</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="glossary"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Glossary</span>
+            </a>
+          </li>
+
+          <li *ngIf="user_info">
+            <a
+              routerLink="dashboard"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Dashboard</span>
+            </a>
+          </li>
+
+          <li *ngIf="user_info?.role == 'admin'">
+            <a
+              routerLink="admin"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Admin Module</span>
+            </a>
+          </li>
+          <li *ngIf="user_info">
+            <a
+              routerLink="archive"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Archive</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
     <nav class="header-user-nav-box">
@@ -96,12 +172,6 @@
             user_info?.full_name
           }}</span>
         </span>
-
-        <span class="user-nav-button__invisible">
-          <span class="user-nav-button__title--3">{{
-            user_info?.full_name
-          }}</span></span
-        >
       </button>
 
       <button
@@ -137,82 +207,6 @@
       </button>
     </nav>
   </div>
-
-  <!-- section nav -->
-  <nav
-    class="header-risk__main-nav"
-    [style.background]="headerService.backgroundNavMain"
-  >
-    <ul class="main-nav-list">
-      <li>
-        <a
-          (click)="accessHome()"
-          [routerLink]="[homeRoute]"
-          class="main-nav-link cool-link"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <span>Home</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="about"
-          class="main-nav-link cool-link"
-          routerLinkActive="active"
-        >
-          <span>About Risk</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="faq"
-          class="main-nav-link cool-link"
-          routerLinkActive="active"
-        >
-          <span>FAQ</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="glossary"
-          class="main-nav-link cool-link"
-          routerLinkActive="active"
-        >
-          <span>Glossary</span>
-        </a>
-      </li>
-
-      <li *ngIf="user_info">
-        <a
-          routerLink="dashboard"
-          class="main-nav-link cool-link"
-          routerLinkActive="active"
-        >
-          <span>Dashboard</span>
-        </a>
-      </li>
-
-      <li *ngIf="user_info?.role == 'admin'">
-        <a
-          routerLink="admin"
-          class="main-nav-link cool-link"
-          routerLinkActive="active"
-        >
-          <span>Admin Module</span>
-        </a>
-      </li>
-      <li *ngIf="user_info">
-        <a
-          routerLink="archive"
-          class="main-nav-link cool-link"
-          routerLinkActive="active"
-        >
-          <span>Archive</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
   <div [ngClass]="{ admin: isadmin }" class="loading-holder">
     <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   </div>
