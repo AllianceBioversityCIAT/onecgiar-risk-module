@@ -136,6 +136,16 @@
           <button mat-raised-button color="primary" class="filter-btn" (click)="exportExcel()">
             <mat-icon>file_download</mat-icon> Export Excel
           </button>
+
+          <button mat-raised-button color="accent" class="filter-btn" [matMenuTriggerFor]="pdfMenu">
+            <mat-icon>picture_as_pdf</mat-icon> Export PDF
+            <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #pdfMenu="matMenu">
+            <button mat-menu-item (click)="exportLandscapePDF()">
+              <mat-icon>table_chart</mat-icon> Report Landscape
+            </button>
+          </mat-menu>
         </div>
 
         <div class="table-box table-box--compact mat-elevation-z8" *ngIf="reportedActions.length">

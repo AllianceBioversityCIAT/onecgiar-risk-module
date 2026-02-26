@@ -454,6 +454,128 @@ export class RiskReportTableComponent {
     doc.save(`Risk-Report-Full-${this.scienceProgramsId}.pdf`);
   }
 
+  public async SaveLandscapePDF(): Promise<void> {
+    const risks: any[] = this.AllRisk?.risks || this.dataSource?.data || [];
+    const top5 = [...risks]
+      .sort(
+        (a: any, b: any) =>
+          b.current_likelihood * b.current_impact -
+          a.current_likelihood * a.current_impact
+      )
+      .slice(0, 5);
+
+    const logoBase64 = await this.getBase64FromUrl('assets/shared-image/cgiar-logo.png');
+
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageH = 210;
+    const margin = 12;
+    const themeR = 67, themeG = 98, themeB = 128;
+    const logoH = 10;
+    const logoW = logoH * (148 / 182);
+
+    const cols = [
+      { header: 'ID',                          key: 'id',          w: 14 },
+      { header: 'Risk Title',                  key: 'title',       w: 55 },
+      { header: 'Description',                 key: 'description', w: 90 },
+      { header: 'Mitigation Action in place?', key: 'mitigations', w: 55 },
+      { header: 'Deadline',                    key: 'due_date',    w: 29 },
+    ];
+
+    const cellPad  = 2;
+    const hdrH    = 8;
+    const tableX   = margin;
+    // Rows start after logo header (17mm) + table header (8mm)
+    const rowsStartY = 17 + hdrH;
+    const rowsEndY   = pageH - 8; // 8mm bottom margin
+    const availableH = rowsEndY - rowsStartY;
+
+    const getCellVal = (col: { key: string }, risk: any): string => {
+      if (col.key === 'mitigations') {
+        return risk.mitigations?.length > 0 ? 'Yes' : 'No';
+      }
+      if (col.key === 'due_date') {
+        if (!risk.due_date) return '-';
+        const d = new Date(risk.due_date);
+        return isNaN(d.getTime()) ? String(risk.due_date) : d.toLocaleDateString('en-GB');
+      }
+      return String(risk[col.key] ?? '');
+    };
+
+    // ── Find the largest font size that fits all 5 rows on one page ──────────
+    let fontSize = 8;
+    let lineH    = 3.8;
+
+    const calcLayout = (fs: number, lh: number) => {
+      doc.setFontSize(fs);
+      doc.setFont('helvetica', 'normal');
+      const cellTextsAll = top5.map(risk =>
+        cols.map(col => doc.splitTextToSize(getCellVal(col, risk), col.w - cellPad * 2) as string[])
+      );
+      const rowHeights = cellTextsAll.map(cells => {
+        const maxLines = Math.max(...cells.map(t => t.length));
+        return Math.max(6, maxLines * lh + cellPad * 2);
+      });
+      return { cellTextsAll, rowHeights, totalH: rowHeights.reduce((s, h) => s + h, 0) };
+    };
+
+    let layout = calcLayout(fontSize, lineH);
+    while (layout.totalH > availableH && fontSize > 5.5) {
+      fontSize -= 0.25;
+      lineH    -= 0.1;
+      layout    = calcLayout(fontSize, lineH);
+    }
+
+    // ── Draw page header (logo + "PRMS Risk") ────────────────────────────────
+    if (logoBase64) {
+      doc.addImage(logoBase64, 'PNG', margin, 3, logoW, logoH);
+    }
+    doc.setTextColor(themeR, themeG, themeB);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PRMS Risk', margin + logoW + 3, 10);
+
+    // ── Draw table header row ─────────────────────────────────────────────────
+    let x = tableX;
+    doc.setFontSize(Math.min(8.5, fontSize + 0.5));
+    doc.setFont('helvetica', 'bold');
+    for (const col of cols) {
+      doc.setFillColor(themeR, themeG, themeB);
+      doc.setDrawColor(255, 255, 255);
+      doc.setLineWidth(0.3);
+      doc.rect(x, 17, col.w, hdrH, 'FD');
+      doc.setTextColor(255, 255, 255);
+      doc.text(col.header, x + cellPad, 17 + hdrH / 2 + 1.5);
+      x += col.w;
+    }
+
+    // ── Draw data rows ────────────────────────────────────────────────────────
+    let y = rowsStartY;
+    doc.setFontSize(fontSize);
+    doc.setFont('helvetica', 'normal');
+
+    layout.cellTextsAll.forEach((cellTexts, ri) => {
+      const rowH = layout.rowHeights[ri];
+      x = tableX;
+      for (let i = 0; i < cols.length; i++) {
+        const col = cols[i];
+        doc.setFillColor(ri % 2 === 1 ? 240 : 255, ri % 2 === 1 ? 244 : 255, ri % 2 === 1 ? 248 : 255);
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.2);
+        doc.rect(x, y, col.w, rowH, 'FD');
+        doc.setTextColor(30, 30, 30);
+        let textY = y + cellPad + fontSize * 0.35;
+        for (const line of cellTexts[i]) {
+          doc.text(line, x + cellPad, textY);
+          textY += lineH;
+        }
+        x += col.w;
+      }
+      y += rowH;
+    });
+
+    doc.save(`Risk-Report-Landscape-${this.scienceProgramsId}.pdf`);
+  }
+
   private drawBarChart(
     doc: jsPDF,
     top5: any[],
@@ -582,6 +704,8 @@ export class RiskReportTableComponent {
     this.savePdf.subscribe((type: string) => {
       if (type === 'full') {
         this.SaveFullDetailsPDF();
+      } else if (type === 'landscape') {
+        this.SaveLandscapePDF();
       } else {
         this.SavePDF();
       }

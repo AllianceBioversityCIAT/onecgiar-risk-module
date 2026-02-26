@@ -4,6 +4,7 @@ import HighchartsMore from 'highcharts/highcharts-more';
 import SunburstModule from 'highcharts/modules/sunburst';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { jsPDF } from 'jspdf';
 
 import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
 import { DashboardService } from '../services/dashboard.service';
@@ -613,5 +614,132 @@ export class DashboardComponent implements OnInit {
       default:
         return `background-color: #6ab8f2;`;
     }
+  }
+
+  async exportLandscapePDF(): Promise<void> {
+    const rows = this.filteredActions;
+    if (!rows.length) return;
+
+    const logoBase64 = await this.getBase64FromUrl('assets/shared-image/cgiar-logo.png');
+
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageW = 297;
+    const pageH = 210;
+    const margin = 12;
+    const themeR = 67, themeG = 98, themeB = 128;
+
+    const cols = [
+      { header: 'ID',                 key: 'official_code',      w: 18 },
+      { header: 'Risk Title',         key: 'risk_title',         w: 50 },
+      { header: 'Description',        key: 'risk_description',   w: 68 },
+      { header: 'Mitigation Action',  key: 'action_description', w: 68 },
+      { header: 'Status',             key: 'action_status',      w: 30 },
+      { header: 'Deadline',           key: 'due_date',           w: 27 },
+    ];
+
+    const cellPad  = 2;
+    const hdrH     = 8;
+    const fontSize  = 7.5;
+    const lineH     = 3.5;  // mm per wrapped line at fontSize 7.5
+
+    const tableX = margin;
+
+    const drawPageHeader = () => {
+      const logoH = 10;
+      const logoW = logoH * (148 / 182);
+      if (logoBase64) {
+        doc.addImage(logoBase64, 'PNG', margin, 3, logoW, logoH);
+      }
+      doc.setTextColor(themeR, themeG, themeB);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('PRMS Risk', margin + logoH * (148 / 182) + 3, 10);
+    };
+
+    const drawTableHeader = (y: number) => {
+      let x = tableX;
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'bold');
+      for (const col of cols) {
+        doc.setFillColor(themeR, themeG, themeB);
+        doc.setDrawColor(255, 255, 255);
+        doc.setLineWidth(0.3);
+        doc.rect(x, y, col.w, hdrH, 'FD');
+        doc.setTextColor(255, 255, 255);
+        doc.text(col.header, x + cellPad, y + hdrH / 2 + 1.5);
+        x += col.w;
+      }
+    };
+
+    // Set font BEFORE splitTextToSize so wrapping matches the render size
+    doc.setFontSize(fontSize);
+    doc.setFont('helvetica', 'normal');
+
+    drawPageHeader();
+    let y = 17;
+    drawTableHeader(y);
+    y += hdrH;
+
+    let rowAlt = false;
+    for (const row of rows) {
+      const cellTexts = cols.map(col => {
+        let val: string = row[col.key] ?? '';
+        if (col.key === 'due_date' && val) {
+          const d = new Date(val);
+          val = isNaN(d.getTime()) ? String(val) : d.toLocaleDateString('en-GB');
+        }
+        return doc.splitTextToSize(String(val), col.w - cellPad * 2) as string[];
+      });
+
+      const maxLines = Math.max(...cellTexts.map(t => t.length));
+      const rowH = Math.max(6, maxLines * lineH + cellPad * 2);
+
+      if (y + rowH > pageH - 8) {
+        doc.addPage();
+        doc.setFontSize(fontSize);
+        doc.setFont('helvetica', 'normal');
+        drawPageHeader();
+        y = 17;
+        drawTableHeader(y);
+        y += hdrH;
+        rowAlt = false;
+      }
+
+      let x = tableX;
+      for (let i = 0; i < cols.length; i++) {
+        const col = cols[i];
+        doc.setFillColor(rowAlt ? 240 : 255, rowAlt ? 244 : 255, rowAlt ? 248 : 255);
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.2);
+        doc.rect(x, y, col.w, rowH, 'FD');
+        doc.setTextColor(30, 30, 30);
+        let textY = y + cellPad + fontSize * 0.35;
+        for (const line of cellTexts[i]) {
+          doc.text(line, x + cellPad, textY);
+          textY += lineH;
+        }
+        x += col.w;
+      }
+      y += rowH;
+      rowAlt = !rowAlt;
+    }
+
+    doc.save('Report-Landscape.pdf');
+  }
+
+  private getBase64FromUrl(url: string): Promise<string | null> {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        canvas.getContext('2d')!.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = () => resolve(null);
+      img.src = url;
+    });
   }
 }
