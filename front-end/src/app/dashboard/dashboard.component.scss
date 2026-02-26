@@ -224,14 +224,18 @@ highcharts-chart {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .filter-field {
-  min-width: 160px;
-  max-width: 200px;
+  min-width: 140px;
+  max-width: 180px;
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
 }
 
 .filter-btn {
@@ -266,4 +270,38 @@ highcharts-chart {
   padding: 2rem;
   color: #666;
   font-size: 1.4rem;
+}
+
+/* Compact variant for the Reported Actions/Controls table */
+.table-box--compact {
+  margin-top: 0.5rem;
+
+  ::ng-deep mat-card {
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 1.1rem !important;
+    line-height: 1.3 !important;
+  }
+
+  th {
+    font-size: 1.2rem !important;
+    white-space: nowrap;
+  }
+
+  /* Reset fixed widths from the global nth-child rules */
+  th:nth-child(n),
+  td:nth-child(n) {
+    width: auto !important;
+    padding: 0.4rem 0.6rem !important;
+  }
 }
