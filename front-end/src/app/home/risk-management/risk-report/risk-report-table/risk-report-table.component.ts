@@ -481,12 +481,14 @@ export class RiskReportTableComponent {
       { header: 'Deadline',                    key: 'due_date',    w: 29 },
     ];
 
-    const cellPad  = 2;
-    const hdrH    = 8;
-    const tableX   = margin;
-    // Rows start after logo header (17mm) + table header (8mm)
-    const rowsStartY = 17 + hdrH;
-    const rowsEndY   = pageH - 8; // 8mm bottom margin
+    const cellPad    = 2;
+    const hdrH      = 8;
+    const totalColW  = cols.reduce((s, c) => s + c.w, 0);
+    const tableX     = (297 - totalColW) / 2;   // centered horizontally
+    // Layout: logo area (17mm) + program title (6mm) = 23mm for table header
+    const tableHdrY  = 23;
+    const rowsStartY = tableHdrY + hdrH;
+    const rowsEndY   = pageH - 8;
     const availableH = rowsEndY - rowsStartY;
 
     const getCellVal = (col: { key: string }, risk: any): string => {
@@ -525,7 +527,9 @@ export class RiskReportTableComponent {
       layout    = calcLayout(fontSize, lineH);
     }
 
-    // ── Draw page header (logo + "PRMS Risk") ────────────────────────────────
+    const programName = this.sciencePrograms?.name || this.scienceProgramsId || '';
+
+    // ── Logo + "PRMS Risk" (top-left) ─────────────────────────────────────────
     if (logoBase64) {
       doc.addImage(logoBase64, 'PNG', margin, 3, logoW, logoH);
     }
@@ -533,6 +537,14 @@ export class RiskReportTableComponent {
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.text('PRMS Risk', margin + logoW + 3, 10);
+
+    // ── Program title centered above table ────────────────────────────────────
+    if (programName) {
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(themeR, themeG, themeB);
+      doc.text(programName, 297 / 2, 19, { align: 'center' });
+    }
 
     // ── Draw table header row ─────────────────────────────────────────────────
     let x = tableX;
@@ -542,9 +554,9 @@ export class RiskReportTableComponent {
       doc.setFillColor(themeR, themeG, themeB);
       doc.setDrawColor(255, 255, 255);
       doc.setLineWidth(0.3);
-      doc.rect(x, 17, col.w, hdrH, 'FD');
+      doc.rect(x, tableHdrY, col.w, hdrH, 'FD');
       doc.setTextColor(255, 255, 255);
-      doc.text(col.header, x + cellPad, 17 + hdrH / 2 + 1.5);
+      doc.text(col.header, x + cellPad, tableHdrY + hdrH / 2 + 1.5);
       x += col.w;
     }
 

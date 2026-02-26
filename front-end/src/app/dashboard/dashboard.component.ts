@@ -637,12 +637,14 @@ export class DashboardComponent implements OnInit {
       { header: 'Deadline',           key: 'due_date',           w: 27 },
     ];
 
-    const cellPad  = 2;
-    const hdrH     = 8;
-    const fontSize  = 7.5;
-    const lineH     = 3.5;  // mm per wrapped line at fontSize 7.5
-
-    const tableX = margin;
+    const cellPad     = 2;
+    const hdrH        = 8;
+    const fontSize    = 7.5;
+    const lineH       = 3.5;
+    const totalColW   = cols.reduce((s, c) => s + c.w, 0);
+    const tableX      = (297 - totalColW) / 2;  // centered horizontally
+    const tableHdrY   = 23;                      // below logo + title
+    const programLabel = this.filterProgram || 'All Programs';
 
     const drawPageHeader = () => {
       const logoH = 10;
@@ -650,10 +652,15 @@ export class DashboardComponent implements OnInit {
       if (logoBase64) {
         doc.addImage(logoBase64, 'PNG', margin, 3, logoW, logoH);
       }
+      // "PRMS Risk" top-left
       doc.setTextColor(themeR, themeG, themeB);
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
-      doc.text('PRMS Risk', margin + logoH * (148 / 182) + 3, 10);
+      doc.text('PRMS Risk', margin + logoW + 3, 10);
+      // Program title centered above table
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text(programLabel, 297 / 2, 19, { align: 'center' });
     };
 
     const drawTableHeader = (y: number) => {
@@ -676,7 +683,7 @@ export class DashboardComponent implements OnInit {
     doc.setFont('helvetica', 'normal');
 
     drawPageHeader();
-    let y = 17;
+    let y = tableHdrY;
     drawTableHeader(y);
     y += hdrH;
 
@@ -699,7 +706,7 @@ export class DashboardComponent implements OnInit {
         doc.setFontSize(fontSize);
         doc.setFont('helvetica', 'normal');
         drawPageHeader();
-        y = 17;
+        y = tableHdrY;
         drawTableHeader(y);
         y += hdrH;
         rowAlt = false;
