@@ -179,32 +179,23 @@ highcharts-chart {
   margin: auto;
 }
 
-/* Toggle filter */
-.dashboard-filter {
+/* Global filter bar */
+.global-filter-bar {
+  width: 95%;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  margin: 0;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
-.mat-button-toggle-group {
-  border: 1px solid #d0d5dd;
-  border-radius: 8px;
-  overflow: hidden;
+.filter-spacer {
+  flex: 1;
 }
 
-.mat-button-toggle {
-  text-transform: none;
-}
-
-:host ::ng-deep .mat-button-toggle-group-appearance-standard
-  .mat-button-toggle
-  + .mat-button-toggle {
-  border-left: solid 1px #d0d5dd;
-}
-
-:host ::ng-deep .mat-button-toggle-checked {
-  background: linear-gradient(to right, #0f212f, #0e1e2b);
-  color: #ffffff;
+.filter-field--wide {
+  min-width: 220px;
+  max-width: 300px;
 }
 
 .table-box {

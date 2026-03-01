@@ -1,42 +1,65 @@
 <section class="section-dashboard">
   <div class="dashboard-box">
-    <!-- step--1 -->
+    <!-- Title -->
     <div class="dashboard-title-box">
       <p class="dashboard-title-box__title">Risk dashboard</p>
     </div>
 
-    <!-- ── NEW Programs / Projects toggle ── -->
-    <!-- <div
-      class="dashboard-filter"
-      style="display: flex; gap: 1rem; align-items: center; margin: 1rem 0"
-    >
-      <mat-checkbox [checked]="!isProjectFilter" (change)="selectPrograms()">
-        ✅ Programs
-      </mat-checkbox>
-      <mat-checkbox [checked]="isProjectFilter" (change)="selectProjects()">
-        ☐ Projects
-      </mat-checkbox>
-    </div> -->
+    <!-- Global filter bar (controls all visuals) -->
+    <div class="global-filter-bar">
+      <mat-form-field appearance="outline" class="filter-field filter-field--wide">
+        <mat-label>Program / Project</mat-label>
+        <mat-select [(ngModel)]="globalProgram" (selectionChange)="applyGlobalFilters()">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let p of allProgramOptions" [value]="p.code">
+            {{ p.code }} - {{ p.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- ── NEW Programs / Projects toggle ── -->
-    <mat-button-toggle-group
-      #typeToggle="matButtonToggleGroup"
-      class="dashboard-filter"
-      [value]="isProjectFilter ? 'project' : 'program'"
-      (change)="onTypeToggle($event)"
-      exclusive
-    >
-      <mat-button-toggle value="program">Programs</mat-button-toggle>
-      <mat-button-toggle value="project">Projects</mat-button-toggle>
-    </mat-button-toggle-group>
-    <!-- ──────────────────────────────────── -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Risk Category</mat-label>
+        <mat-select [(ngModel)]="globalCategory" (selectionChange)="applyGlobalFilters()">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let c of allCategoryOptions" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- ──────────────────────────────────── -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Center</mat-label>
+        <mat-select [(ngModel)]="globalCenter" (selectionChange)="applyGlobalFilters()">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let c of allCenterOptions" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- step--2 -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Action Status</mat-label>
+        <mat-select [(ngModel)]="globalActionStatus" (selectionChange)="applyGlobalFilters()">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let s of allActionStatusOptions" [value]="s">{{ s }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button class="filter-btn" (click)="resetGlobalFilters()">
+        <mat-icon>filter_alt_off</mat-icon> Reset
+      </button>
+
+      <span class="filter-spacer"></span>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="globalType" (selectionChange)="onTypeChange()">
+          <mat-option value="program">Programs</mat-option>
+          <mat-option value="project">Projects</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Dashboard content -->
     <div class="dashboard-main-content">
       <div class="dashboard-content-container">
-        <!-- step-box-1 -->
+        <!-- Charts grid -->
         <div class="dashboard-img-box-grid-container">
           <!-- item-1 -->
           <div class="dashboard-item-box">
@@ -45,7 +68,6 @@
                 Current Risk profile
               </p>
             </div>
-
             <highcharts-chart
               *ngIf="risk_profile_current_chartOptions"
               [Highcharts]="Highcharts"
@@ -101,51 +123,25 @@
           <p class="dashboard-title-table-box__title">Reported Actions/Controls</p>
         </div>
 
-        <!-- Filter bar -->
+        <!-- Table filter bar (date filters + export) -->
         <div class="actions-filter-bar" *ngIf="reportedActions.length">
           <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>Program</mat-label>
-            <mat-select [(ngModel)]="filterProgram" (selectionChange)="applyFilters()">
-              <mat-option value="">All</mat-option>
-              <mat-option *ngFor="let p of programOptions" [value]="p">{{ p }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>Status</mat-label>
-            <mat-select [(ngModel)]="filterStatus" (selectionChange)="applyFilters()">
-              <mat-option value="">All</mat-option>
-              <mat-option *ngFor="let s of statusOptions" [value]="s">{{ s }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="filter-field">
             <mat-label>Due date from</mat-label>
-            <input matInput type="date" [(ngModel)]="filterDueDateFrom" (change)="applyFilters()">
+            <input matInput type="date" [(ngModel)]="filterDueDateFrom" (change)="applyTableFilters()">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="filter-field">
             <mat-label>Due date to</mat-label>
-            <input matInput type="date" [(ngModel)]="filterDueDateTo" (change)="applyFilters()">
+            <input matInput type="date" [(ngModel)]="filterDueDateTo" (change)="applyTableFilters()">
           </mat-form-field>
 
-          <button mat-stroked-button class="filter-btn" (click)="resetFilters()">
+          <button mat-stroked-button class="filter-btn" (click)="resetTableFilters()">
             <mat-icon>filter_alt_off</mat-icon> Reset
           </button>
 
           <button mat-raised-button color="primary" class="filter-btn" (click)="exportExcel()">
             <mat-icon>file_download</mat-icon> Export Excel
           </button>
-
-          <button mat-raised-button color="accent" class="filter-btn" [matMenuTriggerFor]="pdfMenu">
-            <mat-icon>picture_as_pdf</mat-icon> Export PDF
-            <mat-icon>arrow_drop_down</mat-icon>
-          </button>
-          <mat-menu #pdfMenu="matMenu">
-            <button mat-menu-item (click)="exportLandscapePDF()">
-              <mat-icon>table_chart</mat-icon> Report Landscape
-            </button>
-          </mat-menu>
         </div>
 
         <div class="table-box table-box--compact mat-elevation-z8" *ngIf="reportedActions.length">

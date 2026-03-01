@@ -10,7 +10,6 @@ import { ApiRiskDetailsService } from '../shared-services/risk-details-services/
 import { DashboardService } from '../services/dashboard.service';
 import { HeaderService } from '../header.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 HighchartsMore(Highcharts);
 SunburstModule(Highcharts);
@@ -26,29 +25,14 @@ export class DashboardComponent implements OnInit {
   };
   Highcharts = Highcharts;
 
-  /** false = Programs (isProject=0), true = Projects (isProject=1) */
-  isProjectFilter = false;
+  // Global filters (control all visuals)
+  globalType: 'program' | 'project' = 'program';
+  globalProgram = '';
+  globalCategory = '';
+  globalCenter = '';
+  globalActionStatus = '';
 
-  data: any = null;
-  status: any = null;
-  categoriesCount: any = null;
-  risk_profile_current_chartOptions: any = null;
-  risk_profile_target_chartOptions: any = null;
-  avg_level_chartOptions: any = null;
-  categories_count_chartOptions: any = null;
-  status_of_action_chartOptions: any = null;
-  category_group_chartOptions: any = null;
-  categoriesLevels: any = null;
-  details: any = null;
-  reportedActions: any[] = [];
-  filteredActions: any[] = [];
-  displayedActions: any[] = [];
-  showAllActions = false;
-  displayLimit = 10;
-
-  // Filters
-  filterProgram = '';
-  filterStatus = '';
+  // Table-specific filters
   filterDueDateFrom = '';
   filterDueDateTo = '';
 
@@ -56,13 +40,27 @@ export class DashboardComponent implements OnInit {
   sortField = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  // Dropdown options
-  programOptions: string[] = [];
-  statusOptions: string[] = [];
+  // Global filter dropdown options
+  allProgramOptions: { code: string; name: string }[] = [];
+  allCategoryOptions: string[] = [];
+  allCenterOptions: string[] = [];
+  allActionStatusOptions: string[] = [];
 
-  groups: any = null;
-  action_areas: any = null;
-  totalStatus: any = null;
+  // Chart options
+  risk_profile_current_chartOptions: any = null;
+  risk_profile_target_chartOptions: any = null;
+  status_of_action_chartOptions: any = null;
+  categories_count_chartOptions: any = null;
+
+  // Data
+  allDetails: any[] = [];
+  filteredDetails: any[] = [];
+  details: any = null;
+  reportedActions: any[] = [];
+  filteredActions: any[] = [];
+  displayedActions: any[] = [];
+  showAllActions = false;
+  displayLimit = 10;
 
   constructor(
     private apiRiskDetailsService: ApiRiskDetailsService,
@@ -80,49 +78,252 @@ export class DashboardComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // initial load (Programs)
     await this.loadDashboard();
     this.title.setTitle('Risk dashboard');
     this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
   }
 
-  /** back to Programs (isProject=0) */
-  selectPrograms() {
-    if (this.isProjectFilter) {
-      this.isProjectFilter = false;
-      this.loadDashboard();
-    }
-  }
-
-  /** switch to Projects (isProject=1) */
-  selectProjects() {
-    if (!this.isProjectFilter) {
-      this.isProjectFilter = true;
-      this.loadDashboard();
-    }
-  }
-
-  /** called whenever you click “Programs” or “Projects” */
-  onTypeToggle(event: MatButtonToggleChange) {
-    this.isProjectFilter = event.value === 'project';
+  /** Reload from backend when type changes (Programs / Projects) */
+  onTypeChange() {
+    this.globalProgram = '';
+    this.globalCategory = '';
+    this.globalCenter = '';
+    this.globalActionStatus = '';
     this.loadDashboard();
   }
-  /** reload _all_ dashboard data using current isProjectFilter */
+
+  /** Load all data from backend */
   private async loadDashboard() {
-    const projectFlag = this.isProjectFilter ? 1 : 0;
+    const projectFlag = this.globalType === 'project' ? 1 : 0;
+    this.allDetails = await this.dashboardService.details(projectFlag);
+    this.extractFilterOptions();
+    this.applyGlobalFilters();
+  }
 
-    // now pass that number to each service call
-    this.data = await this.dashboardService.current(projectFlag);
-    this.details = await this.dashboardService.details(projectFlag);
+  /** Extract unique values for each filter dropdown from raw data */
+  private extractFilterOptions() {
+    const programs: { code: string; name: string }[] = [];
+    const categories = new Set<string>();
+    const centers = new Set<string>();
+    const statuses = new Set<string>();
 
-    // Flatten programs → risks → mitigations into a flat row per mitigation
+    for (const p of this.allDetails) {
+      if (p.official_code) {
+        programs.push({ code: p.official_code, name: p.name });
+      }
+      for (const o of p.organizations || []) {
+        if (o.acronym) centers.add(o.acronym);
+      }
+      for (const r of p.risks || []) {
+        if (r.category?.title) categories.add(r.category.title);
+        for (const m of r.mitigations || []) {
+          if (m.status?.title) statuses.add(m.status.title);
+        }
+      }
+    }
+
+    this.allProgramOptions = programs.sort((a, b) =>
+      a.code.localeCompare(b.code)
+    );
+    this.allCategoryOptions = [...categories].sort();
+    this.allCenterOptions = [...centers].sort();
+    this.allActionStatusOptions = [...statuses].sort();
+  }
+
+  /** Apply global filters to all visuals */
+  applyGlobalFilters() {
+    let filtered = this.allDetails;
+
+    // Program-level filters
+    if (this.globalCenter) {
+      filtered = filtered.filter((p: any) =>
+        (p.organizations || []).some(
+          (o: any) => o.acronym === this.globalCenter
+        )
+      );
+    }
+    if (this.globalProgram) {
+      filtered = filtered.filter(
+        (p: any) => p.official_code === this.globalProgram
+      );
+    }
+
+    // Risk & mitigation level filters — deep filter
+    filtered = filtered
+      .map((p: any) => {
+        let risks = [...(p.risks || [])];
+
+        if (this.globalCategory) {
+          risks = risks.filter(
+            (r: any) => r.category?.title === this.globalCategory
+          );
+        }
+
+        if (this.globalActionStatus) {
+          risks = risks
+            .map((r: any) => ({
+              ...r,
+              mitigations: (r.mitigations || []).filter(
+                (m: any) => m.status?.title === this.globalActionStatus
+              ),
+            }))
+            .filter((r: any) => r.mitigations.length > 0);
+        }
+
+        return { ...p, risks };
+      })
+      .filter((p: any) => p.risks.length > 0);
+
+    this.filteredDetails = filtered;
+    this.details = filtered;
+
+    this.rebuildCharts();
+    this.rebuildReportedActions();
+  }
+
+  /** Recompute all chart options from filteredDetails */
+  private rebuildCharts() {
+    // Bubble charts: average scores per program
+    const scoreData = this.filteredDetails
+      .map((p: any) => {
+        const risks = p.risks || [];
+        if (!risks.length) return null;
+        const avg = (arr: number[]) =>
+          arr.reduce((s, v) => s + v, 0) / arr.length;
+        return {
+          official_code: p.official_code,
+          name: p.name,
+          current_impact: avg(risks.map((r: any) => +r.current_impact)),
+          current_likelihood: avg(
+            risks.map((r: any) => +r.current_likelihood)
+          ),
+          target_impact: avg(risks.map((r: any) => +r.target_impact)),
+          target_likelihood: avg(
+            risks.map((r: any) => +r.target_likelihood)
+          ),
+        };
+      })
+      .filter(Boolean);
+
+    this.risk_profile_current_chartOptions = this.riskProfile(
+      scoreData,
+      'Current'
+    );
+    this.risk_profile_target_chartOptions = this.riskProfile(
+      scoreData,
+      'Target'
+    );
+
+    // Status of action pie
+    const statusMap: Record<string, number> = {};
+    for (const p of this.filteredDetails) {
+      for (const r of p.risks || []) {
+        for (const m of r.mitigations || []) {
+          const s = m.status?.title || 'Unknown';
+          statusMap[s] = (statusMap[s] || 0) + 1;
+        }
+      }
+    }
+    this.status_of_action_chartOptions = this.buildPieChart(
+      Object.entries(statusMap).map(([name, y]) => ({ name, y })),
+      'Actions'
+    );
+
+    // Risk categories pie
+    const catMap: Record<string, number> = {};
+    for (const p of this.filteredDetails) {
+      for (const r of p.risks || []) {
+        const c = r.category?.title || 'Unknown';
+        catMap[c] = (catMap[c] || 0) + 1;
+      }
+    }
+    this.categories_count_chartOptions = this.buildPieChart(
+      Object.entries(catMap).map(([name, y]) => ({ name, y })),
+      'Usage'
+    );
+  }
+
+  private buildPieChart(
+    data: { name: string; y: number }[],
+    seriesName: string
+  ) {
+    return {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+      },
+      credits: { enabled: false },
+      tooltip: {
+        borderWidth: 0,
+        backgroundColor: 'rgba(255,255,255,0)',
+        shadow: false,
+        useHTML: true,
+        style: {
+          textAlign: 'left',
+          color: '#04030f',
+          fontFamily: '"Poppins", sans-serif !important',
+          fontSize: '1.6rem',
+          fontStyle: 'normal',
+          fontWeight: '400',
+          backgroundColor: '#fff',
+          border: '1px solid #172f8f !important',
+          borderRadius: '5px',
+          opacity: '1',
+          zIndex: '9999 !important',
+          padding: '0.8em',
+          left: '0 !important',
+          top: '0 !important',
+        },
+        headerFormat: '<table>',
+        pointFormat:
+          '<tr><th colspan="2"><span class="chart-bubble-title"><b class="title-tooltip">{point.name}</b></span></th></tr>' +
+          '<tr><th></th><td>{series.name}: <b>{point.percentage:.1f}%</b></td></tr>',
+        footerFormat: '</table>',
+        followPointer: true,
+      },
+      accessibility: { point: { valueSuffix: '%' } },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            style: {
+              textAlign: 'left',
+              color: '#04030f',
+              fontFamily: '"Poppins", sans-serif !important',
+              fontSize: '1.6rem',
+              fontStyle: 'normal',
+              fontWeight: '400',
+            },
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          },
+        },
+      },
+      series: [
+        {
+          name: seriesName,
+          colorByPoint: true,
+          innerSize: '55%',
+          data,
+        },
+      ],
+    };
+  }
+
+  /** Flatten filteredDetails into reportedActions rows */
+  private rebuildReportedActions() {
     this.reportedActions = [];
-    for (const program of this.details) {
+    for (const program of this.filteredDetails) {
       for (const risk of program.risks || []) {
         for (const mitigation of risk.mitigations || []) {
           this.reportedActions.push({
             risk_id: risk.id,
             official_code: program.official_code,
+            risk_category: risk.category?.title || '',
+            centers: (program.organizations || []).map((o: any) => o.acronym),
             risk_title: risk.title,
             risk_description: risk.description,
             due_date: risk.due_date,
@@ -132,336 +333,13 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
-
-    // Extract unique filter options and apply filters
-    this.programOptions = [...new Set(this.reportedActions.map(r => r.official_code))].sort();
-    this.statusOptions = [...new Set(this.reportedActions.map(r => r.action_status).filter(Boolean))].sort();
-    this.applyFilters();
-
-    this.categoriesLevels = await this.dashboardService.categoriesLevels(
-      projectFlag
-    );
-    this.categoriesCount = await this.dashboardService.categoriesCount(
-      projectFlag
-    );
-    this.groups = await this.dashboardService.category_groups(projectFlag);
-    this.action_areas = await this.dashboardService.actionAreas(projectFlag);
-    this.status = await this.dashboardService.status(projectFlag);
-
-    this.totalStatus = this.status.reduce(
-      (sum: any, item: any) => sum + parseInt(item.total_actions, 10),
-      0
-    );
-
-    // recreate every chart with fresh data
-    this.risk_profile_target_chartOptions = this.riskProfile(
-      this.data,
-      'Target'
-    );
-    this.risk_profile_current_chartOptions = this.riskProfile(
-      this.data,
-      'Current'
-    );
-
-    this.avg_level_chartOptions = {
-      chart: { type: 'column' },
-      title: { text: 'Average level of risk by action area', align: 'center' },
-      xAxis: {
-        categories: this.categoriesLevels
-          .filter((d: any) => d.current_level)
-          .map((d: any) => d.title),
-        title: { text: 'Categories' },
-        gridLineWidth: 1,
-        lineWidth: 0,
-      },
-      yAxis: {
-        min: 0,
-        title: { text: 'Risk level', align: 'middle' },
-        labels: { overflow: 'justify' },
-        gridLineWidth: 0,
-      },
-      tooltip: { valueSuffix: '' },
-      plotOptions: {
-        bar: {
-          borderRadius: '50%',
-          dataLabels: { enabled: true },
-          groupPadding: 0.1,
-        },
-      },
-      credits: { enabled: false },
-      series: [
-        {
-          name: 'Current',
-          colorByPoint: true,
-          data: this.categoriesLevels
-            .filter((d: any) => d.current_level)
-            .map((d: any) => +d.current_level),
-        },
-        {
-          name: 'Target',
-          colorByPoint: true,
-          data: this.categoriesLevels
-            .filter((d: any) => d.target_level)
-            .map((d: any) => +d.target_level),
-        },
-      ],
-    };
-
-    this.status_of_action_chartOptions = {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie',
-      },
-      credits: { enabled: false },
-      tooltip: {
-        borderWidth: 0,
-        backgroundColor: 'rgba(255,255,255,0)',
-        shadow: false,
-        useHTML: true,
-        style: {
-          textAlign: 'left',
-          color: '#04030f',
-          fontFamily: '"Poppins", sans-serif !important',
-          fontSize: '1.6rem',
-          fontStyle: 'normal',
-          fontWeight: '400',
-          backgroundColor: '#fff',
-          border: '1px solid #172f8f !important',
-          borderRadius: '5px',
-          opacity: '1',
-          zIndex: '9999 !important',
-          padding: '0.8em',
-          left: '0 !important',
-          top: '0 !important',
-        },
-        headerFormat: '<table>',
-        pointFormat:
-          '<tr><th colspan="2"><span class="chart-bubble-title"><b class="title-tooltip">{point.name}</b></span></th></tr>' +
-          '<tr><th>' +
-          '</th><td>{series.name}: <b>{point.percentage:.1f}%</b></td></tr>',
-        footerFormat: '</table>',
-        followPointer: true,
-      },
-      accessibility: {
-        point: { valueSuffix: '%' },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            style: {
-              textAlign: 'left',
-              color: '#04030f',
-              fontFamily: '"Poppins", sans-serif !important',
-              fontSize: '1.6rem',
-              fontStyle: 'normal',
-              fontWeight: '400',
-            },
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          },
-        },
-      },
-      series: [
-        {
-          name: 'Actions',
-          colorByPoint: true,
-          innerSize: '55%',
-          data: this.status.map((item: any) => ({
-            name: item.title,
-            y: parseInt(item.total_actions, 10),
-          })),
-        },
-      ],
-    };
-    this.categories_count_chartOptions = {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie',
-      },
-      credits: {
-        enabled: false,
-      },
-      // title: {
-      //   text: 'Risk Categories',
-      //   align: 'center',
-      // },
-      tooltip: {
-        borderWidth: 0,
-        backgroundColor: 'rgba(255,255,255,0)',
-        shadow: false,
-        useHTML: true,
-        style: {
-          textAlign: 'left',
-          color: '#04030f',
-          fontFamily: '"Poppins", sans-serif !important',
-          fontSize: '1.6rem',
-          fontStyle: 'normal',
-          fontWeight: '400',
-          backgroundColor: '#fff',
-          border: '1px solid #172f8f !important',
-          borderRadius: '5px',
-          opacity: '1',
-          zIndex: '9999 !important',
-          padding: '0.8em',
-          left: '0 !important',
-          top: '0 !important',
-        },
-        headerFormat: '<table>',
-        pointFormat:
-          '<tr><th colspan="2"><span class="chart-bubble-title"><b class="title-tooltip">{point.name}</b></span></th></tr>' +
-          '<tr><th>' +
-          '</th><td>{series.name}: <b>{point.percentage:.1f}%</b></td></tr>',
-        footerFormat: '</table>',
-        followPointer: true,
-      },
-      accessibility: {
-        point: {
-          valueSuffix: '%',
-        },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            style: {
-              textAlign: 'left',
-              color: '#04030f',
-              fontFamily: '"Poppins", sans-serif !important',
-              fontSize: '1.6rem',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              backgroundColor: '#fff',
-              border: '1px solid #172f8f !important',
-              borderRadius: '5px',
-              opacity: '1',
-              zIndex: '9999 !important',
-              padding: '0.8em',
-              left: '0 !important',
-              top: '0 !important',
-            },
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          },
-        },
-      },
-      series: [
-        {
-          name: 'Usage',
-          colorByPoint: true,
-          innerSize: '55%',
-          data: this.categoriesCount.map((d: any) => {
-            return { name: d.title, y: +d.total_count };
-          }),
-        },
-      ],
-    };
-
-    this.category_group_chartOptions = {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie',
-      },
-      credits: {
-        enabled: false,
-      },
-      // title: {
-      //   text: 'Categories groups',
-      //   align: 'center',
-      // },
-      tooltip: {
-        borderWidth: 0,
-        backgroundColor: 'rgba(255,255,255,0)',
-        shadow: false,
-        useHTML: true,
-        style: {
-          textAlign: 'left',
-          color: '#04030f',
-          fontFamily: '"Poppins", sans-serif !important',
-          fontSize: '1.6rem',
-          fontStyle: 'normal',
-          fontWeight: '400',
-          backgroundColor: '#fff',
-          border: '1px solid #172f8f !important',
-          borderRadius: '5px',
-          opacity: '1',
-          zIndex: '9999 !important',
-          padding: '0.8em',
-          left: '0 !important',
-          top: '0 !important',
-        },
-        headerFormat: '<table>',
-        pointFormat:
-          '<tr><th colspan="2"><span class="chart-bubble-title"><b class="title-tooltip">{point.name}</b></span></th></tr>' +
-          '<tr><th>' +
-          '</th><td>{series.name}: <b>{point.percentage:.1f}%</b></td></tr>',
-        footerFormat: '</table>',
-        followPointer: true,
-      },
-      accessibility: {
-        point: {
-          valueSuffix: '%',
-        },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            style: {
-              textAlign: 'left',
-              color: '#04030f',
-              fontFamily: '"Poppins", sans-serif !important',
-              fontSize: '1.6rem',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              backgroundColor: '#fff',
-              border: '1px solid #172f8f !important',
-              borderRadius: '5px',
-              opacity: '1',
-              zIndex: '9999 !important',
-              padding: '0.8em',
-              left: '0 !important',
-              top: '0 !important',
-            },
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-          },
-        },
-      },
-      series: [
-        {
-          name: 'Usage',
-          colorByPoint: true,
-          innerSize: '55%',
-          data: this.groups.map((d: any) => {
-            return { name: d.name, y: +d.total_count };
-          }),
-        },
-      ],
-    };
-
-    this.title.setTitle('Risk dashboard');
-    this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
+    this.applyTableFilters();
   }
 
-  applyFilters() {
+  /** Table-level filters (due dates only) */
+  applyTableFilters() {
     let result = [...this.reportedActions];
 
-    if (this.filterProgram) {
-      result = result.filter(r => r.official_code === this.filterProgram);
-    }
-    if (this.filterStatus) {
-      result = result.filter(r => r.action_status === this.filterStatus);
-    }
     if (this.filterDueDateFrom) {
       const from = new Date(this.filterDueDateFrom);
       result = result.filter(r => r.due_date && new Date(r.due_date) >= from);
@@ -471,7 +349,6 @@ export class DashboardComponent implements OnInit {
       result = result.filter(r => r.due_date && new Date(r.due_date) <= to);
     }
 
-    // Re-apply current sort
     if (this.sortField) {
       result = this.sortArray(result, this.sortField, this.sortDirection);
     }
@@ -499,39 +376,59 @@ export class DashboardComponent implements OnInit {
       this.sortField = field;
       this.sortDirection = 'asc';
     }
-    this.filteredActions = this.sortArray(this.filteredActions, field, this.sortDirection);
+    this.filteredActions = this.sortArray(
+      this.filteredActions,
+      field,
+      this.sortDirection
+    );
     this.updateDisplayedActions();
   }
 
   private sortArray(arr: any[], field: string, dir: 'asc' | 'desc'): any[] {
     return [...arr].sort((a, b) => {
-      const valA = field === 'due_date' ? (a[field] ? new Date(a[field]).getTime() : 0) : a[field];
-      const valB = field === 'due_date' ? (b[field] ? new Date(b[field]).getTime() : 0) : b[field];
+      const valA =
+        field === 'due_date'
+          ? a[field]
+            ? new Date(a[field]).getTime()
+            : 0
+          : a[field];
+      const valB =
+        field === 'due_date'
+          ? b[field]
+            ? new Date(b[field]).getTime()
+            : 0
+          : b[field];
       if (valA < valB) return dir === 'asc' ? -1 : 1;
       if (valA > valB) return dir === 'asc' ? 1 : -1;
       return 0;
     });
   }
 
-  resetFilters() {
-    this.filterProgram = '';
-    this.filterStatus = '';
+  resetGlobalFilters() {
+    this.globalProgram = '';
+    this.globalCategory = '';
+    this.globalCenter = '';
+    this.globalActionStatus = '';
+    this.applyGlobalFilters();
+  }
+
+  resetTableFilters() {
     this.filterDueDateFrom = '';
     this.filterDueDateTo = '';
     this.sortField = '';
     this.sortDirection = 'asc';
-    this.applyFilters();
+    this.applyTableFilters();
   }
 
   exportExcel() {
     const data = this.filteredActions.map(row => ({
       'Risk id': row.risk_id,
-      'ID': row.official_code,
-      'Risk': row.risk_title,
-      'Description': row.risk_description,
+      ID: row.official_code,
+      Risk: row.risk_title,
+      Description: row.risk_description,
       'Due date': row.due_date,
       'Actions/Controls': row.action_description,
-      'Status': row.action_status,
+      Status: row.action_status,
     }));
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -547,6 +444,7 @@ export class DashboardComponent implements OnInit {
       credits: { enabled: false },
       xAxis: {
         gridLineWidth: 1,
+        allowDecimals: false,
         title: {
           text: `<span class="chart-title"> ${type} impact</span>`,
         },
@@ -555,6 +453,7 @@ export class DashboardComponent implements OnInit {
       yAxis: {
         startOnTick: false,
         endOnTick: false,
+        allowDecimals: false,
         title: {
           text: `<span class="chart-title"> ${type} Likelihood</span>`,
         },
@@ -620,31 +519,38 @@ export class DashboardComponent implements OnInit {
     const rows = this.filteredActions;
     if (!rows.length) return;
 
-    const logoBase64 = await this.getBase64FromUrl('assets/shared-image/cgiar-logo.png');
+    const logoBase64 = await this.getBase64FromUrl(
+      'assets/shared-image/cgiar-logo.png'
+    );
 
-    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-    const pageW = 297;
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
     const pageH = 210;
     const margin = 12;
-    const themeR = 67, themeG = 98, themeB = 128;
+    const themeR = 67,
+      themeG = 98,
+      themeB = 128;
 
     const cols = [
-      { header: 'ID',                 key: 'official_code',      w: 18 },
-      { header: 'Risk Title',         key: 'risk_title',         w: 50 },
-      { header: 'Description',        key: 'risk_description',   w: 68 },
-      { header: 'Mitigation Action',  key: 'action_description', w: 68 },
-      { header: 'Status',             key: 'action_status',      w: 30 },
-      { header: 'Deadline',           key: 'due_date',           w: 27 },
+      { header: 'ID', key: 'official_code', w: 18 },
+      { header: 'Risk Title', key: 'risk_title', w: 50 },
+      { header: 'Description', key: 'risk_description', w: 68 },
+      { header: 'Mitigation Action', key: 'action_description', w: 68 },
+      { header: 'Status', key: 'action_status', w: 30 },
+      { header: 'Deadline', key: 'due_date', w: 27 },
     ];
 
-    const cellPad     = 2;
-    const hdrH        = 8;
-    const fontSize    = 7.5;
-    const lineH       = 3.5;
-    const totalColW   = cols.reduce((s, c) => s + c.w, 0);
-    const tableX      = (297 - totalColW) / 2;  // centered horizontally
-    const tableHdrY   = 23;                      // below logo + title
-    const programLabel = this.filterProgram || 'All Programs';
+    const cellPad = 2;
+    const hdrH = 8;
+    const fontSize = 7.5;
+    const lineH = 3.5;
+    const totalColW = cols.reduce((s, c) => s + c.w, 0);
+    const tableX = (297 - totalColW) / 2;
+    const tableHdrY = 23;
+    const programLabel = this.globalProgram || 'All Programs';
 
     const drawPageHeader = () => {
       const logoH = 10;
@@ -652,12 +558,10 @@ export class DashboardComponent implements OnInit {
       if (logoBase64) {
         doc.addImage(logoBase64, 'PNG', margin, 3, logoW, logoH);
       }
-      // "PRMS Risk" top-left
       doc.setTextColor(themeR, themeG, themeB);
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.text('PRMS Risk', margin + logoW + 3, 10);
-      // Program title centered above table
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.text(programLabel, 297 / 2, 19, { align: 'center' });
@@ -678,7 +582,6 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    // Set font BEFORE splitTextToSize so wrapping matches the render size
     doc.setFontSize(fontSize);
     doc.setFont('helvetica', 'normal');
 
@@ -693,9 +596,14 @@ export class DashboardComponent implements OnInit {
         let val: string = row[col.key] ?? '';
         if (col.key === 'due_date' && val) {
           const d = new Date(val);
-          val = isNaN(d.getTime()) ? String(val) : d.toLocaleDateString('en-GB');
+          val = isNaN(d.getTime())
+            ? String(val)
+            : d.toLocaleDateString('en-GB');
         }
-        return doc.splitTextToSize(String(val), col.w - cellPad * 2) as string[];
+        return doc.splitTextToSize(
+          String(val),
+          col.w - cellPad * 2
+        ) as string[];
       });
 
       const maxLines = Math.max(...cellTexts.map(t => t.length));
@@ -715,7 +623,11 @@ export class DashboardComponent implements OnInit {
       let x = tableX;
       for (let i = 0; i < cols.length; i++) {
         const col = cols[i];
-        doc.setFillColor(rowAlt ? 240 : 255, rowAlt ? 244 : 255, rowAlt ? 248 : 255);
+        doc.setFillColor(
+          rowAlt ? 240 : 255,
+          rowAlt ? 244 : 255,
+          rowAlt ? 248 : 255
+        );
         doc.setDrawColor(200, 200, 200);
         doc.setLineWidth(0.2);
         doc.rect(x, y, col.w, rowH, 'FD');

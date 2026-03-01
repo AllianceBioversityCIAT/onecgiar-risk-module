@@ -58,6 +58,7 @@ export class DashboardController {
         'risks.mitigations.status',
         'roles',
         'roles.user',
+        'organizations',
       ],
       order: { risks: { current_level: 'DESC' } },
     });
