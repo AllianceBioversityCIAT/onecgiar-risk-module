@@ -98,6 +98,7 @@ import { OrganizationDialogComponent } from './Admin/admin-module/organization/o
 import { AssignOrganizationsComponent } from './home/risk-management/risk-management-table/assign-organizations/assign-organizations.component';
 import { ProjectsComponent } from './Admin/admin-module/projects/projects.component';
 import { ProjectDialogComponentTsComponent } from './Admin/admin-module/projects/project-dialog.component.ts/project-dialog.component.ts.component';
+import { ExportsComponent } from './Admin/admin-module/exports/exports.component';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -170,6 +171,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     AssignOrganizationsComponent,
     ProjectsComponent,
     ProjectDialogComponentTsComponent,
+    ExportsComponent,
   ],
   imports: [
     BrowserModule,
