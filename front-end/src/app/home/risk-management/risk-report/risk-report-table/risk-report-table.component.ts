@@ -467,57 +467,113 @@ export class RiskReportTableComponent {
     const logoBase64 = await this.getBase64FromUrl('assets/shared-image/cgiar-logo.png');
 
     const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageW = 297;
     const pageH = 210;
-    const margin = 12;
+    const margin = 6;
     const themeR = 67, themeG = 98, themeB = 128;
     const logoH = 10;
     const logoW = logoH * (148 / 182);
 
-    const cols = [
-      { header: 'ID',                          key: 'id',          w: 14 },
-      { header: 'Risk Title',                  key: 'title',       w: 55 },
-      { header: 'Description',                 key: 'description', w: 90 },
-      { header: 'Mitigation Action in place?', key: 'mitigations', w: 55 },
-      { header: 'Deadline',                    key: 'due_date',    w: 29 },
-    ];
+    const stripHtml = (text: string): string =>
+      text ? text.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
 
     const cellPad    = 2;
-    const hdrH      = 8;
-    const totalColW  = cols.reduce((s, c) => s + c.w, 0);
-    const tableX     = (297 - totalColW) / 2;   // centered horizontally
-    // Layout: logo area (17mm) + program title (6mm) = 23mm for table header
-    const tableHdrY  = 23;
+    const hdrH       = 8;
+    const tableX     = margin;
+    const tableHdrY  = 16;
     const rowsStartY = tableHdrY + hdrH;
     const rowsEndY   = pageH - 8;
     const availableH = rowsEndY - rowsStartY;
+    const totalW     = pageW - margin * 2;
+    const minColW    = 60;
 
-    const getCellVal = (col: { key: string }, risk: any): string => {
-      if (col.key === 'mitigations') {
-        return risk.mitigations?.length > 0 ? 'Yes' : 'No';
-      }
-      if (col.key === 'due_date') {
-        if (!risk.due_date) return '-';
-        const d = new Date(risk.due_date);
-        return isNaN(d.getTime()) ? String(risk.due_date) : d.toLocaleDateString('en-GB');
-      }
-      return String(risk[col.key] ?? '');
+    const formatDate = (risk: any): string => {
+      if (!risk.due_date) return '-';
+      const d = new Date(risk.due_date);
+      return isNaN(d.getTime()) ? String(risk.due_date) : d.toLocaleDateString('en-GB');
     };
 
-    // ── Find the largest font size that fits all 5 rows on one page ──────────
+    const calcColWidths = (): { descW: number; actW: number } => {
+      let descChars = 0;
+      let actChars  = 0;
+      for (const risk of top5) {
+        descChars += String(risk.title || '').length;
+        descChars += ('Deadline: ' + formatDate(risk)).length;
+        descChars += stripHtml(String(risk.description || '')).length;
+        const mits = risk.mitigations?.length > 0 ? risk.mitigations : [];
+        for (const m of mits) {
+          actChars += stripHtml(m?.description || '-').length;
+          actChars += (m?.status?.title || '').length;
+        }
+      }
+      const total = descChars + actChars;
+      if (total === 0) return { descW: totalW / 2, actW: totalW / 2 };
+      const descPct = descChars / total;
+      const actPct  = actChars / total;
+      let descW = Math.round(totalW * descPct);
+      let actW  = Math.round(totalW * actPct);
+      if (descW < minColW) { descW = minColW; actW = totalW - minColW; }
+      if (actW  < minColW) { actW  = minColW; descW = totalW - minColW; }
+      return { descW, actW };
+    };
+
+    const { descW, actW } = calcColWidths();
+    const cols = [
+      { header: 'Title / Description', w: descW },
+      { header: 'Actions/Controls',    w: actW },
+    ];
+
+    // ── Find the largest font size that fits all rows on one page ────────────
     let fontSize = 8;
     let lineH    = 3.8;
 
-    const calcLayout = (fs: number, lh: number) => {
+    interface MitLayout { descLines: string[]; statusLines: string[] }
+    interface RiskLayout {
+      combinedLines: { text: string; bold?: boolean; color?: 'theme' | 'dark' }[];
+      mitigations: MitLayout[]; riskRowH: number; subRowHeights: number[];
+    }
+
+    const calcLayout = (fs: number, lh: number): { riskLayouts: RiskLayout[]; totalH: number } => {
       doc.setFontSize(fs);
       doc.setFont('helvetica', 'normal');
-      const cellTextsAll = top5.map(risk =>
-        cols.map(col => doc.splitTextToSize(getCellVal(col, risk), col.w - cellPad * 2) as string[])
-      );
-      const rowHeights = cellTextsAll.map(cells => {
-        const maxLines = Math.max(...cells.map(t => t.length));
-        return Math.max(6, maxLines * lh + cellPad * 2);
+      const colW = cols[0].w - cellPad * 2;
+
+      const riskLayouts: RiskLayout[] = top5.map(risk => {
+        const titleLines = doc.splitTextToSize(String(risk.title || ''), colW) as string[];
+        const deadlineLabel = 'Deadline: ' + formatDate(risk);
+        const deadlineLines = doc.splitTextToSize(deadlineLabel, colW) as string[];
+        const descText = stripHtml(String(risk.description || ''));
+        const descLines = doc.splitTextToSize(descText, colW) as string[];
+
+        const combinedLines: { text: string; bold?: boolean; color?: 'theme' | 'dark' }[] = [];
+        for (const line of titleLines) combinedLines.push({ text: line, bold: true, color: 'dark' });
+        for (const line of deadlineLines) combinedLines.push({ text: line, bold: true, color: 'theme' });
+        for (const line of descLines) combinedLines.push({ text: line, color: 'dark' });
+
+        const mits = risk.mitigations?.length > 0 ? risk.mitigations : [null];
+        const mitigations: MitLayout[] = mits.map((m: any) => {
+          const desc = stripHtml(m?.description || '-');
+          const status = m?.status?.title || '';
+          const statusLabel = status ? `Status: ${status}` : '';
+          return {
+            descLines: doc.splitTextToSize(desc, cols[1].w - cellPad * 2) as string[],
+            statusLines: statusLabel ? doc.splitTextToSize(statusLabel, cols[1].w - cellPad * 2) as string[] : [],
+          };
+        });
+
+        const subRowHeights = mitigations.map(m => {
+          const totalLines = m.descLines.length + m.statusLines.length;
+          return Math.max(5, totalLines * lh + cellPad * 2);
+        });
+
+        const totalMitH = subRowHeights.reduce((s, h) => s + h, 0);
+        const combinedH = Math.max(5, combinedLines.length * lh + cellPad * 2);
+        const riskRowH  = Math.max(combinedH, totalMitH);
+
+        return { combinedLines, mitigations, riskRowH, subRowHeights };
       });
-      return { cellTextsAll, rowHeights, totalH: rowHeights.reduce((s, h) => s + h, 0) };
+
+      return { riskLayouts, totalH: riskLayouts.reduce((s, rl) => s + rl.riskRowH, 0) };
     };
 
     let layout = calcLayout(fontSize, lineH);
@@ -527,9 +583,13 @@ export class RiskReportTableComponent {
       layout    = calcLayout(fontSize, lineH);
     }
 
-    const programName = this.sciencePrograms?.name || this.scienceProgramsId || '';
+    const officialCode = this.sciencePrograms?.official_code || '';
+    const programName  = this.sciencePrograms?.name || '';
+    const headerTitle  = officialCode && programName
+      ? `${officialCode} - ${programName}`
+      : programName || officialCode || String(this.scienceProgramsId || '');
 
-    // ── Logo + "PRMS Risk" (top-left) ─────────────────────────────────────────
+    // ── Header: Logo + "PRMS Risk" (left) | Program title (center) ──────────
     if (logoBase64) {
       doc.addImage(logoBase64, 'PNG', margin, 3, logoW, logoH);
     }
@@ -538,12 +598,11 @@ export class RiskReportTableComponent {
     doc.setFont('helvetica', 'bold');
     doc.text('PRMS Risk', margin + logoW + 3, 10);
 
-    // ── Program title centered above table ────────────────────────────────────
-    if (programName) {
+    if (headerTitle) {
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(themeR, themeG, themeB);
-      doc.text(programName, 297 / 2, 19, { align: 'center' });
+      doc.text(headerTitle, pageW / 2, 10, { align: 'center' });
     }
 
     // ── Draw table header row ─────────────────────────────────────────────────
@@ -560,28 +619,72 @@ export class RiskReportTableComponent {
       x += col.w;
     }
 
-    // ── Draw data rows ────────────────────────────────────────────────────────
+    // ── Draw data rows with merged cells ────────────────────────────────────
     let y = rowsStartY;
     doc.setFontSize(fontSize);
     doc.setFont('helvetica', 'normal');
 
-    layout.cellTextsAll.forEach((cellTexts, ri) => {
-      const rowH = layout.rowHeights[ri];
+    layout.riskLayouts.forEach((rl, ri) => {
+      const rowH = rl.riskRowH;
+      const bgR = ri % 2 === 1 ? 240 : 255;
+      const bgG = ri % 2 === 1 ? 244 : 255;
+      const bgB = ri % 2 === 1 ? 248 : 255;
+
+      // ── Title / Description (col 0) ──
       x = tableX;
-      for (let i = 0; i < cols.length; i++) {
-        const col = cols[i];
-        doc.setFillColor(ri % 2 === 1 ? 240 : 255, ri % 2 === 1 ? 244 : 255, ri % 2 === 1 ? 248 : 255);
+      doc.setFillColor(bgR, bgG, bgB);
+      doc.setDrawColor(200, 200, 200);
+      doc.setLineWidth(0.2);
+      doc.rect(x, y, cols[0].w, rowH, 'FD');
+      let textY = y + cellPad + fontSize * 0.35;
+      for (const line of rl.combinedLines) {
+        if (line.color === 'theme') {
+          doc.setTextColor(themeR, themeG, themeB);
+        } else {
+          doc.setTextColor(30, 30, 30);
+        }
+        doc.setFont('helvetica', line.bold ? 'bold' : 'normal');
+        doc.text(line.text, x + cellPad, textY);
+        textY += lineH;
+      }
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(30, 30, 30);
+
+      // ── Sub-rows: Actions/Controls (col 1) ──
+      const totalSubH = rl.subRowHeights.reduce((s, h) => s + h, 0);
+      const scale = totalSubH > 0 ? rowH / totalSubH : 1;
+      let subY = y;
+
+      rl.mitigations.forEach((m, mi) => {
+        const isLast = mi === rl.mitigations.length - 1;
+        const subH = isLast ? (y + rowH) - subY : rl.subRowHeights[mi] * scale;
+
+        const mitX = tableX + cols[0].w;
+        doc.setFillColor(bgR, bgG, bgB);
         doc.setDrawColor(200, 200, 200);
         doc.setLineWidth(0.2);
-        doc.rect(x, y, col.w, rowH, 'FD');
+        doc.rect(mitX, subY, cols[1].w, subH, 'FD');
         doc.setTextColor(30, 30, 30);
-        let textY = y + cellPad + fontSize * 0.35;
-        for (const line of cellTexts[i]) {
-          doc.text(line, x + cellPad, textY);
+        doc.setFont('helvetica', 'normal');
+        textY = subY + cellPad + fontSize * 0.35;
+        for (const line of m.descLines) {
+          doc.text(line, mitX + cellPad, textY);
           textY += lineH;
         }
-        x += col.w;
-      }
+        if (m.statusLines.length > 0) {
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(themeR, themeG, themeB);
+          for (const line of m.statusLines) {
+            doc.text(line, mitX + cellPad, textY);
+            textY += lineH;
+          }
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(30, 30, 30);
+        }
+
+        subY += subH;
+      });
+
       y += rowH;
     });
 

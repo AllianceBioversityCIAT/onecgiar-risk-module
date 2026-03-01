@@ -77,14 +77,6 @@ export class ExportsComponent {
     const stripHtml = (text: string): string =>
       text ? text.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
 
-    const cols = [
-      { header: 'Risk Title',       w: 50 },
-      { header: 'Description',      w: 100 },
-      { header: 'Actions/Controls', w: 85 },
-      { header: 'Status',           w: 25 },
-      { header: 'Deadline',         w: 25 },
-    ];
-
     const cellPad    = 2;
     const hdrH       = 8;
     const tableX     = margin;
@@ -92,6 +84,8 @@ export class ExportsComponent {
     const rowsStartY = tableHdrY + hdrH;
     const rowsEndY   = pageH - 8;
     const availableH = rowsEndY - rowsStartY;
+    const totalW     = pageW - margin * 2;
+    const minColW    = 60;
 
     const formatDate = (risk: any): string => {
       if (!risk.due_date) return '-';
@@ -99,42 +93,83 @@ export class ExportsComponent {
       return isNaN(d.getTime()) ? String(risk.due_date) : d.toLocaleDateString('en-GB');
     };
 
+    const calcColWidths = (): { descW: number; actW: number } => {
+      let descChars = 0;
+      let actChars  = 0;
+      for (const risk of top5) {
+        descChars += String(risk.title || '').length;
+        descChars += ('Deadline: ' + formatDate(risk)).length;
+        descChars += stripHtml(String(risk.description || '')).length;
+        const mits = risk.mitigations?.length > 0 ? risk.mitigations : [];
+        for (const m of mits) {
+          actChars += stripHtml(m?.description || '-').length;
+          actChars += (m?.status?.title || '').length;
+        }
+      }
+      const total = descChars + actChars;
+      if (total === 0) return { descW: totalW / 2, actW: totalW / 2 };
+      const descPct = descChars / total;
+      const actPct  = actChars / total;
+      let descW = Math.round(totalW * descPct);
+      let actW  = Math.round(totalW * actPct);
+      if (descW < minColW) { descW = minColW; actW = totalW - minColW; }
+      if (actW  < minColW) { actW  = minColW; descW = totalW - minColW; }
+      return { descW, actW };
+    };
+
+    const { descW, actW } = calcColWidths();
+    const cols = [
+      { header: 'Title / Description', w: descW },
+      { header: 'Actions/Controls',    w: actW },
+    ];
+
     let fontSize = 8;
     let lineH    = 3.8;
 
     interface MitLayout { descLines: string[]; statusLines: string[] }
     interface RiskLayout {
-      titleLines: string[]; descLines: string[]; dateLines: string[];
+      combinedLines: { text: string; bold?: boolean; color?: 'theme' | 'dark' }[];
       mitigations: MitLayout[]; riskRowH: number; subRowHeights: number[];
     }
 
     const calcLayout = (fs: number, lh: number): { riskLayouts: RiskLayout[]; totalH: number } => {
       doc.setFontSize(fs);
       doc.setFont('helvetica', 'normal');
+      const colW = cols[0].w - cellPad * 2;
 
       const riskLayouts: RiskLayout[] = top5.map(risk => {
-        const titleLines = doc.splitTextToSize(String(risk.title || ''), cols[0].w - cellPad * 2) as string[];
-        const descLines  = doc.splitTextToSize(stripHtml(String(risk.description || '')), cols[1].w - cellPad * 2) as string[];
-        const dateLines  = doc.splitTextToSize(formatDate(risk), cols[4].w - cellPad * 2) as string[];
+        const titleLines = doc.splitTextToSize(String(risk.title || ''), colW) as string[];
+        const deadlineLabel = 'Deadline: ' + formatDate(risk);
+        const deadlineLines = doc.splitTextToSize(deadlineLabel, colW) as string[];
+        const descText = stripHtml(String(risk.description || ''));
+        const descLines = doc.splitTextToSize(descText, colW) as string[];
+
+        const combinedLines: { text: string; bold?: boolean; color?: 'theme' | 'dark' }[] = [];
+        for (const line of titleLines) combinedLines.push({ text: line, bold: true, color: 'dark' });
+        for (const line of deadlineLines) combinedLines.push({ text: line, bold: true, color: 'theme' });
+        for (const line of descLines) combinedLines.push({ text: line, color: 'dark' });
 
         const mits = risk.mitigations?.length > 0 ? risk.mitigations : [null];
-        const mitigations: MitLayout[] = mits.map((m: any) => ({
-          descLines:   doc.splitTextToSize(stripHtml(m?.description || '-'), cols[2].w - cellPad * 2) as string[],
-          statusLines: doc.splitTextToSize(m?.status?.title || '-', cols[3].w - cellPad * 2) as string[],
-        }));
+        const mitigations: MitLayout[] = mits.map((m: any) => {
+          const desc = stripHtml(m?.description || '-');
+          const status = m?.status?.title || '';
+          const statusLabel = status ? `Status: ${status}` : '';
+          return {
+            descLines: doc.splitTextToSize(desc, cols[1].w - cellPad * 2) as string[],
+            statusLines: statusLabel ? doc.splitTextToSize(statusLabel, cols[1].w - cellPad * 2) as string[] : [],
+          };
+        });
 
         const subRowHeights = mitigations.map(m => {
-          const maxLines = Math.max(m.descLines.length, m.statusLines.length);
-          return Math.max(5, maxLines * lh + cellPad * 2);
+          const totalLines = m.descLines.length + m.statusLines.length;
+          return Math.max(5, totalLines * lh + cellPad * 2);
         });
 
         const totalMitH = subRowHeights.reduce((s, h) => s + h, 0);
-        const titleH    = Math.max(5, titleLines.length * lh + cellPad * 2);
-        const descH     = Math.max(5, descLines.length * lh + cellPad * 2);
-        const dateH     = Math.max(5, dateLines.length * lh + cellPad * 2);
-        const riskRowH  = Math.max(titleH, descH, dateH, totalMitH);
+        const combinedH = Math.max(5, combinedLines.length * lh + cellPad * 2);
+        const riskRowH  = Math.max(combinedH, totalMitH);
 
-        return { titleLines, descLines, dateLines, mitigations, riskRowH, subRowHeights };
+        return { combinedLines, mitigations, riskRowH, subRowHeights };
       });
 
       return { riskLayouts, totalH: riskLayouts.reduce((s, rl) => s + rl.riskRowH, 0) };
@@ -194,32 +229,27 @@ export class ExportsComponent {
       const bgG = ri % 2 === 1 ? 244 : 255;
       const bgB = ri % 2 === 1 ? 248 : 255;
 
-      // Merged cell: Risk Title (col 0)
+      // Title / Description (col 0)
       x = tableX;
       doc.setFillColor(bgR, bgG, bgB);
       doc.setDrawColor(200, 200, 200);
       doc.setLineWidth(0.2);
       doc.rect(x, y, cols[0].w, rowH, 'FD');
-      doc.setTextColor(30, 30, 30);
       let textY = y + cellPad + fontSize * 0.35;
-      for (const line of rl.titleLines) {
-        doc.text(line, x + cellPad, textY);
+      for (const line of rl.combinedLines) {
+        if (line.color === 'theme') {
+          doc.setTextColor(themeR, themeG, themeB);
+        } else {
+          doc.setTextColor(30, 30, 30);
+        }
+        doc.setFont('helvetica', line.bold ? 'bold' : 'normal');
+        doc.text(line.text, x + cellPad, textY);
         textY += lineH;
       }
-
-      // Merged cell: Description (col 1)
-      x = tableX + cols[0].w;
-      doc.setFillColor(bgR, bgG, bgB);
-      doc.setDrawColor(200, 200, 200);
-      doc.rect(x, y, cols[1].w, rowH, 'FD');
+      doc.setFont('helvetica', 'normal');
       doc.setTextColor(30, 30, 30);
-      textY = y + cellPad + fontSize * 0.35;
-      for (const line of rl.descLines) {
-        doc.text(line, x + cellPad, textY);
-        textY += lineH;
-      }
 
-      // Sub-rows: Actions/Controls (col 2) & Status (col 3)
+      // Sub-rows: Actions/Controls (col 1)
       const totalSubH = rl.subRowHeights.reduce((s, h) => s + h, 0);
       const scale = totalSubH > 0 ? rowH / totalSubH : 1;
       let subY = y;
@@ -228,45 +258,31 @@ export class ExportsComponent {
         const isLast = mi === rl.mitigations.length - 1;
         const subH = isLast ? (y + rowH) - subY : rl.subRowHeights[mi] * scale;
 
-        // Actions/Controls cell
-        const mitX = tableX + cols[0].w + cols[1].w;
+        const mitX = tableX + cols[0].w;
         doc.setFillColor(bgR, bgG, bgB);
         doc.setDrawColor(200, 200, 200);
         doc.setLineWidth(0.2);
-        doc.rect(mitX, subY, cols[2].w, subH, 'FD');
+        doc.rect(mitX, subY, cols[1].w, subH, 'FD');
         doc.setTextColor(30, 30, 30);
+        doc.setFont('helvetica', 'normal');
         textY = subY + cellPad + fontSize * 0.35;
         for (const line of m.descLines) {
           doc.text(line, mitX + cellPad, textY);
           textY += lineH;
         }
-
-        // Status cell
-        const statusX = mitX + cols[2].w;
-        doc.setFillColor(bgR, bgG, bgB);
-        doc.setDrawColor(200, 200, 200);
-        doc.rect(statusX, subY, cols[3].w, subH, 'FD');
-        doc.setTextColor(30, 30, 30);
-        textY = subY + cellPad + fontSize * 0.35;
-        for (const line of m.statusLines) {
-          doc.text(line, statusX + cellPad, textY);
-          textY += lineH;
+        if (m.statusLines.length > 0) {
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(themeR, themeG, themeB);
+          for (const line of m.statusLines) {
+            doc.text(line, mitX + cellPad, textY);
+            textY += lineH;
+          }
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(30, 30, 30);
         }
 
         subY += subH;
       });
-
-      // Merged cell: Deadline (col 4)
-      const deadlineX = tableX + cols[0].w + cols[1].w + cols[2].w + cols[3].w;
-      doc.setFillColor(bgR, bgG, bgB);
-      doc.setDrawColor(200, 200, 200);
-      doc.rect(deadlineX, y, cols[4].w, rowH, 'FD');
-      doc.setTextColor(30, 30, 30);
-      textY = y + cellPad + fontSize * 0.35;
-      for (const line of rl.dateLines) {
-        doc.text(line, deadlineX + cellPad, textY);
-        textY += lineH;
-      }
 
       y += rowH;
     });
