@@ -1034,6 +1034,7 @@ export class ProgramController {
           'risks',
           'risks.category',
           'risks.mitigations',
+          'risks.mitigations.status',
           'risks.created_by',
           'risks.risk_owner',
           'risks.risk_owner.user',
