@@ -145,6 +145,18 @@
         <p class="error">{{ errorMsg }}</p>
       </ng-container>
 
+      <div class="narrative-section">
+        <h2 class="submit-risk-title-1">Optional: Provide a summative narrative of your overall Risk Review (50 words or less)</h2>
+        <textarea
+          class="narrative-textarea"
+          [(ngModel)]="narrative"
+          rows="4"
+          placeholder=""
+          maxlength="500"
+        ></textarea>
+        <p class="word-count" [class.over-limit]="wordCount > 50">{{ wordCount }}/50 words</p>
+      </div>
+
       <div class="form-dialog-conten-button-box-2">
         <div class="form-dialog-conten-button-flex">
           <div class="form-dialog-conten__button-box">
@@ -206,6 +218,18 @@
     </div>
 
     <div class="submit-risk-flex-box">
+      <div class="narrative-section">
+        <h2 class="submit-risk-title-1">Optional: Provide a summative narrative of your overall Risk Review (50 words or less)</h2>
+        <textarea
+          class="narrative-textarea"
+          [(ngModel)]="narrative"
+          rows="4"
+          placeholder=""
+          maxlength="500"
+        ></textarea>
+        <p class="word-count" [class.over-limit]="wordCount > 50">{{ wordCount }}/50 words</p>
+      </div>
+
       <div class="form-dialog-conten-button-box-2">
         <div class="form-dialog-conten-button-flex">
           <div class="form-dialog-conten__button-box">

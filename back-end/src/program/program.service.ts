@@ -226,7 +226,7 @@ export class ProgramService {
     else throw new NotFoundException();
   }
 
-  async createINIT(old_init_id: number, user, top: Risk[]) {
+  async createINIT(old_init_id: number, user, top: Risk[], narrative?: string) {
     const old_program = await this.programRepository.findOne({
       where: { id: old_init_id },
       relations: ['roles', 'roles.user'],
@@ -255,6 +255,7 @@ export class ProgramService {
     programs.parent_id = old_init_id;
     programs.created_by_user_id = user.id;
     programs.phase_id = phase?.id;
+    if (narrative) programs.narrative = narrative;
     const new_init = await this.programRepository.save(programs, {
       reload: true,
     });
@@ -292,6 +293,7 @@ export class ProgramService {
     let date = new Date();
     await this.programRepository.update(old_init_id, {
       last_updated_date: date,
+      narrative: narrative || null,
     });
     await this.programRepository.update(new_init.id, {
       submit_date: date,

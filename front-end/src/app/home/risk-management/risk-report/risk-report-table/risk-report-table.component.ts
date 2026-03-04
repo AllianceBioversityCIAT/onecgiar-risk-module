@@ -477,6 +477,11 @@ export class RiskReportTableComponent {
     const stripHtml = (text: string): string =>
       text ? text.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
 
+    const truncateWords = (text: string, maxWords: number): string => {
+      const words = text.split(/\s+/).filter(w => w);
+      return words.length > maxWords ? words.slice(0, maxWords).join(' ') + '...' : text;
+    };
+
     const cellPad    = 2;
     const hdrH       = 8;
     const tableX     = margin;
@@ -493,16 +498,17 @@ export class RiskReportTableComponent {
       return isNaN(d.getTime()) ? String(risk.due_date) : d.toLocaleDateString('en-GB');
     };
 
-    const calcColWidths = (): { descW: number; actW: number } => {
+    const calcColWidths = (mitMaxWords?: number): { descW: number; actW: number } => {
       let descChars = 0;
       let actChars  = 0;
       for (const risk of top5) {
         descChars += String(risk.title || '').length;
         descChars += ('Deadline: ' + formatDate(risk)).length;
         descChars += stripHtml(String(risk.description || '')).length;
-        const mits = risk.mitigations?.length > 0 ? risk.mitigations : [];
+        const mits = (risk.mitigations?.length > 0 ? risk.mitigations : []).slice(0, 3);
         for (const m of mits) {
-          actChars += stripHtml(m?.description || '-').length;
+          const mitDesc = stripHtml(m?.description || '-');
+          actChars += (mitMaxWords ? truncateWords(mitDesc, mitMaxWords) : mitDesc).length;
           actChars += (m?.status?.title || '').length;
         }
       }
@@ -517,11 +523,15 @@ export class RiskReportTableComponent {
       return { descW, actW };
     };
 
-    const { descW, actW } = calcColWidths();
-    const cols = [
-      { header: 'Title / Description', w: descW },
-      { header: 'Actions/Controls',    w: actW },
-    ];
+    let mitMaxWords: number | undefined;
+    const buildCols = () => {
+      const { descW, actW } = calcColWidths(mitMaxWords);
+      return [
+        { header: 'Title / Description', w: descW },
+        { header: 'Actions/Controls',    w: actW },
+      ];
+    };
+    let cols = buildCols();
 
     // ── Find the largest font size that fits all rows on one page ────────────
     let fontSize = 8;
@@ -550,9 +560,10 @@ export class RiskReportTableComponent {
         for (const line of deadlineLines) combinedLines.push({ text: line, bold: true, color: 'theme' });
         for (const line of descLines) combinedLines.push({ text: line, color: 'dark' });
 
-        const mits = risk.mitigations?.length > 0 ? risk.mitigations : [null];
+        const mits = (risk.mitigations?.length > 0 ? risk.mitigations.slice(0, 3) : [null]);
         const mitigations: MitLayout[] = mits.map((m: any) => {
-          const desc = stripHtml(m?.description || '-');
+          const rawDesc = stripHtml(m?.description || '-');
+          const desc = mitMaxWords ? truncateWords(rawDesc, mitMaxWords) : rawDesc;
           const status = m?.status?.title || '';
           const statusLabel = status ? `Status: ${status}` : '';
           return {
@@ -576,11 +587,26 @@ export class RiskReportTableComponent {
       return { riskLayouts, totalH: riskLayouts.reduce((s, rl) => s + rl.riskRowH, 0) };
     };
 
+    // First pass: try without truncation
     let layout = calcLayout(fontSize, lineH);
     while (layout.totalH > availableH && fontSize > 5.5) {
       fontSize -= 0.25;
       lineH    -= 0.1;
       layout    = calcLayout(fontSize, lineH);
+    }
+
+    // If still overflowing at min font, enable truncation and retry
+    if (layout.totalH > availableH) {
+      mitMaxWords = 30;
+      fontSize = 8;
+      lineH = 3.8;
+      cols = buildCols();
+      layout = calcLayout(fontSize, lineH);
+      while (layout.totalH > availableH && fontSize > 5.5) {
+        fontSize -= 0.25;
+        lineH    -= 0.1;
+        layout    = calcLayout(fontSize, lineH);
+      }
     }
 
     const officialCode = this.sciencePrograms?.official_code || '';
@@ -589,20 +615,100 @@ export class RiskReportTableComponent {
       ? `${officialCode} - ${programName}`
       : programName || officialCode || String(this.scienceProgramsId || '');
 
-    // ── Header: Logo + "PRMS Risk" (left) | Program title (center) ──────────
-    if (logoBase64) {
-      doc.addImage(logoBase64, 'PNG', margin, 3, logoW, logoH);
-    }
-    doc.setTextColor(themeR, themeG, themeB);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('PRMS Risk', margin + logoW + 3, 10);
+    const narrative = this.sciencePrograms?.narrative || '';
+    const programLink = `${window.location.origin}/home/${this.id}/${this.scienceProgramsId}`;
 
-    if (headerTitle) {
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(themeR, themeG, themeB);
-      doc.text(headerTitle, pageW / 2, 10, { align: 'center' });
+    // ── Header ──────────────────────────────────────────────────────────────
+    // Row 1: Logo + "PRMS Risk : Program Title" (left)  |  "Click here for more details" (right)
+    if (logoBase64) {
+      doc.addImage(logoBase64, 'PNG', margin, 2, logoW, logoH);
+    }
+    const textX = margin + logoW + 3;
+    doc.setTextColor(themeR, themeG, themeB);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    const titleLabel = headerTitle ? `PRMS Risk : ${headerTitle}` : 'PRMS Risk';
+    doc.text(titleLabel, textX, 8);
+
+    // Link on the right
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(themeR, themeG, themeB);
+    const linkLabel = 'Click ';
+    const linkHere = 'here';
+    const linkAfter = ' for more details';
+    const linkLabelW = doc.getTextWidth(linkLabel);
+    doc.setFont('helvetica', 'bold');
+    const linkHereW = doc.getTextWidth(linkHere);
+    doc.setFont('helvetica', 'normal');
+    const linkAfterW = doc.getTextWidth(linkAfter);
+    const totalLinkW = linkLabelW + linkHereW + linkAfterW;
+    const linkStartX = pageW - margin - totalLinkW;
+    doc.setFont('helvetica', 'normal');
+    doc.text(linkLabel, linkStartX, 8);
+    doc.setFont('helvetica', 'bold');
+    doc.textWithLink(linkHere, linkStartX + linkLabelW, 8, { url: programLink });
+    doc.setDrawColor(themeR, themeG, themeB);
+    doc.setLineWidth(0.3);
+    doc.line(linkStartX + linkLabelW, 8.5, linkStartX + linkLabelW + linkHereW, 8.5);
+    doc.setFont('helvetica', 'normal');
+    doc.text(linkAfter, linkStartX + linkLabelW + linkHereW, 8);
+
+    // Row 2: Narrative — manually word-wrap to full page width
+    let headerBottomY = 14;
+    if (narrative) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(80, 80, 80);
+
+      const fullW = pageW - margin - textX;
+      const words = String(narrative).split(/\s+/);
+      const lines: string[] = [];
+      let cur = '';
+      for (const word of words) {
+        const test = cur ? cur + ' ' + word : word;
+        if (doc.getTextWidth(test) > fullW && cur) {
+          lines.push(cur);
+          cur = word;
+        } else {
+          cur = test;
+        }
+      }
+      if (cur) lines.push(cur);
+
+      const nlh = 2.8;
+      let ny = 11;
+      for (const line of lines) {
+        doc.text(line, textX, ny);
+        ny += nlh;
+      }
+      headerBottomY = ny + 0.5;
+    }
+
+    const actualTableHdrY = Math.max(tableHdrY, headerBottomY);
+    const actualRowsStartY = actualTableHdrY + hdrH;
+    const actualAvailableH = rowsEndY - actualRowsStartY;
+
+    // Recalculate layout if narrative pushed the table down
+    if (narrative && actualAvailableH < availableH) {
+      layout = calcLayout(fontSize, lineH);
+      while (layout.totalH > actualAvailableH && fontSize > 5.5) {
+        fontSize -= 0.25;
+        lineH    -= 0.1;
+        layout    = calcLayout(fontSize, lineH);
+      }
+      if (layout.totalH > actualAvailableH && !mitMaxWords) {
+        mitMaxWords = 30;
+        fontSize = 8;
+        lineH = 3.8;
+        cols = buildCols();
+        layout = calcLayout(fontSize, lineH);
+        while (layout.totalH > actualAvailableH && fontSize > 5.5) {
+          fontSize -= 0.25;
+          lineH    -= 0.1;
+          layout    = calcLayout(fontSize, lineH);
+        }
+      }
     }
 
     // ── Draw table header row ─────────────────────────────────────────────────
@@ -613,14 +719,14 @@ export class RiskReportTableComponent {
       doc.setFillColor(themeR, themeG, themeB);
       doc.setDrawColor(255, 255, 255);
       doc.setLineWidth(0.3);
-      doc.rect(x, tableHdrY, col.w, hdrH, 'FD');
+      doc.rect(x, actualTableHdrY, col.w, hdrH, 'FD');
       doc.setTextColor(255, 255, 255);
-      doc.text(col.header, x + cellPad, tableHdrY + hdrH / 2 + 1.5);
+      doc.text(col.header, x + cellPad, actualTableHdrY + hdrH / 2 + 1.5);
       x += col.w;
     }
 
     // ── Draw data rows with merged cells ────────────────────────────────────
-    let y = rowsStartY;
+    let y = actualRowsStartY;
     doc.setFontSize(fontSize);
     doc.setFont('helvetica', 'normal');
 

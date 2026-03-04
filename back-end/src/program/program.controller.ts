@@ -1584,9 +1584,10 @@ export class ProgramController {
   createVersion(
     @Param('initiative_id') id: number,
     @Body('top') top: any,
+    @Body('narrative') narrative: string,
     @Req() req,
   ): Promise<Program> {
-    return this.iniService.createINIT(id, req.user, top);
+    return this.iniService.createINIT(id, req.user, top, narrative);
   }
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)

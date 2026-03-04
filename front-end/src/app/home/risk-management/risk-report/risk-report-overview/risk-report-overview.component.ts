@@ -99,8 +99,9 @@ export class RiskReportOverviewComponent implements OnInit {
   async publish(id: number) {
     this.dialog
       .open(SubmitRiskDialogComponent, {
-        maxHeight: '800px',
-        maxWidth: '700px',
+        maxHeight: '90vh',
+        maxWidth: '750px',
+        width: '95vw',
         data: { initiative_id: this.id, top: [] },
       })
       .afterClosed()
