@@ -110,7 +110,13 @@ npm run test         # Karma/Jasmine unit tests
 
 **Authentication flow**: AWS Cognito → OAuth2 code exchange → back-end issues JWT → stored in `localStorage` as `access_token`.
 
-**Key libraries**: Angular Material (indigo-pink theme), Highcharts (analytics charts), TinyMCE (announcements/emails editor), ngx-socket-io (WebSocket), docxtemplater + jsPDF (document export), xlsx-js-style (Excel export).
+**Key libraries**: Angular Material (indigo-pink theme), Highcharts (analytics charts), TinyMCE (announcements/emails editor), ngx-socket-io (WebSocket), docxtemplater + jsPDF (document export), xlsx-js-style (Excel export), PizZip + file-saver (ZIP generation).
+
+**Document exports** — Landscape PDF generation exists in two places that must be kept in sync:
+- `Admin/admin-module/exports/exports.component.ts` — bulk ZIP export of all programs
+- `risk-report-table/risk-report-table.component.ts` — per-program export
+
+**jsPDF caveat**: `splitTextToSize()` wraps at ~half the specified width. Use manual word-wrapping with `doc.getTextWidth()` for reliable full-width text rendering.
 
 ## Docker / CI
 
