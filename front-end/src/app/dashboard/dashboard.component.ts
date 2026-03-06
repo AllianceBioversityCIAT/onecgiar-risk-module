@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HighchartsMore from 'highcharts/highcharts-more';
 import SunburstModule from 'highcharts/modules/sunburst';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 import { ApiRiskDetailsService } from '../shared-services/risk-details-services/api-risk-details.service';
 import { DashboardService } from '../services/dashboard.service';
@@ -20,6 +21,8 @@ SunburstModule(Highcharts);
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('dashboardContent') dashboardContent!: ElementRef;
+
   public riskUrl = {
     home: '/home/risk-management',
   };
@@ -27,10 +30,10 @@ export class DashboardComponent implements OnInit {
 
   // Global filters (control all visuals)
   globalType: 'program' | 'project' = 'program';
-  globalProgram = '';
-  globalCategory = '';
-  globalCenter = '';
-  globalActionStatus = '';
+  globalProgram: string[] = [];
+  globalCategory: string[] = [];
+  globalCenter: string[] = [];
+  globalActionStatus: string[] = [];
 
   // Table-specific filters
   filterDueDateFrom = '';
@@ -85,10 +88,10 @@ export class DashboardComponent implements OnInit {
 
   /** Reload from backend when type changes (Programs / Projects) */
   onTypeChange() {
-    this.globalProgram = '';
-    this.globalCategory = '';
-    this.globalCenter = '';
-    this.globalActionStatus = '';
+    this.globalProgram = [];
+    this.globalCategory = [];
+    this.globalCenter = [];
+    this.globalActionStatus = [];
     this.loadDashboard();
   }
 
@@ -135,16 +138,16 @@ export class DashboardComponent implements OnInit {
     let filtered = this.allDetails;
 
     // Program-level filters
-    if (this.globalCenter) {
+    if (this.globalCenter.length) {
       filtered = filtered.filter((p: any) =>
         (p.organizations || []).some(
-          (o: any) => o.acronym === this.globalCenter
+          (o: any) => this.globalCenter.includes(o.acronym)
         )
       );
     }
-    if (this.globalProgram) {
+    if (this.globalProgram.length) {
       filtered = filtered.filter(
-        (p: any) => p.official_code === this.globalProgram
+        (p: any) => this.globalProgram.includes(p.official_code)
       );
     }
 
@@ -153,18 +156,18 @@ export class DashboardComponent implements OnInit {
       .map((p: any) => {
         let risks = [...(p.risks || [])];
 
-        if (this.globalCategory) {
+        if (this.globalCategory.length) {
           risks = risks.filter(
-            (r: any) => r.category?.title === this.globalCategory
+            (r: any) => this.globalCategory.includes(r.category?.title)
           );
         }
 
-        if (this.globalActionStatus) {
+        if (this.globalActionStatus.length) {
           risks = risks
             .map((r: any) => ({
               ...r,
               mitigations: (r.mitigations || []).filter(
-                (m: any) => m.status?.title === this.globalActionStatus
+                (m: any) => this.globalActionStatus.includes(m.status?.title)
               ),
             }))
             .filter((r: any) => r.mitigations.length > 0);
@@ -323,12 +326,14 @@ export class DashboardComponent implements OnInit {
             risk_id: risk.id,
             official_code: program.official_code,
             risk_category: risk.category?.title || '',
+            risk_category_description: risk.category?.description || '',
             centers: (program.organizations || []).map((o: any) => o.acronym),
             risk_title: risk.title,
             risk_description: risk.description,
             due_date: risk.due_date,
             action_description: mitigation.description,
             action_status: mitigation.status?.title || '',
+            action_status_description: mitigation.status?.description || '',
           });
         }
       }
@@ -405,10 +410,10 @@ export class DashboardComponent implements OnInit {
   }
 
   resetGlobalFilters() {
-    this.globalProgram = '';
-    this.globalCategory = '';
-    this.globalCenter = '';
-    this.globalActionStatus = '';
+    this.globalProgram = [];
+    this.globalCategory = [];
+    this.globalCenter = [];
+    this.globalActionStatus = [];
     this.applyGlobalFilters();
   }
 
@@ -445,6 +450,8 @@ export class DashboardComponent implements OnInit {
       xAxis: {
         gridLineWidth: 1,
         allowDecimals: false,
+        min: 1,
+        max: 5,
         title: {
           text: `<span class="chart-title"> ${type} impact</span>`,
         },
@@ -454,6 +461,8 @@ export class DashboardComponent implements OnInit {
         startOnTick: false,
         endOnTick: false,
         allowDecimals: false,
+        min: 1,
+        max: 5,
         title: {
           text: `<span class="chart-title"> ${type} Likelihood</span>`,
         },
@@ -550,7 +559,7 @@ export class DashboardComponent implements OnInit {
     const totalColW = cols.reduce((s, c) => s + c.w, 0);
     const tableX = (297 - totalColW) / 2;
     const tableHdrY = 23;
-    const programLabel = this.globalProgram || 'All Programs';
+    const programLabel = this.globalProgram.length ? this.globalProgram.join(', ') : 'All Programs';
 
     const drawPageHeader = () => {
       const logoH = 10;
@@ -644,6 +653,70 @@ export class DashboardComponent implements OnInit {
     }
 
     doc.save('Report-Landscape.pdf');
+  }
+
+  async exportDashboardPDF(): Promise<void> {
+    const el = this.dashboardContent?.nativeElement;
+    if (!el) return;
+
+    // Hide filter bars during capture
+    const filterBars = el.querySelectorAll('.actions-filter-bar');
+    filterBars.forEach((bar: HTMLElement) => bar.style.display = 'none');
+
+    const canvas = await html2canvas(el, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+    });
+
+    // Restore filter bars
+    filterBars.forEach((bar: HTMLElement) => bar.style.display = '');
+
+    const imgData = canvas.toDataURL('image/png');
+    const imgW = canvas.width;
+    const imgH = canvas.height;
+
+    // Fit to A4 landscape
+    const pdfW = 297;
+    const pdfH = 210;
+    const margin = 10;
+    const contentW = pdfW - margin * 2;
+    const scaledH = (imgH * contentW) / imgW;
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    // If content fits on one page
+    if (scaledH <= pdfH - margin * 2) {
+      doc.addImage(imgData, 'PNG', margin, margin, contentW, scaledH);
+    } else {
+      // Multi-page: slice the canvas into page-sized chunks
+      const pageContentH = pdfH - margin * 2;
+      const sourcePageH = (pageContentH / scaledH) * imgH;
+      let srcY = 0;
+      let page = 0;
+
+      while (srcY < imgH) {
+        if (page > 0) doc.addPage();
+        const sliceH = Math.min(sourcePageH, imgH - srcY);
+        const sliceCanvas = document.createElement('canvas');
+        sliceCanvas.width = imgW;
+        sliceCanvas.height = sliceH;
+        sliceCanvas.getContext('2d')!.drawImage(
+          canvas, 0, srcY, imgW, sliceH, 0, 0, imgW, sliceH
+        );
+        const sliceImg = sliceCanvas.toDataURL('image/png');
+        const renderH = (sliceH * contentW) / imgW;
+        doc.addImage(sliceImg, 'PNG', margin, margin, contentW, renderH);
+        srcY += sourcePageH;
+        page++;
+      }
+    }
+
+    doc.save('Dashboard-Report.pdf');
   }
 
   private getBase64FromUrl(url: string): Promise<string | null> {

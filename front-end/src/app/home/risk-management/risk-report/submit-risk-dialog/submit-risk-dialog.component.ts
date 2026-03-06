@@ -27,6 +27,8 @@ export class SubmitRiskDialogComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.narrative = this.data.existingNarrative || '';
+
     this.tops = await this.initiativeService.getTopRisks(
       this.data.initiative_id
     );
@@ -39,12 +41,17 @@ export class SubmitRiskDialogComponent implements OnInit {
   async publish() {
     this.error = [];
 
-    if (this.wordCount > 50) {
-      this.error.push("Narrative must not exceed 50 words.");
+    if (!this.narrative.trim()) {
+      this.error.push("Narrative is required.");
       return;
     }
 
-    this.data.narrative = this.narrative.trim() || null;
+    if (this.wordCount > 100) {
+      this.error.push("Narrative must not exceed 100 words.");
+      return;
+    }
+
+    this.data.narrative = this.narrative.trim();
 
     // case 1
     if(this.tops.top.length + this.tops.similar.length <= 5) {

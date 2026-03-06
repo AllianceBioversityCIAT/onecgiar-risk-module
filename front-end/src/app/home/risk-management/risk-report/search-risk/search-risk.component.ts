@@ -236,8 +236,8 @@ export class SearchRiskComponent {
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <dc:title>Risk Export</dc:title>
-  <dc:creator>PRMS Risk</dc:creator>
-  <cp:lastModifiedBy>PRMS Risk</cp:lastModifiedBy>
+  <dc:creator>PRMS Risk Management</dc:creator>
+  <cp:lastModifiedBy>PRMS Risk Management</cp:lastModifiedBy>
 </cp:coreProperties>`
     );
 
@@ -245,7 +245,7 @@ export class SearchRiskComponent {
       'app.xml',
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
-  <Application>PRMS Risk</Application>
+  <Application>PRMS Risk Management</Application>
 </Properties>`
     );
 
@@ -271,7 +271,7 @@ export class SearchRiskComponent {
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" mc:Ignorable="w14 wp14">
   <w:body>
-    <w:p><w:r><w:t>PRMS Risk - Risks Export</w:t></w:r></w:p>
+    <w:p><w:r><w:t>PRMS Risk Management - Risks Export</w:t></w:r></w:p>
     <w:p><w:r><w:t>Initiative: {initiative_code}</w:t></w:r></w:p>
     <w:p><w:r><w:t>Total risks: {total_risks}</w:t></w:r></w:p>
     <w:p><w:r><w:t>Generated at: {generated_at}</w:t></w:r></w:p>

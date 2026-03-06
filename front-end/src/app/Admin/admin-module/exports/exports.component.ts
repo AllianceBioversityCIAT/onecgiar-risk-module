@@ -128,13 +128,13 @@ export class ExportsComponent {
       const { descW, actW } = calcColWidths(mitMaxWords);
       return [
         { header: 'Title / Description', w: descW },
-        { header: 'Actions/Controls',    w: actW },
+        { header: 'Actions and controls to manage risk', w: actW },
       ];
     };
     let cols = buildCols();
 
-    let fontSize = 8;
-    let lineH    = 3.8;
+    let fontSize = 10;
+    let lineH    = 4.5;
 
     interface MitLayout { descLines: string[]; statusLines: string[] }
     interface RiskLayout {
@@ -188,7 +188,7 @@ export class ExportsComponent {
 
     // First pass: try without truncation
     let layout = calcLayout(fontSize, lineH);
-    while (layout.totalH > availableH && fontSize > 5.5) {
+    while (layout.totalH > availableH && fontSize > 6.5) {
       fontSize -= 0.25;
       lineH    -= 0.1;
       layout    = calcLayout(fontSize, lineH);
@@ -197,38 +197,39 @@ export class ExportsComponent {
     // If still overflowing at min font, enable truncation and retry
     if (layout.totalH > availableH) {
       mitMaxWords = 30;
-      fontSize = 8;
-      lineH = 3.8;
+      fontSize = 10;
+      lineH = 4.5;
       cols = buildCols();
       layout = calcLayout(fontSize, lineH);
-      while (layout.totalH > availableH && fontSize > 5.5) {
+      while (layout.totalH > availableH && fontSize > 6.5) {
         fontSize -= 0.25;
         lineH    -= 0.1;
         layout    = calcLayout(fontSize, lineH);
       }
     }
 
-    const officialCode = program?.official_code || '';
     const programName  = program?.name || '';
-    const headerTitle  = officialCode && programName
-      ? `${officialCode} - ${programName}`
-      : programName || officialCode || '';
+    const activePhaseYear = program?.phase?.reporting_year || new Date().getFullYear();
 
     const narrative = program?.narrative || '';
-    const programLink = `${window.location.origin}/home/${program?.id}/${officialCode}`;
+    const programLink = `${window.location.origin}/home/${program?.id}/${program?.official_code || ''}`;
 
-    // Row 1: Logo + "PRMS Risk : Program Title" (left)  |  "Click here for more details" (right)
+    // Row 1: Logo + "Top 5 submitted risks for {Year}" (left)  |  "Click here for more details" (right)
+    const titleY = 7;
+    const logoY = titleY - 2; // align logo top with text top
     if (logoBase64) {
-      doc.addImage(logoBase64, 'PNG', margin, 2, logoW, logoH);
+      doc.addImage(logoBase64, 'PNG', margin, logoY, logoW, logoH);
     }
     const textX = margin + logoW + 3;
     doc.setTextColor(themeR, themeG, themeB);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    const titleLabel = headerTitle ? `PRMS Risk : ${headerTitle}` : 'PRMS Risk';
-    doc.text(titleLabel, textX, 8);
+    const titleLabel = programName
+      ? `Top 5 submitted risks for ${activePhaseYear} - ${programName}`
+      : `Top 5 submitted risks for ${activePhaseYear}`;
+    doc.text(titleLabel, textX, titleY);
 
-    // Link on the right
+    // Link on the right (same vertical position as title)
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(themeR, themeG, themeB);
@@ -243,22 +244,23 @@ export class ExportsComponent {
     const totalLinkW = linkLabelW + linkHereW + linkAfterW;
     const linkStartX = pageW - margin - totalLinkW;
     doc.setFont('helvetica', 'normal');
-    doc.text(linkLabel, linkStartX, 8);
+    doc.text(linkLabel, linkStartX, titleY);
     doc.setFont('helvetica', 'bold');
-    doc.textWithLink(linkHere, linkStartX + linkLabelW, 8, { url: programLink });
+    doc.textWithLink(linkHere, linkStartX + linkLabelW, titleY, { url: programLink });
     doc.setDrawColor(themeR, themeG, themeB);
     doc.setLineWidth(0.3);
-    doc.line(linkStartX + linkLabelW, 8.5, linkStartX + linkLabelW + linkHereW, 8.5);
+    doc.line(linkStartX + linkLabelW, titleY + 0.5, linkStartX + linkLabelW + linkHereW, titleY + 0.5);
     doc.setFont('helvetica', 'normal');
-    doc.text(linkAfter, linkStartX + linkLabelW + linkHereW, 8);
+    doc.text(linkAfter, linkStartX + linkLabelW + linkHereW, titleY);
 
     // Row 2: Narrative — manually word-wrap to full page width
-    let headerBottomY = 14;
+    let headerBottomY = titleY + 5;
     if (narrative) {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(80, 80, 80);
 
+      const narrativeStartY = titleY + 4;
       const fullW = pageW - margin - textX;
       const words = String(narrative).split(/\s+/);
       const lines: string[] = [];
@@ -275,7 +277,7 @@ export class ExportsComponent {
       if (cur) lines.push(cur);
 
       const nlh = 2.8;
-      let ny = 11;
+      let ny = narrativeStartY;
       for (const line of lines) {
         doc.text(line, textX, ny);
         ny += nlh;

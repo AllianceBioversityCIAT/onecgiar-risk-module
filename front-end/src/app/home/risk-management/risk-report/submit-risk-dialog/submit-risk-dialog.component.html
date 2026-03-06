@@ -146,15 +146,16 @@
       </ng-container>
 
       <div class="narrative-section">
-        <h2 class="submit-risk-title-1">Optional: Provide a summative narrative of your overall Risk Review (50 words or less)</h2>
+        <h2 class="submit-risk-title-1">Risk Narrative <span style="color: red;">*</span></h2>
+        <p class="narrative-hint">Summarize the key insights highlighting which risks materialized, how effectively they were managed, what new risks emerged, and how risk events affected results, timelines, or budgets. This will appear at the top of your PDF export and will be copied and pasted into your Annual Technical Report. (100 words or less)</p>
         <textarea
           class="narrative-textarea"
           [(ngModel)]="narrative"
           rows="4"
           placeholder=""
-          maxlength="500"
+          maxlength="1000"
         ></textarea>
-        <p class="word-count" [class.over-limit]="wordCount > 50">{{ wordCount }}/50 words</p>
+        <p class="word-count" [class.over-limit]="wordCount > 100">{{ wordCount }}/100 words</p>
       </div>
 
       <div class="form-dialog-conten-button-box-2">
@@ -219,15 +220,16 @@
 
     <div class="submit-risk-flex-box">
       <div class="narrative-section">
-        <h2 class="submit-risk-title-1">Optional: Provide a summative narrative of your overall Risk Review (50 words or less)</h2>
+        <h2 class="submit-risk-title-1">Risk Narrative <span style="color: red;">*</span></h2>
+        <p class="narrative-hint">Summarize the key insights highlighting which risks materialized, how effectively they were managed, what new risks emerged, and how risk events affected results, timelines, or budgets. This will appear at the top of your PDF export and will be copied and pasted into your Annual Technical Report. (100 words or less)</p>
         <textarea
           class="narrative-textarea"
           [(ngModel)]="narrative"
           rows="4"
           placeholder=""
-          maxlength="500"
+          maxlength="1000"
         ></textarea>
-        <p class="word-count" [class.over-limit]="wordCount > 50">{{ wordCount }}/50 words</p>
+        <p class="word-count" [class.over-limit]="wordCount > 100">{{ wordCount }}/100 words</p>
       </div>
 
       <div class="form-dialog-conten-button-box-2">

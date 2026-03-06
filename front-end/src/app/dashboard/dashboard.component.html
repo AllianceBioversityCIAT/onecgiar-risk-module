@@ -9,8 +9,7 @@
     <div class="global-filter-bar">
       <mat-form-field appearance="outline" class="filter-field filter-field--wide">
         <mat-label>Program / Project</mat-label>
-        <mat-select [(ngModel)]="globalProgram" (selectionChange)="applyGlobalFilters()">
-          <mat-option value="">All</mat-option>
+        <mat-select [(ngModel)]="globalProgram" [multiple]="true" (selectionChange)="applyGlobalFilters()">
           <mat-option *ngFor="let p of allProgramOptions" [value]="p.code">
             {{ p.code }} - {{ p.name }}
           </mat-option>
@@ -19,24 +18,21 @@
 
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Risk Category</mat-label>
-        <mat-select [(ngModel)]="globalCategory" (selectionChange)="applyGlobalFilters()">
-          <mat-option value="">All</mat-option>
+        <mat-select [(ngModel)]="globalCategory" [multiple]="true" (selectionChange)="applyGlobalFilters()">
           <mat-option *ngFor="let c of allCategoryOptions" [value]="c">{{ c }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Center</mat-label>
-        <mat-select [(ngModel)]="globalCenter" (selectionChange)="applyGlobalFilters()">
-          <mat-option value="">All</mat-option>
+        <mat-select [(ngModel)]="globalCenter" [multiple]="true" (selectionChange)="applyGlobalFilters()">
           <mat-option *ngFor="let c of allCenterOptions" [value]="c">{{ c }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Action Status</mat-label>
-        <mat-select [(ngModel)]="globalActionStatus" (selectionChange)="applyGlobalFilters()">
-          <mat-option value="">All</mat-option>
+        <mat-select [(ngModel)]="globalActionStatus" [multiple]="true" (selectionChange)="applyGlobalFilters()">
           <mat-option *ngFor="let s of allActionStatusOptions" [value]="s">{{ s }}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -54,10 +50,14 @@
           <mat-option value="project">Projects</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <button mat-raised-button color="primary" class="filter-btn" (click)="exportDashboardPDF()">
+        <mat-icon>picture_as_pdf</mat-icon> Export PDF
+      </button>
     </div>
 
     <!-- Dashboard content -->
-    <div class="dashboard-main-content">
+    <div class="dashboard-main-content" #dashboardContent>
       <div class="dashboard-content-container">
         <!-- Charts grid -->
         <div class="dashboard-img-box-grid-container">
@@ -174,7 +174,7 @@
                   <td>{{ row.risk_description }}</td>
                   <td class="due-date-cell">{{ row.due_date | date: 'M/d/yyyy' }}</td>
                   <td>{{ row.action_description }}</td>
-                  <td>{{ row.action_status }}</td>
+                  <td [matTooltip]="row.action_status_description" matTooltipPosition="above">{{ row.action_status }}</td>
                 </tr>
               </table>
 
@@ -223,7 +223,7 @@
                     >
                       {{ sciencePrograms.name }}
                     </td>
-                    <td>{{ risk.category.title }}</td>
+                    <td [matTooltip]="risk.category?.description" matTooltipPosition="above">{{ risk.category.title }}</td>
                     <td>{{ risk.title }}</td>
                     <td>{{ risk.description }}</td>
                     <td class="level" [attr.style]="color(risk.current_level)">

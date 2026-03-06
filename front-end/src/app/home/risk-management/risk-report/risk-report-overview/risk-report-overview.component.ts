@@ -102,12 +102,17 @@ export class RiskReportOverviewComponent implements OnInit {
         maxHeight: '90vh',
         maxWidth: '750px',
         width: '95vw',
-        data: { initiative_id: this.id, top: [] },
+        data: { initiative_id: this.id, top: [], existingNarrative: this.sciencePrograms?.narrative || '' },
       })
       .afterClosed()
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.initiativeService.Publish(id, dialogResult);
+
+          // Update narrative locally so PDF export reflects it immediately
+          if (dialogResult.narrative != null) {
+            this.sciencePrograms.narrative = dialogResult.narrative;
+          }
 
           this.toastr.success(
             `Risks for ${this.sciencePrograms.name} has been submitted successfully`
