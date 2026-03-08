@@ -210,8 +210,6 @@ highcharts-chart {
 }
 
 .due-date-cell {
-  background-color: #ffff00 !important;
-  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -245,6 +243,15 @@ highcharts-chart {
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+  color: #436280;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: #0f212f;
+    text-decoration-style: solid;
+  }
 }
 
 .sort-icon {
@@ -253,6 +260,15 @@ highcharts-chart {
   height: 16px;
   vertical-align: middle;
   margin-left: 2px;
+}
+
+.sort-hint {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  margin-left: 2px;
+  opacity: 0.4;
 }
 
 .show-more-bar {
@@ -268,7 +284,7 @@ highcharts-chart {
   font-size: 1.4rem;
 }
 
-/* Compact variant for the Reported Actions/Controls table */
+/* Compact variant for the Actions and Controls to Manage Risk table */
 .table-box--compact {
   margin-top: 0.5rem;
 
@@ -284,13 +300,13 @@ highcharts-chart {
 
   th,
   td {
-    padding: 0.4rem 0.6rem !important;
-    font-size: 1.1rem !important;
-    line-height: 1.3 !important;
+    padding: 0.5rem 0.8rem !important;
+    font-size: 1.3rem !important;
+    line-height: 1.5 !important;
   }
 
   th {
-    font-size: 1.2rem !important;
+    font-size: 1.4rem !important;
     white-space: nowrap;
   }
 

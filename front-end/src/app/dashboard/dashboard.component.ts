@@ -82,8 +82,8 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadDashboard();
-    this.title.setTitle('Risk dashboard');
-    this.meta.updateTag({ name: 'description', content: 'Risk dashboard' });
+    this.title.setTitle('Risk Dashboard');
+    this.meta.updateTag({ name: 'description', content: 'Risk Dashboard' });
   }
 
   /** Reload from backend when type changes (Programs / Projects) */
@@ -217,7 +217,7 @@ export class DashboardComponent implements OnInit {
       'Target'
     );
 
-    // Status of action pie
+    // Status of Actions and Controls to Manage Risk pie
     const statusMap: Record<string, number> = {};
     for (const p of this.filteredDetails) {
       for (const r of p.risks || []) {
@@ -427,7 +427,7 @@ export class DashboardComponent implements OnInit {
 
   exportExcel() {
     const data = this.filteredActions.map(row => ({
-      'Risk id': row.risk_id,
+      'Risk ID': row.risk_id,
       ID: row.official_code,
       Risk: row.risk_title,
       Description: row.risk_description,

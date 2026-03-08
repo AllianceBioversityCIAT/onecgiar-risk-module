@@ -508,7 +508,7 @@ export class ProgramController {
   getTemplateAdmin(width = false) {
     return {
       // 'top': null,
-      'Risk id': null,
+      'Risk ID': null,
       ID: null,
       Title: null,
       Description: null,
@@ -526,14 +526,14 @@ export class ProgramController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      'Actions /Controls to manage risks': width ? 'Description' : null,
+      'Actions and Controls to Manage Risk': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
 
   mapTemplateAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
-    template['Risk id'] =
+    template['Risk ID'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.ID = element.program.official_code;
@@ -594,12 +594,12 @@ export class ProgramController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template['Actions /Controls to manage risks'] = d.description;
+          template['Actions and Controls to Manage Risk'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateAdmin();
-          template2['Actions /Controls to manage risks'] = d.description;
+          template2['Actions and Controls to Manage Risk'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -611,7 +611,7 @@ export class ProgramController {
   getTemplateAllDataAdmin(width = false) {
     return {
       // 'top': null,
-      'Risk id': null,
+      'Risk ID': null,
       ID: null,
       Title: null,
       Description: null,
@@ -629,7 +629,7 @@ export class ProgramController {
       'Due date': null,
       'Targets not set': null,
       // Redundant: false,
-      'Actions /Controls to manage risks': width ? 'Description' : null,
+      'Actions and Controls to Manage Risk': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
@@ -637,7 +637,7 @@ export class ProgramController {
   mapTemplateAllDataAdmin(template, element) {
     // template['top'] = element.top == 999 ? '' : element.top;
 
-    template['Risk id'] =
+    template['Risk ID'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.ID = element.program.official_code;
@@ -699,12 +699,12 @@ export class ProgramController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template['Actions /Controls to manage risks'] = d.description;
+          template['Actions and Controls to Manage Risk'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateAllDataAdmin();
-          template2['Actions /Controls to manage risks'] = d.description;
+          template2['Actions and Controls to Manage Risk'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -715,7 +715,7 @@ export class ProgramController {
   getTemplateVersionAdmin(width = false) {
     return {
       top: null,
-      'Risk id': null,
+      'Risk ID': null,
       ID: null,
       Title: null,
       Description: null,
@@ -733,14 +733,14 @@ export class ProgramController {
       Flagged: null,
       'Due date': null,
       // Redundant: false,
-      'Actions /Controls to manage risks': width ? 'Description' : null,
+      'Actions and Controls to Manage Risk': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
 
   mapTemplateVersionAdmin(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template['Risk id'] =
+    template['Risk ID'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.ID = element.program.official_code;
@@ -801,12 +801,12 @@ export class ProgramController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template['Actions /Controls to manage risks'] = d.description;
+          template['Actions and Controls to Manage Risk'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateVersionAdmin();
-          template2['Actions /Controls to manage risks'] = d.description;
+          template2['Actions and Controls to Manage Risk'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -817,7 +817,7 @@ export class ProgramController {
 
   getTemplateUser(width = false) {
     return {
-      'Risk id': null,
+      'Risk ID': null,
       ID: null,
       Title: null,
       Description: null,
@@ -835,13 +835,13 @@ export class ProgramController {
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
-      'Actions /Controls to manage risks': width ? 'Description' : null,
+      'Actions and Controls to Manage Risk': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
 
   mapTemplateUser(template, element) {
-    template['Risk id'] =
+    template['Risk ID'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.ID = element.program.official_code;
@@ -903,12 +903,12 @@ export class ProgramController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template['Actions /Controls to manage risks'] = d.description;
+          template['Actions and Controls to Manage Risk'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateUser();
-          template2['Actions /Controls to manage risks'] = d.description;
+          template2['Actions and Controls to Manage Risk'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -920,7 +920,7 @@ export class ProgramController {
   getTemplateVersionUser(width = false) {
     return {
       top: null,
-      'Risk id': null,
+      'Risk ID': null,
       ID: null,
       Title: null,
       Description: null,
@@ -938,14 +938,14 @@ export class ProgramController {
       // "Flag to SGD":null,
       'Due Date': null,
       // Redundant: false,
-      'Actions /Controls to manage risks': width ? 'Description' : null,
+      'Actions and Controls to Manage Risk': width ? 'Description' : null,
       mitigations_status: width ? 'Status' : null,
     };
   }
 
   mapTemplateVersionUser(template, element) {
     template['top'] = element.top == 999 ? '' : element.top;
-    template['Risk id'] =
+    template['Risk ID'] =
       element.original_risk_id == null ? element.id : element.original_risk_id;
     template.Title = element.title;
     template.ID = element.program.official_code;
@@ -1007,12 +1007,12 @@ export class ProgramController {
       }
       element.mitigations.forEach((d, index) => {
         if (index == 0) {
-          template['Actions /Controls to manage risks'] = d.description;
+          template['Actions and Controls to Manage Risk'] = d.description;
           template.mitigations_status = d.status.title;
           finaldata.push(template);
         } else {
           const template2 = this.getTemplateVersionUser();
-          template2['Actions /Controls to manage risks'] = d.description;
+          template2['Actions and Controls to Manage Risk'] = d.description;
           template2.mitigations_status = d.status.title;
           finaldata.push(template2);
         }
@@ -1350,18 +1350,18 @@ export class ProgramController {
     for (let i = 1; i <= json.length - 1; i++) {
       if (json[i]) {
         if (
-          json[i]['Actions /Controls to manage risks'] &&
+          json[i]['Actions and Controls to Manage Risk'] &&
           json[i].Description
         ) {
           if (
-            json[i]['Actions /Controls to manage risks'].length > 300 ||
+            json[i]['Actions and Controls to Manage Risk'].length > 300 ||
             json[i].Description.length > 300
           ) {
             worksheet['!rows'].push({
               hpt:
-                json[i]['Actions /Controls to manage risks'].length >
+                json[i]['Actions and Controls to Manage Risk'].length >
                 json[i].Description.length
-                  ? json[i]['Actions /Controls to manage risks'].length / 3
+                  ? json[i]['Actions and Controls to Manage Risk'].length / 3
                   : json[i].Description.length / 3,
             });
           } else {
@@ -1370,12 +1370,12 @@ export class ProgramController {
             });
           }
         } else if (
-          json[i]['Actions /Controls to manage risks'] &&
+          json[i]['Actions and Controls to Manage Risk'] &&
           json[i].Description == null
         ) {
-          if (json[i]['Actions /Controls to manage risks'].length > 300) {
+          if (json[i]['Actions and Controls to Manage Risk'].length > 300) {
             worksheet['!rows'].push({
-              hpt: json[i]['Actions /Controls to manage risks'].length / 3,
+              hpt: json[i]['Actions and Controls to Manage Risk'].length / 3,
             });
           } else {
             worksheet['!rows'].push({
@@ -1384,7 +1384,7 @@ export class ProgramController {
           }
         } else if (
           json[i].Description &&
-          json[i]['Actions /Controls to manage risks'] == null
+          json[i]['Actions and Controls to Manage Risk'] == null
         ) {
           if (json[i].Description.length > 300) {
             worksheet['!rows'].push({

@@ -66,10 +66,10 @@ export class RiskDashboardComponent {
     if (this.my_roles?.includes(ROLES.MEMBER) && url == 'risk-dashboard') {
       this.router.navigate([`/home/${this.scienceProgramsId}/${this.officalCode}`]);
     }
-    this.title.setTitle('Risk dashboard');
+    this.title.setTitle('Risk Dashboard');
     this.meta.updateTag({
       name: 'description',
-      content: 'Risk dashboard',
+      content: 'Risk Dashboard',
     });
   }
 

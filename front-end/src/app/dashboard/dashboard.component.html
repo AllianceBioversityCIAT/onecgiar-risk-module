@@ -2,7 +2,7 @@
   <div class="dashboard-box">
     <!-- Title -->
     <div class="dashboard-title-box">
-      <p class="dashboard-title-box__title">Risk dashboard</p>
+      <p class="dashboard-title-box__title">Risk Dashboard</p>
     </div>
 
     <!-- Global filter bar (controls all visuals) -->
@@ -65,7 +65,7 @@
           <div class="dashboard-item-box">
             <div class="dashboard-item-box-title">
               <p class="dashboard-item-box-title__title">
-                Current Risk profile
+                Current Risk Profile
               </p>
             </div>
             <highcharts-chart
@@ -79,7 +79,7 @@
           <!-- item-2 -->
           <div class="dashboard-item-box">
             <div class="dashboard-item-box-title">
-              <p class="dashboard-item-box-title__title">Target Risk profile</p>
+              <p class="dashboard-item-box-title__title">Target Risk Profile</p>
             </div>
             <highcharts-chart
               *ngIf="risk_profile_target_chartOptions"
@@ -93,7 +93,7 @@
           <div class="dashboard-item-box">
             <div class="dashboard-item-box-title">
               <p class="dashboard-item-box-title__title">
-                Status of action
+                Status of Actions and Controls to Manage Risk
               </p>
             </div>
             <highcharts-chart
@@ -118,9 +118,9 @@
           </div>
         </div>
 
-        <!-- Reported Actions/Controls table -->
+        <!-- Actions and Controls to Manage Risk table -->
         <div class="dashboard-title-table-box">
-          <p class="dashboard-title-table-box__title">Reported Actions/Controls</p>
+          <p class="dashboard-title-table-box__title">Actions and Controls to Manage Risk</p>
         </div>
 
         <!-- Table filter bar (date filters + export) -->
@@ -150,22 +150,36 @@
               <table>
                 <tr>
                   <th class="sortable-th" (click)="sortBy('risk_id')">
-                    Risk id
+                    Risk ID
                     <mat-icon *ngIf="sortField === 'risk_id'" class="sort-icon">
                       {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
                     </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'risk_id'" class="sort-hint">unfold_more</mat-icon>
                   </th>
-                  <th>ID</th>
-                  <th>Risk</th>
+                  <th class="sortable-th" (click)="sortBy('official_code')">
+                    ID
+                    <mat-icon *ngIf="sortField === 'official_code'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'official_code'" class="sort-hint">unfold_more</mat-icon>
+                  </th>
+                  <th>Risk Title</th>
                   <th>Description</th>
                   <th class="sortable-th" (click)="sortBy('due_date')">
                     Due date
                     <mat-icon *ngIf="sortField === 'due_date'" class="sort-icon">
                       {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
                     </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'due_date'" class="sort-hint">unfold_more</mat-icon>
                   </th>
-                  <th>Actions /Controls to manage risks</th>
-                  <th>Status</th>
+                  <th>Actions and Controls to Manage Risk</th>
+                  <th class="sortable-th" (click)="sortBy('action_status')">
+                    Status
+                    <mat-icon *ngIf="sortField === 'action_status'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'action_status'" class="sort-hint">unfold_more</mat-icon>
+                  </th>
                 </tr>
                 <tr *ngFor="let row of displayedActions">
                   <td>{{ row.risk_id }}</td>
@@ -192,21 +206,21 @@
         </div>
 
         <div class="dashboard-title-table-box" style="margin-top: 3rem;">
-          <p class="dashboard-title-table-box__title">Risk details</p>
+          <p class="dashboard-title-table-box__title">Risk Details</p>
         </div>
 
-        <!-- Risk details-table -->
+        <!-- Risk Details table -->
         <div class="table-box table-box--compact mat-elevation-z8">
           <mat-card>
             <mat-card-content>
               <table>
                 <tr>
-                  <th>INIT-ID</th>
-                  <th>Science Programs</th>
+                  <th>ID</th>
+                  <th>Science Program</th>
                   <th>Risk Category</th>
-                  <th>Risk</th>
+                  <th>Risk Title</th>
                   <th>Risk Description</th>
-                  <th>Risk score</th>
+                  <th>Risk Score</th>
                 </tr>
                 <ng-container *ngFor="let sciencePrograms of details">
                   <tr *ngFor="let risk of sciencePrograms.risks; let i = index">

@@ -495,24 +495,16 @@ export class RiskReportTableComponent {
     const totalW     = pageW - margin * 2;
     const minColW    = 60;
 
-    const formatDate = (risk: any): string => {
-      if (!risk.due_date) return '-';
-      const d = new Date(risk.due_date);
-      return isNaN(d.getTime()) ? String(risk.due_date) : d.toLocaleDateString('en-GB');
-    };
-
     const calcColWidths = (mitMaxWords?: number): { descW: number; actW: number } => {
       let descChars = 0;
       let actChars  = 0;
       for (const risk of top5) {
         descChars += String(risk.title || '').length;
-        descChars += ('Deadline: ' + formatDate(risk)).length;
         descChars += stripHtml(String(risk.description || '')).length;
         const mits = (risk.mitigations?.length > 0 ? risk.mitigations : []).slice(0, 3);
         for (const m of mits) {
           const mitDesc = stripHtml(m?.description || '-');
           actChars += (mitMaxWords ? truncateWords(mitDesc, mitMaxWords) : mitDesc).length;
-          actChars += (m?.status?.title || '').length;
         }
       }
       const total = descChars + actChars;
@@ -527,11 +519,11 @@ export class RiskReportTableComponent {
     };
 
     let mitMaxWords: number | undefined;
-    const buildCols = () => {
+    const buildCols = (year: string | number = '') => {
       const { descW, actW } = calcColWidths(mitMaxWords);
       return [
-        { header: 'Title / Description', w: descW },
-        { header: 'Actions and controls to manage risk', w: actW },
+        { header: `Top 5 Submitted Risks for ${year}`, w: descW },
+        { header: 'Actions and Controls to Manage Risk', w: actW },
       ];
     };
     let cols = buildCols();
@@ -553,25 +545,20 @@ export class RiskReportTableComponent {
 
       const riskLayouts: RiskLayout[] = top5.map(risk => {
         const titleLines = doc.splitTextToSize(String(risk.title || ''), colW) as string[];
-        const deadlineLabel = 'Deadline: ' + formatDate(risk);
-        const deadlineLines = doc.splitTextToSize(deadlineLabel, colW) as string[];
         const descText = stripHtml(String(risk.description || ''));
         const descLines = doc.splitTextToSize(descText, colW) as string[];
 
         const combinedLines: { text: string; bold?: boolean; color?: 'theme' | 'dark' }[] = [];
         for (const line of titleLines) combinedLines.push({ text: line, bold: true, color: 'dark' });
-        for (const line of deadlineLines) combinedLines.push({ text: line, bold: true, color: 'theme' });
         for (const line of descLines) combinedLines.push({ text: line, color: 'dark' });
 
         const mits = (risk.mitigations?.length > 0 ? risk.mitigations.slice(0, 3) : [null]);
         const mitigations: MitLayout[] = mits.map((m: any) => {
           const rawDesc = stripHtml(m?.description || '-');
           const desc = mitMaxWords ? truncateWords(rawDesc, mitMaxWords) : rawDesc;
-          const status = m?.status?.title || '';
-          const statusLabel = status ? `Status: ${status}` : '';
           return {
             descLines: doc.splitTextToSize(desc, cols[1].w - cellPad * 2) as string[],
-            statusLines: statusLabel ? doc.splitTextToSize(statusLabel, cols[1].w - cellPad * 2) as string[] : [],
+            statusLines: [] as string[],
           };
         });
 
@@ -614,6 +601,7 @@ export class RiskReportTableComponent {
 
     const programName  = this.sciencePrograms?.name || '';
     const activePhaseYear = this.sciencePrograms?.phase?.reporting_year || new Date().getFullYear();
+    cols = buildCols(activePhaseYear);
 
     const narrative = this.sciencePrograms?.narrative || '';
     const programLink = `${window.location.origin}/home/${this.id}/${this.scienceProgramsId}`;
@@ -630,8 +618,8 @@ export class RiskReportTableComponent {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     const titleLabel = programName
-      ? `Top 5 submitted risks for ${activePhaseYear} - ${programName}`
-      : `Top 5 submitted risks for ${activePhaseYear}`;
+      ? `Risk Management - ${programName}`
+      : `Risk Management`;
     doc.text(titleLabel, textX, titleY);
 
     // Link on the right (same vertical position as title)
