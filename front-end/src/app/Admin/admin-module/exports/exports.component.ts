@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { InitiativesService } from 'src/app/services/initiatives.service';
+import { PhasesService } from 'src/app/services/phases.service';
 import { jsPDF } from 'jspdf';
 import PizZip from 'pizzip';
 import { saveAs } from 'file-saver';
@@ -17,7 +18,10 @@ export class ExportsComponent {
   exporting = false;
   exportProgress = '';
 
-  constructor(private initiativeService: InitiativesService) {}
+  constructor(
+    private initiativeService: InitiativesService,
+    private phasesService: PhasesService,
+  ) {}
 
   async exportAllLandscapePDFs(): Promise<void> {
     this.exporting = true;
@@ -26,6 +30,8 @@ export class ExportsComponent {
     try {
       const programs = await this.initiativeService.getInitiatives();
       const logoBase64 = await this.getBase64FromUrl('assets/shared-image/cgiar-logo.png');
+      const activePhase = await this.phasesService.getActivePhase();
+      const activePhaseYear = activePhase?.reporting_year || new Date().getFullYear();
       const zip = new PizZip();
       let count = 0;
 
@@ -39,7 +45,7 @@ export class ExportsComponent {
           continue;
         }
 
-        const pdfBuffer = this.generateLandscapePDF(fullProgram, logoBase64);
+        const pdfBuffer = this.generateLandscapePDF(fullProgram, logoBase64, activePhaseYear);
         const code = fullProgram.official_code || program.official_code || program.id;
         zip.file(`Risk-Report-Landscape-${code}.pdf`, pdfBuffer);
         count++;
@@ -56,7 +62,7 @@ export class ExportsComponent {
     }
   }
 
-  private generateLandscapePDF(program: any, logoBase64: string): ArrayBuffer {
+  private generateLandscapePDF(program: any, logoBase64: string, activePhaseYear: string | number): ArrayBuffer {
     const risks: any[] = program?.risks || [];
     const top5 = [...risks]
       .sort(
@@ -196,7 +202,6 @@ export class ExportsComponent {
     }
 
     const programName  = program?.name || '';
-    const activePhaseYear = program?.phase?.reporting_year || new Date().getFullYear();
     cols = buildCols(activePhaseYear);
 
     const narrative = program?.narrative || '';
@@ -210,7 +215,7 @@ export class ExportsComponent {
     }
     const textX = margin + logoW + 3;
     doc.setTextColor(themeR, themeG, themeB);
-    doc.setFontSize(10);
+    doc.setFontSize(fontSize + 1);
     doc.setFont('helvetica', 'bold');
     const titleLabel = programName
       ? `Risk Management - ${programName}`
@@ -223,7 +228,7 @@ export class ExportsComponent {
     doc.setTextColor(themeR, themeG, themeB);
     const linkLabel = 'Click ';
     const linkHere = 'here';
-    const linkAfter = ' for more details';
+    const linkAfter = ' for additional details including a full list of actions and controls, deadlines and status';
     const linkLabelW = doc.getTextWidth(linkLabel);
     doc.setFont('helvetica', 'bold');
     const linkHereW = doc.getTextWidth(linkHere);
@@ -245,7 +250,7 @@ export class ExportsComponent {
     let headerBottomY = titleY + 5;
     if (narrative) {
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7);
+      doc.setFontSize(9);
       doc.setTextColor(80, 80, 80);
 
       const narrativeStartY = titleY + 4;
@@ -300,8 +305,9 @@ export class ExportsComponent {
     }
 
     // Draw table header row
+    const headerFontSize = Math.max(fontSize + 1.5, 8.5);
     let x = tableX;
-    doc.setFontSize(Math.min(8.5, fontSize + 0.5));
+    doc.setFontSize(headerFontSize);
     doc.setFont('helvetica', 'bold');
     for (const col of cols) {
       doc.setFillColor(themeR, themeG, themeB);

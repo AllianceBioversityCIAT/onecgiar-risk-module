@@ -24,6 +24,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { RiskService } from 'src/app/services/risk.service';
 import { InitiativesService } from 'src/app/services/initiatives.service';
+import { PhasesService } from 'src/app/services/phases.service';
 import { jsPDF } from 'jspdf';
 import { DeleteConfirmDialogComponent } from 'src/app/delete-confirm-dialog/delete-confirm-dialog.component';
 import { ROLES } from '../team-members/team-members.component';
@@ -68,7 +69,8 @@ export class RiskReportTableComponent {
     private socket: AppSocket,
     private loading: LoadingService,
     private cd: ChangeDetectorRef,
-    private titleService: Title
+    private titleService: Title,
+    private phasesService: PhasesService
   ) {}
 
   @Input() dataSource: any;
@@ -600,7 +602,8 @@ export class RiskReportTableComponent {
     }
 
     const programName  = this.sciencePrograms?.name || '';
-    const activePhaseYear = this.sciencePrograms?.phase?.reporting_year || new Date().getFullYear();
+    const activePhase = await this.phasesService.getActivePhase();
+    const activePhaseYear = activePhase?.reporting_year || new Date().getFullYear();
     cols = buildCols(activePhaseYear);
 
     const narrative = this.sciencePrograms?.narrative || '';
@@ -615,7 +618,7 @@ export class RiskReportTableComponent {
     }
     const textX = margin + logoW + 3;
     doc.setTextColor(themeR, themeG, themeB);
-    doc.setFontSize(10);
+    doc.setFontSize(fontSize + 1);
     doc.setFont('helvetica', 'bold');
     const titleLabel = programName
       ? `Risk Management - ${programName}`
@@ -628,7 +631,7 @@ export class RiskReportTableComponent {
     doc.setTextColor(themeR, themeG, themeB);
     const linkLabel = 'Click ';
     const linkHere = 'here';
-    const linkAfter = ' for more details';
+    const linkAfter = ' for additional details including a full list of actions and controls, deadlines and status';
     const linkLabelW = doc.getTextWidth(linkLabel);
     doc.setFont('helvetica', 'bold');
     const linkHereW = doc.getTextWidth(linkHere);
@@ -650,7 +653,7 @@ export class RiskReportTableComponent {
     let headerBottomY = titleY + 5;
     if (narrative) {
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7);
+      doc.setFontSize(9);
       doc.setTextColor(80, 80, 80);
 
       const narrativeStartY = titleY + 4;
@@ -705,8 +708,9 @@ export class RiskReportTableComponent {
     }
 
     // ── Draw table header row ─────────────────────────────────────────────────
+    const headerFontSize = Math.max(fontSize + 1.5, 8.5);
     let x = tableX;
-    doc.setFontSize(Math.min(8.5, fontSize + 0.5));
+    doc.setFontSize(headerFontSize);
     doc.setFont('helvetica', 'bold');
     for (const col of cols) {
       doc.setFillColor(themeR, themeG, themeB);

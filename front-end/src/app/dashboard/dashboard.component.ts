@@ -455,7 +455,7 @@ export class DashboardComponent implements OnInit {
         title: {
           text: `<span class="chart-title"> ${type} impact</span>`,
         },
-        labels: { format: '{value}' },
+        labels: { format: '{value}', style: { fontSize: '14px' } },
       },
       yAxis: {
         startOnTick: false,
@@ -466,7 +466,7 @@ export class DashboardComponent implements OnInit {
         title: {
           text: `<span class="chart-title"> ${type} Likelihood</span>`,
         },
-        labels: { format: '{value}' },
+        labels: { format: '{value}', style: { fontSize: '14px' } },
         accessibility: { rangeDescription: 'Range: 1 to 5' },
       },
       tooltip: {
