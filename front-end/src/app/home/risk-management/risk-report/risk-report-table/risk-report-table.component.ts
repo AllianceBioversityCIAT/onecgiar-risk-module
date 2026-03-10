@@ -480,7 +480,7 @@ export class RiskReportTableComponent {
     const logoW = logoH * (148 / 182);
 
     const stripHtml = (text: string): string =>
-      text ? text.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
+      text ? text.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim() : '';
 
     const truncateWords = (text: string, maxWords: number): string => {
       const words = text.split(/\s+/).filter(w => w);
@@ -495,7 +495,8 @@ export class RiskReportTableComponent {
     const rowsEndY   = pageH - 8;
     const availableH = rowsEndY - rowsStartY;
     const totalW     = pageW - margin * 2;
-    const minColW    = 60;
+    const minDescW   = 60;
+    const minActW    = 100; // enough for "Actions and Controls to Manage Risk" header
 
     const calcColWidths = (mitMaxWords?: number): { descW: number; actW: number } => {
       let descChars = 0;
@@ -515,8 +516,8 @@ export class RiskReportTableComponent {
       const actPct  = actChars / total;
       let descW = Math.round(totalW * descPct);
       let actW  = Math.round(totalW * actPct);
-      if (descW < minColW) { descW = minColW; actW = totalW - minColW; }
-      if (actW  < minColW) { actW  = minColW; descW = totalW - minColW; }
+      if (descW < minDescW) { descW = minDescW; actW = totalW - minDescW; }
+      if (actW  < minActW)  { actW  = minActW;  descW = totalW - minActW; }
       return { descW, actW };
     };
 
