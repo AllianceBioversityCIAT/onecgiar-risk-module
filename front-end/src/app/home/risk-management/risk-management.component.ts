@@ -22,8 +22,8 @@ export class RiskManagementComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.title.setTitle('Risk Management');
-    this.meta.updateTag({ name: 'description', content: 'Risk management' });
+    this.title.setTitle('PRMS Risk');
+    this.meta.updateTag({ name: 'description', content: 'PRMS Risk' });
   }
 
   // public url1: string = '';

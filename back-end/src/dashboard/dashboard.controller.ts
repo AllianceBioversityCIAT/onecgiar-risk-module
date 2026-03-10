@@ -18,7 +18,6 @@ import { getProgram } from 'DTO/initiative.dto';
 import { Program } from 'entities/program.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
-import { AdminRolesGuard } from 'src/auth/admin-roles.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { ProgramService } from 'src/program/program.service';
@@ -28,7 +27,7 @@ import { DataSource, ILike, IsNull } from 'typeorm';
 @ApiBearerAuth()
 @ApiTags('Dashboard')
 @Controller('Dashboard')
-@UseGuards(JwtAuthGuard, AdminRolesGuard)
+@UseGuards(JwtAuthGuard)
 export class DashboardController {
   constructor(
     private dataSource: DataSource,
@@ -55,8 +54,11 @@ export class DashboardController {
         'risks',
         'risks.category',
         'risks.risk_owner',
+        'risks.mitigations',
+        'risks.mitigations.status',
         'roles',
         'roles.user',
+        'organizations',
       ],
       order: { risks: { current_level: 'DESC' } },
     });

@@ -179,7 +179,7 @@
       <button
         class="risk-management-export-btn"
         mat-raised-button
-        (click)="exportPDF()"
+        (click)="exportPDF('landscape')"
       >
         <mat-icon class="risk-management-export-box-icon">
           <svg
@@ -195,8 +195,18 @@
               fill="white"
             /></svg
         ></mat-icon>
+        Export to PDF
+      </button>
+    </div>
 
-        Export to pdf
+    <!-- TODO: Remove Word export code entirely in future cleanup -->
+    <div style="display: none;">
+      <button
+        class="risk-management-export-btn"
+        mat-raised-button
+        (click)="exportWord()"
+      >
+        Export to Word
       </button>
     </div>
   </div>

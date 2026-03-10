@@ -1,51 +1,73 @@
 <section class="section-dashboard">
   <div class="dashboard-box">
-    <!-- step--1 -->
+    <!-- Title -->
     <div class="dashboard-title-box">
-      <p class="dashboard-title-box__title">Risk dashboard</p>
+      <p class="dashboard-title-box__title">Risk Dashboard</p>
     </div>
 
-    <!-- ── NEW Programs / Projects toggle ── -->
-    <!-- <div
-      class="dashboard-filter"
-      style="display: flex; gap: 1rem; align-items: center; margin: 1rem 0"
-    >
-      <mat-checkbox [checked]="!isProjectFilter" (change)="selectPrograms()">
-        ✅ Programs
-      </mat-checkbox>
-      <mat-checkbox [checked]="isProjectFilter" (change)="selectProjects()">
-        ☐ Projects
-      </mat-checkbox>
-    </div> -->
+    <!-- Global filter bar (controls all visuals) -->
+    <div class="global-filter-bar">
+      <mat-form-field appearance="outline" class="filter-field filter-field--wide">
+        <mat-label>Program / Project</mat-label>
+        <mat-select [(ngModel)]="globalProgram" [multiple]="true" (selectionChange)="applyGlobalFilters()">
+          <mat-option *ngFor="let p of allProgramOptions" [value]="p.code">
+            {{ p.code }} - {{ p.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- ── NEW Programs / Projects toggle ── -->
-    <mat-button-toggle-group
-      #typeToggle="matButtonToggleGroup"
-      class="dashboard-filter"
-      [value]="isProjectFilter ? 'project' : 'program'"
-      (change)="onTypeToggle($event)"
-      exclusive
-    >
-      <mat-button-toggle value="program">Programs</mat-button-toggle>
-      <mat-button-toggle value="project">Projects</mat-button-toggle>
-    </mat-button-toggle-group>
-    <!-- ──────────────────────────────────── -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Risk Category</mat-label>
+        <mat-select [(ngModel)]="globalCategory" [multiple]="true" (selectionChange)="applyGlobalFilters()">
+          <mat-option *ngFor="let c of allCategoryOptions" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- ──────────────────────────────────── -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Center</mat-label>
+        <mat-select [(ngModel)]="globalCenter" [multiple]="true" (selectionChange)="applyGlobalFilters()">
+          <mat-option *ngFor="let c of allCenterOptions" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- step--2 -->
-    <div class="dashboard-main-content">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Action Status</mat-label>
+        <mat-select [(ngModel)]="globalActionStatus" [multiple]="true" (selectionChange)="applyGlobalFilters()">
+          <mat-option *ngFor="let s of allActionStatusOptions" [value]="s">{{ s }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button class="filter-btn" (click)="resetGlobalFilters()">
+        <mat-icon>filter_alt_off</mat-icon> Reset
+      </button>
+
+      <span class="filter-spacer"></span>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="globalType" (selectionChange)="onTypeChange()">
+          <mat-option value="program">Programs</mat-option>
+          <mat-option value="project">Projects</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="filter-btn" (click)="exportDashboardPDF()">
+        <mat-icon>picture_as_pdf</mat-icon> Export PDF
+      </button>
+    </div>
+
+    <!-- Dashboard content -->
+    <div class="dashboard-main-content" #dashboardContent>
       <div class="dashboard-content-container">
-        <!-- step-box-1 -->
+        <!-- Charts grid -->
         <div class="dashboard-img-box-grid-container">
           <!-- item-1 -->
           <div class="dashboard-item-box">
             <div class="dashboard-item-box-title">
               <p class="dashboard-item-box-title__title">
-                Current Risk profile
+                Current Risk Profile
               </p>
             </div>
-
             <highcharts-chart
               *ngIf="risk_profile_current_chartOptions"
               [Highcharts]="Highcharts"
@@ -57,7 +79,7 @@
           <!-- item-2 -->
           <div class="dashboard-item-box">
             <div class="dashboard-item-box-title">
-              <p class="dashboard-item-box-title__title">Target Risk profile</p>
+              <p class="dashboard-item-box-title__title">Target Risk Profile</p>
             </div>
             <highcharts-chart
               *ngIf="risk_profile_target_chartOptions"
@@ -67,74 +89,138 @@
             </highcharts-chart>
           </div>
 
-          <div class="collection">
-            <div class="content">
-              <!-- item-3 -->
-              <div class="dashboard-item-box">
-                <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">
-                    Status of action
-                  </p>
-                </div>
-                <highcharts-chart
-                  *ngIf="status_of_action_chartOptions"
-                  [Highcharts]="Highcharts"
-                  [options]="status_of_action_chartOptions"
-                >
-                </highcharts-chart>
-              </div>
+          <!-- item-3 -->
+          <div class="dashboard-item-box">
+            <div class="dashboard-item-box-title">
+              <p class="dashboard-item-box-title__title">
+                Status of Actions and Controls to Manage Risk
+              </p>
             </div>
+            <highcharts-chart
+              *ngIf="status_of_action_chartOptions"
+              [Highcharts]="Highcharts"
+              [options]="status_of_action_chartOptions"
+            >
+            </highcharts-chart>
+          </div>
 
-            <div class="content-2">
-              <!-- item-4 -->
-              <div class="dashboard-item-box" class="content-3">
-                <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">Risk Categories</p>
-                </div>
-
-                <highcharts-chart
-                  *ngIf="categories_count_chartOptions"
-                  [Highcharts]="Highcharts"
-                  [options]="categories_count_chartOptions"
-                >
-                </highcharts-chart>
-              </div>
-
-              <!-- item-5 -->
-              <div class="dashboard-item-box" class="content-3">
-                <div class="dashboard-item-box-title">
-                  <p class="dashboard-item-box-title__title">
-                    Categories groups
-                  </p>
-                </div>
-
-                <highcharts-chart
-                  *ngIf="category_group_chartOptions"
-                  [Highcharts]="Highcharts"
-                  [options]="category_group_chartOptions"
-                >
-                </highcharts-chart>
-              </div>
+          <!-- item-4 -->
+          <div class="dashboard-item-box">
+            <div class="dashboard-item-box-title">
+              <p class="dashboard-item-box-title__title">Risk Categories</p>
             </div>
+            <highcharts-chart
+              *ngIf="categories_count_chartOptions"
+              [Highcharts]="Highcharts"
+              [options]="categories_count_chartOptions"
+            >
+            </highcharts-chart>
           </div>
         </div>
 
+        <!-- Actions and Controls to Manage Risk table -->
         <div class="dashboard-title-table-box">
-          <p class="dashboard-title-table-box__title">Risk details</p>
+          <p class="dashboard-title-table-box__title">Actions and Controls to Manage Risk</p>
         </div>
 
-        <!-- Risk details-table -->
-        <div class="table-box mat-elevation-z8">
+        <!-- Table filter bar (date filters + export) -->
+        <div class="actions-filter-bar" *ngIf="reportedActions.length">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Due date from</mat-label>
+            <input matInput type="date" [(ngModel)]="filterDueDateFrom" (change)="applyTableFilters()">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Due date to</mat-label>
+            <input matInput type="date" [(ngModel)]="filterDueDateTo" (change)="applyTableFilters()">
+          </mat-form-field>
+
+          <button mat-stroked-button class="filter-btn" (click)="resetTableFilters()">
+            <mat-icon>filter_alt_off</mat-icon> Reset
+          </button>
+
+          <button mat-raised-button color="primary" class="filter-btn" (click)="exportExcel()">
+            <mat-icon>file_download</mat-icon> Export Excel
+          </button>
+        </div>
+
+        <div class="table-box table-box--compact mat-elevation-z8" *ngIf="reportedActions.length">
           <mat-card>
             <mat-card-content>
               <table>
                 <tr>
-                  <th>INIT-ID</th>
-                  <th>Science Programs</th>
+                  <th class="sortable-th" (click)="sortBy('risk_id')">
+                    Risk ID
+                    <mat-icon *ngIf="sortField === 'risk_id'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'risk_id'" class="sort-hint">unfold_more</mat-icon>
+                  </th>
+                  <th class="sortable-th" (click)="sortBy('official_code')">
+                    ID
+                    <mat-icon *ngIf="sortField === 'official_code'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'official_code'" class="sort-hint">unfold_more</mat-icon>
+                  </th>
+                  <th>Risk Title</th>
+                  <th>Description</th>
+                  <th class="sortable-th" (click)="sortBy('due_date')">
+                    Due date
+                    <mat-icon *ngIf="sortField === 'due_date'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'due_date'" class="sort-hint">unfold_more</mat-icon>
+                  </th>
+                  <th>Actions and Controls to Manage Risk</th>
+                  <th class="sortable-th" (click)="sortBy('action_status')">
+                    Status
+                    <mat-icon *ngIf="sortField === 'action_status'" class="sort-icon">
+                      {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                    </mat-icon>
+                    <mat-icon *ngIf="sortField !== 'action_status'" class="sort-hint">unfold_more</mat-icon>
+                  </th>
+                </tr>
+                <tr *ngFor="let row of displayedActions">
+                  <td>{{ row.risk_id }}</td>
+                  <td>{{ row.official_code }}</td>
+                  <td>{{ row.risk_title }}</td>
+                  <td>{{ row.risk_description }}</td>
+                  <td class="due-date-cell">{{ row.due_date | date: 'M/d/yyyy' }}</td>
+                  <td>{{ row.action_description }}</td>
+                  <td [matTooltip]="row.action_status_description" matTooltipPosition="above">{{ row.action_status }}</td>
+                </tr>
+              </table>
+
+              <div class="show-more-bar" *ngIf="filteredActions.length > displayLimit">
+                <button mat-button color="primary" (click)="toggleShowAll()">
+                  {{ showAllActions ? 'Show less' : 'Show more (' + filteredActions.length + ' total)' }}
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div *ngIf="reportedActions.length && filteredActions.length === 0" class="no-results">
+          No actions match the current filters.
+        </div>
+
+        <div class="dashboard-title-table-box" style="margin-top: 3rem;">
+          <p class="dashboard-title-table-box__title">Risk Details</p>
+        </div>
+
+        <!-- Risk Details table -->
+        <div class="table-box table-box--compact mat-elevation-z8">
+          <mat-card>
+            <mat-card-content>
+              <table>
+                <tr>
+                  <th>ID</th>
+                  <th>Science Program</th>
                   <th>Risk Category</th>
-                  <th>Risk</th>
+                  <th>Risk Title</th>
                   <th>Risk Description</th>
-                  <th>Risk score</th>
+                  <th>Risk Score</th>
                 </tr>
                 <ng-container *ngFor="let sciencePrograms of details">
                   <tr *ngFor="let risk of sciencePrograms.risks; let i = index">
@@ -151,7 +237,7 @@
                     >
                       {{ sciencePrograms.name }}
                     </td>
-                    <td>{{ risk.category.title }}</td>
+                    <td [matTooltip]="risk.category?.description" matTooltipPosition="above">{{ risk.category.title }}</td>
                     <td>{{ risk.title }}</td>
                     <td>{{ risk.description }}</td>
                     <td class="level" [attr.style]="color(risk.current_level)">

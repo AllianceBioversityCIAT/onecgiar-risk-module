@@ -2,6 +2,12 @@
 @import "../../../../sass/components/button";
 @import "../../../../sass/layout/admin-module/admin-module";
 @import "../../../../sass/pages/admin-module/user-management";
+
+::ng-deep .mat-mdc-menu-item {
+  padding: 0.8rem 2rem !important;
+  font-size: 1.3rem !important;
+  font-family: "Poppins", sans-serif !important;
+}
 // @import "../../../sass/components/table-user-management";
 
 .search {

@@ -400,3 +400,45 @@
 .error {
   color: red;
 }
+
+.narrative-section {
+  margin-top: 1.5rem;
+  padding: 0 0.2rem;
+}
+
+.narrative-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 0.5px solid #8080808a;
+  border-radius: 0.5rem;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.3rem;
+  resize: vertical;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #436280;
+  }
+}
+
+.narrative-hint {
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.word-count {
+  text-align: right;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 1.1rem;
+  color: #808080;
+  margin-top: 0.3rem;
+
+  &.over-limit {
+    color: red;
+    font-weight: 500;
+  }
+}

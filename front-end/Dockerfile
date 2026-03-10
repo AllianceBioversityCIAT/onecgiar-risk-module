@@ -1,10 +1,10 @@
-FROM docker.io/node:16-bullseye
+FROM docker.io/node:18-bullseye
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y wget gnupg gnupg2 \
     && apt-get update
 RUN curl http://nginx.org/keys/nginx_signing.key | apt-key add -
-RUN npm install -g npm@8.19.3  \
+RUN npm install -g npm  \
     npm install -g @angular/cli \ 
     && rm -rf ~/.npm
 RUN apt-get update && \

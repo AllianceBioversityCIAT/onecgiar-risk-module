@@ -90,8 +90,8 @@ export class RiskReportOverviewComponent implements OnInit {
   }
 
   savePdf: EventEmitter<any> = new EventEmitter<any>();
-  exportPdf() {
-    this.savePdf.emit();
+  exportPdf(type: string) {
+    this.savePdf.emit(type);
   }
   refresh(data: any = null) {
     this.loadInitiative();
@@ -99,14 +99,20 @@ export class RiskReportOverviewComponent implements OnInit {
   async publish(id: number) {
     this.dialog
       .open(SubmitRiskDialogComponent, {
-        maxHeight: '800px',
-        maxWidth: '700px',
-        data: { initiative_id: this.id, top: [] },
+        maxHeight: '90vh',
+        maxWidth: '750px',
+        width: '95vw',
+        data: { initiative_id: this.id, top: [], existingNarrative: this.sciencePrograms?.narrative || '' },
       })
       .afterClosed()
       .subscribe(async (dialogResult) => {
         if (dialogResult) {
           await this.initiativeService.Publish(id, dialogResult);
+
+          // Update narrative locally so PDF export reflects it immediately
+          if (dialogResult.narrative != null) {
+            this.sciencePrograms.narrative = dialogResult.narrative;
+          }
 
           this.toastr.success(
             `Risks for ${this.sciencePrograms.name} has been submitted successfully`

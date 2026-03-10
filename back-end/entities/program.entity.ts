@@ -127,4 +127,9 @@ export class Program {
 
   @Column({ type: 'tinyint', name: 'is_project', default: 0 })
   isProject!: number; // 0 | 1
+
+  @ApiProperty()
+  @Optional()
+  @Column({ type: 'text', nullable: true, default: null })
+  narrative: string;
 }

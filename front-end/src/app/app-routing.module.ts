@@ -44,6 +44,7 @@ import { ArchivedVersionsComponent } from './archive/archived-versions/archived-
 import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-clarisa.component';
 import { OrganizationComponent } from './Admin/admin-module/organization/organization.component';
 import { ProjectsComponent } from './Admin/admin-module/projects/projects.component';
+import { ExportsComponent } from './Admin/admin-module/exports/exports.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -74,6 +75,10 @@ const routes: Routes = [
       {
         path: 'projects',
         component: ProjectsComponent,
+      },
+      {
+        path: 'exports',
+        component: ExportsComponent,
       },
 
       {
@@ -205,7 +210,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [AdminGuard],
+    canActivate: [AuthGuard],
     component: DashboardComponent,
   },
   {

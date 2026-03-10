@@ -20,8 +20,15 @@ export class SubmitRiskDialogComponent implements OnInit {
   ) {}
   tops: any = null;
   error: any[] = [];
+  narrative: string = '';
+
+  get wordCount(): number {
+    return this.narrative.trim() ? this.narrative.trim().split(/\s+/).length : 0;
+  }
 
   async ngOnInit() {
+    this.narrative = this.data.existingNarrative || '';
+
     this.tops = await this.initiativeService.getTopRisks(
       this.data.initiative_id
     );
@@ -33,6 +40,19 @@ export class SubmitRiskDialogComponent implements OnInit {
   }
   async publish() {
     this.error = [];
+
+    if (!this.narrative.trim()) {
+      this.error.push("Narrative is required.");
+      return;
+    }
+
+    if (this.wordCount > 100) {
+      this.error.push("Narrative must not exceed 100 words.");
+      return;
+    }
+
+    this.data.narrative = this.narrative.trim();
+
     // case 1
     if(this.tops.top.length + this.tops.similar.length <= 5) {
         this.data.top = this.top;
@@ -48,9 +68,9 @@ export class SubmitRiskDialogComponent implements OnInit {
       if(this.tops.top.length == 5) {
         let current_level_for_top = this.tops.top.map((d: { current_level: any; }) => d.current_level);
         let current_level_for_similar = this.tops.similar.map((d: { current_level: any; }) => d.current_level);
-  
+
         let similarHaveLevelMoreTop: any[] = [];
-  
+
         current_level_for_top.map((current_top: any) => {
           current_level_for_similar.map((current_similar: any) => {
             if(current_top < current_similar) {
@@ -58,7 +78,7 @@ export class SubmitRiskDialogComponent implements OnInit {
             }
           })
         })
-  
+
         if(similarHaveLevelMoreTop.length == 0 && this.error.length == 0){
           this.dialogRef.close(this.data);
         }

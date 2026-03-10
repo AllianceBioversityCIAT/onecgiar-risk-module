@@ -3,7 +3,7 @@
 </p>
 
 
-# CGIAR Risk Management
+# PRMS Risk
 
 Risk is not inherently a bad thing. CGIAR recognizes that taking and managing risks is an integral part of delivering on its strategy and that effective risk management is critical to its success and key element of good governance. Managing risk is an integral part in managing any organization. Good risk management is not only about mitigating risk. Good risk management is equally about good risk taking.
 
@@ -126,7 +126,7 @@ We implemented an OpenAPI Module in Risk management to make it easy for frontend
 You can visit the OpenAPI module at https://api.risk.cgiar.org/ or the root directory of your backend server 
 
 ## Authors
-The following people have made significant contributions to the technical development of Risk Management:
+The following people have made significant contributions to the technical development of PRMS Risk:
 
 - Moayad Al-Najdawi [CodeObia](http://codeobia.com/)
 - Monther AlAzhari [CodeObia](http://codeobia.com/)
@@ -135,7 +135,7 @@ The following people have made significant contributions to the technical develo
 - Rand Awad [CodeObia](http://codeobia.com/)
 
 
-The following people have made significant contributions to the design and overall function of Risk Management:
+The following people have made significant contributions to the design and overall function of PRMS Risk:
 
 - Saakova, Svetlana (International Center for Agricultural Research in the Dry Areas)
 - Cadavid, Juan Carlos (CCAFS - Alliance Bioversity-CIAT)
