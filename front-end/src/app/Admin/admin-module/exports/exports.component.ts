@@ -295,7 +295,7 @@ export class ExportsComponent {
         mitMaxWords = 30;
         fontSize = 8;
         lineH = 3.8;
-        cols = buildCols();
+        cols = buildCols(activePhaseYear);
         layout = calcLayout(fontSize, lineH);
         while (layout.totalH > actualAvailableH && fontSize > 5.5) {
           fontSize -= 0.25;

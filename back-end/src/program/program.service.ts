@@ -293,7 +293,10 @@ export class ProgramService {
     let date = new Date();
     await this.programRepository.update(old_init_id, {
       last_updated_date: date,
-      narrative: narrative || null,
+      narrative:
+        narrative !== undefined
+          ? narrative || null
+          : old_program.narrative || null,
     });
     await this.programRepository.update(new_init.id, {
       submit_date: date,
