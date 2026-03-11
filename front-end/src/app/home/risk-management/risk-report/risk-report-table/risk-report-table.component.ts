@@ -547,7 +547,9 @@ export class RiskReportTableComponent {
       const colW = cols[0].w - cellPad * 2;
 
       const riskLayouts: RiskLayout[] = top5.map(risk => {
+        doc.setFont('helvetica', 'bold');
         const titleLines = doc.splitTextToSize(String(risk.title || ''), colW) as string[];
+        doc.setFont('helvetica', 'normal');
         const descText = stripHtml(String(risk.description || ''));
         const descLines = doc.splitTextToSize(descText, colW) as string[];
 
