@@ -97,9 +97,10 @@ export class ExploreController {
     return results;
   }
 
-  @Get('programs/:official_code')
+  @Get(['programs/:official_code', 'programs/:official_code/:version_id'])
   async getProgramByOfficialCode(
     @Param('official_code') officialCode: string,
+    @Param('version_id') versionId?: string,
   ) {
     const root = await this.programService.programRepository.findOne({
       where: {
@@ -114,32 +115,53 @@ export class ExploreController {
       );
     }
 
-    const latestVersion = await this.programService.programRepository.findOne({
-      where: {
-        parent_id: root.id,
-        status: true,
-      },
-      relations: [
-        'risks',
-        'risks.category',
-        'risks.category.category_group',
-        'risks.mitigations',
-        'risks.mitigations.status',
-        'risks.risk_owner',
-        'risks.risk_owner.user',
-        'phase',
-        'roles',
-        'roles.user',
-      ],
-      order: { id: 'DESC', risks: { top: 'ASC', id: 'DESC' } },
-    });
+    const versionRelations = [
+      'risks',
+      'risks.category',
+      'risks.category.category_group',
+      'risks.mitigations',
+      'risks.mitigations.status',
+      'risks.risk_owner',
+      'risks.risk_owner.user',
+      'phase',
+      'roles',
+      'roles.user',
+    ];
 
-    if (!latestVersion) {
-      throw new NotFoundException(
-        `No submitted version found for program "${officialCode}"`,
-      );
+    let version;
+
+    if (versionId) {
+      version = await this.programService.programRepository.findOne({
+        where: {
+          id: +versionId,
+          parent_id: root.id,
+        },
+        relations: versionRelations,
+        order: { risks: { top: 'ASC', id: 'DESC' } },
+      });
+
+      if (!version) {
+        throw new NotFoundException(
+          `Version ${versionId} not found for program "${officialCode}"`,
+        );
+      }
+    } else {
+      version = await this.programService.programRepository.findOne({
+        where: {
+          parent_id: root.id,
+          status: true,
+        },
+        relations: versionRelations,
+        order: { id: 'DESC', risks: { top: 'ASC', id: 'DESC' } },
+      });
+
+      if (!version) {
+        throw new NotFoundException(
+          `No submitted version found for program "${officialCode}"`,
+        );
+      }
     }
 
-    return latestVersion;
+    return version;
   }
 }

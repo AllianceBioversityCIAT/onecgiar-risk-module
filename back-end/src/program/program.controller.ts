@@ -1081,6 +1081,7 @@ export class ProgramController {
           'created_by',
           'roles',
           'roles.user',
+          'phase',
         ],
         // order: { id: 'DESC', risks: { id: 'DESC', top: 'ASC' } },
         order: { risks: { top: 'ASC' } },

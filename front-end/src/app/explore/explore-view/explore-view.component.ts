@@ -57,13 +57,14 @@ export class ExploreViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const official_code = this.route.snapshot.paramMap.get('official_code');
+    const version_id = this.route.snapshot.paramMap.get('version_id');
     if (!official_code) {
       this.router.navigate(['/explore']);
       return;
     }
 
     this.exploreService
-      .getProgramByCode(official_code)
+      .getProgramByCode(official_code, version_id || undefined)
       .pipe(
         catchError((err) => {
           this.hasError = true;

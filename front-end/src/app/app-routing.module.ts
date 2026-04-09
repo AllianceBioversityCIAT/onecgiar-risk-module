@@ -249,6 +249,7 @@ const routes: Routes = [
 
   { path: 'explore', component: ExploreListComponent },
   { path: 'explore/:official_code', component: ExploreViewComponent },
+  { path: 'explore/:official_code/:version_id', component: ExploreViewComponent },
   { path: '404', component: PagenotfoundcomponentComponent },
   { path: '**', redirectTo: '/404' },
 ];

@@ -108,14 +108,13 @@ export class ApiExploreService extends MainService {
    * Retrieves the latest submitted version detail for a single program.
    * @param official_code The official code of the program (e.g. "INIT-01")
    */
-  getProgramByCode(official_code: string): Observable<ExploreProgramDetail> {
+  getProgramByCode(official_code: string, version_id?: string): Observable<ExploreProgramDetail> {
+    let url = this.backend_url + '/explore/programs/' + official_code;
+    if (version_id) {
+      url += '/' + version_id;
+    }
     return this.http
-      .get<ExploreProgramDetail>(
-        this.backend_url + '/explore/programs/' + official_code,
-        {
-          headers: this.headers,
-        }
-      )
+      .get<ExploreProgramDetail>(url, { headers: this.headers })
       .pipe(map((d: any) => d));
   }
 }
