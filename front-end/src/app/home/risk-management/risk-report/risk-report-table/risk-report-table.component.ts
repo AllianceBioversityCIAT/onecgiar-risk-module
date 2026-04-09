@@ -605,12 +605,17 @@ export class RiskReportTableComponent {
     }
 
     const programName  = this.sciencePrograms?.name || '';
-    const activePhase = await this.phasesService.getActivePhase();
-    const activePhaseYear = activePhase?.reporting_year || new Date().getFullYear();
+    const activePhaseYear = this.showingVersion && this.sciencePrograms?.phase?.reporting_year
+      ? this.sciencePrograms.phase.reporting_year
+      : (await this.phasesService.getActivePhase())?.reporting_year || new Date().getFullYear();
     cols = buildCols(activePhaseYear);
 
     const narrative = this.sciencePrograms?.narrative || '';
-    const programLink = `${window.location.origin}/home/${this.id}/${this.scienceProgramsId}`;
+    const progCode = this.scienceProgramsId || this.sciencePrograms?.official_code || '';
+    const versionId = this.showingVersion
+      ? this.sciencePrograms?.id || ''
+      : this.sciencePrograms?.last_version_id || '';
+    const programLink = `${window.location.origin}/explore/${progCode}${versionId ? '/' + versionId : ''}`;
 
     // ── Header ──────────────────────────────────────────────────────────────
     // Row 1: Logo + "Top 5 submitted risks for {Year}" (left)  |  "Click here for more details" (right)
@@ -794,7 +799,7 @@ export class RiskReportTableComponent {
       y += rowH;
     });
 
-    doc.save(`Risk-Report-Landscape-${this.scienceProgramsId}.pdf`);
+    doc.save(`Risk-Report-Landscape-${progCode}.pdf`);
   }
 
   private drawBarChart(

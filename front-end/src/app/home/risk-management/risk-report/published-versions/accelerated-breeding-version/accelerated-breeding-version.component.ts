@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InitiativesService } from 'src/app/services/initiatives.service';
@@ -26,6 +26,7 @@ export class AcceleratedBreedingVersionComponent {
   dataSource = new MatTableDataSource<any>([]);
   showReduntent: boolean = false;
   titlePage: any;
+  savePdf: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild(MatPaginator) paginator: any;
 
   ngAfterViewInit() {
@@ -88,6 +89,10 @@ export class AcceleratedBreedingVersionComponent {
       name: 'description',
       content: `${this.sciencePrograms?.name} Version  `,
     });
+  }
+
+  exportLandscapePdf() {
+    this.savePdf.emit('landscape');
   }
 
   async export() {

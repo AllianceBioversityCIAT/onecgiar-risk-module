@@ -99,6 +99,9 @@ import { AssignOrganizationsComponent } from './home/risk-management/risk-manage
 import { ProjectsComponent } from './Admin/admin-module/projects/projects.component';
 import { ProjectDialogComponentTsComponent } from './Admin/admin-module/projects/project-dialog.component.ts/project-dialog.component.ts.component';
 import { ExportsComponent } from './Admin/admin-module/exports/exports.component';
+import { ExploreListComponent } from './explore/explore-list/explore-list.component';
+import { ExploreViewComponent } from './explore/explore-view/explore-view.component';
+import { ApiExploreService } from './shared-services/explore-services/api-explore.service';
 
 const avatarSourcesOrder = [AvatarSource.INITIALS];
 @NgModule({
@@ -172,6 +175,8 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     ProjectsComponent,
     ProjectDialogComponentTsComponent,
     ExportsComponent,
+    ExploreListComponent,
+    ExploreViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -206,6 +211,7 @@ const avatarSourcesOrder = [AvatarSource.INITIALS];
     ApiPublishedService,
     ApiTeamMembersService,
     HeaderService,
+    ApiExploreService,
     AppSocket,
     {
       provide: HTTP_INTERCEPTORS,

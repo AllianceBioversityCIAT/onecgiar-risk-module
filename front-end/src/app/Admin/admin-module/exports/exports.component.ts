@@ -208,7 +208,8 @@ export class ExportsComponent {
     cols = buildCols(activePhaseYear);
 
     const narrative = program?.narrative || '';
-    const programLink = `${window.location.origin}/home/${program?.id}/${program?.official_code || ''}`;
+    const versionId = program?.last_version_id || '';
+    const programLink = `${window.location.origin}/explore/${program?.official_code || ''}${versionId ? '/' + versionId : ''}`;
 
     // Row 1: Logo + "Top 5 submitted risks for {Year}" (left)  |  "Click here for more details" (right)
     const titleY = 7;

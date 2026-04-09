@@ -1,0 +1,296 @@
+// =====================================================
+// Explore List Page
+// =====================================================
+
+.explore-list-page {
+  min-height: calc(100vh - 120px);
+  background-color: #f5f6fa;
+  font-family: 'Poppins', sans-serif;
+  margin-top: -4px;
+
+  // ---- Page Header ----
+  &__header {
+    background: linear-gradient(135deg, #0f212f 0%, #1a3a52 100%);
+    padding: 4rem 6rem 3.5rem;
+    color: #ffffff;
+  }
+
+  &__header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__title {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin: 0 0 0.8rem;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+  }
+
+  &__subtitle {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  // ---- Body ----
+  &__body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  // ---- Count ----
+  &__count {
+    margin-top: 1.2rem;
+    font-size: 1.3rem;
+    color: #666;
+    text-align: right;
+  }
+
+  &__count-num {
+    font-weight: 600;
+    color: #436280;
+  }
+}
+
+// =====================================================
+// Search
+// =====================================================
+
+.explore-search {
+  margin-bottom: 2.4rem;
+
+  &__field {
+    width: 100%;
+    max-width: 520px;
+
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+
+  &__icon {
+    color: #436280;
+    font-size: 2rem;
+  }
+
+  &__spinner {
+    margin-right: 0.8rem;
+  }
+}
+
+// =====================================================
+// Table
+// =====================================================
+
+.explore-table-wrapper {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.explore-table {
+  width: 100%;
+
+  // Header row
+  ::ng-deep .mat-mdc-header-row {
+    background-color: #436280;
+  }
+
+  ::ng-deep .mat-mdc-header-cell {
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 1.4rem 1.6rem;
+    border-bottom: none;
+  }
+
+  ::ng-deep .mat-mdc-cell {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.35rem;
+    color: #2d3748;
+    padding: 1.2rem 1.6rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    vertical-align: middle;
+  }
+
+  &__row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: #f0f5f9;
+    }
+
+    &:focus {
+      outline: 2px solid #436280;
+      outline-offset: -2px;
+    }
+  }
+
+  &__code {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #436280;
+    white-space: nowrap;
+  }
+
+  &__name {
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #1a2e40;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 380px;
+  }
+
+  &__orgs {
+    font-size: 1.25rem;
+    color: #436280;
+  }
+
+  &__orgs-more {
+    font-size: 1.1rem;
+    color: #888;
+    margin-left: 2px;
+  }
+
+  &__level-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 32px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+
+    &.level--green { background-color: #4caf50; }
+    &.level--yellow { background-color: #ff9800; }
+    &.level--orange { background-color: #ff5722; }
+    &.level--red { background-color: #f44336; }
+  }
+
+  &__count {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: #436280;
+  }
+
+  &__view-btn {
+    font-size: 1.2rem;
+    color: #436280;
+    border-color: #436280;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+
+    mat-icon {
+      font-size: 1.6rem;
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    &:hover {
+      background-color: #436280;
+      color: #ffffff;
+    }
+  }
+
+  &__empty {
+    color: #999;
+  }
+
+  // No data row
+  &__no-data-cell {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #888;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    width: 100%;
+
+    mat-icon {
+      font-size: 2.4rem;
+      width: 2.4rem;
+      height: 2.4rem;
+      color: #bbb;
+    }
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+// =====================================================
+// Error State
+// =====================================================
+
+.explore-error {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background-color: #fff3f3;
+  border: 1px solid #f5c6c6;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+
+  &__icon {
+    color: #d32f2f;
+    font-size: 2.4rem;
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    color: #c62828;
+    margin: 0;
+  }
+}
+
+// =====================================================
+// Responsive
+// =====================================================
+
+@media (max-width: 768px) {
+  .explore-list-page {
+    &__header {
+      padding: 3rem 2rem 2.5rem;
+    }
+
+    &__title {
+      font-size: 2.4rem;
+    }
+
+    &__body {
+      padding: 2rem 1rem 4rem;
+    }
+  }
+
+  .explore-table {
+    &__name {
+      max-width: 200px;
+    }
+  }
+}
