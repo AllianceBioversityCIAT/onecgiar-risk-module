@@ -67,6 +67,14 @@
     line-height: normal;
   }
 
+  &__subtitle {
+    color: #5a6872;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-top: 0.4rem;
+  }
+
   .assign-org {
     display: flex;
     align-items: center;
