@@ -1,0 +1,357 @@
+<!-- Loading State -->
+<div class="explore-view-loading" *ngIf="isLoading">
+  <mat-spinner diameter="48"></mat-spinner>
+  <p>Loading program data...</p>
+</div>
+
+<!-- Error State -->
+<div class="explore-view-error" *ngIf="hasError && !isLoading">
+  <div class="explore-view-error__box">
+    <mat-icon class="explore-view-error__icon">error_outline</mat-icon>
+    <h2 class="explore-view-error__title">Program Not Available</h2>
+    <p class="explore-view-error__text">{{ errorMessage }}</p>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Explore
+    </button>
+  </div>
+</div>
+
+<!-- Program Detail -->
+<div class="explore-view" *ngIf="program && !isLoading && !hasError">
+
+  <!-- ===== Program Header ===== -->
+  <div class="explore-view__header">
+    <div class="explore-view__header-content">
+      <button
+        mat-icon-button
+        class="explore-view__back-btn"
+        (click)="goBack()"
+        matTooltip="Back to Explore"
+        aria-label="Back to Explore"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div class="explore-view__program-meta">
+        <span class="explore-view__code">{{ program.official_code }}</span>
+        <span class="explore-view__phase" *ngIf="program.phase?.name">
+          {{ program.phase?.name }}
+        </span>
+        <span class="explore-view__status-badge">
+          Published
+        </span>
+      </div>
+
+      <h1 class="explore-view__program-name">{{ program.name }}</h1>
+
+      <!-- Narrative -->
+      <div class="explore-view__narrative" *ngIf="program.narrative">
+        <mat-icon class="explore-view__narrative-icon">format_quote</mat-icon>
+        <p class="explore-view__narrative-text">{{ program.narrative }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Page Body ===== -->
+  <div class="explore-view__body">
+
+    <!-- ===== Summary Charts ===== -->
+    <div class="explore-charts" *ngIf="program.risks?.length">
+
+      <!-- Summary Cards Row -->
+      <div class="explore-charts__summary-row">
+        <div class="explore-summary-card">
+          <span class="explore-summary-card__value">{{ program.risks?.length }}</span>
+          <span class="explore-summary-card__label">Total Risks</span>
+        </div>
+        <div class="explore-summary-card">
+          <span class="explore-summary-card__value explore-summary-card__value--current" [ngClass]="getRiskLevelClass(avgCurrentLevel)">
+            {{ avgCurrentLevel }}
+          </span>
+          <span class="explore-summary-card__label">Avg Current Level</span>
+        </div>
+        <div class="explore-summary-card">
+          <span class="explore-summary-card__value explore-summary-card__value--target" [ngClass]="getRiskLevelClass(avgTargetLevel)">
+            {{ avgTargetLevel }}
+          </span>
+          <span class="explore-summary-card__label">Avg Target Level</span>
+        </div>
+        <div class="explore-summary-card">
+          <span class="explore-summary-card__value">{{ totalActions }}</span>
+          <span class="explore-summary-card__label">Total Actions</span>
+        </div>
+      </div>
+
+      <!-- Two-column chart row -->
+      <div class="explore-charts__row">
+        <!-- Status of Actions -->
+        <mat-card class="explore-chart-card">
+          <mat-card-header>
+            <mat-card-title>Status of Actions & Controls</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <highcharts-chart
+              [Highcharts]="Highcharts"
+              [options]="actionsChartOptions"
+              style="width: 100%; display: block;"
+            ></highcharts-chart>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Category Distribution (Pie Chart) -->
+        <mat-card class="explore-chart-card">
+          <mat-card-header>
+            <mat-card-title>Risks by Category</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <highcharts-chart
+              [Highcharts]="Highcharts"
+              [options]="categoryChartOptions"
+              style="width: 100%; display: block;"
+            ></highcharts-chart>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- ===== Meta: Organizations + Team Members ===== -->
+    <div class="explore-view__meta-row">
+
+      <!-- Organizations -->
+      <mat-card class="explore-meta-card" *ngIf="program.organizations?.length">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="explore-meta-card__icon">business</mat-icon>
+          <mat-card-title>Organizations</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="explore-meta-card__chips">
+            <mat-chip-listbox aria-label="Organizations">
+              <mat-chip
+                *ngFor="let org of program.organizations"
+                class="explore-meta-card__chip"
+                [matTooltip]="org.name"
+                disableRipple
+              >
+                {{ org.acronym || org.name }}
+              </mat-chip>
+            </mat-chip-listbox>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Team Members -->
+      <mat-card class="explore-meta-card" *ngIf="program.roles?.length">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="explore-meta-card__icon">group</mat-icon>
+          <mat-card-title>Team Members</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="explore-team">
+            <ng-container *ngIf="teamLeads.length">
+              <p class="explore-team__role-label">Leadership</p>
+              <div
+                class="explore-team__member"
+                *ngFor="let member of teamLeads; trackBy: trackByRoleId"
+              >
+                <mat-icon class="explore-team__icon">person</mat-icon>
+                <span class="explore-team__name">
+                  {{ member.user?.full_name || member.email }}
+                </span>
+                <span class="explore-team__role-badge explore-team__role-badge--lead">
+                  {{ member.role }}
+                </span>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="teamMembers.length">
+              <p class="explore-team__role-label">Members</p>
+              <div
+                class="explore-team__member"
+                *ngFor="let member of teamMembers; trackBy: trackByRoleId"
+              >
+                <mat-icon class="explore-team__icon">person_outline</mat-icon>
+                <span class="explore-team__name">
+                  {{ member.user?.full_name || member.email }}
+                </span>
+                <span class="explore-team__role-badge">{{ member.role }}</span>
+              </div>
+            </ng-container>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- ===== Risks Section ===== -->
+    <div class="explore-risks">
+      <div class="explore-risks__header">
+        <h2 class="explore-risks__title">
+          <mat-icon class="explore-risks__title-icon">assessment</mat-icon>
+          Identified Risks
+        </h2>
+        <span class="explore-risks__count">
+          {{ program.risks?.length || 0 }} risk{{ (program.risks?.length || 0) !== 1 ? 's' : '' }}
+        </span>
+      </div>
+
+      <!-- No risks state -->
+      <div class="explore-risks__empty" *ngIf="!program.risks?.length">
+        <mat-icon>search_off</mat-icon>
+        <p>No risks have been submitted for this program yet.</p>
+      </div>
+
+      <!-- Risk expansion panels — always expanded -->
+      <mat-accordion
+        class="explore-risks__accordion"
+        *ngIf="program.risks?.length"
+        multi
+      >
+        <mat-expansion-panel
+          class="explore-risk-panel"
+          *ngFor="let risk of program.risks; let i = index; trackBy: trackByRiskId"
+          [expanded]="true"
+          [attr.aria-label]="'Risk ' + (i + 1) + ': ' + risk.title"
+        >
+          <!-- Panel Header -->
+          <mat-expansion-panel-header class="explore-risk-panel__header">
+            <mat-panel-title class="explore-risk-panel__title-row">
+              <span class="explore-risk-panel__index">#{{ i + 1 }}</span>
+              <span class="explore-risk-panel__title">{{ risk.title }}</span>
+            </mat-panel-title>
+            <mat-panel-description class="explore-risk-panel__description-row">
+              <!-- Category -->
+              <span
+                class="explore-risk-panel__category"
+                *ngIf="risk.category"
+                [matTooltip]="risk.category?.category_group?.name || ''"
+              >
+                {{ risk.category.title }}
+              </span>
+
+              <!-- Level badges in header -->
+              <span class="explore-risk-panel__levels">
+                <span
+                  class="explore-level-badge"
+                  [ngClass]="getRiskLevelClass(getRiskLevel(risk.current_likelihood, risk.current_impact))"
+                  matTooltip="Current risk level"
+                >
+                  C: {{ getRiskLevel(risk.current_likelihood, risk.current_impact) }}
+                </span>
+                <span
+                  class="explore-level-badge"
+                  [ngClass]="getRiskLevelClass(getRiskLevel(risk.target_likelihood, risk.target_impact))"
+                  matTooltip="Target risk level"
+                >
+                  T: {{ getRiskLevel(risk.target_likelihood, risk.target_impact) }}
+                </span>
+              </span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <!-- Panel Content -->
+          <div class="explore-risk-detail">
+
+            <!-- Description -->
+            <div class="explore-risk-detail__section" *ngIf="risk.description">
+              <h4 class="explore-risk-detail__section-title">Description</h4>
+              <p class="explore-risk-detail__text">{{ risk.description }}</p>
+            </div>
+
+            <!-- Risk Metrics Grid -->
+            <div class="explore-risk-detail__metrics">
+              <!-- Current Level Card -->
+              <div class="explore-metric-card">
+                <p class="explore-metric-card__label">Current Risk Level</p>
+                <div class="explore-metric-card__values">
+                  <span class="explore-metric-card__sub">
+                    L: {{ risk.current_likelihood }} &times; I: {{ risk.current_impact }}
+                  </span>
+                  <span
+                    class="explore-metric-card__level"
+                    [ngClass]="getRiskLevelClass(getRiskLevel(risk.current_likelihood, risk.current_impact))"
+                  >
+                    {{ getRiskLevel(risk.current_likelihood, risk.current_impact) }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Target Level Card -->
+              <div class="explore-metric-card">
+                <p class="explore-metric-card__label">Target Risk Level</p>
+                <div class="explore-metric-card__values">
+                  <span class="explore-metric-card__sub">
+                    L: {{ risk.target_likelihood }} &times; I: {{ risk.target_impact }}
+                  </span>
+                  <span
+                    class="explore-metric-card__level"
+                    [ngClass]="getRiskLevelClass(getRiskLevel(risk.target_likelihood, risk.target_impact))"
+                  >
+                    {{ getRiskLevel(risk.target_likelihood, risk.target_impact) }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Risk Owner -->
+              <div class="explore-metric-card" *ngIf="risk.risk_owner">
+                <p class="explore-metric-card__label">Risk Owner</p>
+                <div class="explore-metric-card__values">
+                  <mat-icon class="explore-metric-card__person-icon">person</mat-icon>
+                  <span class="explore-metric-card__owner">
+                    {{ risk.risk_owner?.user?.full_name || risk.risk_owner?.email || '—' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Due Date -->
+              <div class="explore-metric-card" *ngIf="risk.due_date">
+                <p class="explore-metric-card__label">Due Date</p>
+                <div class="explore-metric-card__values">
+                  <mat-icon class="explore-metric-card__calendar-icon">event</mat-icon>
+                  <span class="explore-metric-card__date">
+                    {{ risk.due_date | date: 'dd/MM/yyyy' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mitigations -->
+            <div class="explore-risk-detail__section" *ngIf="risk.mitigations?.length">
+              <h4 class="explore-risk-detail__section-title">
+                Actions &amp; Controls to Manage Risk
+                <span class="explore-risk-detail__mitigation-count">
+                  ({{ risk.mitigations?.length }})
+                </span>
+              </h4>
+              <div class="explore-mitigations">
+                <div
+                  class="explore-mitigation"
+                  *ngFor="let m of risk.mitigations; let mi = index; trackBy: trackByMitigationId"
+                >
+                  <span class="explore-mitigation__num">{{ mi + 1 }}</span>
+                  <p class="explore-mitigation__description">{{ m.description }}</p>
+                  <span
+                    class="explore-mitigation__status"
+                    *ngIf="m.status"
+                  >
+                    {{ m.status.title }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- No mitigations -->
+            <div
+              class="explore-risk-detail__section explore-risk-detail__no-mitigations"
+              *ngIf="!risk.mitigations?.length"
+            >
+              <mat-icon>info_outline</mat-icon>
+              <span>No mitigation actions recorded for this risk.</span>
+            </div>
+
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+  </div>
+</div>

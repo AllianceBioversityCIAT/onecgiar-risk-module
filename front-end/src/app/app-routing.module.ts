@@ -45,6 +45,8 @@ import { SyncClarisaComponent } from './Admin/admin-module/sync-clarisa/sync-cla
 import { OrganizationComponent } from './Admin/admin-module/organization/organization.component';
 import { ProjectsComponent } from './Admin/admin-module/projects/projects.component';
 import { ExportsComponent } from './Admin/admin-module/exports/exports.component';
+import { ExploreListComponent } from './explore/explore-list/explore-list.component';
+import { ExploreViewComponent } from './explore/explore-view/explore-view.component';
 
 const routes: Routes = [
   // { path: 'admin', redirectTo: '/admin/user-management', pathMatch: 'full' },
@@ -245,6 +247,8 @@ const routes: Routes = [
     ],
   },
 
+  { path: 'explore', component: ExploreListComponent },
+  { path: 'explore/:official_code', component: ExploreViewComponent },
   { path: '404', component: PagenotfoundcomponentComponent },
   { path: '**', redirectTo: '/404' },
 ];
