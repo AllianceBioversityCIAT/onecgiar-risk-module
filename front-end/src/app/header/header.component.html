@@ -26,7 +26,7 @@
         [style.background]="headerService.backgroundNavMain"
       >
         <ul class="main-nav-list">
-          <li>
+          <li *ngIf="user_info">
             <a
               (click)="accessHome()"
               [routerLink]="[homeRoute]"
@@ -34,7 +34,7 @@
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
             >
-              <span>Home</span>
+              <span>Risk Management</span>
             </a>
           </li>
           <li>
@@ -48,20 +48,38 @@
           </li>
           <li>
             <a
-              routerLink="faq"
-              class="main-nav-link cool-link"
-              routerLinkActive="active"
-            >
-              <span>FAQ</span>
-            </a>
-          </li>
-          <li>
-            <a
               routerLink="explore"
               class="main-nav-link cool-link"
               routerLinkActive="active"
             >
               <span>Explore</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="dashboard"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li *ngIf="user_info">
+            <a
+              routerLink="archive"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Archive</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="faq"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>FAQ</span>
             </a>
           </li>
           <li>
@@ -73,17 +91,6 @@
               <span>Glossary</span>
             </a>
           </li>
-
-          <li *ngIf="user_info">
-            <a
-              routerLink="dashboard"
-              class="main-nav-link cool-link"
-              routerLinkActive="active"
-            >
-              <span>Dashboard</span>
-            </a>
-          </li>
-
           <li *ngIf="user_info?.role == 'admin'">
             <a
               routerLink="admin"
@@ -91,15 +98,6 @@
               routerLinkActive="active"
             >
               <span>Admin Module</span>
-            </a>
-          </li>
-          <li *ngIf="user_info">
-            <a
-              routerLink="archive"
-              class="main-nav-link cool-link"
-              routerLinkActive="active"
-            >
-              <span>Archive</span>
             </a>
           </li>
         </ul>
