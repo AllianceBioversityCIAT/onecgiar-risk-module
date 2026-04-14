@@ -183,24 +183,20 @@ export class ExploreViewComponent implements OnInit, OnDestroy {
     // Averages
     this.avgCurrentLevel =
       Math.round(
-        (risks.reduce(
+        risks.reduce(
           (sum, r) =>
             sum + this.getRiskLevel(r.current_likelihood, r.current_impact),
           0
-        ) /
-          risks.length) *
-          100
-      ) / 100;
+        ) / risks.length
+      );
     this.avgTargetLevel =
       Math.round(
-        (risks.reduce(
+        risks.reduce(
           (sum, r) =>
             sum + this.getRiskLevel(r.target_likelihood, r.target_impact),
           0
-        ) /
-          risks.length) *
-          100
-      ) / 100;
+        ) / risks.length
+      );
 
   }
 

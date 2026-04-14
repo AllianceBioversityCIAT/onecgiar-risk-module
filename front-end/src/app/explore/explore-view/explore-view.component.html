@@ -12,7 +12,7 @@
     <p class="explore-view-error__text">{{ errorMessage }}</p>
     <button mat-raised-button color="primary" (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
-      Back to Explore
+      Back to Risk Reports
     </button>
   </div>
 </div>
@@ -27,8 +27,8 @@
         mat-icon-button
         class="explore-view__back-btn"
         (click)="goBack()"
-        matTooltip="Back to Explore"
-        aria-label="Back to Explore"
+        matTooltip="Back to Risk Reports"
+        aria-label="Back to Risk Reports"
       >
         <mat-icon>arrow_back</mat-icon>
       </button>
@@ -40,6 +40,9 @@
         </span>
         <span class="explore-view__status-badge">
           Published
+        </span>
+        <span class="explore-view__submit-date" *ngIf="program.submit_date">
+          Submitted {{ program.submit_date | date:'mediumDate' }}
         </span>
       </div>
 

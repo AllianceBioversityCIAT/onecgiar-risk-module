@@ -38,6 +38,7 @@ export class ExploreListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'official_code',
     'name',
+    'submit_date',
     'total_actions',
     'avg_current',
     'avg_target',

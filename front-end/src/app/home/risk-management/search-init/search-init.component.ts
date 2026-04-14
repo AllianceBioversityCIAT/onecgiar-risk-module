@@ -36,7 +36,7 @@ export class SearchInitComponent {
 
   phases: any;
   activePhase: any;
-  myIni: boolean = false;
+  myIni: boolean = true;
   activePhaseSelect: boolean = true;
 
   constructor(
@@ -88,7 +88,7 @@ export class SearchInitComponent {
       created_by: [null],
       my_role: [null],
       sort: [null],
-      my_ini: [false],
+      my_ini: [true],
       status: [null],
       phase_id: [null],
 

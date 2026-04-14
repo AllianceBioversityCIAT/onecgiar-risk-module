@@ -2,9 +2,9 @@
   <!-- Page Header -->
   <div class="explore-list-page__header">
     <div class="explore-list-page__header-content">
-      <h1 class="explore-list-page__title">Explore Programs</h1>
+      <h1 class="explore-list-page__title">Risk Reports</h1>
       <p class="explore-list-page__subtitle">
-        Browse publicly available risk reports from CGIAR projects and programs.
+        Browse last submitted risk reports from CGIAR projects and programs.
       </p>
     </div>
   </div>
@@ -60,6 +60,14 @@
           <th mat-header-cell *matHeaderCellDef>Program Name</th>
           <td mat-cell *matCellDef="let program">
             <span class="explore-table__name">{{ program.name }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Submitted Date Column -->
+        <ng-container matColumnDef="submit_date">
+          <th mat-header-cell *matHeaderCellDef>Submitted</th>
+          <td mat-cell *matCellDef="let program">
+            <span class="explore-table__date">{{ program.submit_date ? (program.submit_date | date:'mediumDate') : '—' }}</span>
           </td>
         </ng-container>
 

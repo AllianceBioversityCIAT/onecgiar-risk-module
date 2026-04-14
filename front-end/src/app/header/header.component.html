@@ -28,22 +28,49 @@
         <ul class="main-nav-list">
           <li>
             <a
+              routerLink="about"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Home</span>
+            </a>
+          </li>
+          <li *ngIf="user_info">
+            <a
               (click)="accessHome()"
               [routerLink]="[homeRoute]"
               class="main-nav-link cool-link"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
             >
-              <span>Home</span>
+              <span>My Risk Register</span>
             </a>
           </li>
           <li>
             <a
-              routerLink="about"
+              routerLink="explore"
               class="main-nav-link cool-link"
               routerLinkActive="active"
             >
-              <span>About Risk</span>
+              <span>Risk Reports</span>
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="dashboard"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li *ngIf="user_info">
+            <a
+              routerLink="archive"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Archive</span>
             </a>
           </li>
           <li>
@@ -57,15 +84,6 @@
           </li>
           <li>
             <a
-              routerLink="explore"
-              class="main-nav-link cool-link"
-              routerLinkActive="active"
-            >
-              <span>Explore</span>
-            </a>
-          </li>
-          <li>
-            <a
               routerLink="glossary"
               class="main-nav-link cool-link"
               routerLinkActive="active"
@@ -73,17 +91,6 @@
               <span>Glossary</span>
             </a>
           </li>
-
-          <li *ngIf="user_info">
-            <a
-              routerLink="dashboard"
-              class="main-nav-link cool-link"
-              routerLinkActive="active"
-            >
-              <span>Dashboard</span>
-            </a>
-          </li>
-
           <li *ngIf="user_info?.role == 'admin'">
             <a
               routerLink="admin"
@@ -91,15 +98,6 @@
               routerLinkActive="active"
             >
               <span>Admin Module</span>
-            </a>
-          </li>
-          <li *ngIf="user_info">
-            <a
-              routerLink="archive"
-              class="main-nav-link cool-link"
-              routerLinkActive="active"
-            >
-              <span>Archive</span>
             </a>
           </li>
         </ul>

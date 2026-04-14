@@ -6,7 +6,7 @@ import {
   UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import {
   getCategoriesLevels,
   getCategoriesCount,
@@ -18,16 +18,14 @@ import { getProgram } from 'DTO/initiative.dto';
 import { Program } from 'entities/program.entity';
 import { Mitigation } from 'entities/mitigation.entity';
 import { Risk } from 'entities/risk.entity';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/auth/roles.decorator';
+import { OpenGuard } from 'src/auth/open.guard';
 import { ProgramService } from 'src/program/program.service';
 import { RiskService } from 'src/risk/risk.service';
 import { DataSource, ILike, IsNull } from 'typeorm';
 
-@ApiBearerAuth()
 @ApiTags('Dashboard')
 @Controller('Dashboard')
-@UseGuards(JwtAuthGuard)
+@UseGuards(OpenGuard)
 export class DashboardController {
   constructor(
     private dataSource: DataSource,
@@ -35,7 +33,6 @@ export class DashboardController {
     private riskService: RiskService,
   ) {}
 
-  @Roles()
   @Get('program/details')
   @ApiCreatedResponse({
     description: 'List programs/projects with their risks',
@@ -64,7 +61,6 @@ export class DashboardController {
     });
   }
 
-  @Roles()
   @Get('program/score')
   @ApiCreatedResponse({
     description: 'Average scores for programs/projects',
@@ -119,7 +115,6 @@ export class DashboardController {
       .execute();
   }
 
-  @Roles()
   @Get('categories/levels')
   @ApiCreatedResponse({
     description: 'Average risk levels by category',
@@ -158,7 +153,6 @@ export class DashboardController {
       .execute();
   }
 
-  @Roles()
   @Get('categories/count')
   @ApiCreatedResponse({
     description: 'Count of risks per category',
@@ -193,7 +187,6 @@ export class DashboardController {
       .execute();
   }
 
-  @Roles()
   @Get('categories/groups/count')
   @ApiCreatedResponse({
     description: 'Count of risks per category group',
@@ -233,7 +226,6 @@ export class DashboardController {
       .execute();
   }
 
-  @Roles()
   @Get('action_areas/count')
   @ApiCreatedResponse({
     description: 'Count of risks per action area',
@@ -256,7 +248,6 @@ export class DashboardController {
       .execute();
   }
 
-  @Roles()
   @Get('status')
   @ApiCreatedResponse({
     description: 'Count of mitigations by status',
@@ -295,7 +286,6 @@ export class DashboardController {
       .execute();
   }
 
-  @Roles()
   @Get('risks/:id')
   @ApiCreatedResponse({
     description: 'List risks for one program/project',
