@@ -51,30 +51,26 @@ export class ExploreController {
       const avgCurrentLevel =
         riskCount > 0
           ? Math.round(
-              (risks.reduce(
+              risks.reduce(
                 (sum, r) =>
                   sum +
                   (r.current_level ??
                     (r.current_likelihood ?? 0) * (r.current_impact ?? 0)),
                 0,
-              ) /
-                riskCount) *
-                100,
-            ) / 100
+              ) / riskCount,
+            )
           : 0;
       const avgTargetLevel =
         riskCount > 0
           ? Math.round(
-              (risks.reduce(
+              risks.reduce(
                 (sum, r) =>
                   sum +
                   (r.target_level ??
                     (r.target_likelihood ?? 0) * (r.target_impact ?? 0)),
                 0,
-              ) /
-                riskCount) *
-                100,
-            ) / 100
+              ) / riskCount,
+            )
           : 0;
 
       const totalActions = risks.reduce(
@@ -91,6 +87,7 @@ export class ExploreController {
         total_actions: totalActions,
         avg_current_level: avgCurrentLevel,
         avg_target_level: avgTargetLevel,
+        submit_date: latestSubmitted.submit_date,
       });
     }
 

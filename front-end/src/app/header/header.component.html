@@ -26,6 +26,15 @@
         [style.background]="headerService.backgroundNavMain"
       >
         <ul class="main-nav-list">
+          <li>
+            <a
+              routerLink="about"
+              class="main-nav-link cool-link"
+              routerLinkActive="active"
+            >
+              <span>Home</span>
+            </a>
+          </li>
           <li *ngIf="user_info">
             <a
               (click)="accessHome()"
@@ -34,16 +43,7 @@
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
             >
-              <span>Risk Management</span>
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="about"
-              class="main-nav-link cool-link"
-              routerLinkActive="active"
-            >
-              <span>About Risk</span>
+              <span>My Risk Register</span>
             </a>
           </li>
           <li>
@@ -52,7 +52,7 @@
               class="main-nav-link cool-link"
               routerLinkActive="active"
             >
-              <span>Explore</span>
+              <span>Risk Reports</span>
             </a>
           </li>
           <li>

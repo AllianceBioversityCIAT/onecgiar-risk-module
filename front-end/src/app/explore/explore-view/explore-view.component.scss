@@ -75,11 +75,11 @@ $color-brand-dark: #0f212f;
   margin-top: -4px;
 
   &__header {
-    background: #ffffff;
+    background: linear-gradient(135deg, #0f212f 0%, #1a3a52 100%);
     padding: 3.5rem 6rem 4rem;
-    color: #1a2e40;
+    color: #ffffff;
     position: relative;
-    border-bottom: 1px solid #e0e4ea;
+    border-bottom: none;
   }
 
   &__header-content {
@@ -88,13 +88,13 @@ $color-brand-dark: #0f212f;
   }
 
   &__back-btn {
-    color: $color-brand;
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: 1.5rem;
     display: block;
 
     &:hover {
-      color: $color-brand-dark;
-      background-color: rgba(0, 0, 0, 0.05);
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     mat-icon {
@@ -114,17 +114,17 @@ $color-brand-dark: #0f212f;
     font-family: 'Josefin Sans', sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
-    background: #e8f0f7;
+    background: rgba(255, 255, 255, 0.15);
     padding: 0.3rem 1rem;
     border-radius: 4px;
-    color: $color-brand-dark;
+    color: #ffffff;
     letter-spacing: 0.04em;
   }
 
   &__phase {
     font-size: 1.3rem;
-    color: #666;
-    background: #f0f2f5;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.15);
     padding: 0.3rem 1rem;
     border-radius: 4px;
   }
@@ -133,16 +133,21 @@ $color-brand-dark: #0f212f;
     font-size: 1.2rem;
     padding: 0.3rem 1rem;
     border-radius: 12px;
-    background-color: #e8f5e9;
-    color: #2e7d32;
-    border: 1px solid #c8e6c9;
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #a5d6a7;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+  }
+
+  &__submit-date {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.7);
   }
 
   &__program-name {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 3.2rem;
     font-weight: 700;
-    color: $color-brand-dark;
+    color: #ffffff;
     margin: 0 0 1.6rem;
     line-height: 1.3;
     max-width: 900px;
@@ -152,15 +157,15 @@ $color-brand-dark: #0f212f;
     display: flex;
     align-items: flex-start;
     gap: 1rem;
-    background: #f5f6fa;
-    border-left: 3px solid $color-brand;
+    background: rgba(255, 255, 255, 0.18);
+    border-left: 3px solid rgba(255, 255, 255, 0.4);
     padding: 1.4rem 1.6rem;
     border-radius: 0 6px 6px 0;
     max-width: 860px;
   }
 
   &__narrative-icon {
-    color: $color-brand;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 2.4rem;
     width: 2.4rem;
     height: 2.4rem;
@@ -170,7 +175,7 @@ $color-brand-dark: #0f212f;
 
   &__narrative-text {
     font-size: 1.5rem;
-    color: #333333;
+    color: rgba(255, 255, 255, 0.9);
     margin: 0;
     line-height: 1.7;
     font-style: italic;

@@ -12,6 +12,7 @@ export interface ExploreProgram {
   total_actions: number;
   avg_current_level: number;
   avg_target_level: number;
+  submit_date?: string;
   organizations?: ExploreOrganization[];
 }
 
@@ -63,6 +64,7 @@ export interface ExploreProgramDetail {
   name: string;
   status: boolean;
   narrative?: string;
+  submit_date?: string;
   phase?: { id: number; name: string };
   organizations?: ExploreOrganization[];
   roles?: ExploreProgramRole[];
