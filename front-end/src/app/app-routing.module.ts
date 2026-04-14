@@ -28,7 +28,6 @@ import { FaqAdminComponent } from './Admin/admin-module/faq-admin/faq-admin.comp
 import { PagenotfoundcomponentComponent } from './pagenotfoundcomponent/pagenotfoundcomponent.component';
 import { RiskManagementTableComponent } from './home/risk-management/risk-management-table/risk-management-table.component';
 import { VersionsTableComponent } from './home/risk-management/risk-report/published-versions/versions-table/versions-table.component';
-import { RiskDashboardComponent } from './home/risk-management/risk-report/risk-dashboard/risk-dashboard.component';
 import { EmailsComponent } from './Admin/admin-module/emails/emails.component';
 import { RiskReportOverviewComponent } from './home/risk-management/risk-report/risk-report-overview/risk-report-overview.component';
 import { AuthComponent } from './auth/auth.component';
@@ -184,10 +183,6 @@ const routes: Routes = [
                     },
                   },
                 ],
-              },
-              {
-                path: 'risk-dashboard',
-                component: RiskDashboardComponent,
               },
             ],
           },

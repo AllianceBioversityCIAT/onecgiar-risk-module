@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HighchartsMore from 'highcharts/highcharts-more';
 import SunburstModule from 'highcharts/modules/sunburst';
@@ -66,6 +67,7 @@ export class DashboardComponent implements OnInit {
   displayLimit = 10;
 
   constructor(
+    private route: ActivatedRoute,
     private apiRiskDetailsService: ApiRiskDetailsService,
     private dashboardService: DashboardService,
     private headerService: HeaderService,
@@ -82,6 +84,17 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadDashboard();
+
+    this.route.queryParams.subscribe((params) => {
+      const program = params['program'];
+      if (program) {
+        this.globalProgram = [program];
+      } else {
+        this.globalProgram = [];
+      }
+      this.applyGlobalFilters();
+    });
+
     this.title.setTitle('Risk Dashboard');
     this.meta.updateTag({ name: 'description', content: 'Risk Dashboard' });
   }
