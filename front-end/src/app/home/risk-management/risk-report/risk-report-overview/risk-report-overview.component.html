@@ -58,10 +58,11 @@
         <div class="risk-report-button-box">
           <button
             class="risk-report-button-box__btn btn--animated btn--white btn"
-            routerLink="./risk-dashboard"
+            [routerLink]="['/dashboard']"
+            [queryParams]="{ program: scienceProgramsId }"
             mat-raised-button
           >
-            Risk Dashboard
+            Dashboard
           </button>
         </div>
 
